@@ -16,7 +16,6 @@ const LoggingPage = ({navigation}) => {
   const Verify = () => {
     if (username && password) {
       if (username === password) {
-        console.log('Los campos coinciden');
         navigation.navigate("Worker");
       } else {
         console.log('Los campos no coinciden');
