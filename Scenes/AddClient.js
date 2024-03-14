@@ -53,8 +53,69 @@ const AddCPage = ({navigation}) => {
             source={require('../Resources/imagenes/Fondo1.jpg')}
             style={styles.background}         
         >
-            <Text>ID</Text>
-
+            <Text>Nombre</Text>
+            <TextInput
+                style={styles.input}
+                onChangeText={handleNameChange}
+                value={Name}
+                placeholder="Nombre"
+            />
+            <Text>Dirección</Text>
+            <TextInput
+                style={styles.input}
+                onChangeText={handleAddresChange}
+                value={Addres}
+                placeholder="Direccion"
+            />
+            <Text>Colonia</Text>
+            <TextInput
+                style={styles.input}
+                onChangeText={handleColonyChange}
+                value={Colony}
+                placeholder="Colonia"
+            />
+            <Text>Ciudad</Text>
+            <TextInput
+                style={styles.input}
+                onChangeText={handleCityChange}
+                value={City}
+                placeholder="Ciudad"
+            />
+            <Text>Codigo Postal</Text>
+            <TextInput
+                style={styles.input}
+                onChangeText={handlePostCodeChange}
+                value={PostCode}
+                placeholder="Codigo Postal"
+            />
+            <Text>RFC</Text>
+            <TextInput
+                style={styles.input}
+                onChangeText={handleRFCChange}
+                value={RFC}
+                placeholder="RFC"
+            />
+            <Text>Correo</Text>
+            <TextInput
+                style={styles.input}
+                onChangeText={handleEmailChange}
+                value={Email}
+                placeholder="Correo"
+            />
+            <Text>NSS</Text>
+            <TextInput
+                style={styles.input}
+                onChangeText={handleNSSChange}
+                value={NSS}
+                placeholder="NSS"
+            />
+            <Text>Sueldo</Text>
+            <TextInput
+                style={styles.input}
+                onChangeText={handleSalaryChange}
+                value={Salary}
+                placeholder="Salario"
+            />
         </ImageBackground>
     );
 }
