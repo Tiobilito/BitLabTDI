@@ -66,12 +66,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   input: {
-    height: 40,
+    height: 60,
     borderWidth: 1,
     backgroundColor: 'white',
+    borderRadius: 20,
     padding: 10,
     margin: 10,
     width: '80%',
+    fontSize: 30,
   },
   Logo: {
     width: 400, // Ancho de la imagen
