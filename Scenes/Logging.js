@@ -17,6 +17,7 @@ const LoggingPage = ({navigation}) => {
     if (username && password) {
       if (username === password) {
         console.log('Los campos coinciden');
+        navigation.navigate("Worker");
       } else {
         console.log('Los campos no coinciden');
       }
@@ -58,12 +59,6 @@ const LoggingPage = ({navigation}) => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#004ADE',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   background: {
     flex: 1,
     resizeMode: 'cover',
