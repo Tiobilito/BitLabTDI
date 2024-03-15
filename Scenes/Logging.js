@@ -57,7 +57,7 @@ const Verify = () => {
       <TouchableOpacity onPress={Verify}>
         <Image
           source={require('../Resources/imagenes/acceso.png')}
-          style={[ grayscale ? { tintColor: '#888888' } : null, styles.AccesButtom]}
+          style={[ grayscale ? { tintColor: 'gray' } : null, styles.AccesButtom]}
         />
       </TouchableOpacity>  
     </ImageBackground>
