@@ -5,14 +5,6 @@ const LoggingPage = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleUsernameChange = (text) => {
-    setUsername(text);
-  };
-
-  const handlePasswordChange = (text) => {
-    setPassword(text);
-  };
-
   const Verify = () => {
     if (username && password) {
       if (username === password) {
@@ -36,13 +28,13 @@ const LoggingPage = ({navigation}) => {
       />
       <TextInput
         style={styles.input}
-        onChangeText={handleUsernameChange}
+        onChangeText={(text) => setUsername(text)}
         value={username}
         placeholder="Username"
       />
       <TextInput
         style={styles.input}
-        onChangeText={handlePasswordChange}
+        onChangeText={(text) => setPassword(text)}
         value={password}
         placeholder="Password"
         secureTextEntry={true}

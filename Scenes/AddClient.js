@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, ImageBackground, Image, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, ImageBackground, Image, TouchableOpacity, TextInput, View } from 'react-native';
 
 const AddCPage = ({navigation}) => {
     const [Name, setName] = useState('');
@@ -12,107 +12,71 @@ const AddCPage = ({navigation}) => {
     const [NSS, setNSS] = useState('');
     const [Salary, setSalary] = useState('');
     
-    const handleNameChange = (text) => {
-        setName(text);
-    };
-
-    const handleAddresChange = (text) => {
-        setAddres(text);
-    };
-
-    const handleColonyChange = (text) => {
-        setColony(text);
-    };
-
-    const handleCityChange = (text) => {
-        setCity(text);
-    };
-
-    const handlePostCodeChange = (text) => {
-        setPostCode(text);
-    };
-
-    const handleRFCChange = (text) => {
-        setRFC(text);
-    };
-
-    const handleEmailChange = (text) => {
-        setEmail(text);
-    };
-
-    const handleNSSChange = (text) => {
-        setNSS(text);
-    };
-
-    const handleSalaryChange = (text) => {
-        setSalary(text);
-    };
-
     return (
         <ImageBackground
             source={require('../Resources/imagenes/Fondo1.jpg')}
             style={styles.background}         
         >
-            <Text>Nombre</Text>
+            <View style={styles.inputContainer}>
+                <Text style={styles.text}>Nombre: </Text>
+                <TextInput
+                    style={styles.input}
+                    onChangeText={(text) => setName(text)}
+                    value={Name}
+                    placeholder="Nombre"
+                />
+            </View>
+            <View style={styles.inputContainer}>
+                <Text style={styles.text}>Direccion: </Text>
+                <TextInput
+                    style={styles.input}
+                    onChangeText={(text) => setAddres(text)}
+                    value={Addres}
+                    placeholder="Direccion"
+                />                
+            </View>
+            <View style={styles.inputContainer}>
+                <Text style={styles.text}>Colonia: </Text>
+                <TextInput
+                    style={styles.input}
+                    onChangeText={(text) => setColony(text)}
+                    value={Colony}
+                    placeholder="Colonia"
+                />
+            </View>
             <TextInput
                 style={styles.input}
-                onChangeText={handleNameChange}
-                value={Name}
-                placeholder="Nombre"
-            />
-            <Text>Dirección</Text>
-            <TextInput
-                style={styles.input}
-                onChangeText={handleAddresChange}
-                value={Addres}
-                placeholder="Direccion"
-            />
-            <Text>Colonia</Text>
-            <TextInput
-                style={styles.input}
-                onChangeText={handleColonyChange}
-                value={Colony}
-                placeholder="Colonia"
-            />
-            <Text>Ciudad</Text>
-            <TextInput
-                style={styles.input}
-                onChangeText={handleCityChange}
+                onChangeText={(text) => setCity(text)}
                 value={City}
                 placeholder="Ciudad"
             />
-            <Text>Codigo Postal</Text>
             <TextInput
                 style={styles.input}
-                onChangeText={handlePostCodeChange}
+                onChangeText={(text) => setPostCode(text)}
                 value={PostCode}
                 placeholder="Codigo Postal"
             />
-            <Text>RFC</Text>
             <TextInput
                 style={styles.input}
-                onChangeText={handleRFCChange}
+                onChangeText={(text) => setRFC(text)}
                 value={RFC}
                 placeholder="RFC"
             />
-            <Text>Correo</Text>
             <TextInput
                 style={styles.input}
-                onChangeText={handleEmailChange}
+                onChangeText={(text) => setEmail(text)}
                 value={Email}
                 placeholder="Correo"
             />
-            <Text>NSS</Text>
             <TextInput
                 style={styles.input}
-                onChangeText={handleNSSChange}
+                onChangeText={(text) => setNSS(text)}
                 value={NSS}
                 placeholder="NSS"
             />
-            <Text>Sueldo</Text>
             <TextInput
                 style={styles.input}
-                onChangeText={handleSalaryChange}
+                onChangeText={(text) => setSalary(text)}
                 value={Salary}
                 placeholder="Salario"
             />
@@ -122,24 +86,31 @@ const AddCPage = ({navigation}) => {
 
 const styles = StyleSheet.create({
     background: {
-      flex: 1,
-      resizeMode: 'cover',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    text: {
-        fontSize: 50,
-        color: 'white',
-    },
-    input: {
+        flex: 1,
+        resizeMode: 'cover',
+        alignItems: 'flex-start', // Alinea los elementos a la izquierda
+        justifyContent: 'center', // Alinea los elementos en la parte superior
+      },
+      input: {
         height: 60,
         borderWidth: 1,
         backgroundColor: 'white',
         borderRadius: 20,
         padding: 10,
-        margin: 10,
-        width: '80%',
+        margin: 5,
+        width: '50%',
         fontSize: 30,
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%', // Ocupa todo el ancho disponible
+        paddingHorizontal: 20, // Espacio horizontal entre elementos
+    },
+    text: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginRight: 10,
     },
   });
 
