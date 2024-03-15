@@ -54,7 +54,7 @@ const LoggingPage = ({navigation}) => {
         placeholder="Password"
         secureTextEntry={true}
       />    
-      <TouchableOpacity onPress={Verify}>
+      <TouchableOpacity onPress = {Verify}>
         <Image
           source={require('../Resources/imagenes/acceso.png')}
           style={[ grayscale ? { tintColor: 'gray' } : null, styles.AccesButtom]}

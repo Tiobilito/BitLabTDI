@@ -6,6 +6,10 @@ const WorkerPage = ({navigation}) => {
     navigation.navigate("AddClient");
   };
 
+  const navigateToSearchClient = () => {
+    navigation.navigate("SearchClient");
+  };
+
   return (
     <ImageBackground
       source={require('../Resources/imagenes/Fondo1.jpg')}
@@ -18,7 +22,7 @@ const WorkerPage = ({navigation}) => {
         />
       </TouchableOpacity>
       <Text style={styles.text}>Añadir Cliente</Text>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={navigateToSearchClient}>
         <Image
           source={require('../Resources/imagenes/buscar.png')}
           style={styles.Buttons}
@@ -42,6 +46,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 50,
+    fontWeight: 'bold',
     color: 'white',
   }
 });
