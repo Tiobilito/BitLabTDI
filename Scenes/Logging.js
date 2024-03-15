@@ -6,25 +6,25 @@ const LoggingPage = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [grayscale, setGrayscale] = useState(true);
 
-const VerifyToggleGrayscale = () => {
-  if (username && password) {
-    setGrayscale(false);
-  } else {
-    setGrayscale(true);
-  }
-}
-
-const Verify = () => {
-  if (username && password) {
-    if (username === password) {
-      navigation.navigate("Worker");
+  const VerifyToggleGrayscale = () => {
+    if (username && password) {
+      setGrayscale(false);
     } else {
-      console.log('Los campos no coinciden');
+      setGrayscale(true);
     }
-  } else {
-    console.log('Por favor completa ambos campos');
   }
-}
+
+  const Verify = () => {
+    if (username && password) {
+      if (username === password) {
+        navigation.navigate("Worker");
+      } else {
+        console.log('Los campos no coinciden');
+      }
+    } else {
+      console.log('Por favor completa ambos campos');
+    }
+  }
 
   return (
     <ImageBackground

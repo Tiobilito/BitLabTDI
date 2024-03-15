@@ -11,6 +11,15 @@ const AddCPage = ({navigation}) => {
     const [Email, setEmail] = useState('');
     const [NSS, setNSS] = useState('');
     const [Salary, setSalary] = useState('');
+    const [grayscale, setGrayscale] = useState(true);
+
+    const VerifyToggleGrayscale = () => {
+        if (Name && Addres && Colony && City && PostCode && RFC && Email && NSS && Salary) {
+          setGrayscale(false);
+        } else {
+          setGrayscale(true);
+        }
+    }
     
     return (
         <ImageBackground
@@ -21,7 +30,10 @@ const AddCPage = ({navigation}) => {
                 <Text style={styles.text}>Nombre: </Text>
                 <TextInput
                     style={styles.input}
-                    onChangeText={(text) => setName(text)}
+                    onChangeText={(text) => {
+                        setName(text);
+                        VerifyToggleGrayscale();
+                    }}
                     value={Name}
                     placeholder="Nombre"
                 />
@@ -30,7 +42,10 @@ const AddCPage = ({navigation}) => {
                 <Text style={styles.text}>Direccion: </Text>
                 <TextInput
                     style={styles.input}
-                    onChangeText={(text) => setAddres(text)}
+                    onChangeText={(text) => {
+                        setAddres(text);
+                        VerifyToggleGrayscale();
+                    }}
                     value={Addres}
                     placeholder="Direccion"
                 />                
@@ -39,7 +54,10 @@ const AddCPage = ({navigation}) => {
                 <Text style={styles.text}>Colonia: </Text>
                 <TextInput
                     style={styles.input}
-                    onChangeText={(text) => setColony(text)}
+                    onChangeText={(text) => {
+                        setColony(text);
+                        VerifyToggleGrayscale();
+                    }}
                     value={Colony}
                     placeholder="Colonia"
                 />
@@ -48,7 +66,10 @@ const AddCPage = ({navigation}) => {
                 <Text style={styles.text}>Ciudad: </Text>
                 <TextInput
                     style={styles.input}
-                    onChangeText={(text) => setCity(text)}
+                    onChangeText={(text) => {
+                        setCity(text);
+                        VerifyToggleGrayscale();
+                    }}
                     value={City}
                     placeholder="Ciudad"
                 />                
@@ -57,7 +78,10 @@ const AddCPage = ({navigation}) => {
                 <Text style={styles.text}>Codigo Postal: </Text>
                 <TextInput
                     style={styles.input}
-                    onChangeText={(text) => setPostCode(text)}
+                    onChangeText={(text) => {
+                        setPostCode(text);
+                        VerifyToggleGrayscale();
+                    }}
                     value={PostCode}
                     placeholder="Codigo Postal"
                 />
@@ -66,7 +90,10 @@ const AddCPage = ({navigation}) => {
                 <Text style={styles.text}>RFC: </Text>
                 <TextInput
                     style={styles.input}
-                    onChangeText={(text) => setRFC(text)}
+                    onChangeText={(text) => {
+                        setRFC(text);
+                        VerifyToggleGrayscale();
+                    }}
                     value={RFC}
                     placeholder="RFC"
                 />
@@ -75,7 +102,10 @@ const AddCPage = ({navigation}) => {
                 <Text style={styles.text}>Corre electronico: </Text>
                 <TextInput
                     style={styles.input}
-                    onChangeText={(text) => setEmail(text)}
+                    onChangeText={(text) => {
+                        setEmail(text);
+                        VerifyToggleGrayscale();
+                    }}
                     value={Email}
                     placeholder="Correo"
                 />                
@@ -84,7 +114,10 @@ const AddCPage = ({navigation}) => {
                 <Text style={styles.text}>NSS: </Text>
                 <TextInput
                     style={styles.input}
-                    onChangeText={(text) => setNSS(text)}
+                    onChangeText={(text) => {
+                        setNSS(text);
+                        VerifyToggleGrayscale();
+                    }}
                     value={NSS}
                     placeholder="NSS"
                 />
@@ -93,7 +126,10 @@ const AddCPage = ({navigation}) => {
                 <Text style={styles.text}>Salario: </Text>
                 <TextInput
                     style={styles.input}
-                    onChangeText={(text) => setSalary(text)}
+                    onChangeText={(text) => {
+                        setSalary(text);
+                        VerifyToggleGrayscale();
+                    }}
                     value={Salary}
                     placeholder="Salario"
                 />
@@ -102,7 +138,7 @@ const AddCPage = ({navigation}) => {
                 <TouchableOpacity>
                     <Image
                         source={require('../Resources/imagenes/agregar1.png')}
-                        style={styles.Buttons}
+                        style={[ grayscale ? { tintColor: 'gray' } : null, styles.Buttons]}
                     />
                 </TouchableOpacity>
                 <TouchableOpacity>
