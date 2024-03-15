@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoggingPage from './Scenes/Logging';
 import WorkerPage from './Scenes/Worker';
 import AddClientPage from './Scenes/AddClient';
+import SearchClientPage from './Scenes/SearchClient';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,7 +26,11 @@ export default function App() {
         <Stack.Screen
           name = "AddClient"
           component = {AddClientPage}
-        />     
+        />   
+        <Stack.Screen
+          name = "SearchClient"
+          component = {SearchClientPage}
+        />  
       </Stack.Navigator>
     </NavigationContainer>
   );

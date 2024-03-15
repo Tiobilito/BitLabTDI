@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { React, useState } from 'react';
 import { StyleSheet, TextInput, ImageBackground, Image, TouchableOpacity } from 'react-native';
 
 const LoggingPage = ({navigation}) => {

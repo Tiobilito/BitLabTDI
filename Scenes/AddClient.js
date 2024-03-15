@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { React, useState } from 'react';
 import { StyleSheet, Text, ImageBackground, Image, TouchableOpacity, TextInput, View, Keyboard } from 'react-native';
 
 const AddCPage = ({navigation}) => {
