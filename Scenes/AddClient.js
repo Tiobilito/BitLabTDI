@@ -98,6 +98,20 @@ const AddCPage = ({navigation}) => {
                     placeholder="Salario"
                 />
             </View>
+            <View style={styles.inputContainer}>
+                <TouchableOpacity>
+                    <Image
+                        source={require('../Resources/imagenes/agregar1.png')}
+                        style={styles.Buttons}
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <Image
+                        source={require('../Resources/imagenes/cancelar.png')}
+                        style={styles.Buttons}
+                    />
+                </TouchableOpacity>
+            </View>
         </ImageBackground>
     );
 }
@@ -130,6 +144,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginRight: 10,
         color: 'white'
+    },
+    Buttons: {
+        width: 150,
+        height: 150,
     },
   });
 

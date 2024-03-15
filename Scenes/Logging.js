@@ -4,18 +4,27 @@ import { StyleSheet, TextInput, ImageBackground, Image, TouchableOpacity } from 
 const LoggingPage = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [grayscale, setGrayscale] = useState(true);
 
-  const Verify = () => {
-    if (username && password) {
-      if (username === password) {
-        navigation.navigate("Worker");
-      } else {
-        console.log('Los campos no coinciden');
-      }
-    } else {
-      console.log('Por favor completa ambos campos');
-    }
+const VerifyToggleGrayscale = () => {
+  if (username && password) {
+    setGrayscale(false);
+  } else {
+    setGrayscale(true);
   }
+}
+
+const Verify = () => {
+  if (username && password) {
+    if (username === password) {
+      navigation.navigate("Worker");
+    } else {
+      console.log('Los campos no coinciden');
+    }
+  } else {
+    console.log('Por favor completa ambos campos');
+  }
+}
 
   return (
     <ImageBackground
@@ -28,13 +37,19 @@ const LoggingPage = ({navigation}) => {
       />
       <TextInput
         style={styles.input}
-        onChangeText={(text) => setUsername(text)}
+        onChangeText={(text) => {
+          setUsername(text);
+          VerifyToggleGrayscale();
+        }}
         value={username}
         placeholder="Username"
       />
       <TextInput
         style={styles.input}
-        onChangeText={(text) => setPassword(text)}
+        onChangeText={(text) => {
+          setPassword(text);
+          VerifyToggleGrayscale();
+        }}
         value={password}
         placeholder="Password"
         secureTextEntry={true}
@@ -42,7 +57,7 @@ const LoggingPage = ({navigation}) => {
       <TouchableOpacity onPress={Verify}>
         <Image
           source={require('../Resources/imagenes/acceso.png')}
-          style={styles.AccesButtom}
+          style={[ grayscale ? { tintColor: '#888888' } : null, styles.AccesButtom]}
         />
       </TouchableOpacity>  
     </ImageBackground>
