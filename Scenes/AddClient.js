@@ -44,42 +44,60 @@ const AddCPage = ({navigation}) => {
                     placeholder="Colonia"
                 />
             </View>
-            <TextInput
-                style={styles.input}
-                onChangeText={(text) => setCity(text)}
-                value={City}
-                placeholder="Ciudad"
-            />
-            <TextInput
-                style={styles.input}
-                onChangeText={(text) => setPostCode(text)}
-                value={PostCode}
-                placeholder="Codigo Postal"
-            />
-            <TextInput
-                style={styles.input}
-                onChangeText={(text) => setRFC(text)}
-                value={RFC}
-                placeholder="RFC"
-            />
-            <TextInput
-                style={styles.input}
-                onChangeText={(text) => setEmail(text)}
-                value={Email}
-                placeholder="Correo"
-            />
-            <TextInput
-                style={styles.input}
-                onChangeText={(text) => setNSS(text)}
-                value={NSS}
-                placeholder="NSS"
-            />
-            <TextInput
-                style={styles.input}
-                onChangeText={(text) => setSalary(text)}
-                value={Salary}
-                placeholder="Salario"
-            />
+            <View style={styles.inputContainer}>
+                <Text style={styles.text}>Ciudad: </Text>
+                <TextInput
+                    style={styles.input}
+                    onChangeText={(text) => setCity(text)}
+                    value={City}
+                    placeholder="Ciudad"
+                />                
+            </View>
+            <View style={styles.inputContainer}>
+                <Text style={styles.text}>Codigo Postal: </Text>
+                <TextInput
+                    style={styles.input}
+                    onChangeText={(text) => setPostCode(text)}
+                    value={PostCode}
+                    placeholder="Codigo Postal"
+                />
+            </View>
+            <View style={styles.inputContainer}>
+                <Text style={styles.text}>RFC: </Text>
+                <TextInput
+                    style={styles.input}
+                    onChangeText={(text) => setRFC(text)}
+                    value={RFC}
+                    placeholder="RFC"
+                />
+            </View>
+            <View style={styles.inputContainer}>
+                <Text style={styles.text}>Corre electronico: </Text>
+                <TextInput
+                    style={styles.input}
+                    onChangeText={(text) => setEmail(text)}
+                    value={Email}
+                    placeholder="Correo"
+                />                
+            </View>
+            <View style={styles.inputContainer}>
+                <Text style={styles.text}>NSS: </Text>
+                <TextInput
+                    style={styles.input}
+                    onChangeText={(text) => setNSS(text)}
+                    value={NSS}
+                    placeholder="NSS"
+                />
+            </View>
+            <View style={styles.inputContainer}>
+                <Text style={styles.text}>Salario: </Text>
+                <TextInput
+                    style={styles.input}
+                    onChangeText={(text) => setSalary(text)}
+                    value={Salary}
+                    placeholder="Salario"
+                />
+            </View>
         </ImageBackground>
     );
 }
@@ -108,9 +126,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20, // Espacio horizontal entre elementos
     },
     text: {
-        fontSize: 20,
+        fontSize: 30,
         fontWeight: 'bold',
         marginRight: 10,
+        color: 'white'
     },
   });
 
