@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, ImageBackground, Image, TouchableOpacity, TextInput, View } from 'react-native';
+import { StyleSheet, Text, ImageBackground, Image, TouchableOpacity, TextInput, View, Keyboard } from 'react-native';
 
 const AddCPage = ({navigation}) => {
     const [Name, setName] = useState('');
@@ -127,9 +127,11 @@ const AddCPage = ({navigation}) => {
                 <TextInput
                     style={styles.input}
                     onChangeText={(text) => {
-                        setSalary(text);
+                        if (/^\d+$/.test(text) || text === '') setSalary(text);
                         VerifyToggleGrayscale();
-                    }}
+                        }
+                    }
+                    keyboardType='numeric'
                     value={Salary}
                     placeholder="Salario"
                 />
