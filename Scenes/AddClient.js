@@ -13,6 +13,10 @@ const AddCPage = ({navigation}) => {
     const [Salary, setSalary] = useState('');
     const [grayscale, setGrayscale] = useState(true);
 
+    const navigateToWorker = () => {
+        navigation.navigate("Worker");
+    };
+
     const VerifyToggleGrayscale = () => {
         if (Name && Addres && Colony && City && PostCode && RFC && Email && NSS && Salary) {
           setGrayscale(false);
@@ -79,9 +83,10 @@ const AddCPage = ({navigation}) => {
                 <TextInput
                     style={styles.input}
                     onChangeText={(text) => {
-                        setPostCode(text);
+                        if (/^\d+$/.test(text) || text === '') setPostCode(text);
                         VerifyToggleGrayscale();
                     }}
+                    keyboardType='numeric'
                     value={PostCode}
                     placeholder="Codigo Postal"
                 />
@@ -143,7 +148,7 @@ const AddCPage = ({navigation}) => {
                         style={[ grayscale ? { tintColor: 'gray' } : null, styles.Buttons]}
                     />
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={navigateToWorker}>
                     <Image
                         source={require('../Resources/imagenes/cancelar.png')}
                         style={styles.Buttons}
