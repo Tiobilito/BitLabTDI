@@ -1,5 +1,5 @@
 import { React, useState } from 'react';
-import { StyleSheet, Text, ImageBackground, Image, TouchableOpacity, TextInput, View, Keyboard } from 'react-native';
+import { StyleSheet, Text, ImageBackground, Image, TouchableOpacity, TextInput, View, Keyboard, ScrollView } from 'react-native';
 
 const AddCPage = ({navigation}) => {
     const [Name, setName] = useState('');
@@ -30,6 +30,7 @@ const AddCPage = ({navigation}) => {
             source={require('../Resources/imagenes/Fondo1.jpg')}
             style={styles.background}         
         >
+            <ScrollView>
             <View style={styles.inputContainer}>
                 <Text style={styles.text}>Nombre: </Text>
                 <TextInput
@@ -155,6 +156,7 @@ const AddCPage = ({navigation}) => {
                     />
                 </TouchableOpacity>
             </View>
+            </ScrollView>
         </ImageBackground>
     );
 }
