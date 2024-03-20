@@ -1,5 +1,5 @@
 import { React, useState } from 'react';
-import { StyleSheet, Text, ImageBackground, Image, TouchableOpacity, TextInput, View, Keyboard, ScrollView } from 'react-native';
+import { StyleSheet, Text, ImageBackground, Image, TouchableOpacity, TextInput, View, ScrollView } from 'react-native';
 
 const AddCPage = ({navigation}) => {
     const [Name, setName] = useState('');
