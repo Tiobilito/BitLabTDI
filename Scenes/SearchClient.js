@@ -6,33 +6,33 @@ const Table = () => {
         <View>
             <View style={styles.TableLine}>
                 <Text style={styles.text}>hola1</Text>
-                <Button
-                    title='Detalles'
-                />
+                <TouchableOpacity style = {styles.buttom}>
+                    <Text style={styles.textButton}>Detalles</Text>
+                </TouchableOpacity>
             </View>
             <View style={styles.TableLine}>
                 <Text style={styles.text}>hola2</Text>
-                <Button
-                    title='Detalles'
-                />
+                <TouchableOpacity style = {styles.buttom}>
+                    <Text style={styles.textButton}>Detalles</Text>
+                </TouchableOpacity>
             </View>
             <View style={styles.TableLine}>
                 <Text style={styles.text}>hola3</Text>
-                <Button
-                    title='Detalles'
-                />
+                <TouchableOpacity style = {styles.buttom}>
+                    <Text style={styles.textButton}>Detalles</Text>
+                </TouchableOpacity>
             </View>
             <View style={styles.TableLine}>
                 <Text style={styles.text}>hola4</Text>
-                <Button
-                    title='Detalles'
-                />
+                <TouchableOpacity style = {styles.buttom}>
+                    <Text style={styles.textButton}>Detalles</Text>
+                </TouchableOpacity>
             </View>
             <View style={styles.TableLine}>
                 <Text style={styles.text}>hola5</Text>
-                <Button
-                    title='Detalles'
-                />
+                <TouchableOpacity style = {styles.buttom}>
+                    <Text style={styles.textButton}>Detalles</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -58,7 +58,7 @@ const SearchPage = ({navigation}) => {
                     placeholder="Nombre"
                 />
                 <TouchableOpacity style = {styles.buttom}>
-                    <Text style={styles.text}>Buscar</Text>
+                    <Text style={styles.textButton}>Buscar</Text>
                 </TouchableOpacity>
             </View>
         {
@@ -102,6 +102,12 @@ const styles = StyleSheet.create({
         padding: 5,
         borderRadius: 10,
         alignItems: 'center',
+    },
+    textButton: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        marginRight: 10,
+        color: 'white'
     },
 });
 
