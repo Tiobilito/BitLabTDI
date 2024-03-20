@@ -1,35 +1,11 @@
 import { React, useState } from 'react';
 import { Text, StyleSheet, TextInput, ImageBackground, View, TouchableOpacity } from 'react-native';
 
-const Table = () => {
+const Table = ({name}) => {
     return (
         <View>
             <View style={styles.TableLine}>
-                <Text style={styles.text}>hola1</Text>
-                <TouchableOpacity style = {styles.buttom}>
-                    <Text style={styles.textButton}>Detalles</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.TableLine}>
-                <Text style={styles.text}>hola2</Text>
-                <TouchableOpacity style = {styles.buttom}>
-                    <Text style={styles.textButton}>Detalles</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.TableLine}>
-                <Text style={styles.text}>hola3</Text>
-                <TouchableOpacity style = {styles.buttom}>
-                    <Text style={styles.textButton}>Detalles</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.TableLine}>
-                <Text style={styles.text}>hola4</Text>
-                <TouchableOpacity style = {styles.buttom}>
-                    <Text style={styles.textButton}>Detalles</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.TableLine}>
-                <Text style={styles.text}>hola5</Text>
+                <Text style={styles.text}>{name}</Text>
                 <TouchableOpacity style = {styles.buttom}>
                     <Text style={styles.textButton}>Detalles</Text>
                 </TouchableOpacity>
@@ -62,7 +38,7 @@ const SearchPage = ({navigation}) => {
                 </TouchableOpacity>
             </View>
         {
-            ShowTable == true ? <Table/> : null
+            ShowTable == true ? <Table name={"hola1"}/> : null
         }
         </ImageBackground>
     );
