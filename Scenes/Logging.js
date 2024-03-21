@@ -20,16 +20,13 @@ const LoggingPage = ({navigation}) => {
     .then(response => response.json())
     .then(data => {
       if (username && password) {
-        if (username === password) {
-          navigation.navigate("Worker");
-        } else {
-          console.log('Los campos no coinciden');
-        }
+        data.forEach(item => {
+          if(item.username === username && item.contra === password) navigation.navigate("Worker");
+        });
       } 
       else {
         console.log('Por favor completa ambos campos');
       }
-      console.log(data); // Mostrar los datos en la consola
     })
     .catch(error => {
       console.error('Error al obtener los datos:', error);
