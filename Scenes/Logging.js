@@ -15,15 +15,25 @@ const LoggingPage = ({navigation}) => {
   }
 
   const Verify = () => {
-    if (username && password) {
-      if (username === password) {
-        navigation.navigate("Worker");
-      } else {
-        console.log('Los campos no coinciden');
+
+    fetch('http://10.214.150.5:3000/empleados')
+    .then(response => response.json())
+    .then(data => {
+      if (username && password) {
+        if (username === password) {
+          navigation.navigate("Worker");
+        } else {
+          console.log('Los campos no coinciden');
+        }
+      } 
+      else {
+        console.log('Por favor completa ambos campos');
       }
-    } else {
-      console.log('Por favor completa ambos campos');
-    }
+      console.log(data); // Mostrar los datos en la consola
+    })
+    .catch(error => {
+      console.error('Error al obtener los datos:', error);
+    });
   }
 
   return (
