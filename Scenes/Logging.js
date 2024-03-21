@@ -1,5 +1,5 @@
 import { React, useState } from 'react';
-import { StyleSheet, TextInput, ImageBackground, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, TextInput, ImageBackground, Image, TouchableOpacity, Alert } from 'react-native';
 
 const LoggingPage = ({navigation}) => {
   const [username, setUsername] = useState('');
@@ -15,17 +15,23 @@ const LoggingPage = ({navigation}) => {
   }
 
   const Verify = () => {
-
+    var Done = false
     fetch('http://10.214.150.5:3000/empleados')
     .then(response => response.json())
     .then(data => {
       if (username && password) {
         data.forEach(item => {
-          if(item.username === username && item.contra === password) navigation.navigate("Worker");
+          if(item.username === username && item.contra === password) {
+            Done = true;
+            navigation.navigate("Worker");
+          }
         });
+        if(Done === false) {
+          Alert.alert("Datos de inicio de sesion incorrectos");
+        }
       } 
       else {
-        console.log('Por favor completa ambos campos');
+        Alert.alert("Por favor completa ambos campos");
       }
     })
     .catch(error => {
