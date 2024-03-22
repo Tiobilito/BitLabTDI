@@ -1,5 +1,5 @@
 import { React, useState } from 'react';
-import { StyleSheet, Text, ImageBackground, Image, TouchableOpacity, TextInput, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, ImageBackground, Image, TouchableOpacity, TextInput, View, ScrollView, Alert } from 'react-native';
 
 const AddCPage = ({navigation}) => {
     const [Name, setName] = useState('');
@@ -15,6 +15,15 @@ const AddCPage = ({navigation}) => {
     const navigateToWorker = () => {
         navigation.navigate("Worker");
     };
+
+    const VerifyAllContents = () => {
+        if(Name && Addres && Colony && City && PostCode && RFC && Email && NSS && Salary) {
+            Alert.alert("Espere funcionalidad");
+        }
+        else {
+            Alert.alert("Por favor rellene todos los datos");
+        }
+    }
     
     return (
         <ImageBackground
@@ -125,7 +134,7 @@ const AddCPage = ({navigation}) => {
                 />
             </View>
             <View style={styles.inputContainer}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={VerifyAllContents}>
                     <Image
                         source={require('../Resources/imagenes/agregar1.png')}
                         style={styles.Buttons}
