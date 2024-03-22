@@ -15,9 +15,10 @@ const Table = ({name}) => {
 }
 
 const SearchPage = ({navigation}) => {
-    const [ShowTable, SetShow] = useState(true);
+    const [ShowTable, SetShow] = useState(false);
     const [Name, setName] = useState('');
-    
+    const numberOfTables = 5;
+
     return (
         <ImageBackground
             source={require('../Resources/imagenes/Fondo1.jpg')}
@@ -37,9 +38,11 @@ const SearchPage = ({navigation}) => {
                     <Text style={styles.textButton}>Buscar</Text>
                 </TouchableOpacity>
             </View>
-        {
-            ShowTable == true ? <Table name={"hola1"}/> : null
-        }
+            {
+                Array.from({ length: numberOfTables }).map((_, index) => (
+                    ShowTable ? <Table key={index} name={`hola${index + 1}`} /> : null
+                ))
+            }
         </ImageBackground>
     );
 }

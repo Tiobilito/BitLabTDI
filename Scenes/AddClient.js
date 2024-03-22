@@ -11,19 +11,10 @@ const AddCPage = ({navigation}) => {
     const [Email, setEmail] = useState('');
     const [NSS, setNSS] = useState('');
     const [Salary, setSalary] = useState('');
-    const [grayscale, setGrayscale] = useState(true);
 
     const navigateToWorker = () => {
         navigation.navigate("Worker");
     };
-
-    const VerifyToggleGrayscale = () => {
-        if (Name && Addres && Colony && City && PostCode && RFC && Email && NSS && Salary) {
-          setGrayscale(false);
-        } else {
-          setGrayscale(true);
-        }
-    }
     
     return (
         <ImageBackground
@@ -37,7 +28,6 @@ const AddCPage = ({navigation}) => {
                     style={styles.input}
                     onChangeText={(text) => {
                         setName(text);
-                        VerifyToggleGrayscale();
                     }}
                     value={Name}
                     placeholder="Nombre"
@@ -49,7 +39,6 @@ const AddCPage = ({navigation}) => {
                     style={styles.input}
                     onChangeText={(text) => {
                         setAddres(text);
-                        VerifyToggleGrayscale();
                     }}
                     value={Addres}
                     placeholder="Direccion"
@@ -61,7 +50,6 @@ const AddCPage = ({navigation}) => {
                     style={styles.input}
                     onChangeText={(text) => {
                         setColony(text);
-                        VerifyToggleGrayscale();
                     }}
                     value={Colony}
                     placeholder="Colonia"
@@ -73,7 +61,6 @@ const AddCPage = ({navigation}) => {
                     style={styles.input}
                     onChangeText={(text) => {
                         setCity(text);
-                        VerifyToggleGrayscale();
                     }}
                     value={City}
                     placeholder="Ciudad"
@@ -85,7 +72,6 @@ const AddCPage = ({navigation}) => {
                     style={styles.input}
                     onChangeText={(text) => {
                         if (/^\d+$/.test(text) || text === '') setPostCode(text);
-                        VerifyToggleGrayscale();
                     }}
                     keyboardType='numeric'
                     value={PostCode}
@@ -98,7 +84,6 @@ const AddCPage = ({navigation}) => {
                     style={styles.input}
                     onChangeText={(text) => {
                         setRFC(text);
-                        VerifyToggleGrayscale();
                     }}
                     value={RFC}
                     placeholder="RFC"
@@ -110,7 +95,6 @@ const AddCPage = ({navigation}) => {
                     style={styles.input}
                     onChangeText={(text) => {
                         setEmail(text);
-                        VerifyToggleGrayscale();
                     }}
                     value={Email}
                     placeholder="Correo"
@@ -122,7 +106,6 @@ const AddCPage = ({navigation}) => {
                     style={styles.input}
                     onChangeText={(text) => {
                         setNSS(text);
-                        VerifyToggleGrayscale();
                     }}
                     value={NSS}
                     placeholder="NSS"
@@ -134,7 +117,6 @@ const AddCPage = ({navigation}) => {
                     style={styles.input}
                     onChangeText={(text) => {
                         if (/^\d+$/.test(text) || text === '') setSalary(text);
-                        VerifyToggleGrayscale();
                         }
                     }
                     keyboardType='numeric'
@@ -146,7 +128,7 @@ const AddCPage = ({navigation}) => {
                 <TouchableOpacity>
                     <Image
                         source={require('../Resources/imagenes/agregar1.png')}
-                        style={[ grayscale ? { tintColor: 'gray' } : null, styles.Buttons]}
+                        style={styles.Buttons}
                     />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={navigateToWorker}>

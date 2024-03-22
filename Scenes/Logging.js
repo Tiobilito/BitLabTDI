@@ -4,15 +4,6 @@ import { StyleSheet, TextInput, ImageBackground, Image, TouchableOpacity, Alert 
 const LoggingPage = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [grayscale, setGrayscale] = useState(true);
-
-  const VerifyToggleGrayscale = () => {
-    if (username && password) {
-      setGrayscale(false);
-    } else {
-      setGrayscale(true);
-    }
-  }
 
   const Verify = () => {
     var Done = false
@@ -52,7 +43,6 @@ const LoggingPage = ({navigation}) => {
         style={styles.input}
         onChangeText={(text) => {
           setUsername(text);
-          VerifyToggleGrayscale();
         }}
         value={username}
         placeholder="Username"
@@ -61,7 +51,6 @@ const LoggingPage = ({navigation}) => {
         style={styles.input}
         onChangeText={(text) => {
           setPassword(text);
-          VerifyToggleGrayscale();
         }}
         value={password}
         placeholder="Password"
@@ -70,7 +59,7 @@ const LoggingPage = ({navigation}) => {
       <TouchableOpacity onPress = {Verify}>
         <Image
           source={require('../Resources/imagenes/acceso.png')}
-          style={[ grayscale ? { tintColor: 'gray' } : null, styles.AccesButtom]}
+          style={styles.AccesButtom}
         />
       </TouchableOpacity>  
     </ImageBackground>
