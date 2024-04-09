@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, ImageBackground, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, ImageBackground, Image, TouchableOpacity, View } from 'react-native';
 
 const WorkerPage = ({navigation}) => {
   const navigateToAddClient = () => {
@@ -11,8 +11,7 @@ const WorkerPage = ({navigation}) => {
   };
 
   return (
-    <ImageBackground
-      source={require('../Resources/imagenes/Fondo1.jpg')}
+    <View
       style={styles.background}    
     >
       <TouchableOpacity onPress={navigateToAddClient}>
@@ -29,7 +28,7 @@ const WorkerPage = ({navigation}) => {
         />        
       </TouchableOpacity>
       <Text style={styles.text}>Buscar Cliente</Text>
-    </ImageBackground>
+    </View>
   );
 }
 
@@ -39,6 +38,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#1875c7',
   },
   Buttons: {
     width: 200,

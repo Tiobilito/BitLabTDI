@@ -1,49 +1,98 @@
-import { React, useState } from 'react';
-import { Text, StyleSheet, TextInput, ImageBackground, View, TouchableOpacity } from 'react-native';
-
-const Table = ({name}) => {
-    return (
-        <View>
-            <View style={styles.TableLine}>
-                <Text style={styles.text}>{name}</Text>
-                <TouchableOpacity style = {styles.buttom}>
-                    <Text style={styles.textButton}>Detalles</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-    );
-}
+import { React, useState, useEffect } from 'react';
+import { Text, StyleSheet, TextInput, ImageBackground, View, Button, FlatList, ActivityIndicator } from 'react-native';
+import filter from "lodash.filter";
 
 const SearchPage = ({navigation}) => {
-    const [ShowTable, SetShow] = useState(false);
-    const [Name, setName] = useState('');
-    const numberOfTables = 5;
+    const [isLoading, setIsLoading] = useState(false);
+    const [data, setData] = useState([]);
+    const [error, setError] = useState(null);
+    const [fullData, setFullData] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
+  
+    useEffect(() => {
+      setIsLoading(true);
+      fetchData("http://10.214.150.5:3000/clientes");
+    }, []);
+
+    const fetchData = async(url) => {
+        try {
+          const response = await fetch(url);
+          const json = await response.json();
+          setData(json);
+          setFullData(json);
+          setIsLoading(false);
+        } catch(error) {
+          setError(error);
+          console.log(error);
+          setIsLoading(false);
+        }
+    }
+
+    if(isLoading) {
+        return (
+          <View style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+            <ActivityIndicator
+              size={'large'}
+            />
+          </View>
+        );
+    }
+
+    if(error) {
+        return (
+          <View style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+            <Text>Error in fetch data</Text>
+          </View>
+        );
+    }
+
+    const contains = ({nombre, correo}, query) => {
+        if(nombre.includes(query) || correo.includes(query)) {
+          return true;
+        } else {
+          return false;
+        }
+    }
 
     return (
-        <ImageBackground
-            source={require('../Resources/imagenes/Fondo1.jpg')}
+        <View
             style={styles.background}
         >
-            <Text style={styles.text}>Nombre del cliente a buscar?</Text>
-            <View style={styles.TableLine}>
-                <TextInput
-                    style = {styles.input}
-                    onChangeText={(text) => {
-                        setName(text);
-                    }}
-                    value={Name}
-                    placeholder="Nombre"
-                />
-                <TouchableOpacity style = {styles.buttom}>
-                    <Text style={styles.textButton}>Buscar</Text>
-                </TouchableOpacity>
-            </View>
-            {
-                Array.from({ length: numberOfTables }).map((_, index) => (
-                    ShowTable ? <Table key={index} name={`hola${index + 1}`} /> : null
-                ))
-            }
-        </ImageBackground>
+            <TextInput
+                style={styles.input}
+                onChangeText={(query) => {
+                    setSearchQuery(query);
+                    const formattedQuery = query;
+                    const filteredData = filter(fullData, (nombre) => {
+                    return contains(nombre, formattedQuery);
+                    });
+                    setData(filteredData);
+                }}
+                value={searchQuery}
+                placeholder="Search" 
+            />
+
+            <FlatList
+                data = {data}
+                keyExtractor = {(item) => item.idCliente}
+                renderItem={({item}) => (
+                    <View>
+                    <View>
+                        <Text style = {styles.textName}>{item.nombre}</Text>
+                        <Text style = {styles.textEmail}>{item.correo}</Text>
+                    </View>
+                    </View>
+                )}
+            />
+        </View>
     );
 }
 
@@ -53,12 +102,7 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
         alignItems: 'center',
         justifyContent: 'flex-start',
-    },
-    text: {
-        fontSize: 50,
-        fontWeight: 'bold',
-        marginRight: 10,
-        color: 'white'
+        backgroundColor: '#1875c7',
     },
     TableLine: {
         flexDirection: 'row',
@@ -72,8 +116,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 20,
         padding: 10,
-        margin: 5,
-        width: '50%',
+        margin: 10,
+        width: '80%',
         fontSize: 30,
     },
     buttom: {
@@ -82,11 +126,16 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
     },
-    textButton: {
-        fontSize: 30,
-        fontWeight: 'bold',
-        marginRight: 10,
-        color: 'white'
+    textName: {
+        fontSize: 50,
+        marginLeft: 10,
+        fontWeight: "bold",
+        color: "white"
+    },
+    textEmail: {
+        fontSize: 38,
+        marginLeft: 10,
+        color: "white",
     },
 });
 

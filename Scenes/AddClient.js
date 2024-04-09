@@ -1,5 +1,5 @@
 import { React, useState } from 'react';
-import { StyleSheet, Text, ImageBackground, Image, TouchableOpacity, TextInput, View, ScrollView, Alert } from 'react-native';
+import { StyleSheet, Text, Image, TouchableOpacity, TextInput, View, ScrollView, Alert } from 'react-native';
 
 const AddCPage = ({navigation}) => {
     const [Name, setName] = useState('');
@@ -46,6 +46,7 @@ const AddCPage = ({navigation}) => {
         .then(response => response.json())
         .then(Data => console.log(Data))
         .catch(err => console.log(err));
+        navigation.navigate("Worker");
     }
 
     const VerifyAllContents = () => {
@@ -59,8 +60,7 @@ const AddCPage = ({navigation}) => {
     }
     
     return (
-        <ImageBackground
-            source={require('../Resources/imagenes/Fondo1.jpg')}
+        <View
             style={styles.background}         
         >
             <ScrollView>
@@ -170,7 +170,7 @@ const AddCPage = ({navigation}) => {
                 </TouchableOpacity>
             </View>
             </ScrollView>
-        </ImageBackground>
+        </View>
     );
 }
 
@@ -180,6 +180,7 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
         alignItems: 'flex-start', // Alinea los elementos a la izquierda
         justifyContent: 'center', // Alinea los elementos en la parte superior
+        backgroundColor: '#1875c7',
       },
       input: {
         height: 60,
