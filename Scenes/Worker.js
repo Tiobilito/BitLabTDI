@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, ImageBackground, Image, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, Image, TouchableOpacity, View } from 'react-native';
 
 const WorkerPage = ({navigation}) => {
   const navigateToAddClient = () => {
