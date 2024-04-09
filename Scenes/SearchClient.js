@@ -67,7 +67,7 @@ const SearchPage = ({navigation}) => {
             style={styles.background}
         >
             <TextInput
-                style={styles.input}
+                style={styles.searchBox}
                 onChangeText={(query) => {
                     setSearchQuery(query);
                     const formattedQuery = query;
@@ -79,16 +79,15 @@ const SearchPage = ({navigation}) => {
                 value={searchQuery}
                 placeholder="Search" 
             />
-
             <FlatList
                 data = {data}
                 keyExtractor = {(item) => item.idCliente}
                 renderItem={({item}) => (
-                    <View>
-                    <View>
-                        <Text style = {styles.textName}>{item.nombre}</Text>
-                        <Text style = {styles.textEmail}>{item.correo}</Text>
-                    </View>
+                    <View style = {styles.flatlistContainer}>
+                      <View>
+                          <Text style = {styles.textName}>{item.nombre}</Text>
+                          <Text style = {styles.textEmail}>{item.correo}</Text>
+                      </View>
                     </View>
                 )}
             />
@@ -99,26 +98,21 @@ const SearchPage = ({navigation}) => {
 const styles = StyleSheet.create({
     background: {
         flex: 1,
-        resizeMode: 'cover',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
         backgroundColor: '#1875c7',
     },
-    TableLine: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '100%', // Ocupa todo el ancho disponible
-        paddingHorizontal: 20, // Espacio horizontal entre elementos
+    flatlistContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginLeft: 10,
+        marginTop: 10,
     },
-    input: {
-        height: 60,
-        borderWidth: 1,
-        backgroundColor: 'white',
-        borderRadius: 20,
+    searchBox: {
         padding: 10,
-        margin: 10,
-        width: '80%',
+        margin: 5,
         fontSize: 30,
+        borderWidth: 1,
+        borderRadius: 8,
+        backgroundColor: 'white'
     },
     buttom: {
         backgroundColor: 'blue',
