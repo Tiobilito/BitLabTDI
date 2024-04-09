@@ -1,19 +1,63 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import { StyleSheet, TextInput, ImageBackground, Image, TouchableOpacity, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoggingPage = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  var UserData = {
+    Username: "",
+    Password: "",
+  }
 
-  const Verify = () => {
+  useEffect(() => {
+    VerifyStrCr();
+  }, []);
+
+  const VerifyStrCr = () => {
+    const isEmpty = Object.values(UserData).every(value => value === "");
+    if(isEmpty) {
+      GetUserData();
+    } else {
+      Verify(UserData.Username, UserData.Password);
+    }
+  }
+
+  const GetUserData = async() => {
+    try {
+      const UDjson = await AsyncStorage.getItem('@UserCr');
+      if (UDjson !== null) {
+        UserData = JSON.parse(UDjson);
+      } else {
+        console.log('No data found');
+      }
+    } catch (error) {
+      console.error('Error al leer datos:', error);
+    }   
+  }
+
+  const StoreUserData = async() => {
+    UserData.Username = username;
+    UserData.Password = password;
+    try {
+      const UDjson = JSON.stringify(UserData);
+      console.log(UDjson);
+      await AsyncStorage.setItem('@UserCr', UDjson);
+    } catch(error) {
+      console.error('Error al guardar datos:', error);
+    } 
+  }
+
+  const Verify = (User, PassW) => {
     var Done = false
     fetch('http://10.214.150.5:3000/empleados')
     .then(response => response.json())
     .then(data => {
-      if (username && password) {
+      if (User && PassW) {
         data.forEach(item => {
-          if(item.username === username && item.contra === password) {
+          if(item.username === User && item.contra === PassW) {
             Done = true;
+            StoreUserData();
             navigation.navigate("Worker");
           }
         });
@@ -56,7 +100,7 @@ const LoggingPage = ({navigation}) => {
         placeholder="Password"
         secureTextEntry={true}
       />    
-      <TouchableOpacity onPress = {Verify}>
+      <TouchableOpacity onPress = {() => Verify(username, password)}>
         <Image
           source={require('../Resources/imagenes/acceso.png')}
           style={styles.AccesButtom}
