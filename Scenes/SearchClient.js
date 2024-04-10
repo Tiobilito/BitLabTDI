@@ -64,7 +64,7 @@ const SearchPage = ({navigation}) => {
 
     const navigateToClient = (idClient) => {
       console.log("Id cliente: ", idClient);
-      navigation.navigate("Client", { id: idClient});
+      navigation.navigate("Client", { idCli: idClient});
     }
 
     return (

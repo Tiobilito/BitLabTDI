@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     fontSize: 50,
     fontWeight: 'bold',
     color: 'white',
-  }
+  },
 });
 
 export default WorkerPage;
