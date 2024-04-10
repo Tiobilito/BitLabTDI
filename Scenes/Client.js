@@ -3,12 +3,14 @@ import { View, ScrollView } from 'react-native';
 
 const ClientPage = ({navigation}) => {
 
+    
+
     return (
         <View
             style={styles.background}
         >
             <ScrollView>
-                
+                <Text></Text>
             </ScrollView>
         </View>
     );

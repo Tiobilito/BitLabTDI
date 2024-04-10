@@ -62,6 +62,11 @@ const SearchPage = ({navigation}) => {
         }
     }
 
+    const navigateToClient = (idClient) => {
+      console.log(idClient);
+      //navigation.navigate("Client", { id: idClient});
+    }
+
     return (
         <View
             style={styles.background}
@@ -88,7 +93,7 @@ const SearchPage = ({navigation}) => {
                           <Text style = {styles.textName}>{item.nombre}</Text>
                           <Text style = {styles.textEmail}>{item.correo}</Text>
                       </View>
-                      <TouchableOpacity>
+                      <TouchableOpacity onPress={navigateToClient(item.idCliente)}>
                         <Image
                           source = {require('../Resources/imagenes/buscar (1).png')}
                           style = {styles.image}

@@ -64,111 +64,111 @@ const AddCPage = ({navigation}) => {
             style={styles.background}         
         >
             <ScrollView>
-            <View style={styles.inputContainer}>
-                <Text style={styles.text}>Nombre: </Text>
-                <TextInput
-                    style={styles.input}
-                    onChangeText={(text) => {
-                        setName(text);
-                    }}
-                    value={Name}
-                    placeholder="Nombre"
-                />
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.text}>Direccion: </Text>
-                <TextInput
-                    style={styles.input}
-                    onChangeText={(text) => {
-                        setAddres(text);
-                    }}
-                    value={Addres}
-                    placeholder="Direccion"
-                />                
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.text}>Colonia: </Text>
-                <TextInput
-                    style={styles.input}
-                    onChangeText={(text) => {
-                        setColony(text);
-                    }}
-                    value={Colony}
-                    placeholder="Colonia"
-                />
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.text}>Ciudad: </Text>
-                <TextInput
-                    style={styles.input}
-                    onChangeText={(text) => {
-                        setCity(text);
-                    }}
-                    value={City}
-                    placeholder="Ciudad"
-                />                
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.text}>Codigo Postal: </Text>
-                <TextInput
-                    style={styles.input}
-                    onChangeText={(text) => {
-                        if (/^\d+$/.test(text) || text === '') setPostCode(text);
-                    }}
-                    keyboardType='numeric'
-                    value={PostCode}
-                    placeholder="Codigo Postal"
-                />
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.text}>Corre electronico: </Text>
-                <TextInput
-                    style={styles.input}
-                    onChangeText={(text) => {
-                        setEmail(text);
-                    }}
-                    value={Email}
-                    placeholder="Correo"
-                />                
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.text}>Telefono: </Text>
-                <TextInput
-                    style={styles.input}
-                    onChangeText={(text) => {
-                        if (/^\d+$/.test(text) || text === '') setPhone(text);
-                    }}
-                    value={Phone}
-                    placeholder="Telefono"
-                />
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.text}>Otro Telefono: </Text>
-                <TextInput
-                    style={styles.input}
-                    onChangeText={(text) => {
-                        if (/^\d+$/.test(text) || text === '') setPhone2(text);
+                <View style={styles.inputContainer}>
+                    <Text style={styles.text}>Nombre: </Text>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            setName(text);
+                        }}
+                        value={Name}
+                        placeholder="Nombre"
+                    />
+                </View>
+                <View style={styles.inputContainer}>
+                    <Text style={styles.text}>Direccion: </Text>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            setAddres(text);
+                        }}
+                        value={Addres}
+                        placeholder="Direccion"
+                    />                
+                </View>
+                <View style={styles.inputContainer}>
+                    <Text style={styles.text}>Colonia: </Text>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            setColony(text);
+                        }}
+                        value={Colony}
+                        placeholder="Colonia"
+                    />
+                </View>
+                <View style={styles.inputContainer}>
+                    <Text style={styles.text}>Ciudad: </Text>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            setCity(text);
+                        }}
+                        value={City}
+                        placeholder="Ciudad"
+                    />                
+                </View>
+                <View style={styles.inputContainer}>
+                    <Text style={styles.text}>Codigo Postal: </Text>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            if (/^\d+$/.test(text) || text === '') setPostCode(text);
+                        }}
+                        keyboardType='numeric'
+                        value={PostCode}
+                        placeholder="Codigo Postal"
+                    />
+                </View>
+                <View style={styles.inputContainer}>
+                    <Text style={styles.text}>Corre electronico: </Text>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            setEmail(text);
+                        }}
+                        value={Email}
+                        placeholder="Correo"
+                    />                
+                </View>
+                <View style={styles.inputContainer}>
+                    <Text style={styles.text}>Telefono: </Text>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            if (/^\d+$/.test(text) || text === '') setPhone(text);
+                        }}
+                        value={Phone}
+                        placeholder="Telefono"
+                    />
+                </View>
+                <View style={styles.inputContainer}>
+                    <Text style={styles.text}>Otro Telefono: </Text>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            if (/^\d+$/.test(text) || text === '') setPhone2(text);
+                            }
                         }
-                    }
-                    keyboardType='numeric'
-                    value={Phone2}
-                    placeholder="Telefono"
-                />
-            </View>
-            <View style={styles.inputContainer}>
-                <TouchableOpacity onPress={VerifyAllContents}>
-                    <Image
-                        source={require('../Resources/imagenes/agregar1.png')}
-                        style={styles.Buttons}
+                        keyboardType='numeric'
+                        value={Phone2}
+                        placeholder="Telefono"
                     />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={navigateToWorker}>
-                    <Image
-                        source={require('../Resources/imagenes/cancelar.png')}
-                        style={styles.Buttons}
-                    />
-                </TouchableOpacity>
-            </View>
+                </View>
+                <View style={styles.inputContainer}>
+                    <TouchableOpacity onPress={VerifyAllContents}>
+                        <Image
+                            source={require('../Resources/imagenes/agregar1.png')}
+                            style={styles.Buttons}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={navigateToWorker}>
+                        <Image
+                            source={require('../Resources/imagenes/cancelar.png')}
+                            style={styles.Buttons}
+                        />
+                    </TouchableOpacity>
+                </View>
             </ScrollView>
         </View>
     );
