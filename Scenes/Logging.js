@@ -21,7 +21,6 @@ const LoggingPage = ({navigation}) => {
         const parsedData = JSON.parse(UDjson);
         setUsername(parsedData.Username);
         setPassword(parsedData.Password);
-        console.log('Los datos son: ', parsedData);
       } else {
         console.log('No data found');
       }

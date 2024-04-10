@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from 'react';
-import { Text, StyleSheet, TextInput, ImageBackground, View, Button, FlatList, ActivityIndicator } from 'react-native';
+import { Text, StyleSheet, TextInput, TouchableOpacity, Image, View, FlatList, ActivityIndicator } from 'react-native';
 import filter from "lodash.filter";
 
 const SearchPage = ({navigation}) => {
@@ -88,6 +88,12 @@ const SearchPage = ({navigation}) => {
                           <Text style = {styles.textName}>{item.nombre}</Text>
                           <Text style = {styles.textEmail}>{item.correo}</Text>
                       </View>
+                      <TouchableOpacity>
+                        <Image
+                          source = {require('../Resources/imagenes/buscar (1).png')}
+                          style = {styles.image}
+                        />
+                      </TouchableOpacity>
                     </View>
                 )}
             />
@@ -131,6 +137,10 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         color: "white",
     },
+    image: {
+        width: 80,
+        height: 80,
+    }
 });
 
 export default SearchPage;
