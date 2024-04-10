@@ -1,7 +1,6 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import { StyleSheet, TextInput, ImageBackground, Image, TouchableOpacity, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
 
 const LoggingPage = ({navigation}) => {
   const [username, setUsername] = useState('');
@@ -11,31 +10,24 @@ const LoggingPage = ({navigation}) => {
     Password: "",
   }
 
-  useFocusEffect(() => {
-    VerifyStrCr();
-  });
-
-  const VerifyStrCr = () => {
-    const isEmpty = Object.values(UserData).every(value => value === "");
-    if(isEmpty) {
-      GetUserData();
-    } else {
-      Verify(UserData.Username, UserData.Password);
-    }
-  }
+  useEffect(() => {
+    GetUserData();
+  }, []);
 
   const GetUserData = async() => {
     try {
       const UDjson = await AsyncStorage.getItem('@UserCr');
       if (UDjson !== null) {
-        UserData = JSON.parse(UDjson);
-        console.log('Los datos son: ', UserData);
+        const parsedData = JSON.parse(UDjson);
+        setUsername(parsedData.Username);
+        setPassword(parsedData.Password);
+        console.log('Los datos son: ', parsedData);
       } else {
         console.log('No data found');
       }
     } catch (error) {
       console.error('Error al leer datos:', error);
-    }   
+    }
   }
 
   const StoreUserData = async() => {
