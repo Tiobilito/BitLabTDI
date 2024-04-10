@@ -1,5 +1,5 @@
 import { React } from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, StyleSheet } from 'react-native';
 
 const ClientPage = ({navigation}) => {
 
