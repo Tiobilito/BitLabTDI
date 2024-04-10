@@ -34,7 +34,6 @@ const LoggingPage = ({navigation}) => {
     UserData.Password = password;
     try {
       const UDjson = JSON.stringify(UserData);
-      console.log(UDjson);
       await AsyncStorage.setItem('@UserCr', UDjson);
     } catch(error) {
       console.error('Error al guardar datos:', error);
