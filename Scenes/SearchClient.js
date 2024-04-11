@@ -1,13 +1,21 @@
 import { React, useState, useEffect } from 'react';
 import { Text, StyleSheet, TextInput, TouchableOpacity, Image, View, FlatList, ActivityIndicator } from 'react-native';
 import filter from "lodash.filter";
+import { useRoute } from '@react-navigation/native';
 
 const SearchPage = ({navigation}) => {
+    const route = useRoute();
+    const [Refresh, setRefresh] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState([]);
     const [error, setError] = useState(null);
     const [fullData, setFullData] = useState([]);
-    const [searchQuery, setSearchQuery] = useState("");
+    const [searchQuery, setSearchQuery] = useState(""); 
+    
+    if(Refresh != false) {
+      fetchData("http://10.214.150.5:3000/clientes");
+      Refresh = false;
+    }
   
     useEffect(() => {
       setIsLoading(true);
@@ -92,7 +100,7 @@ const SearchPage = ({navigation}) => {
                           <Text style = {styles.textName}>{item.nombre}</Text>
                           <Text style = {styles.textEmail}>{item.correo}</Text>
                       </View>
-                      <TouchableOpacity onPress={() => navigateToClient(item.idCliente)}>
+                      <TouchableOpacity onPress={() => {navigateToClient(item.idCliente)}}>
                         <Image
                           source = {require('../Resources/imagenes/buscar (1).png')}
                           style = {styles.image}

@@ -52,21 +52,15 @@ const AddCPage = ({navigation}) => {
     }
 
     const DeleteClient = async () => {
-        try {
-            const response = await fetch(`http://10.214.150.5:3000/clientes/${idClient}`, {
-                method: "DELETE",
-                headers: {
-                    "Content-type": "application/json"
-                }
-            });
-            const data = await response.json();
-            console.log(data);
-        } catch (err) {
-            console.log("Error al eliminar:", err);
-        }
+        await fetch(`http://10.214.150.5:3000/clientes/${idClient}`, {
+            method: "DELETE",
+            headers: {
+              "Content-type": "application/json"
+            }
+        });
     }
 
-    const SentData = () => {
+    const SentData = async () => {
         Data.idCliente = idClient;
         Data.nombre = Name;
         Data.direccion = Addres;
@@ -76,7 +70,7 @@ const AddCPage = ({navigation}) => {
         Data.correo = Email;
         Data.telefono = Phone;
         Data.telefono2 = Phone2;
-        fetch('http://10.214.150.5:3000/clientes', {
+        await fetch('http://10.214.150.5:3000/clientes', {
             method: "POST",
             headers: {
                 "Content-type": "application/json"

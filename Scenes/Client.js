@@ -1,11 +1,11 @@
-import { React, useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import { useFocusEffect } from '@react-navigation/native';
 
 const ClientPage = ({navigation}) => {
     const route = useRoute();
     const { idCli } = route.params;
+    const [Refresh, setRefresh] = useState(false);
     const [Name, setName] = useState('');
     const [Addres, setAddres] = useState('');
     const [Colony, setColony] = useState('');
@@ -15,16 +15,14 @@ const ClientPage = ({navigation}) => {
     const [Phone, setPhone] = useState('');
     const [Phone2, setPhone2] = useState('');
 
+    if(Refresh != false) {
+        GetClientData();
+        Refresh = false;
+    }
+
     useEffect(() => {
         GetClientData();
     }, []);
-
-    useFocusEffect(
-        useCallback(() => {
-            GetClientData();
-            return () => {};
-        }, [])
-    );
 
     const GetClientData = () => {
         fetch('http://10.214.150.5:3000/clientes')
@@ -48,6 +46,11 @@ const ClientPage = ({navigation}) => {
         });
     }
 
+    const navigateToEditClient = async () => {
+        navigation.navigate("EditClient", { idClient: idCli});
+        setRefresh(true);
+    }
+
     return (
         <View
             style={styles.background}
@@ -65,7 +68,7 @@ const ClientPage = ({navigation}) => {
                     <Text style = {styles.text} >Segunto Telefono: {Phone2}</Text>
                 </View>
                 <View style = {styles.buttoms}>
-                    <TouchableOpacity onPress={() => navigation.navigate("EditClient", { idClient: idCli})}>
+                    <TouchableOpacity onPress={navigateToEditClient}>
                         <Image
                             source = {require('../Resources/imagenes/editar.png')}
                             style = {styles.image}
