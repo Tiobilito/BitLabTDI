@@ -109,7 +109,7 @@ const SearchPage = ({navigation}) => {
 const styles = StyleSheet.create({
     background: {
         flex: 1,
-        backgroundColor: '#1875c7',
+        backgroundColor: '#095ea7',
     },
     flatlistContainer: {
         flexDirection: "row",

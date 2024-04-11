@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
         alignItems: 'flex-start', // Alinea los elementos a la izquierda
         justifyContent: 'center', // Alinea los elementos en la parte superior
-        backgroundColor: '#1875c7',
+        backgroundColor: '#095ea7',
       },
       input: {
         height: 60,

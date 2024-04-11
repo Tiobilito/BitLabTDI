@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#1875c7',
+    backgroundColor: '#095ea7',
   },
   Buttons: {
     width: 200,
