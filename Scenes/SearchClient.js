@@ -63,7 +63,6 @@ const SearchPage = ({navigation}) => {
     }
 
     const navigateToClient = (idClient) => {
-      console.log("Id cliente: ", idClient);
       navigation.navigate("Client", { idCli: idClient});
     }
 
@@ -143,9 +142,9 @@ const styles = StyleSheet.create({
         color: "white",
     },
     image: {
-        width: 80,
-        height: 80,
-    }
+        width: 120,
+        height: 120,
+    },
 });
 
 export default SearchPage;

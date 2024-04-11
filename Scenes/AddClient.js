@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center', // Alinea los elementos en la parte superior
         backgroundColor: '#095ea7',
       },
-      input: {
+    input: {
         height: 60,
         borderWidth: 1,
         backgroundColor: 'white',
@@ -207,6 +207,7 @@ const styles = StyleSheet.create({
     Buttons: {
         width: 150,
         height: 150,
+        margin: 20,
     },
   });
 
