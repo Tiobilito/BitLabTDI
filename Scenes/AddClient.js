@@ -64,110 +64,112 @@ const AddCPage = ({navigation}) => {
             style={styles.background}         
         >
             <ScrollView>
-                <View style={styles.inputContainer}>
-                    <Text style={styles.text}>Nombre: </Text>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={(text) => {
-                            setName(text);
-                        }}
-                        value={Name}
-                        placeholder="Nombre"
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <Text style={styles.text}>Direccion: </Text>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={(text) => {
-                            setAddres(text);
-                        }}
-                        value={Addres}
-                        placeholder="Direccion"
-                    />                
-                </View>
-                <View style={styles.inputContainer}>
-                    <Text style={styles.text}>Colonia: </Text>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={(text) => {
-                            setColony(text);
-                        }}
-                        value={Colony}
-                        placeholder="Colonia"
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <Text style={styles.text}>Ciudad: </Text>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={(text) => {
-                            setCity(text);
-                        }}
-                        value={City}
-                        placeholder="Ciudad"
-                    />                
-                </View>
-                <View style={styles.inputContainer}>
-                    <Text style={styles.text}>Codigo Postal: </Text>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={(text) => {
-                            if (/^\d+$/.test(text) || text === '') setPostCode(text);
-                        }}
-                        keyboardType='numeric'
-                        value={PostCode}
-                        placeholder="Codigo Postal"
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <Text style={styles.text}>Corre electronico: </Text>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={(text) => {
-                            setEmail(text);
-                        }}
-                        value={Email}
-                        placeholder="Correo"
-                    />                
-                </View>
-                <View style={styles.inputContainer}>
-                    <Text style={styles.text}>Telefono: </Text>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={(text) => {
-                            if (/^\d+$/.test(text) || text === '') setPhone(text);
-                        }}
-                        value={Phone}
-                        placeholder="Telefono"
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <Text style={styles.text}>Otro Telefono: </Text>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={(text) => {
-                            if (/^\d+$/.test(text) || text === '') setPhone2(text);
+                <View style = {{ margin: 20 }}>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.text}>Nombre: </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(text) => {
+                                setName(text);
+                            }}
+                            value={Name}
+                            placeholder="Nombre"
+                        />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.text}>Direccion: </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(text) => {
+                                setAddres(text);
+                            }}
+                            value={Addres}
+                            placeholder="Direccion"
+                        />                
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.text}>Colonia: </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(text) => {
+                                setColony(text);
+                            }}
+                            value={Colony}
+                            placeholder="Colonia"
+                        />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.text}>Ciudad: </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(text) => {
+                                setCity(text);
+                            }}
+                            value={City}
+                            placeholder="Ciudad"
+                        />                
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.text}>Codigo Postal: </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(text) => {
+                                if (/^\d+$/.test(text) || text === '') setPostCode(text);
+                            }}
+                            keyboardType='numeric'
+                            value={PostCode}
+                            placeholder="Codigo Postal"
+                        />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.text}>Corre electronico: </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(text) => {
+                                setEmail(text);
+                            }}
+                            value={Email}
+                            placeholder="Correo"
+                        />                
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.text}>Telefono: </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(text) => {
+                                if (/^\d+$/.test(text) || text === '') setPhone(text);
+                            }}
+                            value={Phone}
+                            placeholder="Telefono"
+                        />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.text}>Otro Telefono: </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(text) => {
+                                if (/^\d+$/.test(text) || text === '') setPhone2(text);
+                                }
                             }
-                        }
-                        keyboardType='numeric'
-                        value={Phone2}
-                        placeholder="Telefono"
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <TouchableOpacity onPress={VerifyAllContents}>
-                        <Image
-                            source={require('../Resources/imagenes/agregar1.png')}
-                            style={styles.Buttons}
+                            keyboardType='numeric'
+                            value={Phone2}
+                            placeholder="Telefono"
                         />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={navigateToWorker}>
-                        <Image
-                            source={require('../Resources/imagenes/cancelar.png')}
-                            style={styles.Buttons}
-                        />
-                    </TouchableOpacity>
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <TouchableOpacity onPress={VerifyAllContents}>
+                            <Image
+                                source={require('../Resources/imagenes/agregar1.png')}
+                                style={styles.Buttons}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={navigateToWorker}>
+                            <Image
+                                source={require('../Resources/imagenes/cancelar.png')}
+                                style={styles.Buttons}
+                            />
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </ScrollView>
         </View>
@@ -177,26 +179,21 @@ const AddCPage = ({navigation}) => {
 const styles = StyleSheet.create({
     background: {
         flex: 1,
-        resizeMode: 'cover',
-        alignItems: 'flex-start', // Alinea los elementos a la izquierda
-        justifyContent: 'center', // Alinea los elementos en la parte superior
         backgroundColor: '#095ea7',
       },
     input: {
-        height: 60,
-        borderWidth: 1,
-        backgroundColor: 'white',
-        borderRadius: 8,
+        flex: 1,
         padding: 10,
-        margin: 5,
-        width: '50%',
         fontSize: 30,
+        borderWidth: 1,
+        borderRadius: 8,
+        backgroundColor: 'white'
     },
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: '100%', // Ocupa todo el ancho disponible
         paddingHorizontal: 20, // Espacio horizontal entre elementos
+        marginTop: 10,
     },
     text: {
         fontSize: 30,

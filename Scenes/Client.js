@@ -1,6 +1,7 @@
-import { React, useEffect, useState } from 'react';
+import { React, useEffect, useState, useCallback } from 'react';
 import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 
 const ClientPage = ({navigation}) => {
     const route = useRoute();
@@ -17,6 +18,13 @@ const ClientPage = ({navigation}) => {
     useEffect(() => {
         GetClientData();
     }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            GetClientData();
+            return () => {};
+        }, [])
+    );
 
     const GetClientData = () => {
         fetch('http://10.214.150.5:3000/clientes')
@@ -57,9 +65,9 @@ const ClientPage = ({navigation}) => {
                     <Text style = {styles.text} >Segunto Telefono: {Phone2}</Text>
                 </View>
                 <View style = {styles.buttoms}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate("EditClient", { idClient: idCli})}>
                         <Image
-                            source = {require('../Resources/imagenes/actualizar.png')}
+                            source = {require('../Resources/imagenes/editar.png')}
                             style = {styles.image}
                         />
                     </TouchableOpacity>
