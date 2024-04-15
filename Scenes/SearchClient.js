@@ -1,21 +1,19 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState } from 'react';
 import { Text, StyleSheet, TextInput, TouchableOpacity, Image, View, FlatList, ActivityIndicator } from 'react-native';
 import filter from "lodash.filter";
-import { useRoute } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 
 const SearchPage = ({navigation}) => {
-    const route = useRoute();
-    const { Refresh } = route.params;
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState([]);
     const [error, setError] = useState(null);
     const [fullData, setFullData] = useState([]);
     const [searchQuery, setSearchQuery] = useState(""); 
   
-    useEffect(() => {
+    useFocusEffect(() => {
       setIsLoading(true);
       fetchData("http://10.214.150.5:3000/clientes");
-    }, []);
+    });
 
     const fetchData = async(url) => {
         try {

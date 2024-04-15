@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useFocusEffect } from '@react-navigation/native';
 
 const ClientPage = ({navigation}) => {
     const route = useRoute();
-    const { idCli, Refresh } = route.params;
+    const { idCli } = route.params;
     const [Name, setName] = useState('');
     const [Addres, setAddres] = useState('');
     const [Colony, setColony] = useState('');
@@ -14,9 +14,9 @@ const ClientPage = ({navigation}) => {
     const [Phone, setPhone] = useState('');
     const [Phone2, setPhone2] = useState('');
 
-    useEffect(() => {
+    useFocusEffect(() => {
         GetClientData();
-    }, []);
+    });
 
     const GetClientData = () => {
         fetch('http://10.214.150.5:3000/clientes')
