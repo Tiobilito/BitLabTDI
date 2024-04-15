@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import { Text, StyleSheet, TextInput, TouchableOpacity, Image, View, FlatList, ActivityIndicator } from 'react-native';
 import filter from "lodash.filter";
 import { useFocusEffect } from '@react-navigation/native';
@@ -10,10 +10,10 @@ const SearchPage = ({navigation}) => {
     const [fullData, setFullData] = useState([]);
     const [searchQuery, setSearchQuery] = useState(""); 
   
-    useFocusEffect(() => {
+    useEffect(() => {
       setIsLoading(true);
       fetchData("http://10.214.150.5:3000/clientes");
-    });
+    }, []);
 
     const fetchData = async(url) => {
         try {

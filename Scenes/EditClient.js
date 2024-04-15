@@ -82,12 +82,11 @@ const AddCPage = ({navigation}) => {
     }
 
     const VerifyAllContents = () => {
-        if(Name && Addres && Colony && City && PostCode && Email && Phone && Phone2) {
+        if(Name.trim() !== '' && Addres.trim() !== '' && Colony.trim() !== '' && City.trim() !== '' && PostCode.trim() !== '' && Email.trim() !== '' && Phone.trim() !== '' && Phone2.trim() !== '') {
             DeleteClient();
             SentData();
-        }
-        else {
-            Alert.alert("Por favor rellene todos los datos");
+        } else {
+            Alert.alert("Por favor rellene todos los datos correctamente");
         }
     }
     
@@ -192,12 +191,6 @@ const AddCPage = ({navigation}) => {
                         <TouchableOpacity onPress={VerifyAllContents}>
                             <Image
                                 source={require('../Resources/imagenes/actualizar.png')}
-                                style={styles.Buttons}
-                            />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => navigation.navigate("Client", { idCli: idClient})}>
-                            <Image
-                                source={require('../Resources/imagenes/cancelar.png')}
                                 style={styles.Buttons}
                             />
                         </TouchableOpacity>
