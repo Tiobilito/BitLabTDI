@@ -42,7 +42,6 @@ const ClientPage = ({navigation}) => {
 
     const navigateToEditClient = async () => {
         navigation.navigate("EditClient", { idClient: idCli});
-        setRefresh(true);
     }
 
     return (
