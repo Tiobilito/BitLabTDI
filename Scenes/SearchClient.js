@@ -5,17 +5,12 @@ import { useRoute } from '@react-navigation/native';
 
 const SearchPage = ({navigation}) => {
     const route = useRoute();
-    const [Refresh, setRefresh] = useState(false);
+    const { Refresh } = route.params;
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState([]);
     const [error, setError] = useState(null);
     const [fullData, setFullData] = useState([]);
     const [searchQuery, setSearchQuery] = useState(""); 
-    
-    if(Refresh != false) {
-      fetchData("http://10.214.150.5:3000/clientes");
-      Refresh = false;
-    }
   
     useEffect(() => {
       setIsLoading(true);

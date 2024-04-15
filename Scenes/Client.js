@@ -4,8 +4,7 @@ import { useRoute } from '@react-navigation/native';
 
 const ClientPage = ({navigation}) => {
     const route = useRoute();
-    const { idCli } = route.params;
-    const [Refresh, setRefresh] = useState(false);
+    const { idCli, Refresh } = route.params;
     const [Name, setName] = useState('');
     const [Addres, setAddres] = useState('');
     const [Colony, setColony] = useState('');
@@ -14,11 +13,6 @@ const ClientPage = ({navigation}) => {
     const [Email, setEmail] = useState('');
     const [Phone, setPhone] = useState('');
     const [Phone2, setPhone2] = useState('');
-
-    if(Refresh != false) {
-        GetClientData();
-        Refresh = false;
-    }
 
     useEffect(() => {
         GetClientData();
