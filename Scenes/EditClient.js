@@ -43,11 +43,10 @@ const AddCPage = ({navigation}) => {
           .catch(error => {
             console.error('Error al obtener los datos:', error);
           });
-      };
-      
+    };
 
     const SentData = async () => {
-        var Data = {
+        const Data = {
             idCliente: idClient,
             nombre: Name,
             direccion: Addres,
@@ -57,27 +56,19 @@ const AddCPage = ({navigation}) => {
             correo: Email,
             telefono: Phone,
             telefono2: Phone2,
-        }
-        try {
-            const response = await fetch(`http://10.214.150.5:3000/clientes`, {
-              method: 'POST',
-              headers: {
+        };
+        fetch(`http://10.214.150.5:3000/clientes/${idClient}`, {
+            method: 'PATCH',
+            headers: {
                 'Content-type': 'application/json',
-              },
-              body: JSON.stringify(Data),
-            });
-        
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-        
-            const data = await response.json();
-            console.log('Data updated successfully:', data);
-            navigation.navigate('Client', { idCli: idClient });
-          } catch (error) {
-            console.error('Error updating data:', error);
-          }
-    }
+            },
+            body: JSON.stringify(Data),
+        })
+        .then(response => response.json())
+        .then(Data => console.log(Data))
+        .catch(err => console.log(err));
+        navigation.navigate('Client', { idCli: idClient });
+    };
 
     const VerifyAllContents = () => {
         if(Name.trim() !== '' && Addres.trim() !== '' && Colony.trim() !== '' && City.trim() !== '' && PostCode.trim() !== '' && Email.trim() !== '' && Phone.trim() !== '' && Phone2.trim() !== '') {
