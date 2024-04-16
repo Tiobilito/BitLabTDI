@@ -3,7 +3,7 @@ import { Text, StyleSheet, TextInput, TouchableOpacity, Image, View, FlatList, A
 import filter from "lodash.filter";
 import { useRoute, useFocusEffect } from '@react-navigation/native';
 
-const DevisesPage = ({navigation}) => {
+const DevicesPage = ({navigation}) => {
     const route = useRoute();
     const { idClient } = route.params;
     const [isLoading, setIsLoading] = useState(false);

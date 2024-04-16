@@ -8,7 +8,7 @@ import WorkerPage from './Scenes/Worker';
 import AddClientPage from './Scenes/AddClient';
 import SearchClientPage from './Scenes/SearchClient';
 import ClientPage from './Scenes/Client';
-import DevisesPage from './Scenes/Devises';
+import DevicesPage from './Scenes/Devices';
 import EditClientPage from './Scenes/EditClient';
 
 const Stack = createNativeStackNavigator();
@@ -38,8 +38,8 @@ export default function App() {
           component = {ClientPage}
         />  
         <Stack.Screen
-          name = "Devises"
-          component = {DevisesPage}
+          name = "Devices"
+          component = {DevicesPage}
         /> 
         <Stack.Screen
           name = "EditClient"

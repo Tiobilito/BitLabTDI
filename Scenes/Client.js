@@ -44,8 +44,8 @@ const ClientPage = ({navigation}) => {
         navigation.navigate("EditClient", { idClient: idCli});
     }
 
-    const navigateToDivises = async () => {
-        navigation.navigate("Divises", { idClient: idCli});
+    const navigateToDevices = async () => {
+        navigation.navigate("Divices", { idClient: idCli});
     }
 
     return (
@@ -71,7 +71,7 @@ const ClientPage = ({navigation}) => {
                             style = {styles.image}
                         />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={navigateToDivises}>
+                    <TouchableOpacity onPress={navigateToDevices}>
                         <Image
                             source = {require('../Resources/imagenes/device.png')}
                             style = {styles.image}
