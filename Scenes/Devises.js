@@ -1,76 +1,112 @@
-import { React, useEffect, useState } from 'react';
-import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import { Text, StyleSheet, TextInput, TouchableOpacity, Image, View, FlatList, ActivityIndicator } from 'react-native';
+import filter from "lodash.filter";
+import { useRoute, useFocusEffect } from '@react-navigation/native';
 
-const ClientPage = ({navigation}) => {
+const DevisesPage = ({navigation}) => {
     const route = useRoute();
-    const { idCli } = route.params;
-    const [Name, setName] = useState('');
-    const [Addres, setAddres] = useState('');
-    const [Colony, setColony] = useState('');
-    const [City, setCity] = useState('');
-    const [PostCode, setPostCode] = useState('');
-    const [Email, setEmail] = useState('');
-    const [Phone, setPhone] = useState('');
-    const [Phone2, setPhone2] = useState('');
+    const { idClient } = route.params;
+    const [isLoading, setIsLoading] = useState(false);
+    const [data, setData] = useState([]);
+    const [error, setError] = useState(null); 
+    const [fullData, setFullData] = useState([]);
+    const [searchQuery, setSearchQuery] = useState(""); 
+  
+    useFocusEffect(
+      React.useCallback(() => {
+          setIsLoading(true);
+          fetchData("http://10.214.150.5:3000/dispositivos");
+      }, [])
+    );
 
-    useEffect(() => {
-        GetClientData();
-    }, []);
+    const fetchData = async (url) => {
+        try {
+          const response = await fetch(url);
+          const json = await response.json();
+          const filteredData = filter(json, (item) => item.id_cliente === idClient);
+          setData(filteredData);
+          setFullData(filteredData);
+          setIsLoading(false);
+        } catch (error) {
+          setError(error);
+          console.log(error);
+          setIsLoading(false);
+        }
+    };
 
-    const GetClientData = () => {
-        fetch('http://10.214.150.5:3000/clientes')
-        .then(response => response.json())
-        .then(data => {
-        data.forEach(item => {
-            if(item.idCliente === idCli) {
-                setName(item.nombre);
-                setAddres(item.direccion);
-                setColony(item.colonia);
-                setCity(item.ciudad);
-                setPostCode(item.cp);
-                setEmail(item.correo);
-                setPhone(item.telefono);
-                setPhone2(item.telefono2);
-            }
-        });
-        })
-        .catch(error => {
-            console.error('Error al obtener los datos:', error);
-        });
+    if(isLoading) {
+        return (
+          <View style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+            <ActivityIndicator
+              size={'large'}
+            />
+          </View>
+        );
+    }
+
+    if(error) {
+        return (
+          <View style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+            <Text>Error in fetch data</Text>
+          </View>
+        );
+    }
+
+    const contains = ({nombre, correo}, query) => {
+        if(nombre.includes(query) || correo.includes(query)) {
+          return true;
+        } else {
+          return false;
+        }
+    }
+
+    const navigateToClient = (idClient) => {
+      navigation.navigate("Client", { idCli: idClient});
     }
 
     return (
         <View
             style={styles.background}
         >
-            <ScrollView style = {styles.scrollData}>
-                <View>
-                    <Text style = {styles.text} >Id Cliente: {idCli}</Text>
-                    <Text style = {styles.text} >Nombre: {Name}</Text>
-                    <Text style = {styles.text} >Direccion: {Addres}</Text>
-                    <Text style = {styles.text} >Colonia: {Colony}</Text>
-                    <Text style = {styles.text} >Ciudad: {City}</Text>
-                    <Text style = {styles.text} >C.P: {PostCode}</Text>
-                    <Text style = {styles.text} >Correo: {Email}</Text>
-                    <Text style = {styles.text} >Telefono: {Phone}</Text>
-                    <Text style = {styles.text} >Segunto Telefono: {Phone2}</Text>
-                </View>
-                <View style = {styles.buttoms}>
-                    <TouchableOpacity>
+            <TextInput
+                style={styles.searchBox}
+                onChangeText={(query) => {
+                    setSearchQuery(query);
+                    const formattedQuery = query;
+                    const filteredData = filter(fullData, (nombre) => {
+                    return contains(nombre, formattedQuery);
+                    });
+                    setData(filteredData);
+                }}
+                value={searchQuery}
+                placeholder="Search" 
+            />
+            <FlatList
+                data = {data}
+                keyExtractor = {(item) => item.idCliente}
+                renderItem={({item}) => (
+                    <View style = {styles.flatlistContainer}>
+                      <View>
+                          <Text style = {styles.textName}>{item.nombre}</Text>
+                          <Text style = {styles.textEmail}>{item.correo}</Text>
+                      </View>
+                      <TouchableOpacity onPress={() => {navigateToClient(item.idCliente)}}>
                         <Image
-                            source = {require('../Resources/imagenes/actualizar.png')}
-                            style = {styles.image}
+                          source = {require('../Resources/imagenes/buscar (1).png')}
+                          style = {styles.image}
                         />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Image
-                            source = {require('../Resources/imagenes/device.png')}
-                            style = {styles.image}
-                        />                    
-                    </TouchableOpacity>
-                </View>
-            </ScrollView>
+                      </TouchableOpacity>
+                    </View>
+                )}
+            />
         </View>
     );
 }
@@ -80,25 +116,41 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#095ea7',
     },
-    scrollData: {
-        margin: 18,
+    flatlistContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginLeft: 10,
+        marginTop: 10,
     },
-    text: {
+    searchBox: {
+        padding: 10,
+        margin: 5,
+        fontSize: 30,
+        borderWidth: 1,
+        borderRadius: 8,
+        backgroundColor: 'white'
+    },
+    buttom: {
+        backgroundColor: 'blue',
+        padding: 5,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    textName: {
         fontSize: 50,
-        fontWeight: 'bold',
-        color: 'white',
+        marginLeft: 10,
+        fontWeight: "bold",
+        color: "white"
+    },
+    textEmail: {
+        fontSize: 38,
+        marginLeft: 10,
+        color: "white",
     },
     image: {
-        width: 150,
-        height: 150,
-        margin: 20,
+        width: 120,
+        height: 120,
     },
-    buttoms: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '100%', 
-        paddingHorizontal: 20,
-    }
 });
 
-export default ClientPage;
+export default DevisesPage;
