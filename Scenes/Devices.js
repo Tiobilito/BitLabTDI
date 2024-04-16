@@ -92,20 +92,24 @@ const DevicesPage = ({navigation}) => {
             <FlatList
                 data = {data}
                 keyExtractor = {(item) => item.idCliente}
-                renderItem={({item}) => (
-                    <View style = {styles.flatlistContainer}>
+                renderItem={({item}) => {    
+                  const [showDetails, setShowDetails] = useState(false);
+
+                  return (<View style = {styles.flatlistContainer}>
+                    <TouchableOpacity>
                       <View>
                           <Text style = {styles.textName}>{item.nombre}</Text>
                           <Text style = {styles.textEmail}>{item.correo}</Text>
                       </View>
-                      <TouchableOpacity onPress={() => {navigateToClient(item.idCliente)}}>
-                        <Image
-                          source = {require('../Resources/imagenes/buscar (1).png')}
-                          style = {styles.image}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                )}
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {navigateToClient(item.idCliente)}}>
+                      <Image
+                        source = {require('../Resources/imagenes/buscar (1).png')}
+                        style = {styles.image}
+                      />
+                    </TouchableOpacity>
+                  </View>)
+                }}
             />
         </View>
     );
