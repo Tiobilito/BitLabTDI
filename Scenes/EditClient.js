@@ -13,17 +13,6 @@ const AddCPage = ({navigation}) => {
     const [Email, setEmail] = useState('');
     const [Phone, setPhone] = useState('');
     const [Phone2, setPhone2] = useState('');
-    var Data = {
-        idCliente: 0,
-        nombre: "",
-        direccion: "",
-        colonia: "",
-        ciudad: "",
-        cp: "",
-        correo: "",
-        telefono: "",
-        telefono2: "",
-    }
 
     useEffect(() => {
         GetClientData();
@@ -31,10 +20,15 @@ const AddCPage = ({navigation}) => {
 
     const GetClientData = () => {
         fetch('http://10.214.150.5:3000/clientes')
-        .then(response => response.json())
-        .then(data => {
-        data.forEach(item => {
-            if(item.idCliente === idClient) {
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Error al obtener los datos');
+            }
+            return response.json();
+          })
+          .then(data => {
+            data.forEach(item => {
+              if (item.idCliente === idClient) {
                 setName(item.nombre);
                 setAddres(item.direccion);
                 setColony(item.colonia);
@@ -43,47 +37,50 @@ const AddCPage = ({navigation}) => {
                 setEmail(item.correo);
                 setPhone(item.telefono);
                 setPhone2(item.telefono2);
-            }
-        });
-        })
-        .catch(error => {
+              }
+            });
+          })
+          .catch(error => {
             console.error('Error al obtener los datos:', error);
-        });
-    }
-
-    const DeleteClient = async () => {
-        await fetch(`http://10.214.150.5:3000/clientes/${idClient}`, {
-            method: "DELETE",
-            headers: {
-              "Content-type": "application/json"
-            }
-        });
-    }
+          });
+      };
+      
 
     const SentData = async () => {
-        Data.idCliente = idClient;
-        Data.nombre = Name;
-        Data.direccion = Addres;
-        Data.colonia = Colony;
-        Data.ciudad = City;
-        Data.cp = PostCode;
-        Data.correo = Email;
-        Data.telefono = Phone;
-        Data.telefono2 = Phone2;
-        await fetch('http://10.214.150.5:3000/clientes', {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify(Data),
-        })
-        .then(response => response.json());
-        navigation.navigate("Client", { idCli: idClient});
+        var Data = {
+            idCliente: idClient,
+            nombre: Name,
+            direccion: Addres,
+            colonia: Colony,
+            ciudad: City,
+            cp: PostCode,
+            correo: Email,
+            telefono: Phone,
+            telefono2: Phone2,
+        }
+        try {
+            const response = await fetch(`http://10.214.150.5:3000/clientes`, {
+              method: 'POST',
+              headers: {
+                'Content-type': 'application/json',
+              },
+              body: JSON.stringify(Data),
+            });
+        
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        
+            const data = await response.json();
+            console.log('Data updated successfully:', data);
+            navigation.navigate('Client', { idCli: idClient });
+          } catch (error) {
+            console.error('Error updating data:', error);
+          }
     }
 
     const VerifyAllContents = () => {
         if(Name.trim() !== '' && Addres.trim() !== '' && Colony.trim() !== '' && City.trim() !== '' && PostCode.trim() !== '' && Email.trim() !== '' && Phone.trim() !== '' && Phone2.trim() !== '') {
-            DeleteClient();
             SentData();
         } else {
             Alert.alert("Por favor rellene todos los datos correctamente");
