@@ -21,15 +21,30 @@ const SearchPage = ({navigation}) => {
       try {
           const response = await fetch(url);
           const json = await response.json();
-          setData(json);
-          setFullData(json);
+          const BData = json.map((registro) => ({
+            ...registro,
+            Details: false
+          }));
+          setData(BData);
+          setFullData(BData);
           setIsLoading(false);
       } catch(error) {
           setError(error);
           console.log(error);
           setIsLoading(false);
       }
-  }
+    }
+
+    const toggleDetails = (itemId) => {
+      // Encuentra el registro con el id correspondiente
+      const updatedData = data.map((registro) => {
+        if (registro.idCliente === itemId) {
+          return { ...registro, Details: !registro.Details };
+        }
+        return registro;
+      });
+      setData(updatedData);
+    }
 
     if(isLoading) {
         return (
@@ -92,9 +107,22 @@ const SearchPage = ({navigation}) => {
                 renderItem={({item}) => (
                     <View style = {styles.flatlistContainer}>
                       <View>
-                          <Text style = {styles.textName}>{item.nombre}</Text>
-                          <Text style = {styles.textEmail}>{item.correo}</Text>
+                        <TouchableOpacity onPress={() => toggleDetails(item.idCliente)}>
+                          <View>
+                              <Text style = {styles.textLng}>{item.nombre}</Text>
+                              <Text style = {styles.textSrt}>{item.correo}</Text>
+                          </View>
+                        </TouchableOpacity>
+
+                        {
+                          item.Details ? <View>
+                            <Text style = {styles.textSrt}>ID: {item.idCliente}</Text>
+                            <Text style = {styles.textSrt}>Direccion: {item.direccion}</Text>
+                            <Text style = {styles.textSrt}>Colonia: {item.colonia}</Text>
+                          </View>: null
+                        }
                       </View>
+                      
                       <TouchableOpacity onPress={() => {navigateToClient(item.idCliente)}}>
                         <Image
                           source = {require('../Resources/imagenes/buscar (1).png')}
@@ -133,13 +161,13 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
     },
-    textName: {
+    textLng: {
         fontSize: 50,
         marginLeft: 10,
         fontWeight: "bold",
         color: "white"
     },
-    textEmail: {
+    textSrt: {
         fontSize: 38,
         marginLeft: 10,
         color: "white",

@@ -95,20 +95,32 @@ const DevicesPage = ({navigation}) => {
                 renderItem={({item}) => {    
                   const [showDetails, setShowDetails] = useState(false);
 
-                  return (<View style = {styles.flatlistContainer}>
-                    <TouchableOpacity>
+                  const Details = () => {
+                    return (
                       <View>
-                          <Text style = {styles.textName}>{item.nombre}</Text>
-                          <Text style = {styles.textEmail}>{item.correo}</Text>
+                        <Text style = {styles.textSrt}></Text>
                       </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {navigateToClient(item.idCliente)}}>
-                      <Image
-                        source = {require('../Resources/imagenes/buscar (1).png')}
-                        style = {styles.image}
-                      />
-                    </TouchableOpacity>
-                  </View>)
+                    )
+                  }
+
+                  return (
+                    <View style = {styles.flatlistContainer}>
+                      <TouchableOpacity onPress={() => setShowDetails(!showDetails)}>
+                        <View>
+                            <Text style = {styles.textLng}>{item.nombre}</Text>
+                            <Text style = {styles.textSrt}>{item.correo}</Text>
+                        </View>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity onPress={() => {navigateToClient(item.idCliente)}}>
+                        <Image
+                          source = {require('../Resources/imagenes/buscar (1).png')}
+                          style = {styles.image}
+                        />
+                      </TouchableOpacity>
+                      
+                    </View>
+                  )
                 }}
             />
         </View>
@@ -140,13 +152,13 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
     },
-    textName: {
+    textLng: {
         fontSize: 50,
         marginLeft: 10,
         fontWeight: "bold",
         color: "white"
     },
-    textEmail: {
+    textSrt: {
         fontSize: 38,
         marginLeft: 10,
         color: "white",
