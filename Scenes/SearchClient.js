@@ -80,8 +80,8 @@ const SearchPage = ({navigation}) => {
         }
     }
 
-    const navigateToClient = (idClient) => {
-      navigation.navigate("Client", { idCli: idClient});
+    const navigateToEditClient = async (idCli) => {
+      navigation.navigate("EditClient", { idClient: idCli});
     }
 
     return (
@@ -119,16 +119,21 @@ const SearchPage = ({navigation}) => {
                             <Text style = {styles.textSrt}>ID: {item.idCliente}</Text>
                             <Text style = {styles.textSrt}>Direccion: {item.direccion}</Text>
                             <Text style = {styles.textSrt}>Colonia: {item.colonia}</Text>
+                            <Text style = {styles.textSrt}>Ciudad: {item.ciudad}</Text>
+                            <Text style = {styles.textSrt}>Codigo postal: {item.cp}</Text>
+                            <Text style = {styles.textSrt}>Telefono: {item.telefono}</Text>
+                            <Text style = {styles.textSrt}>2do Telefono: {item.telefono2}</Text>
+                              <View style = {styles.buttoms}>
+                                <TouchableOpacity onPress={() => {navigateToEditClient(item.idCliente)}}>
+                                    <Image
+                                        source = {require('../Resources/imagenes/editar.png')}
+                                        style = {styles.image}
+                                    />
+                                </TouchableOpacity>
+                            </View>
                           </View>: null
                         }
                       </View>
-                      
-                      <TouchableOpacity onPress={() => {navigateToClient(item.idCliente)}}>
-                        <Image
-                          source = {require('../Resources/imagenes/buscar (1).png')}
-                          style = {styles.image}
-                        />
-                      </TouchableOpacity>
                     </View>
                 )}
             />
@@ -173,8 +178,15 @@ const styles = StyleSheet.create({
         color: "white",
     },
     image: {
-        width: 120,
-        height: 120,
+        width: 100,
+        height: 100,
+        margin: 20,
+    },
+    buttoms: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      width: '100%', 
+      paddingHorizontal: 20,
     },
 });
 

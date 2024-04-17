@@ -67,7 +67,7 @@ const AddCPage = ({navigation}) => {
         .then(response => response.json())
         .then(Data => console.log(Data))
         .catch(err => console.log(err));
-        navigation.navigate('Client', { idCli: idClient });
+        navigation.navigate('SearchClient');
     };
 
     const VerifyAllContents = () => {

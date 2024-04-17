@@ -7,7 +7,6 @@ import LoggingPage from './Scenes/Logging';
 import WorkerPage from './Scenes/Worker';
 import AddClientPage from './Scenes/AddClient';
 import SearchClientPage from './Scenes/SearchClient';
-import ClientPage from './Scenes/Client';
 import DevicesPage from './Scenes/Devices';
 import EditClientPage from './Scenes/EditClient';
 
@@ -32,11 +31,7 @@ export default function App() {
         <Stack.Screen
           name = "SearchClient"
           component = {SearchClientPage}
-        />  
-        <Stack.Screen
-          name = "Client"
-          component = {ClientPage}
-        />  
+        />    
         <Stack.Screen
           name = "Devices"
           component = {DevicesPage}
