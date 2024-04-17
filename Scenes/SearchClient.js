@@ -80,8 +80,8 @@ const SearchPage = ({navigation}) => {
         }
     }
 
-    const navigateToEditClient = async (idCli) => {
-      navigation.navigate("EditClient", { idClient: idCli});
+    const navigateToEditClient = (id) => {
+      navigation.navigate("EditClient", { idClient: id});
     }
 
     return (
@@ -124,7 +124,7 @@ const SearchPage = ({navigation}) => {
                             <Text style = {styles.textSrt}>Telefono: {item.telefono}</Text>
                             <Text style = {styles.textSrt}>2do Telefono: {item.telefono2}</Text>
                               <View style = {styles.buttoms}>
-                                <TouchableOpacity onPress={() => {navigateToEditClient(item.id)}}>
+                                <TouchableOpacity onPress={() => {navigateToEditClient(item.idCliente)}}>
                                     <Image
                                         source = {require('../Resources/imagenes/editar.png')}
                                         style = {styles.image}
