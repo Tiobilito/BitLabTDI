@@ -76,51 +76,24 @@ const DevicesPage = ({navigation}) => {
         <View
             style={styles.background}
         >
-            <TextInput
-                style={styles.searchBox}
-                onChangeText={(query) => {
-                    setSearchQuery(query);
-                    const formattedQuery = query;
-                    const filteredData = filter(fullData, (nombre) => {
-                    return contains(nombre, formattedQuery);
-                    });
-                    setData(filteredData);
-                }}
-                value={searchQuery}
-                placeholder="Search" 
-            />
-            <FlatList
-                data = {data}
-                keyExtractor = {(item) => item.idCliente}
-                renderItem={({item}) => {    
-                  const [showDetails, setShowDetails] = useState(false);
-
-                  const Details = () => {
-                    return (
-                      <View>
-                        <Text style = {styles.textSrt}></Text>
-                      </View>
-                    )
-                  }
-
-                  return (
-                    <View style = {styles.flatlistContainer}>
-                      <TouchableOpacity onPress={() => setShowDetails(!showDetails)}>
-                        <View>
-                            <Text style = {styles.textLng}>{item.nombre}</Text>
-                            <Text style = {styles.textSrt}>{item.correo}</Text>
-                        </View>
-                      </TouchableOpacity>
-
-                      <TouchableOpacity onPress={() => {navigateToClient(item.idCliente)}}>
-                        <Image
-                          source = {require('../Resources/imagenes/buscar (1).png')}
-                          style = {styles.image}
-                        />
-                      </TouchableOpacity>
-                      
+          <FlatList
+              data = {data}
+              keyExtractor = {(item) => item.idCliente}
+              renderItem={({item}) => {    
+                  <View style = {styles.flatlistContainer}>
+                    <View>
+                      <Text style = {styles.textLng}>{item.nombre}</Text>
+                      <Text style = {styles.textSrt}>{item.correo}</Text>
                     </View>
-                  )
+
+                    <TouchableOpacity onPress={() => {navigateToClient(item.idCliente)}}>
+                      <Image
+                        source = {require('../Resources/imagenes/buscar (1).png')}
+                        style = {styles.image}
+                      />
+                    </TouchableOpacity>
+                      
+                  </View>
                 }}
             />
         </View>

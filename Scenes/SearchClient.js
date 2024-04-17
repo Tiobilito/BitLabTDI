@@ -124,7 +124,7 @@ const SearchPage = ({navigation}) => {
                             <Text style = {styles.textSrt}>Telefono: {item.telefono}</Text>
                             <Text style = {styles.textSrt}>2do Telefono: {item.telefono2}</Text>
                               <View style = {styles.buttoms}>
-                                <TouchableOpacity onPress={() => {navigateToEditClient(item.idCliente)}}>
+                                <TouchableOpacity onPress={() => {navigateToEditClient(item.id)}}>
                                     <Image
                                         source = {require('../Resources/imagenes/editar.png')}
                                         style = {styles.image}
