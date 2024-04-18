@@ -76,10 +76,21 @@ const DevicesPage = ({navigation}) => {
       navigation.navigate("Client", { idCli: idClient});
     }
 
+    const navigateToAddDevice = () => {
+      navigation.navigate("AddDevice", { idCli: idClient});
+    }
+
     return (
         <View
             style={styles.background}
         >
+          <Text style={styles.textLng}>{idClient}</Text>
+          <TouchableOpacity onPress={() => {navigateToAddDevice()}}>
+            <Image
+              source = {require('../Resources/imagenes/agregar.png')}
+              style = {styles.longImage}
+            />
+          </TouchableOpacity>
           <FlatList
               data = {data}
               keyExtractor = {(item) => item.id_dispo}
@@ -106,13 +117,6 @@ const DevicesPage = ({navigation}) => {
                         <Text style = {styles.textSrt}>Inventario: {item.inventario}</Text>
                       </View>: null
                     }
-
-                    <TouchableOpacity>
-                      <Image
-                        source = {require('../Resources/imagenes/buscar (1).png')}
-                        style = {styles.image}
-                      />
-                    </TouchableOpacity>
                       
                   </View>
                 }}
@@ -123,43 +127,47 @@ const DevicesPage = ({navigation}) => {
 
 const styles = StyleSheet.create({
     background: {
-        flex: 1,
-        backgroundColor: '#095ea7',
+      flex: 1,
+      backgroundColor: '#095ea7',
     },
     flatlistContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        marginLeft: 10,
-        marginTop: 10,
+      flexDirection: "row",
+      alignItems: "center",
+      marginLeft: 10,
+      marginTop: 10,
     },
     searchBox: {
-        padding: 10,
-        margin: 5,
-        fontSize: 30,
-        borderWidth: 1,
-        borderRadius: 8,
-        backgroundColor: 'white'
+      padding: 10,
+      margin: 5,
+      fontSize: 30,
+      borderWidth: 1,
+      borderRadius: 8,
+      backgroundColor: 'white'
     },
     buttom: {
-        backgroundColor: 'blue',
-        padding: 5,
-        borderRadius: 10,
-        alignItems: 'center',
+      backgroundColor: 'blue',
+      padding: 5,
+      borderRadius: 10,
+      alignItems: 'center',
     },
     textLng: {
-        fontSize: 50,
-        marginLeft: 10,
-        fontWeight: "bold",
-        color: "white"
+      fontSize: 50,
+      marginLeft: 10,
+      fontWeight: "bold",
+      color: "white"
     },
-    textSrt: {
-        fontSize: 38,
-        marginLeft: 10,
-        color: "white",
+    textSrt: {        fontSize: 38,
+      marginLeft: 10,
+      color: "white",
     },
     image: {
-        width: 120,
-        height: 120,
+      width: 120,
+      height: 120,
+    },
+    longImage: {
+      width: 160,
+      height: 120,    
+      margin: 50,
     },
 });
 

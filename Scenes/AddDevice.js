@@ -4,7 +4,7 @@ import { useRoute } from '@react-navigation/native';
 
 const AddDevicePage = ({navigation}) => {
     const route = useRoute();
-    const { idClient } = route.params;
+    const { idCli } = route.params;
     const [Sn, setSn] = useState('');
     const [Type, setType] = useState('');
     const [Model, setModel] = useState('');
@@ -14,37 +14,23 @@ const AddDevicePage = ({navigation}) => {
     const [Color, setColor] = useState('');
     const [Case, setCase] = useState('');
     const [Inventory, setInventory] = useState('');
-    var Data = {
-        id_dispo: 0,
-        id_cliente: 0,
-        sn: "",
-        tipo_dis: "",
-        modelo: "",
-        estado_fisi: "",
-        esta_recep: "",
-        color: "",
-        marca: "",
-        caso: "",
-        fecha: "",
-        inventario: 0,
-    }
-
-    const navigateToWorker = () => {
-        navigation.navigate("Worker");
-    };
 
     const SentData = () => {
-        Data.id_dispo = Math.floor(Math.random() * 9000000) + 1;
-        Data.id_cliente = idClient;
-        Data.sn = Sn;
-        Data.tipo_dis = Type;
-        Data.modelo = Model;
-        Data.estado_fisi = PhysiCond;
-        Data.esta_recep = ReceidStat;
-        Data.color = Color;
-        Data.marca = Brand;
-        Data.caso = Case;
-        fetch('http://10.214.150.5:3000/clientes', {
+        const Data = {
+            id_dispo: Math.floor(Math.random() * 9000000) + 1,
+            id_cliente: idCli,
+            sn: Sn,
+            tipo_dis: Type,
+            modelo: Model,
+            estado_fisi: PhysiCond,
+            esta_recep: ReceidStat,
+            color: Color,
+            marca: Brand,
+            caso: Case,
+            fecha: new Date().toISOString().split('T')[0],
+            inventario: parseInt(Inventory, 10),
+        }
+        fetch('http://10.214.150.5:3000/dispositivos', {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
@@ -54,12 +40,11 @@ const AddDevicePage = ({navigation}) => {
         .then(response => response.json())
         .then(Data => console.log(Data))
         .catch(err => console.log(err));
-        navigation.navigate("Worker");
+        navigation.navigate("Devices", { idClient: idCli });
     }
 
     const VerifyAllContents = () => {
         if(Sn && Type && Model && PhysiCond && Brand && ReceidStat && Color && Inventory && Case) {
-            //Alert.alert("Espere funcionalidad");
             SentData();
         }
         else {
@@ -156,12 +141,23 @@ const AddDevicePage = ({navigation}) => {
                             style={styles.input}
                             onChangeText={(text) => {
                                 if (/^\d+$/.test(text) || text === '') {
-                                    setInventory(parseInt(text,10));
+                                    setInventory(parseInt(text, 10))
                                 }
                             }}
                             keyboardType='numeric'
-                            value={Inventory}
+                            value={Inventory} // convert Inventory to a string
                             placeholder="Inventario"
+                        />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.text}>Color: </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(text) => {
+                                setColor(text);
+                            }}
+                            value={Color}
+                            placeholder="Marca"
                         />
                     </View>
                     <View style={styles.inputContainer}>
