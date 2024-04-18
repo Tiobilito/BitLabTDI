@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, StyleSheet, TextInput, TouchableOpacity, Image, View, FlatList, ActivityIndicator } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, Image, View, FlatList, ActivityIndicator } from 'react-native';
 import filter from "lodash.filter";
 import { useRoute, useFocusEffect } from '@react-navigation/native';
 
@@ -8,9 +8,7 @@ const DevicesPage = ({navigation}) => {
     const { idClient } = route.params;
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState([]);
-    const [error, setError] = useState(null); 
-    const [fullData, setFullData] = useState([]);
-    const [searchQuery, setSearchQuery] = useState(""); 
+    const [error, setError] = useState(null);
   
     useFocusEffect(
       React.useCallback(() => {
@@ -24,15 +22,29 @@ const DevicesPage = ({navigation}) => {
           const response = await fetch(url);
           const json = await response.json();
           const filteredData = filter(json, (item) => item.id_cliente === idClient);
-          setData(filteredData);
-          setFullData(filteredData);
+          const BData = filteredData.map((registro) => ({
+            ...registro,
+            Details: false
+          }));
+          setData(BData);
           setIsLoading(false);
         } catch (error) {
           setError(error);
           console.log(error);
           setIsLoading(false);
         }
-    };
+    }
+
+    const toggleDetails = (itemId) => {
+      // Encuentra el registro con el id correspondiente
+      const updatedData = data.map((registro) => {
+        if (registro.idCliente === itemId) {
+          return { ...registro, Details: !registro.Details };
+        }
+        return registro;
+      });
+      setData(updatedData);
+    }
 
     if(isLoading) {
         return (
@@ -60,14 +72,6 @@ const DevicesPage = ({navigation}) => {
         );
     }
 
-    const contains = ({nombre, correo}, query) => {
-        if(nombre.includes(query) || correo.includes(query)) {
-          return true;
-        } else {
-          return false;
-        }
-    }
-
     const navigateToClient = (idClient) => {
       navigation.navigate("Client", { idCli: idClient});
     }
@@ -78,15 +82,32 @@ const DevicesPage = ({navigation}) => {
         >
           <FlatList
               data = {data}
-              keyExtractor = {(item) => item.idCliente}
+              keyExtractor = {(item) => item.id_dispo}
               renderItem={({item}) => {    
                   <View style = {styles.flatlistContainer}>
-                    <View>
-                      <Text style = {styles.textLng}>{item.nombre}</Text>
-                      <Text style = {styles.textSrt}>{item.correo}</Text>
-                    </View>
+                    <TouchableOpacity onPress={() => toggleDetails(item.id_dispo)}>
+                      <View>
+                        <Text style = {styles.textSrt}>Modelo: {item.modelo}</Text>
+                        <Text style = {styles.textLng}>Id Dispositivo: {item.id_dispo}</Text>
+                      </View>
+                    </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => {navigateToClient(item.idCliente)}}>
+                    {
+                      item.Details ? <View>
+                        <Text style = {styles.textSrt}>Id Cliente: {item.id_cliente}</Text>
+                        <Text style = {styles.textSrt}>Fecha: {item.fecha}</Text>
+                        <Text style = {styles.textSrt}>S/N: {item.sn}</Text>
+                        <Text style = {styles.textSrt}>Caso: {item.caso}</Text>
+                        <Text style = {styles.textSrt}>Tipo: {item.tipo_dis}</Text>
+                        <Text style = {styles.textSrt}>Estado fisico: {item.estado_fisi}</Text>
+                        <Text style = {styles.textSrt}>Marca: {item.marca}</Text>
+                        <Text style = {styles.textSrt}>Estado recibido: {item.esta_recep}</Text>
+                        <Text style = {styles.textSrt}>Color: {item.color}</Text>
+                        <Text style = {styles.textSrt}>Inventario: {item.inventario}</Text>
+                      </View>: null
+                    }
+
+                    <TouchableOpacity>
                       <Image
                         source = {require('../Resources/imagenes/buscar (1).png')}
                         style = {styles.image}
