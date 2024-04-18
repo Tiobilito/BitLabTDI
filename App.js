@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoggingPage from './Scenes/Logging';
 import WorkerPage from './Scenes/Worker';
 import AddClientPage from './Scenes/AddClient';
+import AddDevicePage from './Scenes/AddDevice';
 import SearchClientPage from './Scenes/SearchClient';
 import DevicesPage from './Scenes/Devices';
 import EditClientPage from './Scenes/EditClient';
@@ -40,6 +41,10 @@ export default function App() {
           name = "EditClient"
           component = {EditClientPage}
         /> 
+        <Stack.Screen
+          name = "AddDevice"
+          component = {AddDevicePage}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
