@@ -16,7 +16,6 @@ const DevicesPage = ({ navigation }) => {
     React.useCallback(() => {
         setIsLoading(true);
         fetchData("http://10.214.150.5:3000/dispositivos");
-
     }, [])
   );
 
@@ -28,8 +27,8 @@ const DevicesPage = ({ navigation }) => {
           ...registro,
           Details: false
         }));
-        setData(BData);
-        setFullData(BData);
+        setData(filter(BData, { 'idCliente': idClient }));
+        setFullData(filter(BData, { 'idCliente': idClient }));
         setIsLoading(false);
     } catch(error) {
         setError(error);
@@ -75,12 +74,12 @@ const DevicesPage = ({ navigation }) => {
       );
   }
 
-  const contains = ({nombre, correo}, query) => {
-      if(nombre.includes(query) || correo.includes(query)) {
-        return true;
-      } else {
-        return false;
-      }
+  const contains = ({modelo}, query) => {
+    if (modelo.includes(query)) {
+      return modelo.includes(query);
+    } else {
+      return false;
+    }
   }
 
   const navigateToEditClient = (id) => {
@@ -100,8 +99,8 @@ const DevicesPage = ({ navigation }) => {
               onChangeText={(query) => {
                   setSearchQuery(query);
                   const formattedQuery = query;
-                  const filteredData = filter(fullData, (nombre) => {
-                  return contains(nombre, formattedQuery);
+                  const filteredData = filter(fullData, (modelo) => {
+                    return contains(modelo, formattedQuery);
                   });
                   setData(filteredData);
               }}
@@ -116,8 +115,8 @@ const DevicesPage = ({ navigation }) => {
                     <View>
                       <TouchableOpacity onPress={() => toggleDetails(item.idDispo)}>
                         <View>
-                            <Text style = {styles.textLng}>{item.idDispo}</Text>
-                            <Text style = {styles.textSrt}>{item.modelo}</Text>
+                            <Text style = {styles.textLng}>Modelo: {item.modelo}</Text>
+                            <Text style = {styles.textSrt}>Id: {item.idDispo}</Text>
                         </View>
                       </TouchableOpacity>
 
