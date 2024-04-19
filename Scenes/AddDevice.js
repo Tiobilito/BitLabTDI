@@ -18,16 +18,16 @@ const AddDevicePage = ({navigation}) => {
     const SentData = () => {
         const Data = {
             id_dispo: Math.floor(Math.random() * 9000000) + 1,
-            id_cliente: idCli,
             sn: Sn,
             tipo_dis: Type,
+            id_cliente: idCli,
             modelo: Model,
             estado_fisi: PhysiCond,
             esta_recep: ReceidStat,
             color: Color,
             marca: Brand,
             caso: Case,
-            fecha: new Date().toISOString().split('T')[0],
+            //fecha: new Date().toISOString(),
             inventario: parseInt(Inventory, 10),
         }
         fetch('http://10.214.150.5:3000/dispositivos', {
