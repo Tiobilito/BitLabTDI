@@ -14,22 +14,34 @@ const AddDevicePage = ({navigation}) => {
     const [Color, setColor] = useState('');
     const [Case, setCase] = useState('');
     const [Inventory, setInventory] = useState('');
+    var Data = {
+        idDispo: 0,
+        sn: "",
+        tipoDis: "",
+        idCliente: 0,
+        modelo: "",
+        estadoFisi: "",
+        estaRecep: "",
+        color: "",
+        marca: "",
+        caso: "",
+        //fecha: "",
+        inventario: 0,
+    }
 
     const SentData = () => {
-        const Data = {
-            id_dispo: Math.floor(Math.random() * 9000000) + 1,
-            sn: Sn,
-            tipo_dis: Type,
-            id_cliente: idCli,
-            modelo: Model,
-            estado_fisi: PhysiCond,
-            esta_recep: ReceidStat,
-            color: Color,
-            marca: Brand,
-            caso: Case,
-            //fecha: new Date().toISOString(),
-            inventario: parseInt(Inventory, 10),
-        }
+        Data.idDispo = Math.floor(Math.random() * 9000000) + 1;
+        Data.sn = Sn;
+        Data.tipoDis = Type;
+        Data.idCliente = idCli;
+        Data.modelo = Model;
+        Data.estadoFisi = PhysiCond;
+        Data.estaRecep = ReceidStat;
+        Data.color = Color;
+        Data.marca = Brand;
+        Data.caso = Case;
+        //Data.fecha = new Date().toISOString();
+        Data.inventario = parseInt(Inventory, 10);
         fetch('http://10.214.150.5:3000/dispositivos', {
             method: "POST",
             headers: {
@@ -140,12 +152,9 @@ const AddDevicePage = ({navigation}) => {
                         <TextInput
                             style={styles.input}
                             onChangeText={(text) => {
-                                if (/^\d+$/.test(text) || text === '') {
-                                    setInventory(parseInt(text, 10))
-                                }
+                                if (/^\d+$/.test(text) || text === '') setInventory(text);
                             }}
-                            keyboardType='numeric'
-                            value={Inventory} // convert Inventory to a string
+                            value={Inventory}
                             placeholder="Inventario"
                         />
                     </View>
