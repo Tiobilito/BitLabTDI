@@ -86,8 +86,12 @@ const DevicesPage = ({ navigation }) => {
     navigation.navigate("EditClient", { idClient: id});
   }
 
-  const navigateToDivices = (id) => {
-    navigation.navigate("Devices", { idClient: id});
+  const navigateToEditDevice = (id) => {
+    navigation.navigate("EditDevice", { idClient: id});
+  }
+
+  const navigateToAddDevice = (id) => {
+    navigation.navigate("AddDevice", { idClient: id});
   }
 
   return (
@@ -107,6 +111,12 @@ const DevicesPage = ({ navigation }) => {
               value={searchQuery}
               placeholder="Search" 
           />
+          <TouchableOpacity onPress={() => {navigateToAddDevice(idClient)}}>
+            <Image
+              source={require("../Resources/imagenes/agregar.png")}
+              style = {styles.image}
+            />
+          </TouchableOpacity>
           <FlatList
               data = {data}
               keyExtractor = {(item) => item.idDispo}
@@ -131,6 +141,12 @@ const DevicesPage = ({ navigation }) => {
                           <Text style = {styles.textSrt}>Estado recibido: {item.estaRecip}</Text>
                           <Text style = {styles.textSrt}>Color: {item.color}</Text>
                           <Text style = {styles.textSrt}>Inventario: {item.inventario}</Text>
+                          <TouchableOpacity onPress={() => console.log("espere funcionalidad")}>
+                            <Image
+                              source={require("../Resources/imagenes/agregar.png")}
+                              style = {styles.image}
+                            />
+                          </TouchableOpacity>
                         </View>: null
                       }
                     </View>

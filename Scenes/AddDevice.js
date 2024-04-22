@@ -1,6 +1,7 @@
 import { React, useState } from 'react';
 import { StyleSheet, Text, Image, TouchableOpacity, TextInput, View, ScrollView, Alert } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const AddDevicePage = ({navigation}) => {
     const route = useRoute();
@@ -14,6 +15,8 @@ const AddDevicePage = ({navigation}) => {
     const [Color, setColor] = useState('');
     const [Case, setCase] = useState('');
     const [Inventory, setInventory] = useState('');
+    const [date, setDate] = useState(new Date());
+    const [showDt, setShowDt] = useState(false);
     var Data = {
         idDispo: 0,
         sn: "",
@@ -62,6 +65,15 @@ const AddDevicePage = ({navigation}) => {
         else {
             Alert.alert("Por favor rellene todos los datos");
         }
+    }
+
+    const ShowDt = () => {
+        setShowDt(true);
+    }
+
+    const onChange = (e, SelectedDate) => {
+        setDate(SelectedDate);
+        setShowDt(false);
     }
     
     return (
@@ -157,6 +169,19 @@ const AddDevicePage = ({navigation}) => {
                             value={Inventory}
                             placeholder="Inventario"
                         />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <TouchableOpacity onPress={() => {setShowDt(true)}}>
+                            <Text style = {styles.text}>Fecha (click to set) </Text>
+                        </TouchableOpacity>
+                        { showDt && (
+                        <DateTimePicker
+                            value={date}
+                            mode='date'
+                            onChange={onChange}
+                        />
+                        )}
+                        <Text style = {styles.text}>{date.toLocaleString()}</Text>
                     </View>
                     <View style={styles.inputContainer}>
                         <Text style={styles.text}>Color: </Text>
