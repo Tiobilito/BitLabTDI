@@ -91,7 +91,7 @@ const DevicesPage = ({ navigation }) => {
   }
 
   const navigateToAddDevice = (id) => {
-    navigation.navigate("AddDevice", { idClient: id});
+    navigation.navigate("AddDevice", { idCli: id});
   }
 
   return (

@@ -17,46 +17,42 @@ const AddDevicePage = ({navigation}) => {
     const [Inventory, setInventory] = useState('');
     const [date, setDate] = useState(new Date());
     const [showDt, setShowDt] = useState(false);
-    var Data = {
-        idDispo: 0,
-        sn: "",
-        tipoDis: "",
-        idCliente: 0,
-        modelo: "",
-        estadoFisi: "",
-        estaRecep: "",
-        color: "",
-        marca: "",
-        caso: "",
-        //fecha: "",
-        inventario: 0,
-    }
 
     const SentData = () => {
-        Data.idDispo = Math.floor(Math.random() * 9000000) + 1;
-        Data.sn = Sn;
-        Data.tipoDis = Type;
-        Data.idCliente = idCli;
-        Data.modelo = Model;
-        Data.estadoFisi = PhysiCond;
-        Data.estaRecep = ReceidStat;
-        Data.color = Color;
-        Data.marca = Brand;
-        Data.caso = Case;
-        //Data.fecha = new Date().toISOString();
-        Data.inventario = parseInt(Inventory, 10);
+        const Data = {
+          idDispo: Math.floor(Math.random() * 9000000) + 1,
+          sn: Sn,
+          tipoDis: Type,
+          idCliente: idCli,
+          modelo: Model,
+          estadoFisi: PhysiCond,
+          estaRecep: ReceidStat,
+          color: Color,
+          marca: Brand,
+          caso: Case,
+          fecha: date.toISOString(),
+          inventario: parseInt(Inventory, 10),
+        };
+
+        console.log(Data);
+      
         fetch('http://10.214.150.5:3000/dispositivos', {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify(Data),
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(Data),
         })
-        .then(response => response.json())
-        .then(Data => console.log(Data))
-        .catch(err => console.log(err));
-        navigation.navigate("Devices", { idClient: idCli });
-    }
+          .then(response => response.json())
+          .then(responseData => {
+            console.log('Response from server:', responseData);
+            navigation.navigate('Devices', { idClient: idCli });
+          })
+          .catch(error => {
+            console.error('Error sending data:', error);
+            Alert.alert('Error al enviar los datos');
+          });
+      };      
 
     const VerifyAllContents = () => {
         if(Sn && Type && Model && PhysiCond && Brand && ReceidStat && Color && Inventory && Case) {
@@ -171,7 +167,7 @@ const AddDevicePage = ({navigation}) => {
                         />
                     </View>
                     <View style={styles.inputContainer}>
-                        <TouchableOpacity onPress={() => {setShowDt(true)}}>
+                        <TouchableOpacity onPress={ShowDt}>
                             <Text style = {styles.text}>Fecha (click to set) </Text>
                         </TouchableOpacity>
                         { showDt && (
@@ -191,7 +187,7 @@ const AddDevicePage = ({navigation}) => {
                                 setColor(text);
                             }}
                             value={Color}
-                            placeholder="Marca"
+                            placeholder="Color"
                         />
                     </View>
                     <View style={styles.inputContainer}>
