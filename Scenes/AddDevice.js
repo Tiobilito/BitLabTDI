@@ -33,8 +33,6 @@ const AddDevicePage = ({navigation}) => {
           fecha: date.toISOString(),
           inventario: parseInt(Inventory, 10),
         };
-
-        console.log(Data);
       
         fetch('http://10.214.150.5:3000/dispositivos', {
           method: 'POST',
