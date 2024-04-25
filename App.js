@@ -11,6 +11,7 @@ import SearchClientPage from './Scenes/SearchClient';
 import DevicesPage from './Scenes/Devices';
 import EditClientPage from './Scenes/EditClient';
 import EditDevicePage from './Scenes/EditDevice';
+import OrderPage from './Scenes/Order';
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +50,10 @@ export default function App() {
         <Stack.Screen
           name = "AddDevice"
           component = {AddDevicePage}
+        />
+        <Stack.Screen
+          name = "Order"
+          component = {OrderPage}
         />
       </Stack.Navigator>
     </NavigationContainer>

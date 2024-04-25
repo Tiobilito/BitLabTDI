@@ -28,7 +28,7 @@ const AddCPage = ({navigation}) => {
 
     const SentData = () => {
         Data.idCliente = Math.floor(Math.random() * 9000000) + 1;
-        Data.nombre = Name;
+        Data.nombre = Name.toUpperCase();
         Data.direccion = Addres;
         Data.colonia = Colony;
         Data.ciudad = City;

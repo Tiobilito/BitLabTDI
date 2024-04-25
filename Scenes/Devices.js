@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginLeft: 10,
-    marginTop: 10,
+    marginTop: 15,
   },
   searchBox: {
     padding: 10,

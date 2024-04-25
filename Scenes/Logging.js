@@ -72,7 +72,7 @@ const LoggingPage = ({navigation}) => {
       style={styles.background}
     >
       <Image
-        source={require('../Resources/IMG/BITLABTDI.png')}
+        source={require('../Resources/imagenes/BITLABTDI.png')}
         style={styles.Logo}
       />
       <TextInput

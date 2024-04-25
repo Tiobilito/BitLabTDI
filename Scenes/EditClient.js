@@ -48,7 +48,7 @@ const AddCPage = ({navigation}) => {
     const SentData = async () => {
         const Data = {
             idCliente: idClient,
-            nombre: Name,
+            nombre: Name.toUpperCase(),
             direccion: Addres,
             colonia: Colony,
             ciudad: City,
