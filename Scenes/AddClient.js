@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     background: {
         flex: 1,
         backgroundColor: '#095ea7',
-      },
+    },
     input: {
         flex: 1,
         padding: 10,
