@@ -76,15 +76,10 @@ const EditDevicePage = ({navigation}) => {
           },
           body: JSON.stringify(Data),
         })
-          .then(response => response.json())
-          .then(responseData => {
-            console.log('Response from server:', responseData);
-            navigation.navigate('Devices', { idClient: idCli });
-          })
-          .catch(error => {
-            console.error('Error sending data:', error);
-            Alert.alert('Error al enviar los datos');
-          });
+        .then(response => response.json())
+        .then(Data => console.log(Data))
+        .catch(err => console.log(err));
+        navigation.navigate('Devices', { idClient: idCli });
       };      
 
     const VerifyAllContents = () => {
