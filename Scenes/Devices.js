@@ -82,12 +82,8 @@ const DevicesPage = ({ navigation }) => {
     }
   }
 
-  const navigateToEditClient = (id) => {
-    navigation.navigate("EditClient", { idClient: id});
-  }
-
   const navigateToEditDevice = (id) => {
-    navigation.navigate("EditDevice", { idClient: id});
+    navigation.navigate("EditDevice", { idDevice: id});
   }
 
   const navigateToAddDevice = (id) => {
@@ -141,12 +137,20 @@ const DevicesPage = ({ navigation }) => {
                           <Text style = {styles.textSrt}>Estado recibido: {item.estaRecip}</Text>
                           <Text style = {styles.textSrt}>Color: {item.color}</Text>
                           <Text style = {styles.textSrt}>Inventario: {item.inventario}</Text>
-                          <TouchableOpacity onPress={() => console.log("espere funcionalidad")}>
-                            <Image
-                              source={require("../Resources/imagenes/agregar.png")}
-                              style = {styles.image}
-                            />
-                          </TouchableOpacity>
+                          <View style = {styles.buttoms}>
+                            <TouchableOpacity onPress={() => console.log("espere funcionalidad")}>
+                              <Image
+                                source={require("../Resources/imagenes/agregar.png")}
+                                style = {styles.image}
+                              />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => {navigateToEditDevice(item.idDispo)}}>
+                              <Image
+                                  source = {require('../Resources/imagenes/editar.png')}
+                                  style = {styles.image}
+                              />
+                            </TouchableOpacity>
+                          </View>
                         </View>: null
                       }
                     </View>
@@ -201,6 +205,12 @@ const styles = StyleSheet.create({
     width: 160,
     height: 120,    
     margin: 50,
+  },
+  buttoms: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%', 
+    paddingHorizontal: 20,
   },
 });
 
