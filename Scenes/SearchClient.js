@@ -84,7 +84,7 @@ const SearchPage = ({navigation}) => {
       navigation.navigate("EditClient", { idClient: id});
     }
 
-    const navigateToDivices = (id) => {
+    const navigateToDevices = (id) => {
       navigation.navigate("Devices", { idClient: id});
     }
 
@@ -134,7 +134,7 @@ const SearchPage = ({navigation}) => {
                                         style = {styles.image}
                                     />
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => {navigateToDivices(item.idCliente)}}>
+                                <TouchableOpacity onPress={() => {navigateToDevices(item.idCliente)}}>
                                     <Image
                                         source = {require('../Resources/imagenes/device.png')}
                                         style = {styles.image}
