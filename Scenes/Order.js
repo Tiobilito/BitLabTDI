@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, ScrollView, TextInput } from 'react-native';
 
 const OrderPage = ({ navigation }) => {
+    const route = useRoute();
+    const { idDevice } = route.params;
     const [ShowCost, setShowCost] = useState(false);
     const [idOrder, setIdOrder] = useState(0);
-    const [idDevice, setIdDevice] = useState(0);
     const [idClient, setIdClient] = useState(0);
     const [partsUsed, setPartsUsed] = useState('');
     const [geneDiag, setGeneDiag] = useState('');
