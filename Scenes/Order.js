@@ -83,6 +83,7 @@ const OrderPage = ({ navigation }) => {
                         <Text style={styles.text}>Estatus: </Text>
                         <Picker
                             selectedValue={status}
+                            itemStyle = {styles.text}  
                             onValueChange={(itemValue) => setStatus(itemValue)}
                         >
                             <Picker.Item label="Recibido" value="Recibido" />
@@ -96,7 +97,8 @@ const OrderPage = ({ navigation }) => {
                         <Text style={styles.text}>Departamento: </Text>
                         <Picker
                             selectedValue={department}
-                            onValueChange={(itemValue) => setDepartment(itemValue)}                            
+                            itemStyle = {styles.text}  
+                            onValueChange={(itemValue) => setDepartment(itemValue)}                       
                         >
                             <Picker.Item label="iLabTDI" value="iLabTDI" />
                             {depData.map((item) => {
