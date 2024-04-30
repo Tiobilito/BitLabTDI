@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TextInput, FlatList, TouchableOpacity, Image } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import {Picker} from '@react-native-picker/picker';
 
@@ -17,10 +17,12 @@ const OrderPage = ({ navigation }) => {
     const [typePay, setTypePay] = useState('');
     const [total, setTotal] = useState(0);
     const [depData, setDepData] = useState([]);
+    const [cost, setCost] = useState([]);
 
     useEffect(() => {
         GetDepData("http://10.214.150.5:3000/departamentos");
         GetDeviceData("http://10.214.150.5:3000/dispositivos");
+        setIdOrder(Math.floor(Math.random() * 9000000) + 1);
     }, []);
 
     const GetDepData = async(url) => {
@@ -57,6 +59,7 @@ const OrderPage = ({ navigation }) => {
         <View style = {styles.background}>
             <ScrollView>
                 <View style = {{ margin: 20 }}>
+                    <Text style={styles.text}>ID - Orden: {idOrder}</Text>
                     <Text style={styles.text}>ID - Dispositivo: {idDevice}</Text>
                     <Text style={styles.text}>ID - Cliente: {idClient}</Text>
                     <Text style={styles.text}>Partes utilizadas: </Text>
@@ -105,6 +108,15 @@ const OrderPage = ({ navigation }) => {
                                 return (<Picker.Item key={item.idDepartamento} label={item.nombreDepa} value={item.nombreDepa}/>)
                             })}
                         </Picker>
+                        <View style = {styles.inputContainer}>
+                            <Text style={styles.text}>Costos: </Text> 
+                            <TouchableOpacity>
+                                <Image
+                                    source = {require('../Resources/imagenes/agregar3.png')}
+                                    style = {styles.image}
+                                />
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </ScrollView>
@@ -136,6 +148,10 @@ const styles = StyleSheet.create({
         maxHeight: 150,
         textAlignVertical: "top",
     },
+    image: {
+        width: 60,
+        height: 60,
+      },
     text: {
         fontSize: 40,
         fontWeight: 'bold',
