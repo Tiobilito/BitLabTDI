@@ -29,9 +29,7 @@ const OrderPage = ({ navigation }) => {
             const json = await response.json();
             setDepData(json);
         } catch(error) {
-            setError(error);
             console.log(error);
-            setIsLoading(false);
         }
     }
 
@@ -56,43 +54,37 @@ const OrderPage = ({ navigation }) => {
     };
 
     return (
-        <View>
+        <View style = {styles.background}>
             <ScrollView>
                 <View style = {{ margin: 20 }}>
                     <Text style={styles.text}>ID - Dispositivo: {idDevice}</Text>
                     <Text style={styles.text}>ID - Cliente: {idClient}</Text>
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.text}>Partes utilizadas: </Text>
-                            <TextInput
-                                multiline
-                                numberOfLines={4}
-                                style={styles.input}
-                                onChangeText={(text) => {
-                                    setPartsUsed(text);
-                                }}
-                                value={partsUsed}
-                                placeholder="Partes utilizadas"
-                            />
-                    </View>
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.text}>Diagnostigo general: </Text>
-                            <TextInput
-                                multiline
-                                numberOfLines={4}
-                                style={styles.input}
-                                onChangeText={(text) => {
-                                    setGeneDiag(text);
-                                }}
-                                value={geneDiag}
-                                placeholder="Diagnostigo general"
-                            />
-                    </View>
+                    <Text style={styles.text}>Partes utilizadas: </Text>
+                        <TextInput
+                            multiline
+                            style={[styles.input, styles.multilineText]}
+                            onChangeText={(text) => {
+                                setPartsUsed(text);
+                            }}
+                            value={partsUsed}
+                            placeholder="Partes utilizadas"
+                        />
+                    <Text style={styles.text}>Diagnostigo general: </Text>
+                        <TextInput
+                            multiline
+                            style={[styles.input, styles.multilineText]}
+                            onChangeText={(text) => {
+                                setGeneDiag(text);
+                            }}
+                            value={geneDiag}
+                            placeholder="Diagnostigo general"
+                        />
                     <View>
+                        <Text style={styles.text}>Estatus: </Text>
                         <Picker
                             selectedValue={status}
                             onValueChange={(itemValue) => setStatus(itemValue)}
                         >
-                            <Picker.Item label="Selecciona una opción" value="" />
                             <Picker.Item label="Recibido" value="Recibido" />
                             <Picker.Item label="Pendiente" value="Pendiente" />
                             <Picker.Item label="Reparado" value="Reparado" />
@@ -101,13 +93,14 @@ const OrderPage = ({ navigation }) => {
                             <Picker.Item label="Revisado" value="Revisado" />
                             <Picker.Item label="Otro" value="Otro" />
                         </Picker>
+                        <Text style={styles.text}>Departamento: </Text>
                         <Picker
                             selectedValue={department}
                             onValueChange={(itemValue) => setDepartment(itemValue)}                            
                         >
-                            <Picker.Item label="Selecciona una opción" value="" />
+                            <Picker.Item label="iLabTDI" value="iLabTDI" />
                             {depData.map((item) => {
-                                return (<Picker.item label={item.nombreDepa} value={item.nombreDepa}/>)
+                                return (<Picker.Item key={item.idDepartamento} label={item.nombreDepa} value={item.nombreDepa}/>)
                             })}
                         </Picker>
                     </View>
@@ -128,10 +121,24 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20, // Espacio horizontal entre elementos
         marginTop: 10,
     },
-    text: {
+    input: {
+        flex: 1,
+        padding: 10,
         fontSize: 30,
+        borderWidth: 1,
+        borderRadius: 8,
+        backgroundColor: 'white'
+    },
+    multilineText: {
+        minHeight: 150,
+        maxHeight: 150,
+        textAlignVertical: "top",
+    },
+    text: {
+        fontSize: 40,
         fontWeight: 'bold',
         marginRight: 10,
+        color: "white",
     },
 });
 
