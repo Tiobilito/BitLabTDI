@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 import {Picker} from '@react-native-picker/picker';
 
 const OrderPage = ({ navigation }) => {
@@ -55,7 +56,7 @@ const OrderPage = ({ navigation }) => {
     };
 
     return (
-        <View style={styles.background}>
+        <View>
             <ScrollView>
                 <View style = {{ margin: 20 }}>
                     <Text style={styles.text}>ID - Dispositivo: {idDevice}</Text>
@@ -126,6 +127,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 20, // Espacio horizontal entre elementos
         marginTop: 10,
+    },
+    text: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        marginRight: 10,
     },
 });
 

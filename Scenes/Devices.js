@@ -86,6 +86,10 @@ const DevicesPage = ({ navigation }) => {
     navigation.navigate("EditDevice", { idDevice: id});
   }
 
+  const navigateToOrder = (id) => {
+    navigation.navigate("Order", { idDevice: id});
+  }
+
   const navigateToAddDevice = (id) => {
     navigation.navigate("AddDevice", { idCli: id});
   }
@@ -147,6 +151,12 @@ const DevicesPage = ({ navigation }) => {
                             <TouchableOpacity onPress={() => {navigateToEditDevice(item.idDispo)}}>
                               <Image
                                   source = {require('../Resources/imagenes/editar.png')}
+                                  style = {styles.image}
+                              />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => {navigateToOrder(item.idDispo)}}>
+                              <Image
+                                  source = {require('../Resources/imagenes/orden.png')}
                                   style = {styles.image}
                               />
                             </TouchableOpacity>
