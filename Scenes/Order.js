@@ -212,6 +212,12 @@ const styles = StyleSheet.create({
         marginRight: 10,
         color: "white",
     },
+    flatlistContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginLeft: 10,
+        marginTop: 15,
+    },
 });
 
 export default OrderPage;
