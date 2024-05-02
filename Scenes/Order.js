@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput, FlatList, TouchableOpacity, Image } from 'react-native';
+import { Button, StyleSheet, Text, View, ScrollView, TextInput, FlatList, TouchableOpacity, Image } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import {Picker} from '@react-native-picker/picker';
 
@@ -17,7 +17,13 @@ const OrderPage = ({ navigation }) => {
     const [typePay, setTypePay] = useState('');
     const [total, setTotal] = useState(0);
     const [depData, setDepData] = useState([]);
+    //All cost const
     const [cost, setCost] = useState([]);
+    const [descripCost, setDescripCost] = useState('');
+    const [iva, setIva] = useState(false);
+    const [ivaBtext, setIvaBText] = useState('off');
+    const [buttonColor, setButtomColor] = useState('red');
+    const [price, setPrice] = useState('');
 
     useEffect(() => {
         GetDepData("http://10.214.150.5:3000/departamentos");
@@ -54,6 +60,16 @@ const OrderPage = ({ navigation }) => {
             console.error('Error al obtener los datos:', error);
         });
     };
+
+    const handleIva = () => {
+        setButtomColor(buttonColor === 'red' ? 'blue' : 'red');
+        setIvaBText(buttonColor === 'red' ? 'On' : 'Off');
+        setIva(iva === false ? true : false);
+    }
+
+    const toggleCost = () => {
+        setShowCost(!ShowCost);
+    }
 
     return (
         <View style = {styles.background}>
@@ -110,13 +126,45 @@ const OrderPage = ({ navigation }) => {
                         </Picker>
                         <View style = {styles.inputContainer}>
                             <Text style={styles.text}>Costos: </Text> 
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => toggleCost()}>
                                 <Image
                                     source = {require('../Resources/imagenes/agregar3.png')}
                                     style = {styles.image}
                                 />
                             </TouchableOpacity>
-                        </View>
+                        </View> 
+                        {
+                            ShowCost ? <View style={styles.subWin}>
+                                <TextInput
+                                    multiline
+                                    style={[styles.input, styles.multilineText]}
+                                    onChangeText={(text) => {
+                                        setDescripCost(text);
+                                    }}
+                                    value={descripCost}
+                                    placeholder="Descripcion Costo"
+                                />
+                                <View style = {styles.inputContainer}>
+                                    <Text style = {styles.text}>Precio: </Text>
+                                            <TextInput
+                                                style = {styles.input}
+                                                onChangeText={(text) => {
+                                                    setPrice(text);
+                                                }}
+                                                value={price}
+                                                placeholder="Precio"
+                                            />
+                                </View>
+                                <View style = {styles.inputContainer}>
+                                    <Text style = {styles.text}>Iva: </Text>
+                                    <Button
+                                        title={ivaBtext}
+                                        color={buttonColor}
+                                        onPress={() => handleIva()}
+                                    />
+                                </View>
+                            </View>: null
+                        }
                     </View>
                 </View>
             </ScrollView>
@@ -125,6 +173,11 @@ const OrderPage = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+    subWin: {
+        flex: 1,
+        margin: 20,
+        backgroundColor: '#0a75d1',
+    },  
     background: {
         flex: 1,
         backgroundColor: '#095ea7',
@@ -136,6 +189,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     input: {
+        margin: 20,
         flex: 1,
         padding: 10,
         fontSize: 30,
