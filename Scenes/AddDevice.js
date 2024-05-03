@@ -67,7 +67,7 @@ const AddDevicePage = ({navigation}) => {
 
     const onChange = (e, SelectedDate) => {
         setDate(SelectedDate);
-        setShowDt(false);
+        setShowDt(!showDt);
     }
     
     return (

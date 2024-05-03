@@ -165,6 +165,15 @@ const OrderPage = ({ navigation }) => {
                                 </View>
                             </View>: null
                         }
+                        <FlatList
+                            data={cost}
+                            keyExtractor={(item) => item.id}
+                            renderItem={({item}) =>(
+                                <View style={styles.flatlistContainer}>
+
+                                </View>
+                            )}
+                        />
                     </View>
                 </View>
             </ScrollView>
