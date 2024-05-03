@@ -22,10 +22,6 @@ const AddCPage = ({navigation}) => {
         telefono2: "",
     }
 
-    const navigateToWorker = () => {
-        navigation.navigate("Worker");
-    };
-
     const SentData = () => {
         Data.idCliente = Math.floor(Math.random() * 9000000) + 1;
         Data.nombre = Name.toUpperCase();
@@ -46,7 +42,7 @@ const AddCPage = ({navigation}) => {
         .then(response => response.json())
         .then(Data => console.log(Data))
         .catch(err => console.log(err));
-        navigation.navigate("Worker");
+        navigation.goBack();
     }
 
     const VerifyAllContents = () => {
@@ -58,6 +54,10 @@ const AddCPage = ({navigation}) => {
             Alert.alert("Por favor rellene todos los datos");
         }
     }
+
+    const navigateToWorker = () => {
+        navigation.goBack();
+    };
     
     return (
         <View
