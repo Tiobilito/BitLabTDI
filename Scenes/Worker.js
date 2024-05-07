@@ -1,7 +1,7 @@
-import React from 'react';
-import { StyleSheet, Text, Image, TouchableOpacity, View } from 'react-native';
+import React from "react";
+import { StyleSheet, Text, Image, TouchableOpacity, View } from "react-native";
 
-const WorkerPage = ({navigation}) => {
+const WorkerPage = ({ navigation }) => {
   const navigateToAddClient = () => {
     navigation.navigate("AddClient");
   };
@@ -11,34 +11,32 @@ const WorkerPage = ({navigation}) => {
   };
 
   return (
-    <View
-      style={styles.background}    
-    >
+    <View style={styles.background}>
       <TouchableOpacity onPress={navigateToAddClient}>
         <Image
-          source={require('../Resources/imagenes/editar.png')}
+          source={require("../Resources/imagenes/editar.png")}
           style={styles.Buttons}
         />
       </TouchableOpacity>
       <Text style={styles.text}>Añadir Cliente</Text>
       <TouchableOpacity onPress={navigateToSearchClient}>
         <Image
-          source={require('../Resources/imagenes/buscar.png')}
+          source={require("../Resources/imagenes/buscar.png")}
           style={styles.Buttons}
-        />        
+        />
       </TouchableOpacity>
       <Text style={styles.text}>Buscar Cliente</Text>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    resizeMode: 'cover',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#095ea7',
+    resizeMode: "cover",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#095ea7",
   },
   Buttons: {
     width: 200,
@@ -46,8 +44,8 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 50,
-    fontWeight: 'bold',
-    color: 'white',
+    fontWeight: "bold",
+    color: "white",
   },
 });
 
