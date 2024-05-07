@@ -8,7 +8,14 @@ import {
   View,
   ScrollView,
   Alert,
+  PixelRatio
 } from "react-native";
+
+const fontS = (size) => {
+  const fontScale = PixelRatio.getFontScale();
+  const getFontSize = size / fontScale;
+  return getFontSize;
+}
 
 const AddCPage = ({ navigation }) => {
   const [Name, setName] = useState("");
@@ -206,8 +213,8 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 20, // Espacio horizontal entre elementos
-    marginTop: 10,
+    paddingHorizontal: '1%', // Espacio horizontal entre elementos
+    marginTop: '1%',
   },
   text: {
     fontSize: 30,
