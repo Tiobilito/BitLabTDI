@@ -6,8 +6,12 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  Dimensions,
+  Text,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const Scale = Dimensions.get('window').width;
 
 const LoggingPage = ({ navigation }) => {
   const [username, setUsername] = useState("");
@@ -81,6 +85,7 @@ const LoggingPage = ({ navigation }) => {
         source={require("../Resources/imagenes/BITLABTDI.png")}
         style={styles.Logo}
       />
+      <Text style = {styles.text}>{Scale}</Text>
       <TextInput
         style={styles.input}
         onChangeText={(text) => {
@@ -116,18 +121,24 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   input: {
-    height: 60,
+    height: Scale > 400 ? 60 : 40,
     borderWidth: 1,
     backgroundColor: "white",
-    borderRadius: 20,
+    borderRadius: Scale > 400 ? 20 : 15,
     padding: 10,
     margin: 10,
     width: "80%",
-    fontSize: 30,
+    fontSize: Scale > 400 ? 30 : 15,
+  },
+  text: {
+    fontSize: Scale > 400 ? 50 : 10,
+    fontWeight: "bold",
+    marginRight: 10,
+    color: "white",
   },
   Logo: {
-    width: 400, // Ancho de la imagen
-    height: 400, // Alto de la imagen
+    width: Scale > 400 ? 400 : 250, // Ancho de la imagen
+    height: Scale > 400 ? 400 : 250, // Alto de la imagen
   },
   AccesButtom: {
     width: 100, // Ancho de la imagen
