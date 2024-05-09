@@ -164,14 +164,6 @@ const DevicesPage = ({ navigation }) => {
                   </Text>
                   <View style={styles.buttoms}>
                     <TouchableOpacity
-                      onPress={() => console.log("espere funcionalidad")}
-                    >
-                      <Image
-                        source={require("../Resources/imagenes/agregar.png")}
-                        style={styles.image}
-                      />
-                    </TouchableOpacity>
-                    <TouchableOpacity
                       onPress={() => {
                         navigateToEditDevice(item.idDispo);
                       }}
