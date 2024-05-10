@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Scale = Dimensions.get('window').width;
+const Scale = Dimensions.get("window").width;
 
 const LoggingPage = ({ navigation }) => {
   const [username, setUsername] = useState("");
@@ -85,7 +85,6 @@ const LoggingPage = ({ navigation }) => {
         source={require("../Resources/imagenes/BITLABTDI.png")}
         style={styles.Logo}
       />
-      <Text style = {styles.text}>{Scale}</Text>
       <TextInput
         style={styles.input}
         onChangeText={(text) => {
@@ -103,6 +102,15 @@ const LoggingPage = ({ navigation }) => {
         placeholder="Password"
         secureTextEntry={true}
       />
+      <Text style={styles.text}>
+        {"No tienes cuenta "}
+        <Text
+          style={{ color: "blue", textDecorationLine: "underline" }}
+          onPress={() => console.log("Espere Funcionalidad")}
+        >
+          Registrate
+        </Text>
+      </Text>
       <TouchableOpacity onPress={() => Verify(username, password)}>
         <Image
           source={require("../Resources/imagenes/acceso.png")}
@@ -131,7 +139,7 @@ const styles = StyleSheet.create({
     fontSize: Scale > 400 ? 30 : 15,
   },
   text: {
-    fontSize: Scale > 400 ? 50 : 10,
+    fontSize: Scale > 400 ? 50 : 15,
     fontWeight: "bold",
     marginRight: 10,
     color: "white",
