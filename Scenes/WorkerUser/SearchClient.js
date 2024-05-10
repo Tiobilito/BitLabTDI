@@ -8,9 +8,12 @@ import {
   View,
   FlatList,
   ActivityIndicator,
+  Dimensions,
 } from "react-native";
 import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
+
+const Scale = Dimensions.get("window").width;
 
 const SearchPage = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -178,6 +181,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#095ea7",
   },
   flatlistContainer: {
+    backgroundColor: "#0a75d1",
     flexDirection: "row",
     alignItems: "center",
     marginLeft: 10,
@@ -186,9 +190,9 @@ const styles = StyleSheet.create({
   searchBox: {
     padding: 10,
     margin: 5,
-    fontSize: 30,
+    fontSize: Scale > 400 ? 30 : 25,
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: 25,
     backgroundColor: "white",
   },
   buttom: {
@@ -198,19 +202,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textLng: {
-    fontSize: 50,
+    fontSize: Scale > 400 ? 50 : 30,
     marginLeft: 10,
     fontWeight: "bold",
     color: "white",
   },
   textSrt: {
-    fontSize: 38,
+    fontSize: Scale > 400 ? 38 : 20,
     marginLeft: 10,
     color: "white",
   },
   image: {
-    width: 100,
-    height: 100,
+    width: Scale > 400 ? 100 : 60,
+    height: Scale > 400 ? 100 : 60,
     margin: 20,
   },
   buttoms: {

@@ -8,14 +8,10 @@ import {
   View,
   ScrollView,
   Alert,
-  PixelRatio
+  Dimensions,
 } from "react-native";
 
-const fontS = (size) => {
-  const fontScale = PixelRatio.getFontScale();
-  const getFontSize = size / fontScale;
-  return getFontSize;
-}
+const Scale = Dimensions.get("window").width;
 
 const AddCPage = ({ navigation }) => {
   const [Name, setName] = useState("");
@@ -161,6 +157,7 @@ const AddCPage = ({ navigation }) => {
               onChangeText={(text) => {
                 if (/^\d+$/.test(text) || text === "") setPhone(text);
               }}
+              keyboardType="numeric"
               value={Phone}
               placeholder="Telefono"
             />
@@ -203,9 +200,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#095ea7",
   },
   input: {
+    height: Scale > 400 ? 60 : 35,
     flex: 1,
     padding: 10,
-    fontSize: 30,
+    fontSize: Scale > 400 ? 30 : 12,
     borderWidth: 1,
     borderRadius: 8,
     backgroundColor: "white",
@@ -217,14 +215,14 @@ const styles = StyleSheet.create({
     marginTop: '1%',
   },
   text: {
-    fontSize: 30,
+    fontSize: Scale > 400 ? 30 : 20,
     fontWeight: "bold",
     marginRight: 10,
     color: "white",
   },
   Buttons: {
-    width: 150,
-    height: 150,
+    width: Scale > 400 ? 150 : 100,
+    height: Scale > 400 ? 150 : 100,
     margin: 20,
   },
 });
