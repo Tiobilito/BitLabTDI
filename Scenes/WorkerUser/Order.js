@@ -238,7 +238,7 @@ const OrderPage = ({ navigation }) => {
               <Text style={styles.text}>Costos: </Text>
               <TouchableOpacity onPress={() => toggleCost()}>
                 <Image
-                  source={require("../Resources/imagenes/agregar3.png")}
+                  source={require("../../Resources/imagenes/agregar3.png")}
                   style={styles.image}
                 />
               </TouchableOpacity>

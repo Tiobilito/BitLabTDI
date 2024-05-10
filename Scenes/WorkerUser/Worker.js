@@ -14,14 +14,14 @@ const WorkerPage = ({ navigation }) => {
     <View style={styles.background}>
       <TouchableOpacity onPress={navigateToAddClient}>
         <Image
-          source={require("../Resources/imagenes/editar.png")}
+          source={require("../../Resources/imagenes/editar.png")}
           style={styles.Buttons}
         />
       </TouchableOpacity>
       <Text style={styles.text}>Añadir Cliente</Text>
       <TouchableOpacity onPress={navigateToSearchClient}>
         <Image
-          source={require("../Resources/imagenes/buscar.png")}
+          source={require("../../Resources/imagenes/buscar.png")}
           style={styles.Buttons}
         />
       </TouchableOpacity>

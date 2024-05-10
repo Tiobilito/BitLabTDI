@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,10 +12,9 @@ import {
 import { useRoute } from "@react-navigation/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-const EditDevicePage = ({ navigation }) => {
+const AddDevicePage = ({ navigation }) => {
   const route = useRoute();
-  const { idDevice } = route.params;
-  const [idCli, setIdCli] = useState(0);
+  const { idCli } = route.params;
   const [Sn, setSn] = useState("");
   const [Type, setType] = useState("");
   const [Model, setModel] = useState("");
@@ -28,43 +27,9 @@ const EditDevicePage = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
   const [showDt, setShowDt] = useState(false);
 
-  useEffect(() => {
-    GetDeviceData();
-  }, []);
-
-  const GetDeviceData = () => {
-    fetch("http://10.214.150.5:3000/dispositivos")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error al obtener los datos");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        data.forEach((item) => {
-          if (item.idDispo === idDevice) {
-            setSn(item.sn);
-            setType(item.tipoDis);
-            setModel(item.modelo);
-            setPhysiCond(item.estadoFisi);
-            setBrand(item.marca);
-            setReceidStat(item.estaRecep);
-            setColor(item.color);
-            setCase(item.caso);
-            setInventory(item.inventario.toString());
-            setDate(new Date(item.fecha));
-            setIdCli(item.idCliente);
-          }
-        });
-      })
-      .catch((error) => {
-        console.error("Error al obtener los datos:", error);
-      });
-  };
-
   const SentData = () => {
     const Data = {
-      idDispo: idDevice,
+      idDispo: Math.floor(Math.random() * 9000000) + 1,
       sn: Sn,
       tipoDis: Type,
       idCliente: idCli,
@@ -78,17 +43,22 @@ const EditDevicePage = ({ navigation }) => {
       inventario: parseInt(Inventory, 10),
     };
 
-    fetch(`http://10.214.150.5:3000/dispositivos/${idDevice}`, {
-      method: "PATCH",
+    fetch("http://10.214.150.5:3000/dispositivos", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(Data),
     })
       .then((response) => response.json())
-      .then((Data) => console.log(Data))
-      .catch((err) => console.log(err));
-    navigation.goBack();
+      .then((responseData) => {
+        console.log("Response from server:", responseData);
+        navigation.navigate("Devices", { idClient: idCli });
+      })
+      .catch((error) => {
+        console.error("Error sending data:", error);
+        Alert.alert("Error al enviar los datos");
+      });
   };
 
   const VerifyAllContents = () => {
@@ -115,7 +85,7 @@ const EditDevicePage = ({ navigation }) => {
 
   const onChange = (e, SelectedDate) => {
     setDate(SelectedDate);
-    setShowDt(false);
+    setShowDt(!showDt);
   };
 
   return (
@@ -233,7 +203,7 @@ const EditDevicePage = ({ navigation }) => {
           <View style={styles.inputContainer}>
             <TouchableOpacity onPress={VerifyAllContents}>
               <Image
-                source={require("../Resources/imagenes/agregar1.png")}
+                source={require("../../Resources/imagenes/agregar1.png")}
                 style={styles.Buttons}
               />
             </TouchableOpacity>
@@ -276,4 +246,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditDevicePage;
+export default AddDevicePage;

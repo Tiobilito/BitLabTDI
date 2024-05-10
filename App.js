@@ -4,14 +4,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 //Scenes
 import LoggingPage from './Scenes/Logging';
-import WorkerPage from './Scenes/Worker';
-import AddClientPage from './Scenes/AddClient';
-import AddDevicePage from './Scenes/AddDevice';
-import SearchClientPage from './Scenes/SearchClient';
-import DevicesPage from './Scenes/Devices';
+import WorkerPage from './Scenes/WorkerUser/Worker';
+import AddClientPage from './Scenes/WorkerUser/AddClient';
+import AddDevicePage from './Scenes/WorkerUser/AddDevice';
+import SearchClientPage from './Scenes/WorkerUser/SearchClient';
+import DevicesPage from './Scenes/WorkerUser/Devices';
 import EditClientPage from './Scenes/EditClient';
-import EditDevicePage from './Scenes/EditDevice';
-import OrderPage from './Scenes/Order';
+import EditDevicePage from './Scenes/WorkerUser/EditDevice';
+import OrderPage from './Scenes/WorkerUser/Order';
 
 const Stack = createNativeStackNavigator();
 

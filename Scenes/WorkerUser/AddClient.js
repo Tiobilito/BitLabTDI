@@ -180,13 +180,13 @@ const AddCPage = ({ navigation }) => {
           <View style={styles.inputContainer}>
             <TouchableOpacity onPress={VerifyAllContents}>
               <Image
-                source={require("../Resources/imagenes/agregar1.png")}
+                source={require("../../Resources/imagenes/agregar1.png")}
                 style={styles.Buttons}
               />
             </TouchableOpacity>
             <TouchableOpacity onPress={navigateToWorker}>
               <Image
-                source={require("../Resources/imagenes/cancelar.png")}
+                source={require("../../Resources/imagenes/cancelar.png")}
                 style={styles.Buttons}
               />
             </TouchableOpacity>
