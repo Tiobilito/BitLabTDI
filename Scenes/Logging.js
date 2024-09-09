@@ -10,70 +10,29 @@ import {
   Text,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { GetUserData, StoreUserData } from "../Modules/DataInfo";
+import { CheckUser } from "../Modules/OperacionesBD";
 
 const Scale = Dimensions.get("window").width;
 
 const LoggingPage = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  var UserData = {
-    Username: "",
-    Password: "",
-  };
 
-  useEffect(() => {
-    GetUserData();
+  useEffect(async () => {
+    const data = await GetUserData();
+    if(data) {
+      setUsername(data.Username);
+      setPassword(data.Password);
+    }
   }, []);
 
-  const GetUserData = async () => {
-    try {
-      const UDjson = await AsyncStorage.getItem("@UserCr");
-      if (UDjson !== null) {
-        const parsedData = JSON.parse(UDjson);
-        setUsername(parsedData.Username);
-        setPassword(parsedData.Password);
-      } else {
-        console.log("No data found");
-      }
-    } catch (error) {
-      console.error("Error al leer datos:", error);
+  const Verify = async () => {
+    const BVerify = await CheckUser(username, password);
+    if(BVerify == true) {
+      await StoreUserData(username, password);
+      navigation.navigate("Worker");
     }
-  };
-
-  const StoreUserData = async () => {
-    UserData.Username = username;
-    UserData.Password = password;
-    try {
-      const UDjson = JSON.stringify(UserData);
-      await AsyncStorage.setItem("@UserCr", UDjson);
-    } catch (error) {
-      console.error("Error al guardar datos:", error);
-    }
-  };
-
-  const Verify = (User, PassW) => {
-    var Done = false;
-    fetch("http://192.168.56.1:3000/empleados")
-      .then((response) => response.json())
-      .then((data) => {
-        if (User && PassW) {
-          data.forEach((item) => {
-            if (item.username === User && item.contra === PassW) {
-              Done = true;
-              StoreUserData();
-              navigation.navigate("Worker");
-            }
-          });
-          if (Done === false) {
-            Alert.alert("Datos de inicio de sesion incorrectos");
-          }
-        } else {
-          Alert.alert("Por favor completa ambos campos");
-        }
-      })
-      .catch((error) => {
-        console.error("Error al obtener los datos:", error);
-      });
   };
 
   return (

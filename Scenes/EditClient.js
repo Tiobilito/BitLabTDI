@@ -10,6 +10,7 @@ import {
   Alert,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
+import { getClientById, updateClient } from "../Modules/OperacionesBD";
 
 const AddCPage = ({ navigation }) => {
   const route = useRoute();
@@ -27,31 +28,18 @@ const AddCPage = ({ navigation }) => {
     GetClientData();
   }, []);
 
-  const GetClientData = () => {
-    fetch("http://192.168.56.1:3000/clientes")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error al obtener los datos");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        data.forEach((item) => {
-          if (item.idCliente === idClient) {
-            setName(item.nombre);
-            setAddres(item.direccion);
-            setColony(item.colonia);
-            setCity(item.ciudad);
-            setPostCode(item.cp);
-            setEmail(item.correo);
-            setPhone(item.telefono);
-            setPhone2(item.telefono2);
-          }
-        });
-      })
-      .catch((error) => {
-        console.error("Error al obtener los datos:", error);
-      });
+  const GetClientData = async() => {
+    const item = await getClientById(idClient);
+    if(item) {
+      setName(item.nombre);
+      setAddres(item.direccion);
+      setColony(item.colonia);
+      setCity(item.ciudad);
+      setPostCode(item.cp);
+      setEmail(item.correo);
+      setPhone(item.telefono);
+      setPhone2(item.telefono2);
+    }
   };
 
   const SentData = async () => {
@@ -66,16 +54,7 @@ const AddCPage = ({ navigation }) => {
       telefono: Phone,
       telefono2: Phone2,
     };
-    fetch(`http://10.214.150.5:3000/clientes/${idClient}`, {
-      method: "PATCH",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(Data),
-    })
-      .then((response) => response.json())
-      .then((Data) => console.log(Data))
-      .catch((err) => console.log(err));
+    await updateClient(idClient, Data);
     navigation.goBack();
   };
 

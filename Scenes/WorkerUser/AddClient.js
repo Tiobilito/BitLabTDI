@@ -10,6 +10,7 @@ import {
   Alert,
   Dimensions,
 } from "react-native";
+import { AddClient } from "../../Modules/OperacionesBD";
 
 const Scale = Dimensions.get("window").width;
 
@@ -34,30 +35,7 @@ const AddCPage = ({ navigation }) => {
     telefono2: "",
   };
 
-  const SentData = () => {
-    Data.idCliente = Math.floor(Math.random() * 9000000) + 1;
-    Data.nombre = Name.toUpperCase();
-    Data.direccion = Addres;
-    Data.colonia = Colony;
-    Data.ciudad = City;
-    Data.cp = PostCode;
-    Data.correo = Email;
-    Data.telefono = Phone;
-    Data.telefono2 = Phone2;
-    fetch("http://10.214.150.5:3000/clientes", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(Data),
-    })
-      .then((response) => response.json())
-      .then((Data) => console.log(Data))
-      .catch((err) => console.log(err));
-    navigation.goBack();
-  };
-
-  const VerifyAllContents = () => {
+  const VerifyAllContents = async () => {
     if (
       Name &&
       Addres &&
@@ -68,8 +46,16 @@ const AddCPage = ({ navigation }) => {
       Phone &&
       Phone2
     ) {
-      //Alert.alert("Espere funcionalidad");
-      SentData();
+      Data.nombre = Name.toUpperCase();
+      Data.direccion = Addres;
+      Data.colonia = Colony;
+      Data.ciudad = City;
+      Data.cp = PostCode;
+      Data.correo = Email;
+      Data.telefono = Phone;
+      Data.telefono2 = Phone2;
+      await AddClient(Data);
+      navigateToWorker();
     } else {
       Alert.alert("Por favor rellene todos los datos");
     }

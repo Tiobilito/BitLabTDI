@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { addDispo } from "../../Modules/OperacionesBD";
 
 const AddDevicePage = ({ navigation }) => {
   const route = useRoute();
@@ -27,9 +28,8 @@ const AddDevicePage = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
   const [showDt, setShowDt] = useState(false);
 
-  const SentData = () => {
+  const SentData = async() => {
     const Data = {
-      idDispo: Math.floor(Math.random() * 9000000) + 1,
       sn: Sn,
       tipoDis: Type,
       idCliente: idCli,
@@ -42,26 +42,11 @@ const AddDevicePage = ({ navigation }) => {
       fecha: date.toISOString(),
       inventario: parseInt(Inventory, 10),
     };
-
-    fetch("http://10.214.150.5:3000/dispositivos", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(Data),
-    })
-      .then((response) => response.json())
-      .then((responseData) => {
-        console.log("Response from server:", responseData);
-        navigation.navigate("Devices", { idClient: idCli });
-      })
-      .catch((error) => {
-        console.error("Error sending data:", error);
-        Alert.alert("Error al enviar los datos");
-      });
+    await addDispo(Data);
+    navigation.navigate("Devices", { idClient: idCli });
   };
 
-  const VerifyAllContents = () => {
+  const VerifyAllContents = async () => {
     if (
       Sn &&
       Type &&
@@ -73,7 +58,7 @@ const AddDevicePage = ({ navigation }) => {
       Inventory &&
       Case
     ) {
-      SentData();
+      await SentData();
     } else {
       Alert.alert("Por favor rellene todos los datos");
     }

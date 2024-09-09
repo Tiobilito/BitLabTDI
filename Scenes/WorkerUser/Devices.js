@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import filter from "lodash.filter";
 import { useRoute, useFocusEffect } from "@react-navigation/native";
+import { getAllDispositivos } from "../../Modules/OperacionesBD";
 
 const DevicesPage = ({ navigation }) => {
   const route = useRoute();
@@ -24,14 +25,14 @@ const DevicesPage = ({ navigation }) => {
   useFocusEffect(
     React.useCallback(() => {
       setIsLoading(true);
-      fetchData("http://10.214.150.5:3000/dispositivos");
+      fetchData();
     }, [])
   );
 
-  const fetchData = async (url) => {
+  const fetchData = async () => {
     try {
-      const response = await fetch(url);
-      const json = await response.json();
+      const response = await getAllDispositivos();
+      const json = response;
       const BData = json.map((registro) => ({
         ...registro,
         Details: false,

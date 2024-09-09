@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { getDispoById, updateDispo } from "../../Modules/OperacionesBD";
 
 const EditDevicePage = ({ navigation }) => {
   const route = useRoute();
@@ -32,37 +33,24 @@ const EditDevicePage = ({ navigation }) => {
     GetDeviceData();
   }, []);
 
-  const GetDeviceData = () => {
-    fetch("http://10.214.150.5:3000/dispositivos")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error al obtener los datos");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        data.forEach((item) => {
-          if (item.idDispo === idDevice) {
-            setSn(item.sn);
-            setType(item.tipoDis);
-            setModel(item.modelo);
-            setPhysiCond(item.estadoFisi);
-            setBrand(item.marca);
-            setReceidStat(item.estaRecep);
-            setColor(item.color);
-            setCase(item.caso);
-            setInventory(item.inventario.toString());
-            setDate(new Date(item.fecha));
-            setIdCli(item.idCliente);
-          }
-        });
-      })
-      .catch((error) => {
-        console.error("Error al obtener los datos:", error);
-      });
+  const GetDeviceData = async() => {
+    const item = await getDispoById(idDevice);
+    if(item) {
+      setSn(item.sn);
+      setType(item.tipoDis);
+      setModel(item.modelo);
+      setPhysiCond(item.estadoFisi);
+      setBrand(item.marca);
+      setReceidStat(item.estaRecep);
+      setColor(item.color);
+      setCase(item.caso);
+      setInventory(item.inventario.toString());
+      setDate(new Date(item.fecha));
+      setIdCli(item.idCliente);
+    }
   };
 
-  const SentData = () => {
+  const SentData = async() => {
     const Data = {
       idDispo: idDevice,
       sn: Sn,
@@ -77,17 +65,7 @@ const EditDevicePage = ({ navigation }) => {
       fecha: date.toISOString(),
       inventario: parseInt(Inventory, 10),
     };
-
-    fetch(`http://10.214.150.5:3000/dispositivos/${idDevice}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(Data),
-    })
-      .then((response) => response.json())
-      .then((Data) => console.log(Data))
-      .catch((err) => console.log(err));
+    await updateDispo(idDevice, Data);
     navigation.goBack();
   };
 

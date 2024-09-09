@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
+import { getAllClients } from "../../Modules/OperacionesBD";
 
 const Scale = Dimensions.get("window").width;
 
@@ -25,14 +26,14 @@ const SearchPage = ({ navigation }) => {
   useFocusEffect(
     React.useCallback(() => {
       setIsLoading(true);
-      fetchData("http://192.168.56.1:3000/clientes");
+      fetchData();
     }, [])
   );
 
-  const fetchData = async (url) => {
+  const fetchData = async () => {
     try {
-      const response = await fetch(url);
-      const json = await response.json();
+      const response = await getAllClients();
+      const json = response;
       const BData = json.map((registro) => ({
         ...registro,
         Details: false,
