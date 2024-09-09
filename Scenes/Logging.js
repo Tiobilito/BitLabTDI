@@ -53,7 +53,7 @@ const LoggingPage = ({ navigation }) => {
 
   const Verify = (User, PassW) => {
     var Done = false;
-    fetch("http://10.214.150.5:3000/empleados")
+    fetch("http://192.168.56.1:3000/empleados")
       .then((response) => response.json())
       .then((data) => {
         if (User && PassW) {

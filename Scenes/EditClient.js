@@ -28,7 +28,7 @@ const AddCPage = ({ navigation }) => {
   }, []);
 
   const GetClientData = () => {
-    fetch("http://10.214.150.5:3000/clientes")
+    fetch("http://192.168.56.1:3000/clientes")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Error al obtener los datos");

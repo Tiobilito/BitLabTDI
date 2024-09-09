@@ -25,7 +25,7 @@ const SearchPage = ({ navigation }) => {
   useFocusEffect(
     React.useCallback(() => {
       setIsLoading(true);
-      fetchData("http://10.214.150.5:3000/clientes");
+      fetchData("http://192.168.56.1:3000/clientes");
     }, [])
   );
 
