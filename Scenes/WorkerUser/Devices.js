@@ -31,9 +31,8 @@ const DevicesPage = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const response = await getAllDispositivos();
-      const json = response;
-      const BData = json.map((registro) => ({
+      const Data = await getAllDispositivos();
+      const BData = Data.map((registro) => ({
         ...registro,
         Details: false,
       }));

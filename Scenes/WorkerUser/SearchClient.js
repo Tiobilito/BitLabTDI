@@ -32,9 +32,8 @@ const SearchPage = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const response = await getAllClients();
-      const json = response;
-      const BData = json.map((registro) => ({
+      const Data = await getAllClients();
+      const BData = Data.map((registro) => ({
         ...registro,
         Details: false,
       }));
