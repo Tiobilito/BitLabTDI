@@ -50,7 +50,7 @@ const SearchPage = ({ navigation }) => {
   const toggleDetails = (itemId) => {
     // Encuentra el registro con el id correspondiente
     const updatedData = data.map((registro) => {
-      if (registro.idCliente === itemId) {
+      if (registro.id_cliente === itemId) {
         return { ...registro, Details: !registro.Details };
       }
       return registro;
@@ -119,11 +119,11 @@ const SearchPage = ({ navigation }) => {
       />
       <FlatList
         data={data}
-        keyExtractor={(item) => item.idCliente}
+        keyExtractor={(item) => item.id_cliente}
         renderItem={({ item }) => (
           <View style={styles.flatlistContainer}>
             <View>
-              <TouchableOpacity onPress={() => toggleDetails(item.idCliente)}>
+              <TouchableOpacity onPress={() => toggleDetails(item.id_cliente)}>
                 <View>
                   <Text style={styles.textLng}>{item.nombre}</Text>
                   <Text style={styles.textSrt}>{item.correo}</Text>
@@ -132,7 +132,7 @@ const SearchPage = ({ navigation }) => {
 
               {item.Details ? (
                 <View>
-                  <Text style={styles.textSrt}>ID: {item.idCliente}</Text>
+                  <Text style={styles.textSrt}>ID: {item.id_cliente}</Text>
                   <Text style={styles.textSrt}>
                     Direccion: {item.direccion}
                   </Text>
@@ -146,7 +146,7 @@ const SearchPage = ({ navigation }) => {
                   <View style={styles.buttoms}>
                     <TouchableOpacity
                       onPress={() => {
-                        navigateToEditClient(item.idCliente);
+                        navigateToEditClient(item.id_cliente);
                       }}
                     >
                       <Image
