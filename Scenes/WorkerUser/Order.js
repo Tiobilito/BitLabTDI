@@ -12,8 +12,9 @@ import {
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
-import { printToFileAsync } from 'expo-print';
-import { shareAsync } from 'expo-sharing';
+import { printToFileAsync } from "expo-print";
+import { shareAsync } from "expo-sharing";
+import { getAllDepartamentos } from "../../Modules/OperacionesBD";
 
 const OrderPage = ({ navigation }) => {
   const route = useRoute();
@@ -126,34 +127,14 @@ const OrderPage = ({ navigation }) => {
     setIdOrder(Math.floor(Math.random() * 9000000) + 1);
   }, []);
 
-  const GetDepData = async (url) => {
-    try {
-      const response = await fetch(url);
-      const json = await response.json();
-      setDepData(json);
-    } catch (error) {
-      console.log(error);
-    }
+  const GetDepData = async () => {
+    const Data = await getAllDepartamentos();
+    setDepData(Data);
   };
 
-  const GetDeviceData = async (url) => {
-    fetch(url)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error al obtener los datos");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        data.forEach((item) => {
-          if (item.idDispo === idDevice) {
-            setIdClient(item.idCliente);
-          }
-        });
-      })
-      .catch((error) => {
-        console.error("Error al obtener los datos:", error);
-      });
+  const GetDeviceData = async () => {
+    const item = await getDispoById(idDevice);
+    setIdClient(item.id_cliente);
   };
 
   let createPDF = async () => {

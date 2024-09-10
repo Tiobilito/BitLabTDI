@@ -175,3 +175,16 @@ export async function getDispoById(id_dispo) {
   console.log("Registro del dispositivo:", data[0]); // Retorna el primer (y único) registro
   return data[0];
 }
+
+// Función para obtener todos los registros de la tabla departamentos
+export async function getAllDepartamentos() {
+  const { data, error } = await supabase
+    .from('departamento') 
+    .select('*'); // Selecciona todas las columnas
+  if (error) {
+    console.error('Error al obtener registros:', error);
+    return null;
+  }
+  console.log('Registros de departamentos:', data);
+  return data;
+}
