@@ -26,6 +26,7 @@ const DevicesPage = ({ navigation }) => {
     React.useCallback(() => {
       setIsLoading(true);
       fetchData();
+      console.log(idClient);
     }, [])
   );
 

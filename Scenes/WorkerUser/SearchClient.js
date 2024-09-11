@@ -156,7 +156,7 @@ const SearchPage = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => {
-                        navigateToDevices(item.idCliente);
+                        navigateToDevices(item.id_cliente);
                       }}
                     >
                       <Image

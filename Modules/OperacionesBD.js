@@ -101,6 +101,7 @@ export async function addDispo(dispositivo) {
   const { data, error } = await supabase.from("dispositivo").insert([
     {
       id_cliente: dispositivo.id_cliente,
+      tipo_dis: dispositivo.tipo_dis,
       modelo: dispositivo.modelo,
       estado_fisi: dispositivo.estado_fisi,
       esta_recep: dispositivo.esta_recep,
