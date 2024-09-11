@@ -1,8 +1,7 @@
-import { React, useState } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
-  Image,
   TouchableOpacity,
   TextInput,
   View,
@@ -15,46 +14,39 @@ import { AddClient } from "../../Modules/OperacionesBD";
 const Scale = Dimensions.get("window").width;
 
 const AddCPage = ({ navigation }) => {
-  const [Name, setName] = useState("");
-  const [Addres, setAddres] = useState("");
-  const [Colony, setColony] = useState("");
-  const [City, setCity] = useState("");
-  const [PostCode, setPostCode] = useState("");
-  const [Email, setEmail] = useState("");
-  const [Phone, setPhone] = useState("");
-  const [Phone2, setPhone2] = useState("");
-  var Data = {
-    idCliente: 0,
-    nombre: "",
-    direccion: "",
-    colonia: "",
-    ciudad: "",
-    cp: "",
-    correo: "",
-    telefono: "",
-    telefono2: "",
+  const [formData, setFormData] = useState({
+    name: "",
+    address: "",
+    neighborhood: "",
+    city: "",
+    zipCode: "",
+    email: "",
+    phone: "",
+    phone2: "",
+  });
+
+  const handleChange = (name, value) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const VerifyAllContents = async () => {
-    if (
-      Name &&
-      Addres &&
-      Colony &&
-      City &&
-      PostCode &&
-      Email &&
-      Phone &&
-      Phone2
-    ) {
-      Data.nombre = Name.toUpperCase();
-      Data.direccion = Addres;
-      Data.colonia = Colony;
-      Data.ciudad = City;
-      Data.cp = PostCode;
-      Data.correo = Email;
-      Data.telefono = Phone;
-      Data.telefono2 = Phone2;
-      await AddClient(Data);
+  const verifyAllContents = async () => {
+    const { name, address, neighborhood, city, zipCode, email, phone, phone2 } =
+      formData;
+
+    if (name && address && neighborhood && city && zipCode && email && phone && phone2) {
+      const data = {
+        idCliente: 0,
+        nombre: name.toUpperCase(),
+        direccion: address,
+        colonia: neighborhood,
+        ciudad: city,
+        cp: zipCode,
+        correo: email,
+        telefono: phone,
+        telefono2: phone2,
+      };
+
+      await AddClient(data);
       navigateToWorker();
     } else {
       Alert.alert("Por favor rellene todos los datos");
@@ -69,111 +61,99 @@ const AddCPage = ({ navigation }) => {
     <View style={styles.background}>
       <ScrollView>
         <View style={{ margin: 20 }}>
+          <Text style={styles.title}>Registro de Cliente</Text>
+
           <View style={styles.inputContainer}>
-            <Text style={styles.text}>Nombre: </Text>
+            <Text style={styles.label}>Nombre *</Text>
             <TextInput
               style={styles.input}
-              onChangeText={(text) => {
-                setName(text);
-              }}
-              value={Name}
+              value={formData.name}
+              onChangeText={(value) => handleChange("name", value)}
               placeholder="Nombre"
             />
           </View>
+
           <View style={styles.inputContainer}>
-            <Text style={styles.text}>Direccion: </Text>
+            <Text style={styles.label}>Dirección *</Text>
             <TextInput
               style={styles.input}
-              onChangeText={(text) => {
-                setAddres(text);
-              }}
-              value={Addres}
-              placeholder="Direccion"
+              value={formData.address}
+              onChangeText={(value) => handleChange("address", value)}
+              placeholder="Dirección"
             />
           </View>
+
           <View style={styles.inputContainer}>
-            <Text style={styles.text}>Colonia: </Text>
+            <Text style={styles.label}>Colonia *</Text>
             <TextInput
               style={styles.input}
-              onChangeText={(text) => {
-                setColony(text);
-              }}
-              value={Colony}
+              value={formData.neighborhood}
+              onChangeText={(value) => handleChange("neighborhood", value)}
               placeholder="Colonia"
             />
           </View>
+
           <View style={styles.inputContainer}>
-            <Text style={styles.text}>Ciudad: </Text>
+            <Text style={styles.label}>Ciudad *</Text>
             <TextInput
               style={styles.input}
-              onChangeText={(text) => {
-                setCity(text);
-              }}
-              value={City}
+              value={formData.city}
+              onChangeText={(value) => handleChange("city", value)}
               placeholder="Ciudad"
             />
           </View>
+
           <View style={styles.inputContainer}>
-            <Text style={styles.text}>Codigo Postal: </Text>
+            <Text style={styles.label}>Código Postal *</Text>
             <TextInput
               style={styles.input}
-              onChangeText={(text) => {
-                if (/^\d+$/.test(text) || text === "") setPostCode(text);
-              }}
+              value={formData.zipCode}
+              onChangeText={(value) => handleChange("zipCode", value)}
+              placeholder="Código Postal"
               keyboardType="numeric"
-              value={PostCode}
-              placeholder="Codigo Postal"
             />
           </View>
+
           <View style={styles.inputContainer}>
-            <Text style={styles.text}>Corre electronico: </Text>
+            <Text style={styles.label}>Correo electrónico</Text>
             <TextInput
               style={styles.input}
-              onChangeText={(text) => {
-                setEmail(text);
-              }}
-              value={Email}
+              value={formData.email}
+              onChangeText={(value) => handleChange("email", value)}
               placeholder="Correo"
+              keyboardType="email-address"
             />
           </View>
+
           <View style={styles.inputContainer}>
-            <Text style={styles.text}>Telefono: </Text>
+            <Text style={styles.label}>Teléfono</Text>
             <TextInput
               style={styles.input}
-              onChangeText={(text) => {
-                if (/^\d+$/.test(text) || text === "") setPhone(text);
-              }}
-              keyboardType="numeric"
-              value={Phone}
-              placeholder="Telefono"
+              value={formData.phone}
+              onChangeText={(value) => handleChange("phone", value)}
+              placeholder="Teléfono"
+              keyboardType="phone-pad"
             />
           </View>
+
           <View style={styles.inputContainer}>
-            <Text style={styles.text}>Otro Telefono: </Text>
+            <Text style={styles.label}>Otro Teléfono</Text>
             <TextInput
               style={styles.input}
-              onChangeText={(text) => {
-                if (/^\d+$/.test(text) || text === "") setPhone2(text);
-              }}
-              keyboardType="numeric"
-              value={Phone2}
-              placeholder="Telefono"
+              value={formData.phone2}
+              onChangeText={(value) => handleChange("phone2", value)}
+              placeholder="Otro Teléfono"
+              keyboardType="phone-pad"
             />
           </View>
-          <View style={styles.inputContainer}>
-            <TouchableOpacity onPress={VerifyAllContents}>
-              <Image
-                source={require("../../Resources/imagenes/agregar1.png")}
-                style={styles.Buttons}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={navigateToWorker}>
-              <Image
-                source={require("../../Resources/imagenes/cancelar.png")}
-                style={styles.Buttons}
-              />
-            </TouchableOpacity>
-          </View>
+
+          <TouchableOpacity style={styles.button} onPress={verifyAllContents}>
+            <Text style={styles.buttonText}>Registrar</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.buttonCancel} onPress={navigateToWorker}>
+            <Text style={styles.buttonText}>Cancelar</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </View>
@@ -185,31 +165,47 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#095ea7",
   },
-  input: {
-    height: Scale > 400 ? 60 : 35,
-    flex: 1,
-    padding: 10,
-    fontSize: Scale > 400 ? 30 : 12,
-    borderWidth: 1,
-    borderRadius: 8,
-    backgroundColor: "white",
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "white",
+    textAlign: "center",
+    marginBottom: 20,
   },
   inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: '1%', // Espacio horizontal entre elementos
-    marginTop: '1%',
+    marginBottom: 15,
   },
-  text: {
-    fontSize: Scale > 400 ? 30 : 20,
-    fontWeight: "bold",
-    marginRight: 10,
+  label: {
+    fontSize: 18,
     color: "white",
+    marginBottom: 5,
   },
-  Buttons: {
-    width: Scale > 400 ? 150 : 100,
-    height: Scale > 400 ? 150 : 100,
-    margin: 20,
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 10,
+    fontSize: 16,
+    backgroundColor: "white",
+  },
+  button: {
+    backgroundColor: "#007bff",
+    padding: 15,
+    borderRadius: 5,
+    alignItems: "center",
+    marginTop: 20,
+  },
+  buttonCancel: {
+    backgroundColor: "#ff0000",
+    padding: 15,
+    borderRadius: 5,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
 
