@@ -9,7 +9,7 @@ import {
   Alert,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import { getClientById, updateClient } from "../Modules/OperacionesBD";
+import { getClientById, updateClient } from "../../Modules/OperacionesBD";
 
 const EditClientPage = ({ navigation }) => {
   const route = useRoute();

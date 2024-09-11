@@ -9,7 +9,7 @@ import AddClientPage from "./Scenes/WorkerUser/AddClient";
 import AddDevicePage from "./Scenes/WorkerUser/AddDevice";
 import SearchClientPage from "./Scenes/WorkerUser/SearchClient";
 import DevicesPage from "./Scenes/WorkerUser/Devices";
-import EditClientPage from "./Scenes/EditClient";
+import EditClientPage from "./Scenes/WorkerUser/EditClient";
 import EditDevicePage from "./Scenes/WorkerUser/EditDevice";
 import OrderPage from "./Scenes/WorkerUser/Order";
 
