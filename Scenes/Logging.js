@@ -19,8 +19,8 @@ const LoggingPage = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  useEffect(async () => {
-    const data = await GetUserData();
+  useEffect(() => {
+    const data = GetUserData();
     if(data) {
       setUsername(data.Username);
       setPassword(data.Password);
