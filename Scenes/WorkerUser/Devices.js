@@ -37,8 +37,8 @@ const DevicesPage = ({ navigation }) => {
         ...registro,
         Details: false,
       }));
-      setData(filter(BData, { idCliente: idClient }));
-      setFullData(filter(BData, { idCliente: idClient }));
+      setData(filter(BData, { id_cliente: idClient }));
+      setFullData(filter(BData, { id_cliente: idClient }));
       setIsLoading(false);
     } catch (error) {
       setError(error);
@@ -50,7 +50,7 @@ const DevicesPage = ({ navigation }) => {
   const toggleDetails = (itemId) => {
     // Encuentra el registro con el id correspondiente
     const updatedData = data.map((registro) => {
-      if (registro.idDispo === itemId) {
+      if (registro.id_dispo === itemId) {
         return { ...registro, Details: !registro.Details };
       }
       return registro;
@@ -133,31 +133,31 @@ const DevicesPage = ({ navigation }) => {
       </TouchableOpacity>
       <FlatList
         data={data}
-        keyExtractor={(item) => item.idDispo}
+        keyExtractor={(item) => item.id_dispo}
         renderItem={({ item }) => (
           <View style={styles.flatlistContainer}>
             <View>
-              <TouchableOpacity onPress={() => toggleDetails(item.idDispo)}>
+              <TouchableOpacity onPress={() => toggleDetails(item.id_dispo)}>
                 <View>
                   <Text style={styles.textLng}>Modelo: {item.modelo}</Text>
-                  <Text style={styles.textSrt}>Id: {item.idDispo}</Text>
+                  <Text style={styles.textSrt}>Id: {item.id_dispo}</Text>
                 </View>
               </TouchableOpacity>
 
               {item.Details ? (
                 <View>
                   <Text style={styles.textSrt}>
-                    Id Cliente: {item.idCliente}
+                    Id Cliente: {item.id_cliente}
                   </Text>
                   <Text style={styles.textSrt}>S/N: {item.sn}</Text>
                   <Text style={styles.textSrt}>Caso: {item.caso}</Text>
-                  <Text style={styles.textSrt}>Tipo: {item.tipoDis}</Text>
+                  <Text style={styles.textSrt}>Tipo: {item.tipo_dis}</Text>
                   <Text style={styles.textSrt}>
-                    Estado fisico: {item.estadoFisi}
+                    Estado fisico: {item.estado_fisi}
                   </Text>
                   <Text style={styles.textSrt}>Marca: {item.marca}</Text>
                   <Text style={styles.textSrt}>
-                    Estado recibido: {item.estaRecip}
+                    Estado recibido: {item.esta_recip}
                   </Text>
                   <Text style={styles.textSrt}>Color: {item.color}</Text>
                   <Text style={styles.textSrt}>
@@ -166,7 +166,7 @@ const DevicesPage = ({ navigation }) => {
                   <View style={styles.buttoms}>
                     <TouchableOpacity
                       onPress={() => {
-                        navigateToEditDevice(item.idDispo);
+                        navigateToEditDevice(item.id_dispo);
                       }}
                     >
                       <Image
@@ -176,7 +176,7 @@ const DevicesPage = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => {
-                        navigateToOrder(item.idDispo);
+                        navigateToOrder(item.id_dispo);
                       }}
                     >
                       <Image
