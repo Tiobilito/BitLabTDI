@@ -226,6 +226,7 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: "#095ea7",
+    marginTop: 30
   },
   input: {
     flex: 1,

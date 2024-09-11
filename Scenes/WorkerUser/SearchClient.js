@@ -150,6 +150,7 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: "#ffffff",
+    marginTop: 30
   },
   centered: {
     flex: 1,
