@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 30
   },
   input: {
     height: Scale > 400 ? 60 : 40,

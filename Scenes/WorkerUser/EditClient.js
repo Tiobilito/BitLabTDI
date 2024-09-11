@@ -9,7 +9,7 @@ import {
   Alert,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import { getClientById, updateClient } from "../Modules/OperacionesBD";
+import { getClientById, updateClient } from "../../Modules/OperacionesBD";
 
 const EditClientPage = ({ navigation }) => {
   const route = useRoute();
@@ -197,6 +197,7 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: "#095ea7",
+    marginTop: 30
   },
   title: {
     fontSize: 24,

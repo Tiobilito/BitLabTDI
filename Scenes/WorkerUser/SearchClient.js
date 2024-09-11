@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import {
   Text,
   StyleSheet,
@@ -24,7 +24,7 @@ const SearchPage = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       setIsLoading(true);
       fetchData();
     }, [])
@@ -48,7 +48,6 @@ const SearchPage = ({ navigation }) => {
   };
 
   const toggleDetails = (itemId) => {
-    // Encuentra el registro con el id correspondiente
     const updatedData = data.map((registro) => {
       if (registro.id_cliente === itemId) {
         return { ...registro, Details: !registro.Details };
@@ -60,38 +59,22 @@ const SearchPage = ({ navigation }) => {
 
   if (isLoading) {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <ActivityIndicator size={"large"} />
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color="#ffffff" />
       </View>
     );
   }
 
   if (error) {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Text>Error in fetch data</Text>
+      <View style={styles.centered}>
+        <Text style={styles.errorText}>Error in fetch data</Text>
       </View>
     );
   }
 
   const contains = ({ nombre, correo }, query) => {
-    if (nombre.includes(query) || correo.includes(query)) {
-      return true;
-    } else {
-      return false;
-    }
+    return nombre.includes(query) || correo.includes(query);
   };
 
   const navigateToEditClient = (id) => {
@@ -108,66 +91,54 @@ const SearchPage = ({ navigation }) => {
         style={styles.searchBox}
         onChangeText={(query) => {
           setSearchQuery(query);
-          const formattedQuery = query;
-          const filteredData = filter(fullData, (nombre) => {
-            return contains(nombre, formattedQuery);
-          });
+          const filteredData = filter(fullData, (item) => contains(item, query));
           setData(filteredData);
         }}
         value={searchQuery}
-        placeholder="Search"
+        placeholder="Search contacts"
       />
       <FlatList
         data={data}
-        keyExtractor={(item) => item.id_cliente}
+        keyExtractor={(item) => item.id_cliente.toString()}
         renderItem={({ item }) => (
-          <View style={styles.flatlistContainer}>
-            <View>
-              <TouchableOpacity onPress={() => toggleDetails(item.id_cliente)}>
-                <View>
-                  <Text style={styles.textLng}>{item.nombre}</Text>
-                  <Text style={styles.textSrt}>{item.correo}</Text>
+          <View style={styles.itemContainer}>
+            <TouchableOpacity onPress={() => toggleDetails(item.id_cliente)} style={styles.item}>
+              <View style={styles.avatarContainer}>
+                <Image
+                  source={item.avatar ? { uri: item.avatar } : require("../../Resources/imagenes/default-avatar.jpg")}
+                  style={styles.avatar}
+                />
+              </View>
+              <View style={styles.info}>
+                <Text style={styles.name}>{item.nombre}</Text>
+                <Text style={styles.email}>{item.correo}</Text>
+              </View>
+            </TouchableOpacity>
+            {item.Details && (
+              <View style={styles.details}>
+                <Text style={styles.detailText}>ID: {item.id_cliente}</Text>
+                <Text style={styles.detailText}>Direccion: {item.direccion}</Text>
+                <Text style={styles.detailText}>Colonia: {item.colonia}</Text>
+                <Text style={styles.detailText}>Ciudad: {item.ciudad}</Text>
+                <Text style={styles.detailText}>Codigo postal: {item.cp}</Text>
+                <Text style={styles.detailText}>Telefono: {item.telefono}</Text>
+                <Text style={styles.detailText}>2do Telefono: {item.telefono2}</Text>
+                <View style={styles.buttons}>
+                  <TouchableOpacity onPress={() => navigateToEditClient(item.id_cliente)}>
+                    <Image
+                      source={require("../../Resources/imagenes/editar.png")}
+                      style={styles.buttonImage}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => navigateToDevices(item.id_cliente)}>
+                    <Image
+                      source={require("../../Resources/imagenes/device.png")}
+                      style={styles.buttonImage}
+                    />
+                  </TouchableOpacity>
                 </View>
-              </TouchableOpacity>
-
-              {item.Details ? (
-                <View>
-                  <Text style={styles.textSrt}>ID: {item.id_cliente}</Text>
-                  <Text style={styles.textSrt}>
-                    Direccion: {item.direccion}
-                  </Text>
-                  <Text style={styles.textSrt}>Colonia: {item.colonia}</Text>
-                  <Text style={styles.textSrt}>Ciudad: {item.ciudad}</Text>
-                  <Text style={styles.textSrt}>Codigo postal: {item.cp}</Text>
-                  <Text style={styles.textSrt}>Telefono: {item.telefono}</Text>
-                  <Text style={styles.textSrt}>
-                    2do Telefono: {item.telefono2}
-                  </Text>
-                  <View style={styles.buttoms}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        navigateToEditClient(item.id_cliente);
-                      }}
-                    >
-                      <Image
-                        source={require("../../Resources/imagenes/editar.png")}
-                        style={styles.image}
-                      />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => {
-                        navigateToDevices(item.idCliente);
-                      }}
-                    >
-                      <Image
-                        source={require("../../Resources/imagenes/device.png")}
-                        style={styles.image}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ) : null}
-            </View>
+              </View>
+            )}
           </View>
         )}
       />
@@ -178,50 +149,81 @@ const SearchPage = ({ navigation }) => {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
+    backgroundColor: "#ffffff",
+    marginTop: 30
+  },
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "#095ea7",
   },
-  flatlistContainer: {
-    backgroundColor: "#0a75d1",
-    flexDirection: "row",
-    alignItems: "center",
-    marginLeft: 10,
-    marginTop: 10,
+  errorText: {
+    color: "#ffffff",
+    fontSize: 16,
   },
   searchBox: {
     padding: 10,
     margin: 5,
-    fontSize: Scale > 400 ? 30 : 25,
+    fontSize: 18,
     borderWidth: 1,
     borderRadius: 25,
-    backgroundColor: "white",
+    backgroundColor: "#ffffff",
+    borderColor: "#ddd",
   },
-  buttom: {
-    backgroundColor: "blue",
-    padding: 5,
-    borderRadius: 10,
-    alignItems: "center",
+  itemContainer: {
+    marginVertical: 8,
+    marginHorizontal: 16,
+    backgroundColor: "#0a75d1",
+    borderRadius: 8,
+    overflow: "hidden",
   },
-  textLng: {
-    fontSize: Scale > 400 ? 50 : 30,
-    marginLeft: 10,
-    fontWeight: "bold",
-    color: "white",
-  },
-  textSrt: {
-    fontSize: Scale > 400 ? 38 : 20,
-    marginLeft: 10,
-    color: "white",
-  },
-  image: {
-    width: Scale > 400 ? 100 : 60,
-    height: Scale > 400 ? 100 : 60,
-    margin: 20,
-  },
-  buttoms: {
+  item: {
     flexDirection: "row",
     alignItems: "center",
+    padding: 10,
+  },
+  avatarContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    overflow: "hidden",
+    marginRight: 16,
+  },
+  avatar: {
     width: "100%",
-    paddingHorizontal: 20,
+    height: "100%",
+    resizeMode: "cover",
+  },
+  info: {
+    flex: 1,
+  },
+  name: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#ffffff",
+  },
+  email: {
+    fontSize: 14,
+    color: "#ffffff",
+  },
+  details: {
+    padding: 10,
+    backgroundColor: "#0a75d1",
+  },
+  detailText: {
+    fontSize: 14,
+    color: "#ffffff",
+  },
+  buttons: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    paddingVertical: 10,
+  },
+  buttonImage: {
+    width: 24,
+    height: 24,
+    marginHorizontal: 10,
   },
 });
 

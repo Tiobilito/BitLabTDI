@@ -28,7 +28,7 @@ export async function getAllClients() {
     console.error('Error al obtener registros:', error);
     return null;
   }
-  console.log('Registros de clientes:', data);
+  //console.log('Registros de clientes:', data);
   return data;
 }
 
@@ -101,6 +101,7 @@ export async function addDispo(dispositivo) {
   const { data, error } = await supabase.from("dispositivo").insert([
     {
       id_cliente: dispositivo.id_cliente,
+      tipo_dis: dispositivo.tipo_dis,
       modelo: dispositivo.modelo,
       estado_fisi: dispositivo.estado_fisi,
       esta_recep: dispositivo.esta_recep,
@@ -130,7 +131,7 @@ export async function getAllDispositivos() {
     console.error('Error al obtener registros:', error);
     return null;
   }
-  console.log('Registros de dispositivos:', data);
+  //console.log('Registros de dispositivos:', data);
   return data;
 }
 
