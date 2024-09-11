@@ -28,7 +28,7 @@ export async function getAllClients() {
     console.error('Error al obtener registros:', error);
     return null;
   }
-  console.log('Registros de clientes:', data);
+  //console.log('Registros de clientes:', data);
   return data;
 }
 
@@ -131,7 +131,7 @@ export async function getAllDispositivos() {
     console.error('Error al obtener registros:', error);
     return null;
   }
-  console.log('Registros de dispositivos:', data);
+  //console.log('Registros de dispositivos:', data);
   return data;
 }
 

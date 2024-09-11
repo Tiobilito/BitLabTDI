@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import {
   Text,
   StyleSheet,
@@ -23,10 +23,9 @@ const DevicesPage = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       setIsLoading(true);
       fetchData();
-      console.log(idClient);
     }, [])
   );
 
@@ -37,8 +36,9 @@ const DevicesPage = ({ navigation }) => {
         ...registro,
         Details: false,
       }));
-      setData(filter(BData, { id_cliente: idClient }));
-      setFullData(filter(BData, { id_cliente: idClient }));
+      const filteredData = filter(BData, { id_cliente: idClient });
+      setData(filteredData);
+      setFullData(filteredData);
       setIsLoading(false);
     } catch (error) {
       setError(error);
@@ -48,7 +48,6 @@ const DevicesPage = ({ navigation }) => {
   };
 
   const toggleDetails = (itemId) => {
-    // Encuentra el registro con el id correspondiente
     const updatedData = data.map((registro) => {
       if (registro.id_dispo === itemId) {
         return { ...registro, Details: !registro.Details };
@@ -60,38 +59,22 @@ const DevicesPage = ({ navigation }) => {
 
   if (isLoading) {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <ActivityIndicator size={"large"} />
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color="#ffffff" />
       </View>
     );
   }
 
   if (error) {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Text>Error in fetch data</Text>
+      <View style={styles.centered}>
+        <Text style={styles.errorText}>Error in fetch data</Text>
       </View>
     );
   }
 
   const contains = ({ modelo }, query) => {
-    if (modelo.includes(query)) {
-      return modelo.includes(query);
-    } else {
-      return false;
-    }
+    return modelo.includes(query);
   };
 
   const navigateToEditDevice = (id) => {
@@ -112,82 +95,59 @@ const DevicesPage = ({ navigation }) => {
         style={styles.searchBox}
         onChangeText={(query) => {
           setSearchQuery(query);
-          const formattedQuery = query;
-          const filteredData = filter(fullData, (modelo) => {
-            return contains(modelo, formattedQuery);
-          });
+          const filteredData = filter(fullData, (item) => contains(item, query));
           setData(filteredData);
         }}
         value={searchQuery}
-        placeholder="Search"
+        placeholder="Search devices"
       />
       <TouchableOpacity
-        onPress={() => {
-          navigateToAddDevice(idClient);
-        }}
+        style={styles.addButton}
+        onPress={() => navigateToAddDevice(idClient)}
       >
         <Image
           source={require("../../Resources/imagenes/agregar.png")}
-          style={styles.image}
+          style={styles.addImage}
         />
       </TouchableOpacity>
       <FlatList
         data={data}
-        keyExtractor={(item) => item.id_dispo}
+        keyExtractor={(item) => item.id_dispo.toString()}
         renderItem={({ item }) => (
-          <View style={styles.flatlistContainer}>
-            <View>
-              <TouchableOpacity onPress={() => toggleDetails(item.id_dispo)}>
-                <View>
-                  <Text style={styles.textLng}>Modelo: {item.modelo}</Text>
-                  <Text style={styles.textSrt}>Id: {item.id_dispo}</Text>
+          <View style={styles.itemContainer}>
+            <TouchableOpacity onPress={() => toggleDetails(item.id_dispo)} style={styles.item}>
+              <View style={styles.info}>
+                <Text style={styles.modelText}>Modelo: {item.modelo}</Text>
+                <Text style={styles.idText}>        Id: {item.id_dispo}</Text>
+              </View>
+            </TouchableOpacity>
+            {item.Details && (
+              <View style={styles.details}>
+                <Text style={styles.detailText}>Id Cliente: {item.id_cliente}</Text>
+                <Text style={styles.detailText}>S/N: {item.sn}</Text>
+                <Text style={styles.detailText}>Caso: {item.caso}</Text>
+                <Text style={styles.detailText}>Tipo: {item.tipo_dis}</Text>
+                <Text style={styles.detailText}>Estado fisico: {item.estado_fisi}</Text>
+                <Text style={styles.detailText}>Marca: {item.marca}</Text>
+                <Text style={styles.detailText}>Estado recibido: {item.esta_recip}</Text>
+                <Text style={styles.detailText}>Color: {item.color}</Text>
+                <Text style={styles.detailText}>Inventario: {item.inventario}</Text>
+                <View style={styles.buttons}>
+                  <TouchableOpacity onPress={() => navigateToEditDevice(item.id_dispo)}>
+                    <Image
+                      source={require("../../Resources/imagenes/editar.png")}
+                      style={styles.buttonImage}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => navigateToOrder(item.id_dispo)}>
+                    <Image
+                      source={require("../../Resources/imagenes/orden.png")}
+                      style={styles.buttonImage}
+                    />
+                  </TouchableOpacity>
                 </View>
-              </TouchableOpacity>
-
-              {item.Details ? (
-                <View>
-                  <Text style={styles.textSrt}>
-                    Id Cliente: {item.id_cliente}
-                  </Text>
-                  <Text style={styles.textSrt}>S/N: {item.sn}</Text>
-                  <Text style={styles.textSrt}>Caso: {item.caso}</Text>
-                  <Text style={styles.textSrt}>Tipo: {item.tipo_dis}</Text>
-                  <Text style={styles.textSrt}>
-                    Estado fisico: {item.estado_fisi}
-                  </Text>
-                  <Text style={styles.textSrt}>Marca: {item.marca}</Text>
-                  <Text style={styles.textSrt}>
-                    Estado recibido: {item.esta_recip}
-                  </Text>
-                  <Text style={styles.textSrt}>Color: {item.color}</Text>
-                  <Text style={styles.textSrt}>
-                    Inventario: {item.inventario}
-                  </Text>
-                  <View style={styles.buttoms}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        navigateToEditDevice(item.id_dispo);
-                      }}
-                    >
-                      <Image
-                        source={require("../../Resources/imagenes/editar.png")}
-                        style={styles.image}
-                      />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => {
-                        navigateToOrder(item.id_dispo);
-                      }}
-                    >
-                      <Image
-                        source={require("../../Resources/imagenes/orden.png")}
-                        style={styles.image}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ) : null}
-            </View>
+              </View>
+            )}
           </View>
         )}
       />
@@ -198,53 +158,75 @@ const DevicesPage = ({ navigation }) => {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
+    backgroundColor: "#ffffff",
+  },
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "#095ea7",
   },
-  flatlistContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginLeft: 10,
-    marginTop: 15,
+  errorText: {
+    color: "#ffffff",
+    fontSize: 16,
   },
   searchBox: {
     padding: 10,
     margin: 5,
-    fontSize: 30,
+    fontSize: 18,
     borderWidth: 1,
-    borderRadius: 8,
-    backgroundColor: "white",
+    borderRadius: 25,
+    backgroundColor: "#ffffff",
+    borderColor: "#ddd",
   },
-  buttom: {
-    backgroundColor: "blue",
-    padding: 5,
-    borderRadius: 10,
+  addButton: {
     alignItems: "center",
+    marginVertical: 10,
   },
-  textLng: {
-    fontSize: 50,
-    marginLeft: 10,
-    fontWeight: "bold",
-    color: "white",
+  addImage: {
+    width: 50,
+    height: 50,
   },
-  textSrt: {
-    fontSize: 38,
-    marginLeft: 10,
-    color: "white",
+  itemContainer: {
+    marginVertical: 8,
+    marginHorizontal: 16,
+    backgroundColor: "#0a75d1",
+    borderRadius: 8,
+    overflow: "hidden",
   },
-  image: {
-    width: 120,
-    height: 120,
+  item: {
+    padding: 10,
   },
-  longImage: {
-    width: 160,
-    height: 120,
-    margin: 50,
-  },
-  buttoms: {
+  info: {
     flexDirection: "row",
     alignItems: "center",
-    width: "100%",
-    paddingHorizontal: 20,
+  },
+  modelText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#ffffff",
+  },
+  idText: {
+    fontSize: 14,
+    color: "#ffffff",
+  },
+  details: {
+    padding: 10,
+    backgroundColor: "#0a75d1",
+  },
+  detailText: {
+    fontSize: 14,
+    color: "#ffffff",
+  },
+  buttons: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    paddingVertical: 10,
+  },
+  buttonImage: {
+    width: 24,
+    height: 24,
+    marginHorizontal: 10,
   },
 });
 
