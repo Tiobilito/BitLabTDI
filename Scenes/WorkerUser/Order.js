@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Text,
   View,
-  ScrollView,
   TextInput,
   FlatList,
   TouchableOpacity,
@@ -26,296 +25,241 @@ const OrderPage = ({ navigation }) => {
   const [geneDiag, setGeneDiag] = useState("");
   const [status, setStatus] = useState("");
   const [department, setDepartment] = useState("");
-  const [discounts, setDiscounts] = useState(0);
-  const [typePay, setTypePay] = useState("");
-  const [total, setTotal] = useState(0);
   const [depData, setDepData] = useState([]);
-  //All cost const
   const [cost, setCost] = useState([]);
-  const [cEmpty, setCEmpty] = useState(true);
   const [descripCost, setDescripCost] = useState("");
   const [iva, setIva] = useState(false);
   const [ivaBtext, setIvaBText] = useState("off");
   const [buttonColor, setButtomColor] = useState("red");
   const [price, setPrice] = useState("");
-  const html = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Detalles de Contacto</title>
-        <style>
-            body {
-                font-family: "Book Antiqua", serif;
-                text-align: justify;
-            }
-            .center {
-                text-align: center;
-          font-family: 
-            }
-            .left {
-                text-align: left;
-            }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-            th, td {
-                border: 1px solid black;
-                padding: 8px;
-                text-align: center;
-            }
-        </style>
-    </head>
-    <body>
-        <p class="center">facebook.com/ILabTDI</p>
-        <p class="center">Blvd. Marcelino García Barragán #1421, esq Calzada Olímpica.<br>
-        Guadalajara, Jal, México, C.P. 44430.<br>
-        Tel. (33) 3025-8430.</p>
-
-        <p><strong>DANTE Mail:</strong> ass@gmail.com <strong>Tel:</strong> 1111111111 <strong>Cliente:</strong> 2</p>
-        <p><strong>Dirección:</strong> 122dds <strong>Colonia:</strong> sdsdfg <strong>Ciudad:</strong> assddf <strong>C.P:</strong> 122334</p>
-
-        <p><strong>Dispositivo:</strong> #90 <strong>Tipo:</strong> compu <strong>Modelo:</strong> Maserati <strong>S/N:</strong> SD <strong>Marca:</strong> toshiva <strong>Color:</strong> verde <strong>Inventario:</strong> 2</p>
-        <p><strong>Estado Físico:</strong> obsoleto <strong>Estatus:</strong> Recibido <strong>Departamento:</strong> iLabTDI <strong>Fecha:</strong> 2024/04/22</p>
-        
-        <p><strong>Descripción:</strong> led dña</p>
-        <p><strong>Solución:</strong> asdasdasd</p>
-
-        <table>
-            <tr>
-                <th>Descripción</th>
-                <th>Precio</th>
-                <th>IVA</th>
-            </tr>
-            <tr>
-                <td>N/A</td>
-                <td>0.0</td>
-                <td>No incluido</td>
-            </tr>
-        </table>
-      
-        <p><strong>Total:</strong> $ 0.00</p>
-
-        <p><strong>TÉCNICO</strong></p>
-        <!-- Espacio para la firma del técnico -->
-        <hr style="border: none; height: 2px; background-color: black; margin: 20px 0;">
-
-        <p><strong>CLIENTE (DANTE)</strong></p>
-        <!-- Espacio para la firma del cliente -->
-        <hr style="border: none; height: 2px; background-color: black; margin: 20px 0;">
-      
-      <div style="page-break-before: always;"></div>
-      
-        <p><strong>NO NOS RESPONSABILIZAMOS después de haber reparado o diagnosticado el equipo y notificado al cliente.</strong></p>
-        <p><strong>NOTA: </strong>Para prestarte un mejor servicio, favor de leer las POLÍTICAS de SERVICIO y GARANTÍA.</p>
-        <p>Reparamos7 COMPAQ, DELL, HP, GATEWAY, IBM, MAC, SONY, etc.</p>
-        <hr>
-        <p><strong>Fecha:</strong> 2024/04/22</p>
-        <p><strong>Políticas de Servicio:</strong></p>
-        <p>Reconozco y acepto las siguientes condiciones y términos relacionados con el servicio de reparación de computadoras ofrecido por el taller BitLabTDI:</p>
-        <ul>
-            <li>Servicio Gratuito: Entiendo que el servicio de reparación de computadora ofrecido es completamente gratuito y no conlleva ningún costo para el cliente.</li>
-            <li>Responsabilidad Limitada: Estoy consciente de que los técnicos se esforzarán por reparar mi equipo de la mejor manera posible. Sin embargo, comprendo que no se garantiza la reparación exitosa y que el taller no se hace responsable de cualquier daño adicional que pueda ocurrir durante el proceso de reparación.</li>
-    </html>	
-  `;
 
   useEffect(() => {
-    GetDepData("http://10.214.150.5:3000/departamentos");
-    GetDeviceData("http://10.214.150.5:3000/dispositivos");
+    GetDepData();
     setIdOrder(Math.floor(Math.random() * 9000000) + 1);
   }, []);
 
   const GetDepData = async () => {
-    const Data = await getAllDepartamentos();
-    setDepData(Data);
-  };
-
-  const GetDeviceData = async () => {
-    const item = await getDispoById(idDevice);
-    setIdClient(item.id_cliente);
-  };
-
-  let createPDF = async () => {
-    const file = await printToFileAsync({
-      html: html,
-      base64: false,
-      fileName: "Dante.pdf",
-    });
-    await shareAsync(file.uri);
+    try {
+      const Data = await getAllDepartamentos();
+      console.log("Registros de departamentos:", Data);
+      setDepData(Data || []);
+    } catch (error) {
+      console.error("Error fetching departments:", error);
+    }
   };
 
   const handleIva = () => {
     setButtomColor(buttonColor === "red" ? "blue" : "red");
     setIvaBText(buttonColor === "red" ? "On" : "Off");
-    setIva(iva === false ? true : false);
+    setIva(!iva);
   };
 
   const toggleCost = () => {
     setShowCost(!ShowCost);
   };
 
+  const addCost = () => {
+    if (descripCost && price) {
+      const newCost = {
+        id: Math.random().toString(),
+        description: descripCost,
+        price: price,
+        iva: iva,
+      };
+      setCost([...cost, newCost]);
+      setDescripCost("");
+      setPrice("");
+      setShowCost(false); // Ocultar ventana emergente al agregar
+    }
+  };
+
+  const renderItem = ({ item }) => (
+    <View style={styles.costItem}>
+      <Text style={styles.costText}>{item.description}</Text>
+      <Text style={styles.costText}>{item.price}</Text>
+      <Text style={styles.costText}>{item.iva ? "IVA incluido" : "Sin IVA"}</Text>
+    </View>
+  );
+
+  const createPDF = async () => {
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head><meta charset="UTF-8"></head>
+      <body>
+        <h1>Orden de Servicio</h1>
+        <p><strong>ID Orden:</strong> ${idOrder}</p>
+        <p><strong>ID Dispositivo:</strong> ${idDevice}</p>
+        <p><strong>Partes Utilizadas:</strong> ${partsUsed}</p>
+        <p><strong>Diagnóstico General:</strong> ${geneDiag}</p>
+        <h2>Costos:</h2>
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>IVA</th>
+          </tr>
+          ${cost
+            .map(
+              (item) =>
+                `<tr><td>${item.description}</td><td>${item.price}</td><td>${
+                  item.iva ? "Incluido" : "No incluido"
+                }</td></tr>`
+            )
+            .join("")}
+        </table>
+      </body>
+      </html>
+    `;
+
+    const file = await printToFileAsync({
+      html: htmlContent,
+      base64: false,
+      fileName: "OrderDetails.pdf",
+    });
+    await shareAsync(file.uri);
+  };
+
   return (
     <View style={styles.background}>
-      <ScrollView>
-        <View style={{ margin: 20 }}>
-          <Text style={styles.text}>ID - Orden: {idOrder}</Text>
-          <Text style={styles.text}>ID - Dispositivo: {idDevice}</Text>
-          <Text style={styles.text}>ID - Cliente: {idClient}</Text>
-          <Text style={styles.text}>Partes utilizadas: </Text>
-          <TextInput
-            multiline
-            style={[styles.input, styles.multilineText]}
-            onChangeText={(text) => {
-              setPartsUsed(text);
-            }}
-            value={partsUsed}
-            placeholder="Partes utilizadas"
-          />
-          <Text style={styles.text}>Diagnostigo general: </Text>
-          <TextInput
-            multiline
-            style={[styles.input, styles.multilineText]}
-            onChangeText={(text) => {
-              setGeneDiag(text);
-            }}
-            value={geneDiag}
-            placeholder="Diagnostigo general"
-          />
-          <View>
-            <Text style={styles.text}>Estatus: </Text>
+      <FlatList
+        ListHeaderComponent={
+          <View style={styles.container}>
+            <Text style={styles.text}>ID Orden: {idOrder}</Text>
+            <Text style={styles.text}>ID Dispositivo: {idDevice}</Text>
+            <TextInput
+              multiline
+              style={styles.input}
+              onChangeText={setPartsUsed}
+              value={partsUsed}
+              placeholder="Partes utilizadas"
+            />
+            <TextInput
+              multiline
+              style={styles.input}
+              onChangeText={setGeneDiag}
+              value={geneDiag}
+              placeholder="Diagnóstico general"
+            />
             <Picker
               selectedValue={status}
-              itemStyle={styles.text}
+              style={styles.picker}
               onValueChange={(itemValue) => setStatus(itemValue)}
             >
               <Picker.Item label="Recibido" value="Recibido" />
               <Picker.Item label="Pendiente" value="Pendiente" />
               <Picker.Item label="Reparado" value="Reparado" />
               <Picker.Item label="No Reparado" value="No Reparado" />
-              <Picker.Item label="Traer Despues" value="Traer Despues" />
-              <Picker.Item label="Revisado" value="Revisado" />
-              <Picker.Item label="Otro" value="Otro" />
             </Picker>
-            <Text style={styles.text}>Departamento: </Text>
+
+            {/* Picker para departamentos */}
             <Picker
               selectedValue={department}
-              itemStyle={styles.text}
+              style={styles.picker}
               onValueChange={(itemValue) => setDepartment(itemValue)}
             >
-              <Picker.Item label="iLabTDI" value="iLabTDI" />
-              {depData.map((item) => {
-                return (
-                  <Picker.Item
-                    key={item.idDepartamento}
-                    label={item.nombreDepa}
-                    value={item.nombreDepa}
-                  />
-                );
-              })}
-            </Picker>
-            <View style={styles.inputContainer}>
-              <Text style={styles.text}>Costos: </Text>
-              <TouchableOpacity onPress={() => toggleCost()}>
-                <Image
-                  source={require("../../Resources/imagenes/agregar3.png")}
-                  style={styles.image}
+              {depData.map((dep) => (
+                <Picker.Item
+                  key={dep.id_departamento} // Asegúrate de que cada elemento tenga una clave única
+                  label={dep.nombre_depa} // Usa el nombre correcto de la propiedad
+                  value={dep.id_departamento} // Usa el id correcto para el valor
                 />
-              </TouchableOpacity>
-            </View>
-            {ShowCost ? (
+              ))}
+            </Picker>
+
+            <TouchableOpacity onPress={toggleCost}>
+              <Image
+                source={require("../../Resources/imagenes/agregar3.png")}
+                style={styles.image}
+              />
+            </TouchableOpacity>
+
+            {ShowCost && (
               <View style={styles.subWin}>
                 <TextInput
                   multiline
-                  style={[styles.input, styles.multilineText]}
-                  onChangeText={(text) => {
-                    setDescripCost(text);
-                  }}
+                  style={styles.input}
+                  onChangeText={setDescripCost}
                   value={descripCost}
-                  placeholder="Descripcion Costo"
+                  placeholder="Descripción del costo"
                 />
-                <View style={styles.inputContainer}>
-                  <Text style={styles.text}>Precio: </Text>
-                  <TextInput
-                    style={styles.input}
-                    onChangeText={(text) => {
-                      setPrice(text);
-                    }}
-                    value={price}
-                    placeholder="Precio"
-                  />
-                </View>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.text}>Iva: </Text>
-                  <Button
-                    title={ivaBtext}
-                    color={buttonColor}
-                    onPress={() => handleIva()}
-                  />
-                </View>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={setPrice}
+                  value={price}
+                  placeholder="Precio"
+                  keyboardType="numeric"
+                />
+                <Text>Iva </Text>
+                <Button
+                  title={ivaBtext}
+                  color={buttonColor}
+                  onPress={handleIva}
+                />
+                <Button title="Agregar Costo" onPress={addCost} />
               </View>
-            ) : null}
-            <FlatList
-              data={cost}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <View style={styles.flatlistContainer}></View>
-              )}
-            />
-            <Button onPress={createPDF} title="Generar PDF" />
+            )}
           </View>
-        </View>
-      </ScrollView>
+        }
+        data={cost.length > 0 ? cost : []}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        ListEmptyComponent={<Text>No hay costos aún</Text>}
+        contentContainerStyle={styles.flatlist}
+      />
+      <Button onPress={createPDF} title="Generar PDF" />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  subWin: {
-    flex: 1,
-    margin: 20,
-    backgroundColor: "#0a75d1",
-  },
   background: {
     flex: 1,
-    backgroundColor: "#095ea7",
+    backgroundColor: "#f0f4f7",
+    marginTop: 30
   },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 20, // Espacio horizontal entre elementos
-    marginTop: 10,
+  container: {
+    padding: 20,
   },
   input: {
-    margin: 20,
-    flex: 1,
-    padding: 10,
-    fontSize: 30,
-    borderWidth: 1,
-    borderRadius: 8,
     backgroundColor: "white",
-  },
-  multilineText: {
-    minHeight: 150,
-    maxHeight: 150,
-    textAlignVertical: "top",
-  },
-  image: {
-    width: 60,
-    height: 60,
+    padding: 10,
+    marginVertical: 10,
+    borderRadius: 10,
+    fontSize: 18,
   },
   text: {
-    fontSize: 40,
-    fontWeight: "bold",
-    marginRight: 10,
-    color: "white",
+    fontSize: 18,
+    marginBottom: 5,
   },
-  flatlistContainer: {
+  picker: {
+    marginVertical: 10,
+    backgroundColor: "white",
+  },
+  image: {
+    width: 40,
+    height: 40,
+    marginVertical: 10,
+  },
+  subWin: {
+    backgroundColor: "#e3f2fd",
+    padding: 20,
+    borderRadius: 10,
+    marginVertical: 10,
+  },
+  flatlist: {
+    paddingBottom: 20,
+  },
+  costItem: {
     flexDirection: "row",
-    alignItems: "center",
-    marginLeft: 10,
-    marginTop: 15,
+    justifyContent: "space-between",
+    padding: 10,
+    backgroundColor: "#fff",
+    marginBottom: 5,
+    borderRadius: 5,
+  },
+  costText: {
+    fontSize: 16,
   },
 });
 

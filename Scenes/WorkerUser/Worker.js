@@ -19,13 +19,13 @@ const WorkerPage = ({ navigation }) => {
         />
       </TouchableOpacity>
       <Text style={styles.text}>Añadir Cliente</Text>
-      <TouchableOpacity onPress={navigateToSearchClient}>
+      {/*<TouchableOpacity onPress={navigateToSearchClient}>
         <Image
           source={require("../../Resources/imagenes/buscar.png")}
           style={styles.Buttons}
         />
       </TouchableOpacity>
-      <Text style={styles.text}>Buscar Cliente</Text>
+      <Text style={styles.text}>Buscar Cliente</Text> */}
     </View>
   );
 };
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#095ea7",
-    marginTop: 30
+    marginTop: 30,
   },
   Buttons: {
     width: 200,

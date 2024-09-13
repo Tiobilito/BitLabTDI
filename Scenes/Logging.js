@@ -31,7 +31,7 @@ const LoggingPage = ({ navigation }) => {
     const BVerify = await CheckUser(username, password);
     if(BVerify == true) {
       await StoreUserData(username, password);
-      navigation.navigate("Worker");
+      navigation.navigate("WorkerApp")
     }
   };
 
