@@ -190,6 +190,7 @@ const OrderPage = ({ navigation }) => {
                   placeholder="Precio"
                   keyboardType="numeric"
                 />
+                <Text>Iva </Text>
                 <Button
                   title={ivaBtext}
                   color={buttonColor}
