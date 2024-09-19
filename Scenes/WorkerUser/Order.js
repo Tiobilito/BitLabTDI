@@ -85,29 +85,91 @@ const OrderPage = ({ navigation }) => {
     const htmlContent = `
       <!DOCTYPE html>
       <html>
-      <head><meta charset="UTF-8"></head>
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Detalles de Contacto</title>
+          <style>
+              body {
+                  font-family: "Book Antiqua", serif;
+                  text-align: justify;
+              }
+              .center {
+                  text-align: center;
+              }
+              .left {
+                  text-align: left;
+              }
+              table {
+                  width: 100%;
+                  border-collapse: collapse;
+              }
+              th, td {
+                  border: 1px solid black;
+                  padding: 8px;
+                  text-align: center;
+              }
+          </style>
+      </head>
       <body>
-        <h1>Orden de Servicio</h1>
-        <p><strong>ID Orden:</strong> ${idOrder}</p>
-        <p><strong>ID Dispositivo:</strong> ${idDevice}</p>
-        <p><strong>Partes Utilizadas:</strong> ${partsUsed}</p>
-        <p><strong>Diagnóstico General:</strong> ${geneDiag}</p>
-        <h2>Costos:</h2>
-        <table border="1" cellpadding="5">
-          <tr>
-            <th>Descripción</th>
-            <th>Precio</th>
-            <th>IVA</th>
-          </tr>
-          ${cost
-            .map(
-              (item) =>
-                `<tr><td>${item.description}</td><td>${item.price}</td><td>${
-                  item.iva ? "Incluido" : "No incluido"
-                }</td></tr>`
-            )
-            .join("")}
-        </table>
+          <!-- Información del taller -->
+          <p class="center">facebook.com/ILabTDI</p>
+          <p class="center">Blvd. Marcelino García Barragán #1421, esq Calzada Olímpica.<br>
+          Guadalajara, Jal, México, C.P. 44430.<br>
+          Tel. (33) 3025-8430.</p>
+
+          <!-- Información del cliente -->
+          <p><strong>ID Orden:</strong> ${idOrder}</p>
+          <p><strong>Nombre Cliente:</strong> ## <strong>Mail:</strong> ## <strong>Tel:</strong> ## </p>
+          <p><strong>Dirección:</strong> ## <strong>Colonia:</strong> ## <strong>Ciudad:</strong> ## <strong>C.P:</strong> ## </p>
+
+          <!-- Información del dispositivo -->
+          <p><strong>Dispositivo:</strong> "" <strong>Tipo:</strong> ## <strong>Modelo:</strong> ## <strong>S/N:</strong> ## <strong>Marca:</strong> ## <strong>Color:</strong> ## <strong>Inventario:</strong> ## </p>
+          <p><strong>Estado Físico:</strong> ## <strong>Estatus:</strong> ${status} <strong>Departamento:</strong> ${department} <strong>Fecha:</strong> ## </p>
+
+          <!-- Descripción y solución -->
+          <p><strong>Descripción:</strong> ## </p>
+          <p><strong>Solución:</strong> ${geneDiag}</p>
+
+          <!-- Costos -->
+          <table>
+              <tr>
+                  <th>Descripción</th>
+                  <th>Precio</th>
+                  <th>IVA</th>
+              </tr>
+              ${cost
+                  .map(
+                    (item) =>
+                      `<tr><td>${item.description}</td><td>${item.price}</td><td>${
+                        item.iva ? "Incluido" : "No incluido"
+                      }</td></tr>`
+                  )
+                  .join("")}
+          </table>
+          
+          <p><strong>Total:</strong> $ ## </p>
+
+          <!-- Firmas -->
+          <p><strong>TÉCNICO</strong></p>
+          <hr style="border: none; height: 2px; background-color: black; margin: 20px 0;">
+          <p><strong>CLIENTE ( ## )</strong></p>
+          <hr style="border: none; height: 2px; background-color: black; margin: 20px 0;">
+
+          <div style="page-break-before: always;"></div>
+
+          <!-- Nota legal -->
+          <p><strong>NO NOS RESPONSABILIZAMOS después de haber reparado o diagnosticado el equipo y notificado al cliente.</strong></p>
+          <p><strong>NOTA: </strong>Para prestarte un mejor servicio, favor de leer las POLÍTICAS de SERVICIO y GARANTÍA.</p>
+          <p>Reparamos COMPAQ, DELL, HP, GATEWAY, IBM, MAC, SONY, etc.</p>
+          <hr>
+          <p><strong>Fecha:</strong> ${new Date()}</p>
+          <p><strong>Políticas de Servicio:</strong></p>
+          <p>Reconozco y acepto las siguientes condiciones y términos relacionados con el servicio de reparación de computadoras ofrecido por el taller BitLabTDI:</p>
+          <ul>
+              <li>Servicio Gratuito: Entiendo que el servicio de reparación de computadora ofrecido es completamente gratuito y no conlleva ningún costo para el cliente.</li>
+              <li>Responsabilidad Limitada: Estoy consciente de que los técnicos se esforzarán por reparar mi equipo de la mejor manera posible. Sin embargo, comprendo que no se garantiza la reparación exitosa y que el taller no se hace responsable de cualquier daño adicional que pueda ocurrir durante el proceso de reparación.</li>
+          </ul>
       </body>
       </html>
     `;
