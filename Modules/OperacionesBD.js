@@ -123,8 +123,8 @@ export async function addDispo(dispositivo) {
   return data;
 }
 
-// Función para obtener todos los registros de la tabla dispositivo
-export async function getAllDispositivos() {
+// Función para obtener todos los registros de la tabla devices
+export async function getAllDevices() {
   const { data, error } = await supabase
     .from('devices')
     .select('*'); // Selecciona todas las columnas
@@ -132,7 +132,6 @@ export async function getAllDispositivos() {
     console.error('Error al obtener registros:', error);
     return null;
   }
-  //console.log('Registros de dispositivos:', data);
   return data;
 }
 
