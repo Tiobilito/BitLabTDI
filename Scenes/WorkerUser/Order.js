@@ -20,7 +20,7 @@ const OrderPage = ({ navigation }) => {
   const { idDevice } = route.params;
   const [ShowCost, setShowCost] = useState(false);
   const [idOrder, setIdOrder] = useState(0);
-  const [idClient, setIdClient] = useState(0);
+  const [clientData, setClientData] = useState([]);
   const [partsUsed, setPartsUsed] = useState("");
   const [geneDiag, setGeneDiag] = useState("");
   const [status, setStatus] = useState("");
@@ -222,14 +222,14 @@ const OrderPage = ({ navigation }) => {
             >
               {depData.map((dep) => (
                 <Picker.Item
-                  key={dep.id_departamento} // Asegúrate de que cada elemento tenga una clave única
-                  label={dep.nombre_depa} // Usa el nombre correcto de la propiedad
-                  value={dep.id_departamento} // Usa el id correcto para el valor
+                  key={dep.id} // Asegúrate de que cada elemento tenga una clave única
+                  label={dep.name} // Usa el nombre correcto de la propiedad
+                  value={dep.id} // Usa el id correcto para el valor
                 />
               ))}
             </Picker>
 
-            <TouchableOpacity onPress={toggleCost}>
+            <TouchableOpacity onPress={toggleCost} style = {{marginLeft: 120, width: 70, height: 70}}>
               <Image
                 source={require("../../Resources/imagenes/agregar3.png")}
                 style={styles.image}
@@ -299,8 +299,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   image: {
-    width: 40,
-    height: 40,
+    width: 70,
+    height: 70,
     marginVertical: 10,
   },
   subWin: {
