@@ -134,47 +134,47 @@ export async function getAllDevices() {
   return data;
 }
 
-// Función para modificar un registro basado en id_dispo
-export async function updateDispo(id_dispo, updatedDispositivo) {
+// Función para obtener un registro basado en id
+export async function getDispoById(id) {
+  const { data, error } = await supabase
+    .from("devices")
+    .select("*")
+    .eq("id", id);
+  if (error) {
+    console.error("Error al obtener registro:", error);
+    return null;
+  }
+  if (data.length === 0) {
+    console.log("No se encontró el dispositivo con id:", id);
+    return null;
+  }
+  console.log("Registro del dispositivo:", data[0]);
+  return data[0];
+}
+
+// Función para modificar un registro basado en id
+export async function updateDispo(id, updatedDevice) {
   const { data, error } = await supabase
     .from("devices")
     .update({
-      serial_number: updatedDispositivo.sn,
-      customer_id: updatedDispositivo.id_cliente,
-      device_type: updatedDispositivo.tipo_dis,
-      model: updatedDispositivo.modelo,
-      received_status: updatedDispositivo.esta_recep,
-      color: updatedDispositivo.color,
-      brand: updatedDispositivo.marca,
-      rework_description: updatedDispositivo.caso,
-      received_date: new Date(updatedDispositivo.fecha),
-      inventory_items: updatedDispositivo.inventario,
+      serial_number: updatedDevice.sn,
+      customer_id: updatedDevice.id_cliente,
+      device_type: updatedDevice.tipo_dis,
+      model: updatedDevice.modelo,
+      received_status: updatedDevice.esta_recep,
+      color: updatedDevice.color,
+      brand: updatedDevice.marca,
+      rework_description: updatedDevice.caso,
+      received_date: new Date(updatedDevice.fecha),
+      inventory_items: updatedDevice.inventario,
     })
-    .eq("id", id_dispo); // Filtra por id_dispo
+    .eq("id", id);
   if (error) {
     console.error("Error al actualizar registro:", error);
     return null;
   }
   console.log("Registro actualizado:", data);
   return data;
-}
-
-// Función para obtener un registro basado en id_dispo
-export async function getDispoById(id_dispo) {
-  const { data, error } = await supabase
-    .from("device")
-    .select("*") // Selecciona todas las columnas
-    .eq("id", id_dispo); // Filtra por id_dispo
-  if (error) {
-    console.error("Error al obtener registro:", error);
-    return null;
-  }
-  if (data.length === 0) {
-    console.log("No se encontró el dispositivo con id:", id_dispo);
-    return null;
-  }
-  console.log("Registro del dispositivo:", data[0]); // Retorna el primer (y único) registro
-  return data[0];
 }
 
 // Función para obtener todos los registros de la tabla departamentos
