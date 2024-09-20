@@ -1,4 +1,3 @@
-import { number } from "prop-types";
 import { supabase } from "./Supabase";
 import { Alert } from "react-native";
 
@@ -34,57 +33,59 @@ export async function getAllClients() {
   return data;
 }
 
-// Función para obtener un registro basado en id_cliente
+// Obtener usuario por ID
 export async function getClientById(id_cliente) {
   const { data, error } = await supabase
-    .from("users") // Cambia esto por el nombre real de tu tabla
-    .select("*") // Selecciona todas las columnas
-    .eq("code", id_cliente); // Filtra por id_cliente
+    .from("users") 
+    .select("*")
+    .eq("code", id_cliente); // Filtra por 'code' en lugar de 'id_cliente'
+    
   if (error) {
-    console.error("Error al obtener registro:", error);
+    console.error("Error al obtener usuario:", error);
     return null;
   }
   if (data.length === 0) {
-    console.log("No se encontró el cliente con id:", id_cliente);
+    console.log("No se encontró el usuario con el código:", id_cliente);
     return null;
   }
-  console.log("Registro del cliente:", data[0]); // Retorna el primer (y único) registro
   return data[0];
 }
 
-// Función para modificar un registro basado en id_cliente
+// Actualizar usuario
 export async function updateClient(id_cliente, updatedCliente) {
   const { data, error } = await supabase
-    .from("users") // Cambia esto por el nombre real de tu tabla
+    .from("users")
     .update({
-      name: updatedCliente.nombre,
-      address: updatedCliente.direccion,
-      zip_code: updatedCliente.cp,
-      email: updatedCliente.correo,
-      number: updatedCliente.telefono,
-      second_number: updatedCliente.telefono2,
+      name: updatedCliente.name,
+      address: updatedCliente.address,
+      zip_code: updatedCliente.zip_code,
+      email: updatedCliente.email,
+      number: updatedCliente.number,
+      second_number: updatedCliente.second_number,
     })
-    .eq("code", id_cliente); // Filtra por id_cliente
+    .eq("code", id_cliente);
+
   if (error) {
-    console.error("Error al actualizar registro:", error);
+    console.error("Error al actualizar usuario:", error);
     return null;
   }
-  console.log("Registro actualizado:", data);
   return data;
 }
 
 export async function AddClient(cliente) {
   const { data, error } = await supabase
-    .from("users") // Cambia esto por el nombre real de tu tabla
+    .from("users") // Asegúrate de que "users" sea el nombre real de la tabla
     .insert([
       {
-        code: cliente.codigo,
-        name: cliente.nombre,
-        address: cliente.direccion,
-        zip_code: cliente.cp,
-        email: cliente.correo,
-        number: cliente.telefono,
-        second_number: cliente.telefono2,
+        code: cliente.code,            // Se toma del input del usuario
+        name: cliente.name,            // Nombre en mayúsculas (ya procesado)
+        address: cliente.address,      // Dirección
+        zip_code: cliente.zip_code,    // Código postal
+        email: cliente.email,          // Correo electrónico
+        number: cliente.number,        // Teléfono
+        second_number: cliente.second_number, // Otro teléfono
+        password: cliente.password,    // Contraseña del usuario
+        user_type: "Client",           // Tipo de usuario: "Client" (o lo que corresponda)
       },
     ]);
   if (error) {
@@ -94,6 +95,7 @@ export async function AddClient(cliente) {
   console.log("Registro añadido:", data);
   return data;
 }
+
 
 // Función para añadir un registro
 export async function addDispo(dispositivo) {

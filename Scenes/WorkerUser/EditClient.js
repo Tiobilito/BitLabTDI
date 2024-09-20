@@ -18,8 +18,6 @@ const EditClientPage = ({ navigation }) => {
   const [formData, setFormData] = useState({
     name: "",
     address: "",
-    neighborhood: "",
-    city: "",
     zipCode: "",
     email: "",
     phone: "",
@@ -34,14 +32,12 @@ const EditClientPage = ({ navigation }) => {
     const item = await getClientById(idClient);
     if (item) {
       setFormData({
-        name: item.nombre,
-        address: item.direccion,
-        neighborhood: item.colonia,
-        city: item.ciudad,
-        zipCode: item.cp,
-        email: item.correo,
-        phone: item.telefono,
-        phone2: item.telefono2,
+        name: item.name,
+        address: item.address,
+        zipCode: item.zip_code,
+        email: item.email,
+        phone: item.number,
+        phone2: item.second_number,
       });
     }
   };
@@ -51,18 +47,14 @@ const EditClientPage = ({ navigation }) => {
   };
 
   const verifyAndSendData = () => {
-    const { name, address, neighborhood, city, zipCode, email, phone, phone2 } =
-      formData;
+    const { name, address, zipCode, email, phone, phone2 } = formData;
 
     if (
       name.trim() !== "" &&
       address.trim() !== "" &&
-      neighborhood.trim() !== "" &&
-      city.trim() !== "" &&
       zipCode.trim() !== "" &&
       email.trim() !== "" &&
-      phone.trim() !== "" &&
-      phone2.trim() !== ""
+      phone.trim() !== ""
     ) {
       sendData();
     } else {
@@ -72,15 +64,12 @@ const EditClientPage = ({ navigation }) => {
 
   const sendData = async () => {
     const updatedData = {
-      idCliente: idClient,
-      nombre: formData.name.toUpperCase(),
-      direccion: formData.address,
-      colonia: formData.neighborhood,
-      ciudad: formData.city,
-      cp: formData.zipCode,
-      correo: formData.email,
-      telefono: formData.phone,
-      telefono2: formData.phone2,
+      name: formData.name,
+      address: formData.address,
+      zip_code: formData.zipCode,
+      email: formData.email,
+      number: formData.phone,
+      second_number: formData.phone2,
     };
 
     await updateClient(idClient, updatedData);
@@ -91,7 +80,7 @@ const EditClientPage = ({ navigation }) => {
     <View style={styles.background}>
       <ScrollView>
         <View style={{ margin: 20 }}>
-          <Text style={styles.title}>Editar Cliente</Text>
+          <Text style={styles.title}>Editar Usuario</Text>
 
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Nombre *</Text>
@@ -114,26 +103,6 @@ const EditClientPage = ({ navigation }) => {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Colonia *</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.neighborhood}
-              onChangeText={(value) => handleChange("neighborhood", value)}
-              placeholder="Colonia"
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Ciudad *</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.city}
-              onChangeText={(value) => handleChange("city", value)}
-              placeholder="Ciudad"
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
             <Text style={styles.label}>Código Postal *</Text>
             <TextInput
               style={styles.input}
@@ -145,7 +114,7 @@ const EditClientPage = ({ navigation }) => {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Correo electrónico</Text>
+            <Text style={styles.label}>Correo electrónico *</Text>
             <TextInput
               style={styles.input}
               value={formData.email}
@@ -156,7 +125,7 @@ const EditClientPage = ({ navigation }) => {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Teléfono</Text>
+            <Text style={styles.label}>Teléfono *</Text>
             <TextInput
               style={styles.input}
               value={formData.phone}
@@ -197,7 +166,7 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: "#095ea7",
-    marginTop: 30
+    marginTop: 30,
   },
   title: {
     fontSize: 24,

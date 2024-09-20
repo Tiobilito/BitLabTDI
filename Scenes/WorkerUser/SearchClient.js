@@ -49,7 +49,7 @@ const SearchPage = ({ navigation }) => {
 
   const toggleDetails = (itemId) => {
     const updatedData = data.map((registro) => {
-      if (registro.id_cliente === itemId) {
+      if (registro.code === itemId) {
         return { ...registro, Details: !registro.Details };
       }
       return registro;
@@ -68,21 +68,21 @@ const SearchPage = ({ navigation }) => {
   if (error) {
     return (
       <View style={styles.centered}>
-        <Text style={styles.errorText}>Error in fetch data</Text>
+        <Text style={styles.errorText}>Error en la obtención de datos</Text>
       </View>
     );
   }
 
-  const contains = ({ nombre, correo }, query) => {
-    return nombre.includes(query) || correo.includes(query);
+  const contains = ({ name, email }, query) => {
+    return name.toLowerCase().includes(query.toLowerCase()) || email.toLowerCase().includes(query.toLowerCase());
   };
 
-  const navigateToEditClient = (id) => {
-    navigation.navigate("EditClient", { idClient: id });
+  const navigateToEditClient = (code) => {
+    navigation.navigate("EditClient", { idClient: code });
   };
 
-  const navigateToDevices = (id) => {
-    navigation.navigate("Devices", { idClient: id });
+  const navigateToDevices = (code) => {
+    navigation.navigate("Devices", { idClient: code });
   };
 
   return (
@@ -95,14 +95,14 @@ const SearchPage = ({ navigation }) => {
           setData(filteredData);
         }}
         value={searchQuery}
-        placeholder="Search contacts"
+        placeholder="Buscar contactos"
       />
       <FlatList
         data={data}
-        keyExtractor={(item) => item.id_cliente.toString()}
+        keyExtractor={(item) => item.code.toString()}
         renderItem={({ item }) => (
           <View style={styles.itemContainer}>
-            <TouchableOpacity onPress={() => toggleDetails(item.id_cliente)} style={styles.item}>
+            <TouchableOpacity onPress={() => toggleDetails(item.code)} style={styles.item}>
               <View style={styles.avatarContainer}>
                 <Image
                   source={item.avatar ? { uri: item.avatar } : require("../../Resources/imagenes/default-avatar.jpg")}
@@ -110,27 +110,25 @@ const SearchPage = ({ navigation }) => {
                 />
               </View>
               <View style={styles.info}>
-                <Text style={styles.name}>{item.nombre}</Text>
-                <Text style={styles.email}>{item.correo}</Text>
+                <Text style={styles.name}>{item.name}</Text>
+                <Text style={styles.email}>{item.email}</Text>
               </View>
             </TouchableOpacity>
             {item.Details && (
               <View style={styles.details}>
-                <Text style={styles.detailText}>ID: {item.id_cliente}</Text>
-                <Text style={styles.detailText}>Direccion: {item.direccion}</Text>
-                <Text style={styles.detailText}>Colonia: {item.colonia}</Text>
-                <Text style={styles.detailText}>Ciudad: {item.ciudad}</Text>
-                <Text style={styles.detailText}>Codigo postal: {item.cp}</Text>
-                <Text style={styles.detailText}>Telefono: {item.telefono}</Text>
-                <Text style={styles.detailText}>2do Telefono: {item.telefono2}</Text>
+                <Text style={styles.detailText}>Código: {item.code}</Text>
+                <Text style={styles.detailText}>Dirección: {item.address}</Text>
+                <Text style={styles.detailText}>Código Postal: {item.zip_code}</Text>
+                <Text style={styles.detailText}>Teléfono: {item.number}</Text>
+                <Text style={styles.detailText}>Otro Teléfono: {item.second_number}</Text>
                 <View style={styles.buttons}>
-                  <TouchableOpacity onPress={() => navigateToEditClient(item.id_cliente)}>
+                  <TouchableOpacity onPress={() => navigateToEditClient(item.code)}>
                     <Image
                       source={require("../../Resources/imagenes/editar.png")}
                       style={styles.buttonImage}
                     />
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => navigateToDevices(item.id_cliente)}>
+                  <TouchableOpacity onPress={() => navigateToDevices(item.code)}>
                     <Image
                       source={require("../../Resources/imagenes/device.png")}
                       style={styles.buttonImage}
