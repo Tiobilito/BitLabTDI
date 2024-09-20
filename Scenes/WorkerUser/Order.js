@@ -13,13 +13,14 @@ import { useRoute } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
-import { getAllDepartamentos } from "../../Modules/OperacionesBD";
+import { getAllDepartamentos, getClientById, getDispoById } from "../../Modules/OperacionesBD";
 
 const OrderPage = ({ navigation }) => {
   const route = useRoute();
   const { idDevice } = route.params;
   const [ShowCost, setShowCost] = useState(false);
   const [idOrder, setIdOrder] = useState(0);
+  const [deviceData, setDeviceData] = useState([]);
   const [clientData, setClientData] = useState([]);
   const [partsUsed, setPartsUsed] = useState("");
   const [geneDiag, setGeneDiag] = useState("");
@@ -36,12 +37,21 @@ const OrderPage = ({ navigation }) => {
   useEffect(() => {
     GetDepData();
     setIdOrder(Math.floor(Math.random() * 9000000) + 1);
+    GetClientDeviceData();
   }, []);
+
+  const GetClientDeviceData = async () => {
+    const deviceD = await getDispoById(idDevice); 
+    const clientD = await getClientById(deviceData.customer_id);
+    setDeviceData(deviceD);
+    setClientData(clientD);
+    console.log("Cliente: ", clientData);
+  }
 
   const GetDepData = async () => {
     try {
       const Data = await getAllDepartamentos();
-      console.log("Registros de departamentos:", Data);
+      //console.log("Registros de departamentos:", Data);
       setDepData(Data || []);
     } catch (error) {
       console.error("Error fetching departments:", error);
