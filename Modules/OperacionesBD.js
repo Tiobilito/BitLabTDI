@@ -1,12 +1,13 @@
+import { number } from "prop-types";
 import { supabase } from "./Supabase";
 import { Alert } from "react-native";
 
 export async function CheckUser(username, contraseña) {
   const { data, error } = await supabase
-    .from("empleado")
+    .from("users")
     .select("*")
-    .eq("username", username)
-    .eq("contra", contraseña);
+    .eq("name", username)
+    .eq("password", contraseña);
   if (error) {
     console.log("hubo un error", error);
   }
@@ -21,8 +22,9 @@ export async function CheckUser(username, contraseña) {
 // Función para obtener todos los registros de la tabla cliente
 export async function getAllClients() {
   const { data, error } = await supabase
-    .from('cliente')
-    .select('*'); // Selecciona todas las columnas
+    .from('users')
+    .select('*')
+    .eq("user_type", "Client"); // Selecciona todas las columnas
 
   if (error) {
     console.error('Error al obtener registros:', error);
@@ -35,9 +37,9 @@ export async function getAllClients() {
 // Función para obtener un registro basado en id_cliente
 export async function getClientById(id_cliente) {
   const { data, error } = await supabase
-    .from("cliente") // Cambia esto por el nombre real de tu tabla
+    .from("users") // Cambia esto por el nombre real de tu tabla
     .select("*") // Selecciona todas las columnas
-    .eq("id_cliente", id_cliente); // Filtra por id_cliente
+    .eq("code", id_cliente); // Filtra por id_cliente
   if (error) {
     console.error("Error al obtener registro:", error);
     return null;
@@ -53,18 +55,16 @@ export async function getClientById(id_cliente) {
 // Función para modificar un registro basado en id_cliente
 export async function updateClient(id_cliente, updatedCliente) {
   const { data, error } = await supabase
-    .from("cliente") // Cambia esto por el nombre real de tu tabla
+    .from("users") // Cambia esto por el nombre real de tu tabla
     .update({
-      nombre: updatedCliente.nombre,
-      direccion: updatedCliente.direccion,
-      colonia: updatedCliente.colonia,
-      ciudad: updatedCliente.ciudad,
-      cp: updatedCliente.cp,
-      correo: updatedCliente.correo,
-      telefono: updatedCliente.telefono,
-      telefono2: updatedCliente.telefono2,
+      name: updatedCliente.nombre,
+      address: updatedCliente.direccion,
+      zip_code: updatedCliente.cp,
+      email: updatedCliente.correo,
+      number: updatedCliente.telefono,
+      second_number: updatedCliente.telefono2,
     })
-    .eq("id_cliente", id_cliente); // Filtra por id_cliente
+    .eq("code", id_cliente); // Filtra por id_cliente
   if (error) {
     console.error("Error al actualizar registro:", error);
     return null;
@@ -75,17 +75,16 @@ export async function updateClient(id_cliente, updatedCliente) {
 
 export async function AddClient(cliente) {
   const { data, error } = await supabase
-    .from("cliente") // Cambia esto por el nombre real de tu tabla
+    .from("users") // Cambia esto por el nombre real de tu tabla
     .insert([
       {
-        nombre: cliente.nombre,
-        direccion: cliente.direccion,
-        colonia: cliente.colonia,
-        ciudad: cliente.ciudad,
-        cp: cliente.cp,
-        correo: cliente.correo,
-        telefono: cliente.telefono,
-        telefono2: cliente.telefono2,
+        code: cliente.codigo,
+        name: cliente.nombre,
+        address: cliente.direccion,
+        zip_code: cliente.cp,
+        email: cliente.correo,
+        number: cliente.telefono,
+        second_number: cliente.telefono2,
       },
     ]);
   if (error) {
@@ -98,18 +97,18 @@ export async function AddClient(cliente) {
 
 // Función para añadir un registro
 export async function addDispo(dispositivo) {
-  const { data, error } = await supabase.from("dispositivo").insert([
+  const { data, error } = await supabase.from("devices").insert([
     {
-      id_cliente: dispositivo.id_cliente,
-      tipo_dis: dispositivo.tipo_dis,
-      modelo: dispositivo.modelo,
-      estado_fisi: dispositivo.estado_fisi,
-      esta_recep: dispositivo.esta_recep,
+      serial_number: dispositivo.sn,
+      customer_id: dispositivo.id_cliente,
+      device_type: dispositivo.tipo_dis,
+      model: dispositivo.modelo,
+      received_status: dispositivo.esta_recep,
       color: dispositivo.color,
-      marca: dispositivo.marca,
-      caso: dispositivo.caso,
-      fecha: dispositivo.fecha,
-      inventario: dispositivo.inventario,
+      brand: dispositivo.marca,
+      rework_description: dispositivo.caso,
+      received_date: new Date(dispositivo.fecha),
+      inventory_items: dispositivo.inventario,
     },
   ]);
 
@@ -125,7 +124,7 @@ export async function addDispo(dispositivo) {
 // Función para obtener todos los registros de la tabla dispositivo
 export async function getAllDispositivos() {
   const { data, error } = await supabase
-    .from('dispositivo')
+    .from('devices')
     .select('*'); // Selecciona todas las columnas
   if (error) {
     console.error('Error al obtener registros:', error);
@@ -138,19 +137,20 @@ export async function getAllDispositivos() {
 // Función para modificar un registro basado en id_dispo
 export async function updateDispo(id_dispo, updatedDispositivo) {
   const { data, error } = await supabase
-    .from("dispositivo")
+    .from("devices")
     .update({
-      id_cliente: updatedDispositivo.id_cliente,
-      modelo: updatedDispositivo.modelo,
-      estado_fisi: updatedDispositivo.estado_fisi,
-      esta_recep: updatedDispositivo.esta_recep,
+      serial_number: updatedDispositivo.sn,
+      customer_id: updatedDispositivo.id_cliente,
+      device_type: updatedDispositivo.tipo_dis,
+      model: updatedDispositivo.modelo,
+      received_status: updatedDispositivo.esta_recep,
       color: updatedDispositivo.color,
-      marca: updatedDispositivo.marca,
-      caso: updatedDispositivo.caso,
-      fecha: updatedDispositivo.fecha,
-      inventario: updatedDispositivo.inventario,
+      brand: updatedDispositivo.marca,
+      rework_description: updatedDispositivo.caso,
+      received_date: new Date(updatedDispositivo.fecha),
+      inventory_items: updatedDispositivo.inventario,
     })
-    .eq("id_dispo", id_dispo); // Filtra por id_dispo
+    .eq("id", id_dispo); // Filtra por id_dispo
   if (error) {
     console.error("Error al actualizar registro:", error);
     return null;
@@ -162,9 +162,9 @@ export async function updateDispo(id_dispo, updatedDispositivo) {
 // Función para obtener un registro basado en id_dispo
 export async function getDispoById(id_dispo) {
   const { data, error } = await supabase
-    .from("dispositivo")
+    .from("device")
     .select("*") // Selecciona todas las columnas
-    .eq("id_dispo", id_dispo); // Filtra por id_dispo
+    .eq("id", id_dispo); // Filtra por id_dispo
   if (error) {
     console.error("Error al obtener registro:", error);
     return null;
@@ -180,7 +180,7 @@ export async function getDispoById(id_dispo) {
 // Función para obtener todos los registros de la tabla departamentos
 export async function getAllDepartamentos() {
   const { data, error } = await supabase
-    .from('departamento') 
+    .from('departments') 
     .select('*'); // Selecciona todas las columnas
   if (error) {
     console.error('Error al obtener registros:', error);

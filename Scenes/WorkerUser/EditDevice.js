@@ -52,13 +52,13 @@ const EditDevicePage = ({ navigation }) => {
 
   const SentData = async() => {
     const Data = {
-      idDispo: idDevice,
+      id_dispo: idDevice,
       sn: Sn,
-      tipoDis: Type,
-      idCliente: idCli,
+      tipo_dis: Type,
+      id_cliente: idCli,
       modelo: Model,
-      estadoFisi: PhysiCond,
-      estaRecep: ReceidStat,
+      estado_fisi: PhysiCond,
+      esta_recep: ReceidStat,
       color: Color,
       marca: Brand,
       caso: Case,
