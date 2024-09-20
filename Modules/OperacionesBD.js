@@ -99,26 +99,25 @@ export async function AddClient(cliente) {
 
 // Función para añadir un registro
 export async function addDispo(dispositivo) {
+  console.log("Datos del nuevo dispositivo:", dispositivo);
   const { data, error } = await supabase.from("devices").insert([
     {
       serial_number: dispositivo.sn,
-      customer_id: dispositivo.id_cliente,
-      device_type: dispositivo.tipo_dis,
-      model: dispositivo.modelo,
-      received_status: dispositivo.esta_recep,
+      customer_id: dispositivo.customer_id,
+      device_type: dispositivo.device_type,
+      model: dispositivo.model,
+      received_status: dispositivo.received_status,
       color: dispositivo.color,
-      brand: dispositivo.marca,
-      rework_description: dispositivo.caso,
-      received_date: new Date(dispositivo.fecha),
-      inventory_items: dispositivo.inventario,
+      brand: dispositivo.brand,
+      rework_description: dispositivo.rework_description,
+      received_date: new Date(dispositivo.received_date),
+      inventory_items: dispositivo.inventory_items,
     },
   ]);
-
   if (error) {
     console.error("Error al insertar registro:", error);
     return null;
   }
-
   console.log("Registro añadido:", data);
   return data;
 }

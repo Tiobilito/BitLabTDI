@@ -18,15 +18,14 @@ const AddDevicePage = ({ navigation }) => {
 
   const [formData, setFormData] = useState({
     sn: "",
-    type: "",
+    device_type: "",
     model: "",
-    physiCond: "",
     brand: "",
-    receidStat: "",
+    received_status: "",
     color: "",
-    case: "",
-    inventory: "",
-    date: new Date(),
+    rework_description: "",
+    inventory_items: "",
+    received_date: new Date(),
   });
 
   const [showDt, setShowDt] = useState(false);
@@ -36,10 +35,10 @@ const AddDevicePage = ({ navigation }) => {
   };
 
   const verifyAndSendData = async () => {
-    const { type, receidStat, color, brand } = formData;
+    const { device_type, received_status, color, brand } = formData;
     if (
-      type.trim() !== "" &&
-      receidStat.trim() !== "" &&
+      device_type.trim() !== "" &&
+      received_status.trim() !== "" &&
       color.trim() !== "" &&
       brand.trim() !== ""
     ) {
@@ -52,17 +51,16 @@ const AddDevicePage = ({ navigation }) => {
   const sendData = async () => {
     const newDeviceData = {
       sn: formData.sn,
-      tipo_dis: formData.type,
-      id_cliente: idCli,
-      modelo: formData.model,
-      estado_fisi: formData.physiCond,
-      esta_recep: formData.receidStat,
+      device_type: formData.device_type,
+      customer_id: parseInt(idCli, 10),
+      model: formData.model,
+      brand: formData.brand,
+      received_status: formData.received_status,
       color: formData.color,
-      marca: formData.brand,
-      caso: formData.case,
-      fecha: formData.date.toISOString(),
-      inventario: parseInt(formData.inventory, 10),
-    };
+      rework_description: formData.rework_description,
+      received_date: formData.received_date.toISOString(),
+      inventory_items: parseInt(formData.inventory_items, 10),
+    };    
     await addDispo(newDeviceData);
     navigation.navigate("Devices", { idClient: idCli });
   };
@@ -72,7 +70,7 @@ const AddDevicePage = ({ navigation }) => {
   };
 
   const onDateChange = (e, selectedDate) => {
-    setFormData((prev) => ({ ...prev, date: selectedDate }));
+    setFormData((prev) => ({ ...prev, received_date: selectedDate }));
     setShowDt(false);
   };
 
@@ -83,12 +81,13 @@ const AddDevicePage = ({ navigation }) => {
           <Text style={styles.title}>Añadir Dispositivo</Text>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>S/N:</Text>
+            <Text style={styles.label}>Numero de serie:</Text>
             <TextInput
               style={styles.input}
               value={formData.sn}
               onChangeText={(value) => handleChange("sn", value)}
               placeholder="S/N"
+              keyboardType="numeric"
             />
           </View>
 
@@ -96,8 +95,8 @@ const AddDevicePage = ({ navigation }) => {
             <Text style={styles.label}>Tipo *:</Text>
             <TextInput
               style={styles.input}
-              value={formData.type}
-              onChangeText={(value) => handleChange("type", value)}
+              value={formData.device_type}
+              onChangeText={(value) => handleChange("device_type", value)}
               placeholder="Tipo de dispositivo"
             />
           </View>
@@ -113,16 +112,6 @@ const AddDevicePage = ({ navigation }) => {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Estado Físico:</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.physiCond}
-              onChangeText={(value) => handleChange("physiCond", value)}
-              placeholder="Estado Físico"
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
             <Text style={styles.label}>Marca *:</Text>
             <TextInput
               style={styles.input}
@@ -133,12 +122,12 @@ const AddDevicePage = ({ navigation }) => {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Caso:</Text>
+            <Text style={styles.label}>Descripción de la reparacion:</Text>
             <TextInput
               style={styles.input}
-              value={formData.case}
-              onChangeText={(value) => handleChange("case", value)}
-              placeholder="Caso"
+              value={formData.rework_description}
+              onChangeText={(value) => handleChange("rework_description", value)}
+              placeholder="Descripción"
             />
           </View>
 
@@ -146,8 +135,8 @@ const AddDevicePage = ({ navigation }) => {
             <Text style={styles.label}>Estado recibido *:</Text>
             <TextInput
               style={styles.input}
-              value={formData.receidStat}
-              onChangeText={(value) => handleChange("receidStat", value)}
+              value={formData.received_status}
+              onChangeText={(value) => handleChange("received_status", value)}
               placeholder="Estado recibido"
             />
           </View>
@@ -156,10 +145,10 @@ const AddDevicePage = ({ navigation }) => {
             <Text style={styles.label}>Inventario:</Text>
             <TextInput
               style={styles.input}
-              value={formData.inventory}
+              value={formData.inventory_items}
               onChangeText={(value) =>
                 /^\d+$/.test(value) || value === ""
-                  ? handleChange("inventory", value)
+                  ? handleChange("inventory_items", value)
                   : null
               }
               placeholder="Inventario"
@@ -172,13 +161,13 @@ const AddDevicePage = ({ navigation }) => {
               <Text style={styles.label}>Fecha (click para seleccionar):</Text>
               {showDt && (
                 <DateTimePicker
-                  value={formData.date}
+                  value={formData.received_date}
                   mode="date"
                   onChange={onDateChange}
                 />
               )}
               <Text style={styles.label}>
-                {formData.date.toLocaleDateString()}
+                {formData.received_date.toLocaleDateString()}
               </Text>
             </TouchableOpacity>
           </View>

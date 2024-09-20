@@ -125,7 +125,7 @@ const DevicesPage = ({ navigation }) => {
               <View style={styles.details}>
                 <Text style={styles.detailText}>Id Cliente: {item.customer_id}</Text>
                 <Text style={styles.detailText}>S/N: {item.serial_number}</Text>
-                <Text style={styles.detailText}>Rework: {item.rework_description}</Text>
+                <Text style={styles.detailText}>Descripción reparacion: {item.rework_description}</Text>
                 <Text style={styles.detailText}>Tipo: {item.device_type}</Text>
                 <Text style={styles.detailText}>Estado recibido: {item.received_status}</Text>
                 <Text style={styles.detailText}>Marca: {item.brand}</Text>
