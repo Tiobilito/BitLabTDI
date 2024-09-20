@@ -36,7 +36,6 @@ const OrderPage = ({ navigation }) => {
 
   useEffect(() => {
     GetDepData();
-    setIdOrder(Math.floor(Math.random() * 9000000) + 1);
     GetClientDeviceData();
   }, []);
 
@@ -197,7 +196,6 @@ const OrderPage = ({ navigation }) => {
       <FlatList
         ListHeaderComponent={
           <View style={styles.container}>
-            <Text style={styles.text}>ID Orden: {idOrder}</Text>
             <Text style={styles.text}>ID Dispositivo: {idDevice}</Text>
             <TextInput
               multiline
