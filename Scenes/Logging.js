@@ -9,7 +9,6 @@ import {
   Dimensions,
   Text,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GetUserData, StoreUserData } from "../Modules/DataInfo";
 import { CheckUser } from "../Modules/OperacionesBD";
 

@@ -13,14 +13,19 @@ import { useRoute } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
-import { getAllDepartamentos } from "../../Modules/OperacionesBD";
+import {
+  getAllDepartamentos,
+  getClientById,
+  getDispoById,
+} from "../../Modules/OperacionesBD";
 
 const OrderPage = ({ navigation }) => {
   const route = useRoute();
   const { idDevice } = route.params;
   const [ShowCost, setShowCost] = useState(false);
   const [idOrder, setIdOrder] = useState(0);
-  const [idClient, setIdClient] = useState(0);
+  const [deviceData, setDeviceData] = useState(null);
+  const [clientData, setClientData] = useState(null);
   const [partsUsed, setPartsUsed] = useState("");
   const [geneDiag, setGeneDiag] = useState("");
   const [status, setStatus] = useState("");
@@ -35,13 +40,22 @@ const OrderPage = ({ navigation }) => {
 
   useEffect(() => {
     GetDepData();
-    setIdOrder(Math.floor(Math.random() * 9000000) + 1);
+    GetClientDeviceData();
   }, []);
+
+  const GetClientDeviceData = async () => {
+    const deviceD = await getDispoById(idDevice);
+    const clientD = await getClientById(deviceD.customer_id);
+    setDeviceData(deviceD);
+    setClientData(clientD);
+    console.log("Cliente: ", clientData);
+    console.log("dispositivo: ", deviceData);
+  };
 
   const GetDepData = async () => {
     try {
       const Data = await getAllDepartamentos();
-      console.log("Registros de departamentos:", Data);
+      //console.log("Registros de departamentos:", Data);
       setDepData(Data || []);
     } catch (error) {
       console.error("Error fetching departments:", error);
@@ -73,15 +87,26 @@ const OrderPage = ({ navigation }) => {
     }
   };
 
+  const calculateTotalCost = () => {
+    const total = cost.reduce((sum, item) => {
+      const itemPrice = parseFloat(item.price) || 0;
+      return sum + itemPrice;
+    }, 0);
+    return total.toFixed(2); // Return a formatted total with two decimal places
+  };
+
   const renderItem = ({ item }) => (
     <View style={styles.costItem}>
       <Text style={styles.costText}>{item.description}</Text>
       <Text style={styles.costText}>{item.price}</Text>
-      <Text style={styles.costText}>{item.iva ? "IVA incluido" : "Sin IVA"}</Text>
+      <Text style={styles.costText}>
+        {item.iva ? "IVA incluido" : "Sin IVA"}
+      </Text>
     </View>
   );
 
   const createPDF = async () => {
+    const totalCost = calculateTotalCost();
     const htmlContent = `
       <!DOCTYPE html>
       <html>
@@ -120,15 +145,33 @@ const OrderPage = ({ navigation }) => {
 
           <!-- Información del cliente -->
           <p><strong>ID Orden:</strong> ${idOrder}</p>
-          <p><strong>Nombre Cliente:</strong> ## <strong>Mail:</strong> ## <strong>Tel:</strong> ## </p>
-          <p><strong>Dirección:</strong> ## <strong>Colonia:</strong> ## <strong>Ciudad:</strong> ## <strong>C.P:</strong> ## </p>
+          <p><strong>Nombre Cliente:</strong> ${
+            clientData.name
+          } <strong>Mail:</strong> ${clientData.emal} <strong>Tel:</strong> ${
+      clientData.number
+    } </p>
+          <p><strong>Dirección:</strong> ${
+            clientData.address
+          } <strong>C.P:</strong> ${clientData.zip_code} </p>
 
           <!-- Información del dispositivo -->
-          <p><strong>Dispositivo:</strong> "" <strong>Tipo:</strong> ## <strong>Modelo:</strong> ## <strong>S/N:</strong> ## <strong>Marca:</strong> ## <strong>Color:</strong> ## <strong>Inventario:</strong> ## </p>
-          <p><strong>Estado Físico:</strong> ## <strong>Estatus:</strong> ${status} <strong>Departamento:</strong> ${department} <strong>Fecha:</strong> ## </p>
+          <p><strong>Dispositivo:</strong> ${
+            deviceData.id
+          } <strong>Tipo:</strong> ${
+      deviceData.device_type
+    } <strong>Modelo:</strong> ${deviceData.model} <strong>S/N:</strong> ${
+      deviceData.serial_number
+    } <strong>Marca:</strong> ${deviceData.brand} <strong>Color:</strong> ${
+      deviceData.color
+    } <strong>Inventario:</strong> ${deviceData.inventory_items} </p>
+          <p><strong>Estado Físico:</strong> ${
+            deviceData.received_status
+          } <strong>Estatus:</strong> ${status} <strong>Departamento:</strong> ${department} <strong>Fecha:</strong> ${
+      deviceData.received_date
+    } </p>
 
           <!-- Descripción y solución -->
-          <p><strong>Descripción:</strong> ## </p>
+          <p><strong>Descripción:</strong> ${deviceData.rework_description} </p>
           <p><strong>Solución:</strong> ${geneDiag}</p>
 
           <!-- Costos -->
@@ -139,21 +182,23 @@ const OrderPage = ({ navigation }) => {
                   <th>IVA</th>
               </tr>
               ${cost
-                  .map(
-                    (item) =>
-                      `<tr><td>${item.description}</td><td>${item.price}</td><td>${
-                        item.iva ? "Incluido" : "No incluido"
-                      }</td></tr>`
-                  )
-                  .join("")}
+                .map(
+                  (item) =>
+                    `<tr><td>${item.description}</td><td>${
+                      item.price
+                    }</td><td>${
+                      item.iva ? "Incluido" : "No incluido"
+                    }</td></tr>`
+                )
+                .join("")}
           </table>
           
-          <p><strong>Total:</strong> $ ## </p>
+          <p><strong>Total:</strong> $ ${totalCost} </p>
 
           <!-- Firmas -->
           <p><strong>TÉCNICO</strong></p>
           <hr style="border: none; height: 2px; background-color: black; margin: 20px 0;">
-          <p><strong>CLIENTE ( ## )</strong></p>
+          <p><strong>CLIENTE ( ${clientData.name} )</strong></p>
           <hr style="border: none; height: 2px; background-color: black; margin: 20px 0;">
 
           <div style="page-break-before: always;"></div>
@@ -187,7 +232,6 @@ const OrderPage = ({ navigation }) => {
       <FlatList
         ListHeaderComponent={
           <View style={styles.container}>
-            <Text style={styles.text}>ID Orden: {idOrder}</Text>
             <Text style={styles.text}>ID Dispositivo: {idDevice}</Text>
             <TextInput
               multiline
@@ -222,14 +266,17 @@ const OrderPage = ({ navigation }) => {
             >
               {depData.map((dep) => (
                 <Picker.Item
-                  key={dep.id_departamento} // Asegúrate de que cada elemento tenga una clave única
-                  label={dep.nombre_depa} // Usa el nombre correcto de la propiedad
-                  value={dep.id_departamento} // Usa el id correcto para el valor
+                  key={dep.id} // Asegúrate de que cada elemento tenga una clave única
+                  label={dep.name} // Usa el nombre correcto de la propiedad
+                  value={dep.id} // Usa el id correcto para el valor
                 />
               ))}
             </Picker>
 
-            <TouchableOpacity onPress={toggleCost}>
+            <TouchableOpacity
+              onPress={toggleCost}
+              style={{ marginLeft: 120, width: 70, height: 70 }}
+            >
               <Image
                 source={require("../../Resources/imagenes/agregar3.png")}
                 style={styles.image}
@@ -263,6 +310,15 @@ const OrderPage = ({ navigation }) => {
             )}
           </View>
         }
+        ListFooterComponent={
+          cost.length > 0 && (
+            <View style={styles.totalContainer}>
+              <Text style={styles.totalText}>
+                Total: ${calculateTotalCost()}
+              </Text>
+            </View>
+          )
+        }
         data={cost.length > 0 ? cost : []}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
@@ -278,7 +334,7 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: "#f0f4f7",
-    marginTop: 30
+    marginTop: 30,
   },
   container: {
     padding: 20,
@@ -299,8 +355,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   image: {
-    width: 40,
-    height: 40,
+    width: 70,
+    height: 70,
     marginVertical: 10,
   },
   subWin: {
@@ -322,6 +378,17 @@ const styles = StyleSheet.create({
   },
   costText: {
     fontSize: 16,
+  },
+  totalContainer: {
+    padding: 10,
+    backgroundColor: "#fff",
+    borderTopWidth: 1,
+    borderTopColor: "#ccc",
+  },
+  totalText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "right",
   },
 });
 

@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import filter from "lodash.filter";
 import { useRoute, useFocusEffect } from "@react-navigation/native";
-import { getAllDispositivos } from "../../Modules/OperacionesBD";
+import { getAllDevices } from "../../Modules/OperacionesBD";
 
 const DevicesPage = ({ navigation }) => {
   const route = useRoute();
@@ -31,12 +31,12 @@ const DevicesPage = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const Data = await getAllDispositivos();
+      const Data = await getAllDevices();
       const BData = Data.map((registro) => ({
         ...registro,
         Details: false,
       }));
-      const filteredData = filter(BData, { id_cliente: idClient });
+      const filteredData = filter(BData, { customer_id: idClient });
       setData(filteredData);
       setFullData(filteredData);
       setIsLoading(false);
@@ -49,7 +49,7 @@ const DevicesPage = ({ navigation }) => {
 
   const toggleDetails = (itemId) => {
     const updatedData = data.map((registro) => {
-      if (registro.id_dispo === itemId) {
+      if (registro.id === itemId) {
         return { ...registro, Details: !registro.Details };
       }
       return registro;
@@ -73,8 +73,8 @@ const DevicesPage = ({ navigation }) => {
     );
   }
 
-  const contains = ({ modelo }, query) => {
-    return modelo.includes(query);
+  const contains = ({ model }, query) => {
+    return model && model.includes(query);
   };
 
   const navigateToEditDevice = (id) => {
@@ -112,34 +112,33 @@ const DevicesPage = ({ navigation }) => {
       </TouchableOpacity>
       <FlatList
         data={data}
-        keyExtractor={(item) => item.id_dispo.toString()}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.itemContainer}>
-            <TouchableOpacity onPress={() => toggleDetails(item.id_dispo)} style={styles.item}>
+            <TouchableOpacity onPress={() => toggleDetails(item.id)} style={styles.item}>
               <View style={styles.info}>
-                <Text style={styles.modelText}>Modelo: {item.modelo}</Text>
-                <Text style={styles.idText}>        Id: {item.id_dispo}</Text>
+                <Text style={styles.modelText}>Modelo: {item.model}</Text>
+                <Text style={styles.idText}>        Id: {item.id}</Text>
               </View>
             </TouchableOpacity>
             {item.Details && (
               <View style={styles.details}>
-                <Text style={styles.detailText}>Id Cliente: {item.id_cliente}</Text>
-                <Text style={styles.detailText}>S/N: {item.sn}</Text>
-                <Text style={styles.detailText}>Caso: {item.caso}</Text>
-                <Text style={styles.detailText}>Tipo: {item.tipo_dis}</Text>
-                <Text style={styles.detailText}>Estado fisico: {item.estado_fisi}</Text>
-                <Text style={styles.detailText}>Marca: {item.marca}</Text>
-                <Text style={styles.detailText}>Estado recibido: {item.esta_recip}</Text>
+                <Text style={styles.detailText}>Id Cliente: {item.customer_id}</Text>
+                <Text style={styles.detailText}>S/N: {item.serial_number}</Text>
+                <Text style={styles.detailText}>Descripción reparacion: {item.rework_description}</Text>
+                <Text style={styles.detailText}>Tipo: {item.device_type}</Text>
+                <Text style={styles.detailText}>Estado recibido: {item.received_status}</Text>
+                <Text style={styles.detailText}>Marca: {item.brand}</Text>
                 <Text style={styles.detailText}>Color: {item.color}</Text>
-                <Text style={styles.detailText}>Inventario: {item.inventario}</Text>
+                <Text style={styles.detailText}>Inventario: {item.inventory_items}</Text>
                 <View style={styles.buttons}>
-                  <TouchableOpacity onPress={() => navigateToEditDevice(item.id_dispo)}>
+                  <TouchableOpacity onPress={() => navigateToEditDevice(item.id)}>
                     <Image
                       source={require("../../Resources/imagenes/editar.png")}
                       style={styles.buttonImage}
                     />
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => navigateToOrder(item.id_dispo)}>
+                  <TouchableOpacity onPress={() => navigateToOrder(item.id)}>
                     <Image
                       source={require("../../Resources/imagenes/orden.png")}
                       style={styles.buttonImage}
@@ -159,7 +158,7 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: "#ffffff",
-    marginTop: 30
+    marginTop: 30,
   },
   centered: {
     flex: 1,

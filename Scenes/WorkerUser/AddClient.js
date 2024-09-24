@@ -15,14 +15,14 @@ const Scale = Dimensions.get("window").width;
 
 const AddCPage = ({ navigation }) => {
   const [formData, setFormData] = useState({
+    code: "",     // Campo para el código definido por el usuario
     name: "",
     address: "",
-    neighborhood: "",
-    city: "",
     zipCode: "",
     email: "",
     phone: "",
     phone2: "",
+    password: "",  // Campo para la contraseña
   });
 
   const handleChange = (name, value) => {
@@ -30,26 +30,25 @@ const AddCPage = ({ navigation }) => {
   };
 
   const verifyAllContents = async () => {
-    const { name, address, neighborhood, city, zipCode, email, phone, phone2 } =
-      formData;
+    const { code, name, address, zipCode, email, phone, phone2, password } = formData;
 
-    if (name && address && neighborhood && city && zipCode && email && phone && phone2) {
+    // Verificación básica de los campos obligatorios
+    if (code && name && address && zipCode && email && phone && password) {
       const data = {
-        idCliente: 0,
-        nombre: name.toUpperCase(),
-        direccion: address,
-        colonia: neighborhood,
-        ciudad: city,
-        cp: zipCode,
-        correo: email,
-        telefono: phone,
-        telefono2: phone2,
+        code: parseInt(code),  // Aseguramos que el código sea un número entero
+        name: name.toUpperCase(),
+        address: address,
+        zip_code: zipCode,
+        email: email,
+        number: phone,
+        second_number: phone2,
+        password: password,  // Agregar la contraseña
       };
 
       await AddClient(data);
       navigateToWorker();
     } else {
-      Alert.alert("Por favor rellene todos los datos");
+      Alert.alert("Por favor rellene todos los datos obligatorios");
     }
   };
 
@@ -61,7 +60,19 @@ const AddCPage = ({ navigation }) => {
     <View style={styles.background}>
       <ScrollView>
         <View style={{ margin: 20 }}>
-          <Text style={styles.title}>Registro de Cliente</Text>
+          <Text style={styles.title}>Registro de Usuario</Text>
+
+          {/* Campo para el código */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Código *</Text>
+            <TextInput
+              style={styles.input}
+              value={formData.code}
+              onChangeText={(value) => handleChange("code", value)}
+              placeholder="Código"
+              keyboardType="numeric"  // Asegura que solo se ingresen números
+            />
+          </View>
 
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Nombre *</Text>
@@ -74,7 +85,7 @@ const AddCPage = ({ navigation }) => {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Dirección *</Text>
+            <Text style={styles.label}>Dirección</Text>
             <TextInput
               style={styles.input}
               value={formData.address}
@@ -84,27 +95,7 @@ const AddCPage = ({ navigation }) => {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Colonia *</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.neighborhood}
-              onChangeText={(value) => handleChange("neighborhood", value)}
-              placeholder="Colonia"
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Ciudad *</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.city}
-              onChangeText={(value) => handleChange("city", value)}
-              placeholder="Ciudad"
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Código Postal *</Text>
+            <Text style={styles.label}>Código Postal</Text>
             <TextInput
               style={styles.input}
               value={formData.zipCode}
@@ -144,6 +135,17 @@ const AddCPage = ({ navigation }) => {
               onChangeText={(value) => handleChange("phone2", value)}
               placeholder="Otro Teléfono"
               keyboardType="phone-pad"
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Contraseña *</Text>
+            <TextInput
+              style={styles.input}
+              value={formData.password}
+              onChangeText={(value) => handleChange("password", value)}
+              placeholder="Contraseña"
+              secureTextEntry={true}
             />
           </View>
 
