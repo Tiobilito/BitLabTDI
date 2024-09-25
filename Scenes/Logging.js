@@ -5,7 +5,6 @@ import {
   ImageBackground,
   Image,
   TouchableOpacity,
-  Alert,
   Dimensions,
   Text,
 } from "react-native";
