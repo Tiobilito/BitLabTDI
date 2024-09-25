@@ -92,6 +92,190 @@ const Prototype_Form = ({ navigation }) => {
     await addProjectSub(newProject);
   };
 
+  const createPDF = async () => {
+    const htmlContent = `
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Formato de Requerimiento de Servicio de Maquinado de Prototipo</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 20px;
+                }
+                h1 {
+                    text-align: center;
+                    text-decoration: underline;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-bottom: 20px;
+                }
+                th, td {
+                    border: 1px solid black;
+                    padding: 8px;
+                    text-align: left;
+                }
+                th {
+                    background-color: #f2f2f2;
+                }
+                .section-title {
+                    font-weight: bold;
+                    margin-top: 20px;
+                    margin-bottom: 10px;
+                }
+                .signature-section {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 40px;
+                }
+                .signature {
+                    width: 45%;
+                    text-align: center;
+                    padding-top: 60px;
+                    border-top: 1px solid black;
+                }
+                .checkbox {
+                    display: inline-block;
+                    width: 15px;
+                    height: 15px;
+                    border: 1px solid black;
+                    margin-right: 10px;
+                }
+            </style>
+        </head>
+        <body>
+  
+            <h1>Formato de requerimiento de servicio de maquinado de prototipo</h1>
+  
+            <table>
+                <tr>
+                    <th>Nombre</th>
+                    <td colspan="3">${applicantName}</td>
+                    <th>Fecha</th>
+                    <td>${new Date().toLocaleDateString()}</td>
+                </tr>
+                <tr>
+                    <th>Aplicación</th>
+                    <td colspan="3">${application}</td>
+                </tr>
+                <tr>
+                    <th>Correo electrónico</th>
+                    <td>${contactEmail}</td>
+                    <th>Teléfono</th>
+                    <td>${contactPhone}</td>
+                </tr>
+                <tr>
+                    <th>Código Alumno</th>
+                    <td>${user?.code}</td>
+                    <th>Código Profesor</th>
+                    <td>${selectedProfessor}</td>
+                    <th>Proyecto</th>
+                    <td>
+                        <div class="checkbox">${
+                          projectType === "Licenciatura" ? "X" : ""
+                        }</div> Licenciatura <br>
+                        <div class="checkbox">${
+                          projectType === "Posgrado" ? "X" : ""
+                        }</div> Posgrado <br>
+                        <div class="checkbox">${
+                          projectType === "Cuerpo Academico" ? "X" : ""
+                        }</div> Cuerpo Académico
+                    </td>
+                </tr>
+            </table>
+  
+            <div class="section-title">Tipo de Prototipo</div>
+            <table>
+                <tr>
+                    <th>Diseño de circuito impreso</th>
+                    <td><div class="checkbox">${
+                      prototypeType === "Diseño de circuito impreso" ? "X" : ""
+                    }</div></td>
+                </tr>
+                <tr>
+                    <th>Diseño de prototipo en 3D</th>
+                    <td><div class="checkbox">${
+                      prototypeType === "Diseño de prototipo en 3d" ? "X" : ""
+                    }</div></td>
+                </tr>
+                <tr>
+                    <th>Descripción del prototipo</th>
+                    <td colspan="5">${prototypeDescription}</td>
+                </tr>
+            </table>
+  
+            <div class="section-title">Requerimientos específicos del prototipo</div>
+            <table>
+                <tr>
+                    <th>Dimensiones</th>
+                    <td>${specificRequirementsDimensions}</td>
+                    <th>Corte especial</th>
+                    <td><div class="checkbox">${
+                      specificRequirementsSpecialCut ? "X" : ""
+                    }</div> Sí <div class="checkbox">${
+      !specificRequirementsSpecialCut ? "X" : ""
+    }</div> No</td>
+                </tr>
+                <tr>
+                    <th>Otros</th>
+                    <td colspan="3">${specificRequirementsOther}</td>
+                </tr>
+                <tr>
+                    <th>Observaciones</th>
+                    <td colspan="5">${specificRequirementsComments}</td>
+                </tr>
+            </table>
+  
+            <div class="section-title">Para uso interno</div>
+            <table>
+                <tr>
+                    <th>Número de caras PCB</th>
+                    <td>${internalUsePcbFaces}</td>
+                    <th>PCB proporcionado por usuario</th>
+                    <td><div class="checkbox">${
+                      internalUsePcbProvidedByUser ? "X" : ""
+                    }</div> Sí <div class="checkbox">${
+      !internalUsePcbProvidedByUser ? "X" : ""
+    }</div> No</td>
+                </tr>
+                <tr>
+                    <th>Insumos requeridos</th>
+                    <td colspan="5">${internalUseRequiredInputs}</td>
+                </tr>
+                <tr>
+                    <th>Observaciones</th>
+                    <td colspan="5">${internalUseComments}</td>
+                </tr>
+            </table>
+  
+            <div class="signature-section">
+                <div class="signature">
+                    Fecha: ${new Date().toLocaleDateString()} <br>
+                    Firma del jefe del departamento
+                </div>
+                <div class="signature">
+                    Fecha: ${new Date().toLocaleDateString()} <br>
+                    Firma del jefe del laboratorio de prototipado
+                </div>
+            </div>
+  
+        </body>
+        </html>
+    `;
+
+    const file = await printToFileAsync({
+      html: htmlContent,
+      base64: false,
+      fileName: "OrderDetails.pdf",
+    });
+
+    await shareAsync(file.uri);
+  };
+
   return (
     <View style={styles.background}>
       <ScrollView>
@@ -200,31 +384,23 @@ const Prototype_Form = ({ navigation }) => {
         <Picker
           selectedValue={internalUsePcbFaces}
           style={styles.picker}
-          onValueChange={(itemValue, itemIndex) => setInternalUsePcbFaces(itemValue)}
+          onValueChange={(itemValue, itemIndex) =>
+            setInternalUsePcbFaces(itemValue)
+          }
         >
-          <Picker.Item
-            label="1"
-            value={1}
-          />
-          <Picker.Item
-            label="2"
-            value={2}
-          />
+          <Picker.Item label="1" value={1} />
+          <Picker.Item label="2" value={2} />
         </Picker>
         <Text>Pcb proporcionado por el usuario</Text>
         <Picker
           selectedValue={internalUsePcbProvidedByUser}
           style={styles.picker}
-          onValueChange={(itemValue, itemIndex) => setInternalUsePcbProvidedByUser(itemValue)}
+          onValueChange={(itemValue, itemIndex) =>
+            setInternalUsePcbProvidedByUser(itemValue)
+          }
         >
-          <Picker.Item
-            label="No"
-            value={false}
-          />
-          <Picker.Item
-            label="Si"
-            value={true}
-          />
+          <Picker.Item label="No" value={false} />
+          <Picker.Item label="Si" value={true} />
         </Picker>
         <Text>Insumos requeridos</Text>
         <TextInput
@@ -246,11 +422,7 @@ const Prototype_Form = ({ navigation }) => {
           value={internalUseComments}
           placeholder="Observaciones"
         />
-        <Button
-          onPress={SentProject}
-          title="Learn More"
-          color="#841584"
-        />
+        <Button onPress={SentProject} title="Learn More" color="#841584" />
       </ScrollView>
     </View>
   );
@@ -259,22 +431,22 @@ const Prototype_Form = ({ navigation }) => {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: "#f0f4f7",
-    marginTop: 30,
-  },
-  container: {
+    backgroundColor: "#ffffff", // White background for minimal look
     padding: 20,
   },
   input: {
-    backgroundColor: "white",
-    padding: 10,
+    backgroundColor: "#f9f9f9", // Light gray background for inputs
+    padding: 12,
     marginVertical: 10,
-    borderRadius: 10,
-    fontSize: 18,
+    borderRadius: 8,
+    borderWidth: 1, // Simple thin border
+    borderColor: "#d3d3d3", // Light gray border
+    fontSize: 16,
   },
   picker: {
     marginVertical: 10,
-    backgroundColor: "white",
+    backgroundColor: "#f9f9f9", // Same as inputs
+    borderRadius: 8,
   },
 });
 
