@@ -20,7 +20,7 @@ const LoggingPage = ({ navigation }) => {
 
   useEffect(() => {
     const data = GetUserData();
-    if(data) {
+    if (data) {
       setUsername(data.Username);
       setPassword(data.Password);
     }
@@ -28,9 +28,9 @@ const LoggingPage = ({ navigation }) => {
 
   const Verify = async () => {
     const BVerify = await CheckUser(username, password);
-    if(BVerify == true) {
+    if (BVerify == true) {
       await StoreUserData(username, password);
-      navigation.navigate("WorkerApp")
+      navigation.navigate("WorkerApp");
     }
   };
 
@@ -49,7 +49,7 @@ const LoggingPage = ({ navigation }) => {
           setUsername(text);
         }}
         value={username}
-        placeholder="Username"
+        placeholder="Nombre"
       />
       <TextInput
         style={styles.input}
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 30
+    marginTop: 30,
   },
   input: {
     height: Scale > 400 ? 60 : 40,
