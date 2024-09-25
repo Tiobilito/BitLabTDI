@@ -48,7 +48,6 @@ const Prototype_Form = ({ navigation }) => {
   const [internalUseRequiredInputs, setInternalUseRequiredInputs] =
     useState("");
   const [internalUseComments, setInternalUseComments] = useState("");
-  const [professors, setProfessors] = useState([]);
   const [selectedProfessor, setSelectedProfessor] = useState(null);
 
   useEffect(() => {
@@ -246,6 +245,11 @@ const Prototype_Form = ({ navigation }) => {
           }}
           value={internalUseComments}
           placeholder="Observaciones"
+        />
+        <Button
+          onPress={SentProject}
+          title="Learn More"
+          color="#841584"
         />
       </ScrollView>
     </View>
