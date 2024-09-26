@@ -59,7 +59,7 @@
 }
 
 .halfP-width {
-  flex: 1 1 25%;
+  flex: 1 1 48%;
 }
 
 /* Alineación de Usuario Interno a la izquierda */
@@ -83,6 +83,8 @@
   margin-top: 20px;
   margin-bottom: 25px;
   justify-content: space-around;
+  margin-bottom: -25px;
+  margin-top: 0;
 }
 
 .izquierda {
@@ -189,6 +191,18 @@
   display: block;
   width: 550px;
   align-items: center;
+}
+
+/*Boton para enviar formilario*/
+.button-send {
+  background-color: #3d638a;
+  color: white;
+  border-radius: 5px;
+  width: 100px;
+  height: 40px;
+  font-family: Arial, Helvetica, sans-serif;
+  border-color: antiquewhite;
+  padding: 15px;
 }
 
 /* Adaptar el layout para pantallas pequeñas */

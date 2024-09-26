@@ -3,7 +3,7 @@ import "./Footer.css"; // Asegúrate de tener este archivo CSS
 
 const Footer = () => {
   return (
-    <footer className="footer">
+    <footer className="footer" id="contacto">
       <div className="footer-content">
         {/* Primera fila - Logos laterales e información central */}
         <div className="footer-row">
@@ -53,19 +53,17 @@ const Footer = () => {
               >
                 iLabTDI
               </a>
-              <i class="bi bi-facebook"></i>
-              <p>ProtoLab</p>
               <a
-                href="https://www.instagram.com/ilab_tdi?igsh=aDJ5YTFubHFhYnE4"
+                href="https://www.facebook.com/people/Prototyping-lab/61565476320207/?mibextid=ZbWKwL"
                 target="_blank"
               >
-                <i class="bi bi-instagram"></i>
+                <i class="bi bi-facebook"></i>
               </a>
               <a
                 href="https://www.instagram.com/ilab_tdi?igsh=aDJ5YTFubHFhYnE4"
                 target="_blank"
               >
-                ProtoLab
+                Prototyping Lab
               </a>
               <i class="bi bi-telephone-fill"></i>
               <p>+52 33 1328 6565</p>

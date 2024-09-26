@@ -34,6 +34,11 @@ const Header = () => {
       : header.classList.remove("is-sticky");
   };
 
+  /*Scroll al Footer */
+  const scrollToFooter = () => {
+    document.getElementById("contacto").scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <header className="header-section">
       <Container>
@@ -109,8 +114,12 @@ const Header = () => {
                   </NavDropdown.Item>
                 </NavDropdown>
                 {/* Opción Maquinaria */}
-                <NavLink className="nav-link" to="/maquinaria">
-                  Contactanos
+                <NavLink
+                  className={"nav-link"}
+                  to="#contacto"
+                  onClick={scrollToFooter}
+                >
+                  Contáctanos
                 </NavLink>
               </Nav>
             </Offcanvas.Body>

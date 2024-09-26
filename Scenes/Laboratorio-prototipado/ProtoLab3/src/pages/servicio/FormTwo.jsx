@@ -312,29 +312,31 @@ export default function FormTwo() {
             </div>
             <div className="requerimientos-prototipo">
               <h3>Requerimientos específicos del Prototipo</h3>
-              <div className="form-group half-width">
-                <label htmlFor="dimensiones" className="titulo-entrada">
-                  DIMENSIONES
-                </label>
-                <input type="text" id="dimensiones" placeholder="" />
-              </div>
-              <div className="form-group half-width">
-                <label htmlFor="corte" className="titulo-entrada">
-                  CORTE ESPECIAL
-                </label>
-                <input type="text" id="corte" placeholder="" />
-              </div>
-              <div className="form-group half-width">
-                <label htmlFor="otros" className="titulo-entrada">
-                  OTROS
-                </label>
-                <input type="text" id="otros" placeholder="" />
-              </div>
-              <div className="form-group half-width">
-                <label htmlFor="observaciones" className="titulo-entrada">
-                  OBSERVACIONES
-                </label>
-                <input type="text" id="observaciones" placeholder="" />
+              <div className="row">
+                <div className="form-group half-width">
+                  <label htmlFor="dimensiones" className="titulo-entrada">
+                    DIMENSIONES
+                  </label>
+                  <input type="text" id="dimensiones" placeholder="" />
+                </div>
+                <div className="form-group half-width">
+                  <label htmlFor="corte" className="titulo-entrada">
+                    CORTE ESPECIAL
+                  </label>
+                  <input type="text" id="corte" placeholder="" />
+                </div>
+                <div className="form-group half-width">
+                  <label htmlFor="otros" className="titulo-entrada">
+                    OTROS
+                  </label>
+                  <input type="text" id="otros" placeholder="" />
+                </div>
+                <div className="form-group half-width">
+                  <label htmlFor="observaciones" className="titulo-entrada">
+                    OBSERVACIONES
+                  </label>
+                  <input type="text" id="observaciones" placeholder="" />
+                </div>
               </div>
             </div>
           </div>
@@ -398,7 +400,9 @@ export default function FormTwo() {
           </div>
         </div>
         <div>
-          <button onClick={handleClick}>Enviar</button>
+          <button className="button-send" onClick={handleClick}>
+            Enviar
+          </button>
           {message && <p>{message}</p>}
         </div>
       </form>
