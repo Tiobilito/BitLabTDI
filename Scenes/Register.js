@@ -9,6 +9,7 @@ import {
   Dimensions,
   Text,
   View,
+  ScrollView,
 } from "react-native";
 import { GetUserData, StoreUserData } from "../Modules/DataInfo";
 import { CheckUser } from "../Modules/OperacionesBD";
@@ -19,9 +20,17 @@ import { CustomView } from "./components/CustomView";
 const Scale = Dimensions.get("window").width;
 
 const Register = ({ navigation }) => {
+  const [code, setCode] = useState("");
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [selectedRole, setSelectedRole] = useState("");
+  const [userType, setUserType] = useState("");
+  const [adress, setAdress] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [phoneNum, setPhoneNum] = useState("");
+  const [nss, setNss] = useState(""); //Numero de seguro social
+  const [rfc, setRfc] = useState(""); //Registro Federal de Contribuyentes
+  const [departmentID, setDepartmentID] = useState("");
 
   useEffect(() => {
     const data = GetUserData();
@@ -45,91 +54,199 @@ const Register = ({ navigation }) => {
         source={require("../Resources/imagenes/BITLABTDI.png")}
         style={styles.Logo}
       />
-      <Text style={{ fontSize: Scale > 400 ? 50 : 20 }}>
-        Registra a tu cuenta
-      </Text>
-      <View style={styles.formCont}>
-        <Picker
-          selectedValue={"Fixer"}
-          onValueChange={(itemValue, itemIndex) => setSelectedRole(itemValue)}
-        >
-          <Picker.Item label="Fixer" value="Fixer" />
-          <Picker.Item label="Client" value="Client" />
-        </Picker>
-
-        <Text style={styles.textForm}>Nombre</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={(text) => {
-            setUsername(text);
-          }}
-          value={username}
-          placeholder="Username"
-        />
-        <Text style={styles.textForm}>Contraseña</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={(text) => {
-            setPassword(text);
-          }}
-          value={password}
-          placeholder="Password"
-          secureTextEntry={true}
-        />
-      </View>
-
-      <TouchableOpacity
-        style={styles.loginButton}
-        onPress={() => Verify(username, password)}
+      <Text
+        style={{ fontSize: Scale > 400 ? 50 : 20, marginBottom: Scale * 0.05 }}
       >
-        <Text style={{ color: "white", fontWeight: "bold" }}>Registrar</Text>
-      </TouchableOpacity>
-
-      <View style={{ marginBottom: Scale * 0.1 }}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: Scale * 0.04,
-          }}
-        >
-          <View
-            style={{
-              height: Scale * 0.002,
-              width: Scale * 0.3,
-              backgroundColor: "#000000",
+        Registra tu nueva cuenta
+      </Text>
+      <ScrollView
+        style={{
+          height: Scale * 1.1,
+        }}
+      >
+        <View style={styles.formCont}>
+          <Text style={styles.textForm}>Código</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => {
+              setCode(text);
             }}
+            value={code}
+            placeholder="Code"
           />
-          <Text> Ó </Text>
-          <View
-            style={{
-              height: Scale * 0.002,
-              width: Scale * 0.3,
-              backgroundColor: "#000000",
+
+          <Text style={styles.textForm}>Nombre</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => {
+              setUsername(text);
             }}
+            value={username}
+            placeholder="Username"
+          />
+
+          <Text style={styles.textForm}>Correo Electrónico</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => {
+              setEmail(text);
+            }}
+            value={email}
+            placeholder="something@email.com"
+          />
+
+          <Text style={styles.textForm}>Contraseña</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => {
+              setPassword(text);
+            }}
+            value={password}
+            placeholder="Password"
+            secureTextEntry={true}
+          />
+
+          <Text style={styles.textForm}>Rol:</Text>
+          <Picker //Esto es para el rol del usuario
+            selectedValue={"Fixer"}
+            onValueChange={(itemValue, itemIndex) => setUserType(itemValue)}
+          >
+            <Picker.Item label="Fixer" value="Fixer" />
+            <Picker.Item label="Client" value="Client" />
+          </Picker>
+
+          <Text style={styles.textForm}>Dirección</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => {
+              setAdress(text);
+            }}
+            value={adress}
+            placeholder="Ejemplo 1234"
+          />
+
+          <Text style={styles.textForm}>Código Postal</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => {
+              setZipCode(text);
+            }}
+            value={zipCode}
+            placeholder="Ejemplo 1234"
+          />
+
+          <Text style={styles.textForm}>Número de teléfono</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => {
+              setPhoneNum(text);
+            }}
+            value={phoneNum}
+            placeholder="xx-xxxx-xxxx"
+          />
+
+          <Text style={styles.textForm}>Número de Seguro Social</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => {
+              setNss(text);
+            }}
+            value={nss}
+            placeholder="12345678"
+          />
+
+          <Text style={styles.textForm}>RFC</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => {
+              setRfc(text);
+            }}
+            value={rfc}
+            placeholder="12345678"
+          />
+
+          <Text style={styles.textForm}>ID departamento</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => {
+              setDepartmentID(text);
+            }}
+            value={departmentID}
+            placeholder="12345"
           />
         </View>
-      </View>
 
-      <View>
-        <Text style={{ marginBottom: Scale * 0.04 }}>
-          Si ya estás registrado
-        </Text>
-        <TouchableOpacity
+        <View
           style={{
-            borderWidth: 1,
-            borderColor: "#2272A7",
+            width: Scale * 0.8,
             justifyContent: "center",
             alignItems: "center",
-            borderRadius: 10,
-            height: Scale * 0.1,
           }}
-          onPress={() => navigation.navigate("Logging")}
         >
-          <Text style={{ color: "#2272A7", fontWeight: "bold" }}>Iniciar</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={() => Verify(username, password)}
+          >
+            <Text style={{ color: "white", fontWeight: "bold" }}>
+              Registrar
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={{ marginBottom: Scale * 0.1 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: Scale * 0.04,
+            }}
+          >
+            <View
+              style={{
+                height: Scale * 0.002,
+                width: Scale * 0.3,
+                backgroundColor: "#000000",
+              }}
+            />
+            <Text> Ó </Text>
+            <View
+              style={{
+                height: Scale * 0.002,
+                width: Scale * 0.3,
+                backgroundColor: "#000000",
+              }}
+            />
+          </View>
+        </View>
+
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ marginBottom: Scale * 0.04 }}>
+            Si ya estás registrado
+          </Text>
+          <TouchableOpacity
+            style={{
+              borderWidth: 1,
+              borderColor: "#2272A7",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 10,
+              height: Scale * 0.1,
+              width: Scale * 0.4,
+            }}
+            onPress={() => navigation.navigate("Logging")}
+          >
+            <Text style={{ color: "#2272A7", fontWeight: "bold" }}>
+              Iniciar
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </CustomView>
   );
 };
@@ -153,7 +270,7 @@ const styles = StyleSheet.create({
   formCont: {
     width: Scale * 0.8,
     marginBottom: Scale * 0.08,
-    marginTop: Scale * 0.08,
+    //marginTop: Scale * 0.08,
   },
   Logo: {
     width: Scale > 400 ? 400 : 250, // Ancho de la imagen
@@ -161,7 +278,7 @@ const styles = StyleSheet.create({
     marginTop: "10%",
   },
   loginButton: {
-    width: Scale * 0.25,
+    width: Scale * 0.5,
     height: Scale * 0.1,
     backgroundColor: "#2272A7",
     justifyContent: "center",

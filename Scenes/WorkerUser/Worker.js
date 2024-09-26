@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, Image, TouchableOpacity, View } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { CustomViewReverse } from "../components/CustomViewReverse";
 
@@ -14,7 +15,7 @@ const WorkerPage = ({ navigation }) => {
 
   return (
     <CustomViewReverse>
-      <TouchableOpacity onPress={navigateToAddClient}>
+      <TouchableOpacity onPress={() => navigation.navigate("AddClient")}>
         <Image
           source={require("../../Resources/imagenes/editar.png")}
           style={styles.Buttons}
