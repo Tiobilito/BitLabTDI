@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 // Scenes
 import LoggingPage from "./Scenes/Logging";
+import Register from "./Scenes/Register";
 import WorkerPage from "./Scenes/WorkerUser/Worker";
 import AddClientPage from "./Scenes/WorkerUser/AddClient";
 import AddDevicePage from "./Scenes/WorkerUser/AddDevice";
@@ -32,11 +33,23 @@ function Worker() {
 function Fixes() {
   return (
     <RepairClientDevicesStack.Navigator screenOptions={{ headerShown: false }}>
-      <RepairClientDevicesStack.Screen name="SearchClient" component={SearchClientPage} />
+      <RepairClientDevicesStack.Screen
+        name="SearchClient"
+        component={SearchClientPage}
+      />
       <RepairClientDevicesStack.Screen name="Devices" component={DevicesPage} />
-      <RepairClientDevicesStack.Screen name="EditClient" component={EditClientPage} />
-      <RepairClientDevicesStack.Screen name="EditDevice" component={EditDevicePage} />
-      <RepairClientDevicesStack.Screen name="AddDevice" component={AddDevicePage} />
+      <RepairClientDevicesStack.Screen
+        name="EditClient"
+        component={EditClientPage}
+      />
+      <RepairClientDevicesStack.Screen
+        name="EditDevice"
+        component={EditDevicePage}
+      />
+      <RepairClientDevicesStack.Screen
+        name="AddDevice"
+        component={AddDevicePage}
+      />
       <RepairClientDevicesStack.Screen name="Order" component={OrderPage} />
     </RepairClientDevicesStack.Navigator>
   );
@@ -76,6 +89,7 @@ export default function App() {
         }}
       >
         <Stack.Screen name="Logging" component={LoggingPage} />
+        <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="WorkerApp" component={WorkerApp} />
       </Stack.Navigator>
     </NavigationContainer>

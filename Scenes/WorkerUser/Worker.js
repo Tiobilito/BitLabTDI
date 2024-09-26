@@ -1,6 +1,8 @@
 import React from "react";
 import { StyleSheet, Text, Image, TouchableOpacity, View } from "react-native";
 
+import { CustomViewReverse } from "../components/CustomViewReverse";
+
 const WorkerPage = ({ navigation }) => {
   const navigateToAddClient = () => {
     navigation.navigate("AddClient");
@@ -11,7 +13,7 @@ const WorkerPage = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.background}>
+    <CustomViewReverse>
       <TouchableOpacity onPress={navigateToAddClient}>
         <Image
           source={require("../../Resources/imagenes/editar.png")}
@@ -26,7 +28,7 @@ const WorkerPage = ({ navigation }) => {
         />
       </TouchableOpacity>
       <Text style={styles.text}>Buscar Cliente</Text> */}
-    </View>
+    </CustomViewReverse>
   );
 };
 

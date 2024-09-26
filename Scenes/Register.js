@@ -12,14 +12,16 @@ import {
 } from "react-native";
 import { GetUserData, StoreUserData } from "../Modules/DataInfo";
 import { CheckUser } from "../Modules/OperacionesBD";
+import { Picker } from "@react-native-picker/picker";
 
 import { CustomView } from "./components/CustomView";
 
 const Scale = Dimensions.get("window").width;
 
-const LoggingPage = ({ navigation }) => {
+const Register = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [selectedRole, setSelectedRole] = useState("");
 
   useEffect(() => {
     const data = GetUserData();
@@ -44,10 +46,18 @@ const LoggingPage = ({ navigation }) => {
         style={styles.Logo}
       />
       <Text style={{ fontSize: Scale > 400 ? 50 : 20 }}>
-        Ingresa a tu cuenta
+        Registra a tu cuenta
       </Text>
       <View style={styles.formCont}>
-        <Text style={styles.textForm}>Nombre de usuario</Text>
+        <Picker
+          selectedValue={"Fixer"}
+          onValueChange={(itemValue, itemIndex) => setSelectedRole(itemValue)}
+        >
+          <Picker.Item label="Fixer" value="Fixer" />
+          <Picker.Item label="Client" value="Client" />
+        </Picker>
+
+        <Text style={styles.textForm}>Nombre</Text>
         <TextInput
           style={styles.input}
           onChangeText={(text) => {
@@ -72,7 +82,7 @@ const LoggingPage = ({ navigation }) => {
         style={styles.loginButton}
         onPress={() => Verify(username, password)}
       >
-        <Text style={{ color: "white", fontWeight: "bold" }}>Iniciar</Text>
+        <Text style={{ color: "white", fontWeight: "bold" }}>Registrar</Text>
       </TouchableOpacity>
 
       <View style={{ marginBottom: Scale * 0.1 }}>
@@ -104,7 +114,7 @@ const LoggingPage = ({ navigation }) => {
 
       <View>
         <Text style={{ marginBottom: Scale * 0.04 }}>
-          Si no estás registrado
+          Si ya estás registrado
         </Text>
         <TouchableOpacity
           style={{
@@ -115,11 +125,9 @@ const LoggingPage = ({ navigation }) => {
             borderRadius: 10,
             height: Scale * 0.1,
           }}
-          onPress={() => navigation.navigate("Register")}
+          onPress={() => navigation.navigate("Logging")}
         >
-          <Text style={{ color: "#2272A7", fontWeight: "bold" }}>
-            Registrar
-          </Text>
+          <Text style={{ color: "#2272A7", fontWeight: "bold" }}>Iniciar</Text>
         </TouchableOpacity>
       </View>
     </CustomView>
@@ -195,4 +203,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoggingPage;
+export default Register;
