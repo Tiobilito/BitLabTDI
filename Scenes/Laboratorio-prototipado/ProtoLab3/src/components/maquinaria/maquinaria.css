@@ -1,0 +1,47 @@
+/* Estilo general para la sección de maquinaria */
+.maquinaria {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px; /* Aumenta el padding para mayor espacio */
+  background-color: #f7f7f7; /* Color de fondo más suave */
+  position: absolute; /* Permite que siga el flujo normal del documento */
+  width: 100%;
+  top: 0;
+  left: 0;
+  margin: 0;
+  margin-top: 200vh;
+  height: 78vh;
+}
+
+/* Estilo del título */
+.maquinaria h2 {
+  color: #2c3e50; /* Azul oscuro para más elegancia */
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 2.5em;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 700; /* Negrita para mayor énfasis */
+  position: relative;
+}
+
+/* Subrayado decorativo debajo del título */
+.maquinaria h2::after {
+  content: "";
+  display: block;
+  width: 150px;
+  height: 3px;
+  background-color: #2c3e50; /* Color del subrayado */
+  margin: 10px auto 0;
+  border-radius: 5px;
+}
+
+/* Estilo para la visualización de las tarjetas */
+.cards-display {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /*Te asegura una fila de 6 columnas*/
+  gap: 20px; /*Espacio entre cards*/
+  margin-top: 20px;
+  width: 100%;
+  justify-items: center;
+}

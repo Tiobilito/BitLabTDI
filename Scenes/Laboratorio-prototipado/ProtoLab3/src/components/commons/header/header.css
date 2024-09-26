@@ -1,0 +1,89 @@
+/* Estilos generales del header */
+.header-section {
+  /* Azul oscuro */
+  padding: 2px 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+}
+.logoIT {
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  display: flex;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #ffffff;
+}
+
+/* Estilos cuando el header se hace sticky al hacer scroll */
+.header-section.is-sticky {
+  background-color: #002244; /* Azul más oscuro al hacer scroll */
+}
+
+/* Estilo del logo */
+.logo-img {
+  width: 60px; /* Ajusta el tamaño del logo */
+  height: auto;
+  margin-right: 15px;
+}
+
+/* Estilos de navegación */
+.nav-link {
+  color: #ebdfdf;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-family: "Lato", sans-serif;
+  text-decoration: none;
+  padding: 10px 15px;
+  text-shadow: 0 0 15px white;
+}
+
+.nav-link:hover {
+  color: #fe4e37; /* Color hover rojo */
+}
+
+/* Dropdown para los documentos */
+.navbar-nav .nav-dropdown {
+  color: #ffffff;
+}
+
+.navbar-nav .dropdown-menu {
+  background-color: #003366;
+  border: none;
+}
+
+.navbar-nav .dropdown-item {
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.navbar-nav .dropdown-item:hover {
+  background-color: #a6b6d2; /* Color hover rojo en dropdown */
+  color: #ffffff;
+}
+
+/* Estilos del botón Offcanvas */
+.toggle_btn i {
+  color: #ffffff;
+  font-size: 24px;
+}
+
+/* Estilos de la Offcanvas */
+.offcanvas-body {
+  /* Azul oscuro en el menú lateral */
+  color: #ffffff;
+}
+
+.offcanvas-body .nav-link {
+  color: #ffffff;
+  padding: 10px 0;
+}
+
+.offcanvas-body .nav-link:hover {
+  color: #a6b6d2; /* Color hover rojo */
+}

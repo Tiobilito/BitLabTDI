@@ -1,0 +1,6 @@
+.home-container {
+  display: flex;
+  flex-direction: column; /* Alinea los componentes verticalmente */
+  align-items: stretch; /* Asegura que los componentes ocupen el ancho completo */
+  padding: 0;
+}
