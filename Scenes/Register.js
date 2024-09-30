@@ -12,10 +12,11 @@ import {
   ScrollView,
 } from "react-native";
 import { GetUserData, StoreUserData } from "../Modules/DataInfo";
-import { CheckUser } from "../Modules/OperacionesBD";
+import { addUser, CheckUser } from "../Modules/OperacionesBD";
 import { Picker } from "@react-native-picker/picker";
 
 import { CustomView } from "./components/CustomView";
+import { number } from "prop-types";
 
 const Scale = Dimensions.get("window").width;
 
@@ -24,28 +25,27 @@ const Register = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userType, setUserType] = useState("");
-  const [adress, setAdress] = useState("");
+  const [userType, setUserType] = useState(""); 
+  const [address, setAddress] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [phoneNum, setPhoneNum] = useState("");
   const [nss, setNss] = useState(""); //Numero de seguro social
   const [rfc, setRfc] = useState(""); //Registro Federal de Contribuyentes
   const [departmentID, setDepartmentID] = useState("");
 
-  useEffect(() => {
-    const data = GetUserData();
-    if (data) {
-      setUsername(data.Username);
-      setPassword(data.Password);
-    }
-  }, []);
-
   const Verify = async () => {
-    const BVerify = await CheckUser(username, password);
-    if (BVerify == true) {
-      await StoreUserData(username, password);
-      navigation.navigate("WorkerApp");
-    }
+    const UserData = {
+      code: code,
+      name: username,
+      user_type: userType,
+      address: address,
+      zip_code: zipCode,
+      email: email,
+      nss: nss,
+      rfc: rfc,
+      number: phoneNum,
+    };
+    await addUser(UserData);
   };
 
   return (
@@ -73,6 +73,7 @@ const Register = ({ navigation }) => {
             }}
             value={code}
             placeholder="Code"
+            keyboardType="numeric"
           />
 
           <Text style={styles.textForm}>Nombre</Text>
@@ -119,9 +120,9 @@ const Register = ({ navigation }) => {
           <TextInput
             style={styles.input}
             onChangeText={(text) => {
-              setAdress(text);
+              setAddress(text);
             }}
-            value={adress}
+            value={address}
             placeholder="Ejemplo 1234"
           />
 
@@ -133,6 +134,7 @@ const Register = ({ navigation }) => {
             }}
             value={zipCode}
             placeholder="Ejemplo 1234"
+            keyboardType="numeric"
           />
 
           <Text style={styles.textForm}>Número de teléfono</Text>
@@ -143,6 +145,7 @@ const Register = ({ navigation }) => {
             }}
             value={phoneNum}
             placeholder="xx-xxxx-xxxx"
+            keyboardType="numeric"
           />
 
           <Text style={styles.textForm}>Número de Seguro Social</Text>
@@ -153,6 +156,7 @@ const Register = ({ navigation }) => {
             }}
             value={nss}
             placeholder="12345678"
+            keyboardType="numeric"
           />
 
           <Text style={styles.textForm}>RFC</Text>
