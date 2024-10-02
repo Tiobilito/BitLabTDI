@@ -27,7 +27,6 @@ const RadioButton = ({ label, value, selected, onSelect }) => {
 };
 
 export default function PrototypingForm() {
-
   const SentProject = async () => {
     const newProject = {
       submission_date: new Date().toISOString().split("T")[0], // Fecha actual
