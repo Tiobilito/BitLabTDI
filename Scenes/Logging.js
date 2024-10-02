@@ -7,9 +7,12 @@ import {
   TouchableOpacity,
   Dimensions,
   Text,
+  View,
 } from "react-native";
 import { GetUserData, StoreUserData } from "../Modules/DataInfo";
 import { CheckUser } from "../Modules/OperacionesBD";
+
+import { CustomView } from "./components/CustomView";
 
 const Scale = Dimensions.get("window").width;
 
@@ -19,7 +22,7 @@ const LoggingPage = ({ navigation }) => {
 
   useEffect(() => {
     const data = GetUserData();
-    if(data) {
+    if (data) {
       setUsername(data.Username);
       setPassword(data.Password);
     }
@@ -27,88 +30,167 @@ const LoggingPage = ({ navigation }) => {
 
   const Verify = async () => {
     const BVerify = await CheckUser(username, password);
-    if(BVerify == true) {
+    if (BVerify == true) {
       await StoreUserData(username, password);
-      navigation.navigate("WorkerApp")
+      navigation.navigate("WorkerApp");
     }
   };
 
   return (
-    <ImageBackground
-      source={require("../Resources/imagenes/Fondo1.jpg")}
-      style={styles.background}
-    >
+    <CustomView>
       <Image
         source={require("../Resources/imagenes/BITLABTDI.png")}
         style={styles.Logo}
       />
-      <TextInput
-        style={styles.input}
-        onChangeText={(text) => {
-          setUsername(text);
-        }}
-        value={username}
-        placeholder="Username"
-      />
-      <TextInput
-        style={styles.input}
-        onChangeText={(text) => {
-          setPassword(text);
-        }}
-        value={password}
-        placeholder="Password"
-        secureTextEntry={true}
-      />
-      <Text style={styles.text}>
-        {"No tienes cuenta "}
-        <Text
-          style={{ color: "blue", textDecorationLine: "underline" }}
-          onPress={() => console.log("Espere Funcionalidad")}
-        >
-          Registrate
-        </Text>
+      <Text style={{ fontSize: Scale > 400 ? 50 : 20 }}>
+        Ingresa a tu cuenta
       </Text>
-      <TouchableOpacity onPress={() => Verify(username, password)}>
-        <Image
-          source={require("../Resources/imagenes/acceso.png")}
-          style={styles.AccesButtom}
+      <View style={styles.formCont}>
+        <Text style={styles.textForm}>Nombre de usuario</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => {
+            setUsername(text);
+          }}
+          value={username}
+          placeholder="Username"
         />
+        <Text style={styles.textForm}>Contraseña</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => {
+            setPassword(text);
+          }}
+          value={password}
+          placeholder="Password"
+          secureTextEntry={true}
+        />
+      </View>
+
+      <TouchableOpacity
+        style={styles.loginButton}
+        onPress={() => Verify(username, password)}
+      >
+        <Text style={{ color: "white", fontWeight: "bold" }}>Iniciar</Text>
       </TouchableOpacity>
-    </ImageBackground>
+
+      <View style={{ marginBottom: Scale * 0.1 }}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: Scale * 0.04,
+          }}
+        >
+          <View
+            style={{
+              height: Scale * 0.002,
+              width: Scale * 0.3,
+              backgroundColor: "#000000",
+            }}
+          />
+          <Text> Ó </Text>
+          <View
+            style={{
+              height: Scale * 0.002,
+              width: Scale * 0.3,
+              backgroundColor: "#000000",
+            }}
+          />
+        </View>
+      </View>
+
+      <View>
+        <Text style={{ marginBottom: Scale * 0.04 }}>
+          Si no estás registrado
+        </Text>
+        <TouchableOpacity
+          style={{
+            borderWidth: 1,
+            borderColor: "#2272A7",
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: 10,
+            height: Scale * 0.1,
+          }}
+          onPress={() => navigation.navigate("Register")}
+        >
+          <Text style={{ color: "#2272A7", fontWeight: "bold" }}>
+            Registrar
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </CustomView>
   );
 };
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    resizeMode: "cover",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 30
-  },
   input: {
     height: Scale > 400 ? 60 : 40,
-    borderWidth: 1,
-    backgroundColor: "white",
+    width: "93%",
+    backgroundColor: "#C5E0F2",
     borderRadius: Scale > 400 ? 20 : 15,
     padding: 10,
     margin: 10,
-    width: "80%",
     fontSize: Scale > 400 ? 30 : 15,
   },
-  text: {
+  textForm: {
     fontSize: Scale > 400 ? 50 : 15,
-    fontWeight: "bold",
-    marginRight: 10,
-    color: "white",
+    fontWeight: "regular",
+    marginLeft: "5%",
+    color: "#000000",
+  },
+  formCont: {
+    width: Scale * 0.8,
+    marginBottom: Scale * 0.08,
+    marginTop: Scale * 0.08,
   },
   Logo: {
     width: Scale > 400 ? 400 : 250, // Ancho de la imagen
     height: Scale > 400 ? 400 : 250, // Alto de la imagen
+    marginTop: "10%",
   },
-  AccesButtom: {
-    width: 100, // Ancho de la imagen
-    height: 100, // Alto de la imagen
+  loginButton: {
+    width: Scale * 0.25,
+    height: Scale * 0.1,
+    backgroundColor: "#2272A7",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    marginBottom: Scale * 0.08,
+  },
+  mainTriangle: {
+    width: 0,
+    height: 0,
+    backgroundColor: "transparent",
+    borderStyle: "solid",
+    borderLeftWidth: 450,
+    borderRightWidth: 280,
+    borderBottomWidth: 280,
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
+    borderBottomColor: "#328EC5",
+    transform: [{ rotate: "30deg" }],
+    marginTop: "-70%",
+    marginBottom: "30%",
+    marginRight: "-30%",
+  },
+  backTriangle: {
+    width: 0,
+    height: 0,
+    backgroundColor: "transparent",
+    borderStyle: "solid",
+    borderLeftWidth: 350,
+    borderRightWidth: 200,
+    borderBottomWidth: 250,
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
+    borderBottomColor: "#57A9D9",
+    transform: [{ rotate: "95deg" }],
+    marginTop: "-40%",
+    marginBottom: "10%",
+    marginLeft: "-70%",
   },
 });
 

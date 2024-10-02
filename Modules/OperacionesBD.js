@@ -1,12 +1,28 @@
 import { supabase } from "./Supabase";
 import { Alert } from "react-native";
 
-export async function CheckUser(username, contraseña) {
+export async function CheckUser(code, contraseña) {
   const { data, error } = await supabase
     .from("users")
     .select("*")
-    .eq("name", username)
+    .eq("name", code)
     .eq("password", contraseña);
+  if (error) {
+    console.log("hubo un error", error);
+  }
+  if (data.length > 0) {
+    return true;
+  } else {
+    Alert.alert("Datos incorrectos");
+    return false;
+  }
+}
+
+export async function CheckUserCode(code) {
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("name", code);
   if (error) {
     console.log("hubo un error", error);
   }
@@ -21,12 +37,12 @@ export async function CheckUser(username, contraseña) {
 // Función para obtener todos los registros de la tabla cliente
 export async function getAllClients() {
   const { data, error } = await supabase
-    .from('users')
-    .select('*')
+    .from("users")
+    .select("*")
     .eq("user_type", "Client"); // Selecciona todas las columnas
 
   if (error) {
-    console.error('Error al obtener registros:', error);
+    console.error("Error al obtener registros:", error);
     return null;
   }
   //console.log('Registros de clientes:', data);
@@ -36,10 +52,10 @@ export async function getAllClients() {
 // Obtener usuario por ID
 export async function getClientById(id_cliente) {
   const { data, error } = await supabase
-    .from("users") 
+    .from("users")
     .select("*")
     .eq("code", id_cliente); // Filtra por 'code' en lugar de 'id_cliente'
-    
+
   if (error) {
     console.error("Error al obtener usuario:", error);
     return null;
@@ -77,15 +93,15 @@ export async function AddClient(cliente) {
     .from("users") // Asegúrate de que "users" sea el nombre real de la tabla
     .insert([
       {
-        code: cliente.code,            // Se toma del input del usuario
-        name: cliente.name,            // Nombre en mayúsculas (ya procesado)
-        address: cliente.address,      // Dirección
-        zip_code: cliente.zip_code,    // Código postal
-        email: cliente.email,          // Correo electrónico
-        number: cliente.number,        // Teléfono
+        code: cliente.code, // Se toma del input del usuario
+        name: cliente.name, // Nombre en mayúsculas (ya procesado)
+        address: cliente.address, // Dirección
+        zip_code: cliente.zip_code, // Código postal
+        email: cliente.email, // Correo electrónico
+        number: cliente.number, // Teléfono
         second_number: cliente.second_number, // Otro teléfono
-        password: cliente.password,    // Contraseña del usuario
-        user_type: "Client",           // Tipo de usuario: "Client" (o lo que corresponda)
+        password: cliente.password, // Contraseña del usuario
+        user_type: "Client", // Tipo de usuario: "Client" (o lo que corresponda)
       },
     ]);
   if (error) {
@@ -96,6 +112,38 @@ export async function AddClient(cliente) {
   return data;
 }
 
+// Función para añadir un registro
+export async function addUser(user) {
+  const VerifyCode = await CheckUserCode(user.code);
+  if (VerifyCode == false) {
+    console.log("Datos del nuevo usuario", user);
+    const { data, error } = await supabase.from("users").insert([
+      {
+        code: parseInt(user.code, 10),
+        name: user.name,
+        user_type: user.user_type,
+        address: user.address,
+        zip_code: user.zip_code,
+        email: user.email,
+        nss: user.nss,
+        rfc: user.rfc,
+        number: user.number,
+        second_number: user.second_number,
+        salary: parseInt(user.salary, 10),
+        password: user.password,
+        department_id: user.department_id,
+      },
+    ]);
+    if (error) {
+      console.error("Error al insertar registro:", error);
+      return null;
+    }
+    console.log("Registro añadido:", data);
+    return data;
+  } else {
+    Alert.alert("Codigo duplicado");
+  }
+}
 
 // Función para añadir un registro
 export async function addDispo(dispositivo) {
@@ -124,11 +172,9 @@ export async function addDispo(dispositivo) {
 
 // Función para obtener todos los registros de la tabla devices
 export async function getAllDevices() {
-  const { data, error } = await supabase
-    .from('devices')
-    .select('*'); // Selecciona todas las columnas
+  const { data, error } = await supabase.from("devices").select("*"); // Selecciona todas las columnas
   if (error) {
-    console.error('Error al obtener registros:', error);
+    console.error("Error al obtener registros:", error);
     return null;
   }
   return data;
@@ -179,14 +225,12 @@ export async function updateDispo(id, updatedDevice) {
 
 // Función para obtener todos los registros de la tabla departamentos
 export async function getAllDepartamentos() {
-  const { data, error } = await supabase
-    .from('departments') 
-    .select('*'); // Selecciona todas las columnas
+  const { data, error } = await supabase.from("departments").select("*"); // Selecciona todas las columnas
   if (error) {
-    console.error('Error al obtener registros:', error);
+    console.error("Error al obtener registros:", error);
     return null;
   }
-  console.log('Registros de departamentos:', data);
+  console.log("Registros de departamentos:", data);
   return data;
 }
 

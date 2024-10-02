@@ -1,32 +1,68 @@
 import React from "react";
-import { StyleSheet, Text, Image, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  Image,
+  TouchableOpacity,
+  View,
+  Dimensions,
+} from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { CustomViewReverse } from "../components/CustomViewReverse";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+
+import DevicesTest from "./DevicesTest";
+import Reports from "./Reports";
+
+const WIDTH = Dimensions.get("screen").width;
+const HEIGHT = Dimensions.get("screen").height;
 
 const WorkerPage = ({ navigation }) => {
-  const navigateToAddClient = () => {
-    navigation.navigate("AddClient");
-  };
+  // const navigateToAddClient = () => {
+  //   navigation.navigate("AddClient");
+  // };
 
   const navigateToSearchClient = () => {
     navigation.navigate("SearchClient");
   };
 
+  const Tab = createMaterialTopTabNavigator();
+
   return (
-    <View style={styles.background}>
-      <TouchableOpacity onPress={navigateToAddClient}>
-        <Image
-          source={require("../../Resources/imagenes/editar.png")}
-          style={styles.Buttons}
-        />
-      </TouchableOpacity>
-      <Text style={styles.text}>Añadir Cliente</Text>
-      {/*<TouchableOpacity onPress={navigateToSearchClient}>
-        <Image
-          source={require("../../Resources/imagenes/buscar.png")}
-          style={styles.Buttons}
-        />
-      </TouchableOpacity>
-      <Text style={styles.text}>Buscar Cliente</Text> */}
-    </View>
+    <CustomViewReverse>
+      <View style={{ marginTop: HEIGHT * 0.05, gap: HEIGHT * 0.02 }}>
+        <TouchableOpacity
+          style={styles.btnAction}
+          onPress={() => navigation.navigate("AddClient")}
+        >
+          <Ionicons
+            name="add-circle"
+            style={{
+              fontSize: WIDTH > 400 ? 32 : 24,
+              color: "#2272A7",
+            }}
+          />
+          <Text style={styles.text}>Añadir Cliente</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.btnAction}
+          onPress={() => navigation.navigate("SearchClient")}
+        >
+          <Ionicons
+            name="clipboard"
+            style={{
+              fontSize: WIDTH > 400 ? 32 : 24,
+              color: "#2272A7",
+            }}
+          />
+          <Text style={styles.text}>Añadir Reporte</Text>
+        </TouchableOpacity>
+      </View>
+      <Tab.Navigator>
+        <Tab.Screen name="Devices" component={DevicesTest} />
+        <Tab.Screen name="Reports" component={Reports} />
+      </Tab.Navigator>
+    </CustomViewReverse>
   );
 };
 
@@ -44,9 +80,23 @@ const styles = StyleSheet.create({
     height: 200,
   },
   text: {
-    fontSize: 50,
+    fontSize: WIDTH > 400 ? 32 : 24,
     fontWeight: "bold",
-    color: "white",
+    color: "#2272A7",
+  },
+  icon: {
+    fontSize: WIDTH > 400 ? 32 : 24,
+    color: "#2272A7",
+  },
+  btnAction: {
+    width: WIDTH * 0.85,
+    height: HEIGHT * 0.08,
+    flexDirection: "row",
+    backgroundColor: "#FFFFFF",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 40,
+    gap: WIDTH * 0.04,
   },
 });
 
