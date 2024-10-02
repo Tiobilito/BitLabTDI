@@ -9,6 +9,7 @@ import {
   StatusBar,
   Alert,
 } from "react-native";
+import { addProjectSub } from "../../Modules/OperacionesBD";
 
 // Componente personalizado de RadioButton
 const RadioButton = ({ label, value, selected, onSelect }) => {
@@ -26,6 +27,35 @@ const RadioButton = ({ label, value, selected, onSelect }) => {
 };
 
 export default function PrototypingForm() {
+
+  const SentProject = async () => {
+    const newProject = {
+      submission_date: new Date().toISOString().split("T")[0], // Fecha actual
+      applicant_name: applicantName,
+      contact_email: contactEmail,
+      contact_phone: contactPhone,
+      application,
+      student_user_code: UserData.code, // Código del alumno
+      professor_user_code: selectedProfessor, // Código del profesor seleccionado
+      project_type: projectType,
+      prototype_type: prototypeType,
+      prototype_description: prototypeDescription,
+      specific_requirements_dimensions: specificRequirementsDimensions,
+      specific_requirements_special_cut: specificRequirementsSpecialCut,
+      specific_requirements_other: specificRequirementsOther,
+      specific_requirements_comments: specificRequirementsComments,
+      internal_use_pcb_faces: parseInt(internalUsePcbFaces),
+      internal_use_pcb_provided_by_user: internalUsePcbProvidedByUser,
+      internal_use_required_inputs: internalUseRequiredInputs,
+      internal_use_comments: internalUseComments,
+      prototype_approved_date: null,
+      prototype_approved_signature: null,
+      prototype_delivered_date: null,
+      prototype_delivered_signature: null,
+    };
+    await addProjectSub(newProject);
+  };
+
   {
     /* Datos del contacto */
   }
