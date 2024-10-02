@@ -237,14 +237,14 @@ export async function getAllDepartamentos() {
 // Función para obtener todos los registros de la tabla departamentos
 export async function getAllTeachers() {
   const { data, error } = await supabase
-    .from('users') 
-    .select('*')
+    .from("users")
+    .select("*")
     .eq("user_type", "Teacher"); // Selecciona todas las columnas
   if (error) {
-    console.error('Error al obtener registros:', error);
+    console.error("Error al obtener registros:", error);
     return null;
   }
-  console.log('Registros de profesores:', data);
+  console.log("Registros de profesores:", data);
   return data;
 }
 
@@ -262,18 +262,60 @@ export async function addProjectSub(Project) {
       project_type: Project.project_type,
       prototype_type: Project.prototype_type,
       prototype_description: Project.prototype_description,
-      specific_requirements_dimensions: Project.specific_requirements_dimensions,
-      specific_requirements_special_cut: Project.specific_requirements_special_cut,
+      specific_requirements_dimensions:
+        Project.specific_requirements_dimensions,
+      specific_requirements_special_cut:
+        Project.specific_requirements_special_cut,
       specific_requirements_other: Project.specific_requirements_other,
       specific_requirements_comments: Project.specific_requirements_comments,
       internal_use_pcb_faces: Project.internal_use_pcb_faces,
-      internal_use_pcb_provided_by_user: Project.internal_use_pcb_provided_by_user,
+      internal_use_pcb_provided_by_user:
+        Project.internal_use_pcb_provided_by_user,
       internal_use_required_inputs: Project.internal_use_required_inputs,
       internal_use_comments: Project.internal_use_comments,
       prototype_approved_date: Project.prototype_approved_date,
       prototype_approved_signature: Project.prototype_approved_signature,
       prototype_delivered_date: Project.prototype_delivered_date,
-      prototype_delivered_signature: Project.prototype_delivered_signature
+      prototype_delivered_signature: Project.prototype_delivered_signature,
+    },
+  ]);
+  if (error) {
+    console.error("Error al insertar registro:", error);
+    return null;
+  }
+  console.log("Registro añadido:", data);
+  return data;
+}
+
+export async function addCost(Cost) {
+  const { data, error } = await supabase.from("costs").insert([
+    {
+      cost_name: Cost.cost_name,
+      price: Cost.price,
+      order_id: Cost.order_id,
+      iva: Cost.iva,
+    },
+  ]);
+  if (error) {
+    console.error("Error al insertar registro:", error);
+    return null;
+  }
+  console.log("Registro añadido:", data);
+  return data;
+}
+
+export async function addOrder(Order) {
+  const { data, error } = await supabase.from("orders").insert([
+    {
+      customer_id: Order.customer_id,
+      department_id: Order.department_id,
+      device_id: Order.device_id,
+      date_received: Order.date_received,
+      closing_date: Order.closing_date,
+      status: Order.status,
+      total: Order.total,
+      diagnosis: Order.diagnosis,
+      payment_type: Order.payment_type,
     },
   ]);
   if (error) {
