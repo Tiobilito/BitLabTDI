@@ -287,12 +287,12 @@ export async function addProjectSub(Project) {
   return data;
 }
 
-export async function addCost(Cost) {
+export async function addCostSupa(Cost, idOrder) {
   const { data, error } = await supabase.from("costs").insert([
     {
-      cost_name: Cost.cost_name,
-      price: Cost.price,
-      order_id: Cost.order_id,
+      cost_name: Cost.description,
+      price: parseFloat(Cost.price),
+      order_id: idOrder,
       iva: Cost.iva,
     },
   ]);
@@ -317,11 +317,14 @@ export async function addOrder(Order) {
       diagnosis: Order.diagnosis,
       payment_type: Order.payment_type,
     },
-  ]);
+  ]).select('id'); // Selecciona el campo 'id'
   if (error) {
     console.error("Error al insertar registro:", error);
     return null;
   }
-  console.log("Registro añadido:", data);
-  return data;
+  if (data && data.length > 0) {
+    console.log("ID de la nueva orden:", data[0].id);
+    return data[0].id; // Retorna el ID de la orden insertada
+  }
+  return null;
 }
