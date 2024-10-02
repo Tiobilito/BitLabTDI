@@ -30,9 +30,9 @@ export default function PrototypingForm() {
   const SentProject = async () => {
     const newProject = {
       submission_date: new Date().toISOString().split("T")[0], // Fecha actual
-      applicant_name: applicantName,
-      contact_email: contactEmail,
-      contact_phone: contactPhone,
+      applicant_name: name,
+      contact_email: email,
+      contact_phone: phone,
       application,
       student_user_code: UserData.code, // Código del alumno
       professor_user_code: selectedProfessor, // Código del profesor seleccionado

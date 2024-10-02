@@ -15,6 +15,7 @@ import DevicesPage from "./Scenes/WorkerUser/Devices";
 import EditClientPage from "./Scenes/WorkerUser/EditClient";
 import EditDevicePage from "./Scenes/WorkerUser/EditDevice";
 import OrderPage from "./Scenes/WorkerUser/Order";
+import PrototypingForm from "./Scenes/Laboratorio-prototipado/PrototypingForm";
 
 const Stack = createNativeStackNavigator();
 const WorkerTap = createBottomTabNavigator();
@@ -88,6 +89,7 @@ export default function App() {
           headerShown: false,
         }}
       >
+        <Stack.Screen name="PrototypingForm" component={PrototypingForm} />
         <Stack.Screen name="Logging" component={LoggingPage} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="WorkerApp" component={WorkerApp} />
