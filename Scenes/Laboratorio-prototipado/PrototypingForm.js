@@ -12,7 +12,6 @@ import {
   Dimensions,
 } from "react-native";
 import { addProjectSub } from "../../Modules/OperacionesBD";
-import { CustomView } from "../components/CustomView";
 
 const Scale = Dimensions.get("window").width;
 
@@ -33,23 +32,40 @@ const RadioButton = ({ label, value, selected, onSelect }) => {
 
 export default function PrototypingForm() {
   const SentProject = async () => {
-    const newProject = {
-      submission_date: new Date().toISOString().split("T")[0], // Fecha actual
-      applicant_name: name,
-      contact_email: email,
-      contact_phone: phone,
-      application: application,
-      student_user_code: roles.alumno, // Código del alumno
-      professor_user_code: roles.profesor, // Código del profesor seleccionado
-      project_type: projectType,
-      prototype_type: prototypeType,
-      prototype_description: descriptionPrototype,
-      specific_requirements_dimensions: specificRequirementsDimensions,
-      specific_requirements_special_cut: specialCut,
-      specific_requirements_other: others,
-      specific_requirements_comments: remarks,
-    };
-    await addProjectSub(newProject);
+    try {
+      const newProject = {
+        submission_date: new Date().toISOString().split("T")[0], // Fecha actual
+        applicant_name: name, // Nombre del usuario que solicita el servicio
+        contact_email: email, // Email
+        contact_phone: phone, // Número de teléfono
+        application: application, // Aplicación del proyecto
+        student_user_code: Number(studentCode), // Código del alumno
+        professor_user_code: Number(teacherCode), // Código del profesor seleccionado
+        project_type: projectType, // Tipo de proyecto
+        prototype_type: prototypeType, // Tipo de prototipo
+        prototype_description: descriptionPrototype, // Descripción del prototipo
+        specific_requirements_dimensions: specificRequirementsDimensions, // Dimensiones del prototipo
+        specific_requirements_special_cut: specialCut, // Corte específico (Opcional)
+        specific_requirements_other: others, // Otros (Opcional)
+        specific_requirements_comments: remarks, // Observaciones (Opcional)
+        department_head: "awaiting_revision", // Estado pendiente de revisión
+        laboratory_head: "awaiting_revision",
+        service_staff: "awaiting_revision",
+      };
+
+      // Llamada a la función para agregar el proyecto
+      await addProjectSub(newProject);
+
+      // Mostrar mensaje de éxito si todo va bien
+      Alert.alert("Éxito", "Solicitud enviada exitosamente.");
+    } catch (error) {
+      // Mostrar mensaje de error si ocurre algún problema
+      Alert.alert(
+        "Error",
+        "Hubo un problema al enviar el formulario. Inténtalo de nuevo."
+      );
+      console.error("Error al enviar el proyecto:", error);
+    }
   };
 
   /* Datos del contacto */
@@ -91,10 +107,6 @@ export default function PrototypingForm() {
       Alert.alert("Error", "Por favor, ingresa tu número de teléfono.");
       return;
     }
-    if (!date) {
-      Alert.alert("Error", "Por favor, ingresa la fecha de solicitud.");
-      return;
-    }
 
     // Validaciones de roles y códigos correspondientes
     if (!roles.alumno && !roles.profesor) {
@@ -124,13 +136,11 @@ export default function PrototypingForm() {
       return;
     }
 
-    // Validaciones del prototipo (si aplica)
+    // Validaciones del prototipo
     if (!prototypeType) {
       Alert.alert("Error", "Por favor, selecciona el tipo de prototipo.");
       return;
     }
-
-    // Validación de otros campos del prototipo
     if (!descriptionPrototype) {
       Alert.alert("Error", "Por favor, ingresa una descripción del prototipo.");
       return;
@@ -141,43 +151,12 @@ export default function PrototypingForm() {
     }
 
     // Si todas las validaciones pasan, limpiar errores y enviar el formulario
-    Alert.alert("Éxito", "Formulario enviado exitosamente");
+    //Alert.alert("Éxito", "Formulario enviado exitosamente");
+    SentProject();
     // Aquí va la lógica para enviar el formulario
   };
 
-  /* Funsion para la date */
-  const currentYear = new Date().getFullYear();
-
-  const handleDateChange = (input) => {
-    const cleaned = input.replace(/[^0-9]/g, "");
-    let formatted = cleaned;
-
-    if (cleaned.length > 2) {
-      formatted = cleaned.slice(0, 2) + "/" + cleaned.slice(2);
-    }
-    if (cleaned.length > 4) {
-      formatted = formatted.slice(0, 5) + "/" + cleaned.slice(4, 8);
-    }
-
-    const day = parseInt(cleaned.slice(0, 2), 10);
-    const month = parseInt(cleaned.slice(2, 4), 10);
-    const year = parseInt(cleaned.slice(4, 8), 10);
-
-    // Validación de días y meses
-    if (day > 31) {
-      formatted = "31" + formatted.slice(2);
-    }
-    if (month > 12) {
-      formatted = formatted.slice(0, 3) + "12" + formatted.slice(5);
-    }
-    if (year > currentYear) {
-      formatted = formatted.slice(0, 6) + currentYear.toString();
-    }
-
-    setDate(formatted);
-  };
-
-  /* Funsion para los checkbox */
+  /* Función para los checkbox */
   const Checkbox = ({ label, checked, onChange }) => {
     return (
       <TouchableOpacity onPress={onChange} style={styles.checkboxContainer}>
@@ -187,13 +166,14 @@ export default function PrototypingForm() {
     );
   };
 
-  /* Funcion para elegir el tipo de usuario que solicita el prototipo */
+  /* Función para elegir el tipo de usuario que solicita el prototipo */
   const handleRoleChange = (role) => {
     setRoles((prev) => ({ ...prev, [role]: !prev[role] }));
   };
 
   return (
     <ScrollView contentContainerStyle={styles.formContainer}>
+      {/* Coloca la barra de estado por encima de las ventanas */}
       <StatusBar
         barStyle="light-content"
         backgroundColor="black"
@@ -231,15 +211,6 @@ export default function PrototypingForm() {
           keyboardType="phone-pad"
           maxLength={10}
         />
-        <Text style={styles.label}>date de solicitud:</Text>
-        <TextInput
-          style={styles.input}
-          value={date}
-          onChangeText={handleDateChange}
-          placeholder="DD/MM/AAAA"
-          keyboardType="numeric"
-          maxLength={10}
-        />
         <Text style={styles.sectionSubTitle}>
           Usuario(s) que solicita(n) el servicio:
         </Text>
@@ -255,6 +226,8 @@ export default function PrototypingForm() {
             onChange={() => handleRoleChange("profesor")}
           />
         </View>
+
+        {/* Función para desplegar los inputs del checkbox seleccionado para el tipo de usuario */}
         {roles.alumno ? (
           <View style={styles.formGroup}>
             <Text style={styles.label}>Código de Alumno</Text>
@@ -264,10 +237,10 @@ export default function PrototypingForm() {
               onChangeText={setStudentCode}
               placeholder="Código de Alumno"
               keyboardType="numeric"
+              maxLength={9}
             />
           </View>
         ) : null}
-
         {roles.profesor ? (
           <View style={styles.formGroup}>
             <Text style={styles.label}>Código de Profesor</Text>
@@ -277,6 +250,7 @@ export default function PrototypingForm() {
               onChangeText={setTeacherCode}
               placeholder="Código de Profesor"
               keyboardType="numeric"
+              maxLength={9}
             />
           </View>
         ) : null}
@@ -378,7 +352,7 @@ export default function PrototypingForm() {
         />
       </View>
 
-      {/* Botón de envío */}
+      {/* Botón de envío del formulario */}
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
         <Text style={styles.submitButtonText}>Enviar</Text>
       </TouchableOpacity>
@@ -386,7 +360,7 @@ export default function PrototypingForm() {
   );
 }
 
-/* Styles */
+/* Estilos */
 const styles = StyleSheet.create({
   formContainer: {
     flexGrow: 1,
