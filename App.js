@@ -68,10 +68,20 @@ const WorkerApp = () => {
           } else if (route.name === "Reparaciones") {
             iconName = focused ? "build" : "build-outline";
           }
-          return <Ionicons name={iconName} size={size} color={color} />;
+          // Ajustamos el tamaño de los íconos
+          return <Ionicons name={iconName} size={size * 4} color={color} />;
+        },
+        tabBarLabelStyle: {
+          fontSize: 50, // Tamaño del texto de las pestañas
+          marginLeft: 55
         },
         tabBarActiveTintColor: "black",
         tabBarInactiveTintColor: "gray",
+        tabBarStyle: {
+          height: 250, // Ajusta la altura del tab bar para hacer más espacio
+          paddingBottom: 10, // Añade un poco de espacio debajo del texto
+          paddingTop: 10, // Espacio encima de los íconos
+        },
       })}
     >
       <WorkerTap.Screen name="Principal" component={Worker} />
