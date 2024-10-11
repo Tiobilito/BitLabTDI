@@ -15,6 +15,7 @@ import DevicesPage from "./Scenes/WorkerUser/Devices";
 import EditClientPage from "./Scenes/WorkerUser/EditClient";
 import EditDevicePage from "./Scenes/WorkerUser/EditDevice";
 import OrderPage from "./Scenes/WorkerUser/Order";
+import PrototypingForm from "./Scenes/Laboratorio-prototipado/PrototypingForm";
 
 const Stack = createNativeStackNavigator();
 const WorkerTap = createBottomTabNavigator();
@@ -67,6 +68,10 @@ const WorkerApp = () => {
             iconName = focused ? "home" : "home-outline";
           } else if (route.name === "Reparaciones") {
             iconName = focused ? "build" : "build-outline";
+          } else if (route.name === "Prototipo") {
+            iconName = focused
+              ? "hardware-chip-sharp"
+              : "hardware-chip-outline";
           }
           // Ajustamos el tamaño de los íconos
           return <Ionicons name={iconName} size={size * 4} color={color} />;
@@ -86,6 +91,7 @@ const WorkerApp = () => {
     >
       <WorkerTap.Screen name="Principal" component={Worker} />
       <WorkerTap.Screen name="Reparaciones" component={Fixes} />
+      <WorkerTap.Screen name="Prototipo" component={PrototypingForm} />
     </WorkerTap.Navigator>
   );
 };
@@ -99,6 +105,7 @@ export default function App() {
         }}
       >
         <Stack.Screen name="Logging" component={LoggingPage} />
+        <Stack.Screen name="PrototypingForm" component={PrototypingForm} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="WorkerApp" component={WorkerApp} />
       </Stack.Navigator>
