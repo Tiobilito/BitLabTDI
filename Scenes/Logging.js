@@ -2,10 +2,8 @@ import { React, useState, useEffect } from "react";
 import {
   StyleSheet,
   TextInput,
-  ImageBackground,
   Image,
   TouchableOpacity,
-  Alert,
   Dimensions,
   Text,
   View,
@@ -15,7 +13,7 @@ import { CheckUser } from "../Modules/OperacionesBD";
 
 import { CustomView } from "./components/CustomView";
 
-const Scale = Dimensions.get("window").width;
+const { width, height } = Dimensions.get("window");
 
 const LoggingPage = ({ navigation }) => {
   const [username, setUsername] = useState("");
@@ -38,88 +36,47 @@ const LoggingPage = ({ navigation }) => {
   };
 
   return (
-    <CustomView>
+    <CustomView style={styles.container}>
       <Image
         source={require("../Resources/imagenes/BITLABTDI.png")}
-        style={styles.Logo}
+        style={styles.logo}
       />
-      <Text style={{ fontSize: Scale > 400 ? 50 : 20 }}>
-        Ingresa a tu cuenta
-      </Text>
+      <Text style={styles.title}>Ingresa a tu cuenta</Text>
       <View style={styles.formCont}>
         <Text style={styles.textForm}>Nombre de usuario</Text>
         <TextInput
           style={styles.input}
-          onChangeText={(text) => {
-            setUsername(text);
-          }}
+          onChangeText={(text) => setUsername(text)}
           value={username}
           placeholder="Username"
         />
         <Text style={styles.textForm}>Contraseña</Text>
         <TextInput
           style={styles.input}
-          onChangeText={(text) => {
-            setPassword(text);
-          }}
+          onChangeText={(text) => setPassword(text)}
           value={password}
           placeholder="Password"
           secureTextEntry={true}
         />
       </View>
 
-      <TouchableOpacity
-        style={styles.loginButton}
-        onPress={() => Verify(username, password)}
-      >
-        <Text style={{ color: "white", fontWeight: "bold" }}>Iniciar</Text>
+      <TouchableOpacity style={styles.loginButton} onPress={Verify}>
+        <Text style={styles.loginButtonText}>Iniciar</Text>
       </TouchableOpacity>
 
-      <View style={{ marginBottom: Scale * 0.1 }}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: Scale * 0.04,
-          }}
-        >
-          <View
-            style={{
-              height: Scale * 0.002,
-              width: Scale * 0.3,
-              backgroundColor: "#000000",
-            }}
-          />
-          <Text> Ó </Text>
-          <View
-            style={{
-              height: Scale * 0.002,
-              width: Scale * 0.3,
-              backgroundColor: "#000000",
-            }}
-          />
-        </View>
+      <View style={styles.separator}>
+        <View style={styles.line} />
+        <Text style={styles.orText}>Ó</Text>
+        <View style={styles.line} />
       </View>
 
       <View>
-        <Text style={{ marginBottom: Scale * 0.04 }}>
-          Si no estás registrado
-        </Text>
+        <Text style={styles.registerPrompt}>Si no estás registrado</Text>
         <TouchableOpacity
-          style={{
-            borderWidth: 1,
-            borderColor: "#2272A7",
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 10,
-            height: Scale * 0.1,
-          }}
+          style={styles.registerButton}
           onPress={() => navigation.navigate("Register")}
         >
-          <Text style={{ color: "#2272A7", fontWeight: "bold" }}>
-            Registrar
-          </Text>
+          <Text style={styles.registerButtonText}>Registrar</Text>
         </TouchableOpacity>
       </View>
     </CustomView>
@@ -127,71 +84,86 @@ const LoggingPage = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  input: {
-    height: Scale > 400 ? 60 : 40,
-    width: "93%",
-    backgroundColor: "#C5E0F2",
-    borderRadius: Scale > 400 ? 20 : 15,
-    padding: 10,
-    margin: 10,
-    fontSize: Scale > 400 ? 30 : 15,
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
   },
-  textForm: {
-    fontSize: Scale > 400 ? 50 : 15,
-    fontWeight: "regular",
-    marginLeft: "5%",
-    color: "#000000",
+  logo: {
+    width: width * 0.6,
+    height: height * 0.2,
+    resizeMode: "contain",
+    marginBottom: height * 0.05,
+  },
+  title: {
+    fontSize: width > 400 ? 80 : 50,  // Escalado de la fuente
+    fontWeight: "bold",
+    marginBottom: height * 0.05,
   },
   formCont: {
-    width: Scale * 0.8,
-    marginBottom: Scale * 0.08,
-    marginTop: Scale * 0.08,
+    width: "80%",
+    marginBottom: height * 0.05,
   },
-  Logo: {
-    width: Scale > 400 ? 400 : 250, // Ancho de la imagen
-    height: Scale > 400 ? 400 : 250, // Alto de la imagen
-    marginTop: "10%",
+  textForm: {
+    fontSize: width > 400 ? 50 : 40,  // Escalado de la fuente para etiquetas
+    marginBottom: 8,
+    color: "#333",
+  },
+  input: {
+    height: height * 0.06,
+    backgroundColor: "#C5E0F2",
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    fontSize: width > 400 ? 50 : 40,  // Escalado de la fuente dentro de inputs
+    marginBottom: 15,
   },
   loginButton: {
-    width: Scale * 0.25,
-    height: Scale * 0.1,
+    width: "60%",
+    height: height * 0.08,
     backgroundColor: "#2272A7",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    marginBottom: Scale * 0.08,
+    marginBottom: height * 0.05,
   },
-  mainTriangle: {
-    width: 0,
-    height: 0,
-    backgroundColor: "transparent",
-    borderStyle: "solid",
-    borderLeftWidth: 450,
-    borderRightWidth: 280,
-    borderBottomWidth: 280,
-    borderLeftColor: "transparent",
-    borderRightColor: "transparent",
-    borderBottomColor: "#328EC5",
-    transform: [{ rotate: "30deg" }],
-    marginTop: "-70%",
-    marginBottom: "30%",
-    marginRight: "-30%",
+  loginButtonText: {
+    color: "#fff",
+    fontSize: width > 400 ? 50 : 40,  // Escalado de la fuente del botón
+    fontWeight: "bold",
   },
-  backTriangle: {
-    width: 0,
-    height: 0,
-    backgroundColor: "transparent",
-    borderStyle: "solid",
-    borderLeftWidth: 350,
-    borderRightWidth: 200,
-    borderBottomWidth: 250,
-    borderLeftColor: "transparent",
-    borderRightColor: "transparent",
-    borderBottomColor: "#57A9D9",
-    transform: [{ rotate: "95deg" }],
-    marginTop: "-40%",
-    marginBottom: "10%",
-    marginLeft: "-70%",
+  separator: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: height * 0.05,
+  },
+  line: {
+    height: 1,
+    flex: 1,
+    backgroundColor: "#000",
+  },
+  orText: {
+    fontSize: width > 400 ? 50 : 40,  // Escalado del texto "Ó"
+    marginHorizontal: 10,
+  },
+  registerPrompt: {
+    fontSize: width > 400 ? 50 : 40,  // Escalado de la sugerencia de registro
+    marginBottom: height * 0.02,
+    textAlign: "center",
+  },
+  registerButton: {
+    borderWidth: 1,
+    borderColor: "#2272A7",
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    height: height * 0.08,
+    width: "60%",
+  },
+  registerButtonText: {
+    color: "#2272A7",
+    fontWeight: "bold",
+    fontSize: width > 400 ? 50 : 40,  // Escalado del texto del botón "Registrar"
   },
 });
 
