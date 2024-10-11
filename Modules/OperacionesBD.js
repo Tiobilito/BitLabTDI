@@ -39,7 +39,7 @@ export async function getAllClients() {
   const { data, error } = await supabase
     .from("users")
     .select("*")
-    .eq("user_type", "Client"); // Selecciona todas las columnas
+    .eq("user_type", 4); // Selecciona todas las columnas
 
   if (error) {
     console.error("Error al obtener registros:", error);
@@ -101,7 +101,7 @@ export async function AddClient(cliente) {
         number: cliente.number, // Teléfono
         second_number: cliente.second_number, // Otro teléfono
         password: cliente.password, // Contraseña del usuario
-        user_type: "Client", // Tipo de usuario: "Client" (o lo que corresponda)
+        user_type: 4, // Tipo de usuario: "Client" (o lo que corresponda)
       },
     ]);
   if (error) {
@@ -121,7 +121,7 @@ export async function addUser(user) {
       {
         code: parseInt(user.code, 10),
         name: user.name,
-        user_type: user.user_type,
+        user_type: parseInt(user.user_type, 10),
         address: user.address,
         zip_code: user.zip_code,
         email: user.email,
@@ -239,7 +239,7 @@ export async function getAllTeachers() {
   const { data, error } = await supabase
     .from("users")
     .select("*")
-    .eq("user_type", "Teacher"); // Selecciona todas las columnas
+    .eq("user_type", 3); // Selecciona todas las columnas
   if (error) {
     console.error("Error al obtener registros:", error);
     return null;

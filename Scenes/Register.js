@@ -50,7 +50,7 @@ const Register = ({ navigation }) => {
       Alert.alert("Error", "El nombre es obligatorio.");
       return false;
     }
-    if (!userType) {
+    if (!userType && userType!="null") {
       Alert.alert("Error", "El tipo de usuario es obligatorio.");
       return false;
     }
@@ -145,9 +145,9 @@ const Register = ({ navigation }) => {
             selectedValue={userType}
             onValueChange={handleUserTypeChange}
           >
-            <Picker.Item label="Selecciona un rol" value="" />
-            <Picker.Item label="Fixer" value="Fixer" />
-            <Picker.Item label="Client" value="Client" />
+            <Picker.Item label="Selecciona un rol" value="null" />
+            <Picker.Item label="Prestador de servicio" value="2" />
+            <Picker.Item label="Alumno" value="4" />
           </Picker>
 
           <Text style={styles.textForm}>Dirección</Text>
