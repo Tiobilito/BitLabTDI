@@ -290,3 +290,29 @@ export async function addProjectSub(Project) {
   console.log("Registro añadido:", data);
   return data;
 }
+
+export async function addOrder(Order) {
+  const { data, error } = await supabase.from("orders").insert([
+    {
+      customer_id: Order.customer_id,
+      department_id: Order.department_id,
+      device_id: Order.device_id,
+      date_received: Order.date_received,
+      closing_date: Order.closing_date,
+      status: Order.status,
+      total: Order.total,
+      diagnosis: Order.diagnosis,
+      payment_type: Order.payment_type,
+    },
+  ]).select('id'); // Selecciona el campo 'id'
+  if (error) {
+    console.error("Error al insertar registro:", error);
+    return null;
+  }
+  if (data && data.length > 0) {
+    console.log("ID de la nueva orden:", data[0].id);
+    return data[0].id; // Retorna el ID de la orden insertada
+  }
+  return null;
+}
+
