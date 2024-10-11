@@ -277,23 +277,9 @@ export async function addProjectSub(Project) {
       prototype_approved_signature: Project.prototype_approved_signature,
       prototype_delivered_date: Project.prototype_delivered_date,
       prototype_delivered_signature: Project.prototype_delivered_signature,
-    },
-  ]);
-  if (error) {
-    console.error("Error al insertar registro:", error);
-    return null;
-  }
-  console.log("Registro añadido:", data);
-  return data;
-}
-
-export async function addCostSupa(Cost, idOrder) {
-  const { data, error } = await supabase.from("costs").insert([
-    {
-      cost_name: Cost.description,
-      price: parseFloat(Cost.price),
-      order_id: idOrder,
-      iva: Cost.iva,
+      department_head: Project.department_head,
+      laboratory_head: Project.laboratory_head,
+      service_staff: Project.service_staff,
     },
   ]);
   if (error) {
@@ -328,3 +314,4 @@ export async function addOrder(Order) {
   }
   return null;
 }
+

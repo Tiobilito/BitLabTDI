@@ -3,13 +3,17 @@ import {
   View,
   Text,
   TextInput,
+  Image,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
   StatusBar,
   Alert,
+  Dimensions,
 } from "react-native";
 import { addProjectSub } from "../../Modules/OperacionesBD";
+
+const Scale = Dimensions.get("window").width;
 
 // Componente personalizado de RadioButton
 const RadioButton = ({ label, value, selected, onSelect }) => {
@@ -27,38 +31,44 @@ const RadioButton = ({ label, value, selected, onSelect }) => {
 };
 
 export default function PrototypingForm() {
-
   const SentProject = async () => {
-    const newProject = {
-      submission_date: new Date().toISOString().split("T")[0], // Fecha actual
-      applicant_name: applicantName,
-      contact_email: contactEmail,
-      contact_phone: contactPhone,
-      application,
-      student_user_code: UserData.code, // Código del alumno
-      professor_user_code: selectedProfessor, // Código del profesor seleccionado
-      project_type: projectType,
-      prototype_type: prototypeType,
-      prototype_description: prototypeDescription,
-      specific_requirements_dimensions: specificRequirementsDimensions,
-      specific_requirements_special_cut: specificRequirementsSpecialCut,
-      specific_requirements_other: specificRequirementsOther,
-      specific_requirements_comments: specificRequirementsComments,
-      internal_use_pcb_faces: parseInt(internalUsePcbFaces),
-      internal_use_pcb_provided_by_user: internalUsePcbProvidedByUser,
-      internal_use_required_inputs: internalUseRequiredInputs,
-      internal_use_comments: internalUseComments,
-      prototype_approved_date: null,
-      prototype_approved_signature: null,
-      prototype_delivered_date: null,
-      prototype_delivered_signature: null,
-    };
-    await addProjectSub(newProject);
+    try {
+      const newProject = {
+        submission_date: new Date().toISOString().split("T")[0], // Fecha actual
+        applicant_name: name, // Nombre del usuario que solicita el servicio
+        contact_email: email, // Email
+        contact_phone: phone, // Número de teléfono
+        application: application, // Aplicación del proyecto
+        student_user_code: Number(studentCode), // Código del alumno
+        professor_user_code: Number(teacherCode), // Código del profesor seleccionado
+        project_type: projectType, // Tipo de proyecto
+        prototype_type: prototypeType, // Tipo de prototipo
+        prototype_description: descriptionPrototype, // Descripción del prototipo
+        specific_requirements_dimensions: specificRequirementsDimensions, // Dimensiones del prototipo
+        specific_requirements_special_cut: specialCut, // Corte específico (Opcional)
+        specific_requirements_other: others, // Otros (Opcional)
+        specific_requirements_comments: remarks, // Observaciones (Opcional)
+        department_head: "awaiting_revision", // Estado pendiente de revisión
+        laboratory_head: "awaiting_revision",
+        service_staff: "awaiting_revision",
+      };
+
+      // Llamada a la función para agregar el proyecto
+      await addProjectSub(newProject);
+
+      // Mostrar mensaje de éxito si todo va bien
+      Alert.alert("Éxito", "Solicitud enviada exitosamente.");
+    } catch (error) {
+      // Mostrar mensaje de error si ocurre algún problema
+      Alert.alert(
+        "Error",
+        "Hubo un problema al enviar el formulario. Inténtalo de nuevo."
+      );
+      console.error("Error al enviar el proyecto:", error);
+    }
   };
 
-  {
-    /* Datos del contacto */
-  }
+  /* Datos del contacto */
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [date, setDate] = useState("");
@@ -71,20 +81,17 @@ export default function PrototypingForm() {
   const [application, setApplication] = useState("");
   const [descriptionProject, setDescriptionProject] = useState("");
 
-  {
-    /* Datos del prototipo */
-  }
+  /* Datos del prototipo */
   const [prototypeType, setPrototypeType] = useState("");
   const [descriptionPrototype, setDescriptionPrototype] = useState({
     impreso: false,
     tresD: false,
   });
-  const [dimensions, setDimensions] = useState("");
+  const [specificRequirementsDimensions, setspecificRequirementsDimensions] =
+    useState("");
   const [specialCut, setSpecialCut] = useState("");
   const [others, setOthers] = useState("");
   const [remarks, setRemarks] = useState("");
-  const [circuitType, setCircuitType] = useState("");
-  const [provided, setProvided] = useState("");
 
   const handleSubmit = () => {
     // Validaciones de los campos de contacto
@@ -98,10 +105,6 @@ export default function PrototypingForm() {
     }
     if (!phone) {
       Alert.alert("Error", "Por favor, ingresa tu número de teléfono.");
-      return;
-    }
-    if (!date) {
-      Alert.alert("Error", "Por favor, ingresa la fecha de solicitud.");
       return;
     }
 
@@ -133,75 +136,27 @@ export default function PrototypingForm() {
       return;
     }
 
-    // Validaciones del prototipo (si aplica)
+    // Validaciones del prototipo
     if (!prototypeType) {
       Alert.alert("Error", "Por favor, selecciona el tipo de prototipo.");
       return;
     }
-    if (prototypeType === "impreso" && !circuitType) {
-      Alert.alert(
-        "Error",
-        "Por favor, selecciona el tipo de circuito (1 Cara o 2 Caras)."
-      );
-      return;
-    }
-    if (prototypeType === "impreso" && !provided) {
-      Alert.alert("Error", "Por favor, selecciona si el PCB es proporcionado.");
-      return;
-    }
-
-    // Validación de otros campos del prototipo
     if (!descriptionPrototype) {
       Alert.alert("Error", "Por favor, ingresa una descripción del prototipo.");
       return;
     }
-    if (!dimensions) {
+    if (!specificRequirementsDimensions) {
       Alert.alert("Error", "Por favor, ingresa las dimensiones del prototipo.");
       return;
     }
 
     // Si todas las validaciones pasan, limpiar errores y enviar el formulario
-    Alert.alert("Éxito", "Formulario enviado exitosamente");
+    //Alert.alert("Éxito", "Formulario enviado exitosamente");
+    SentProject();
     // Aquí va la lógica para enviar el formulario
   };
 
-  {
-    /* Funsion para la date */
-  }
-  const currentYear = new Date().getFullYear();
-
-  const handleDateChange = (input) => {
-    const cleaned = input.replace(/[^0-9]/g, "");
-    let formatted = cleaned;
-
-    if (cleaned.length > 2) {
-      formatted = cleaned.slice(0, 2) + "/" + cleaned.slice(2);
-    }
-    if (cleaned.length > 4) {
-      formatted = formatted.slice(0, 5) + "/" + cleaned.slice(4, 8);
-    }
-
-    const day = parseInt(cleaned.slice(0, 2), 10);
-    const month = parseInt(cleaned.slice(2, 4), 10);
-    const year = parseInt(cleaned.slice(4, 8), 10);
-
-    // Validación de días y meses
-    if (day > 31) {
-      formatted = "31" + formatted.slice(2);
-    }
-    if (month > 12) {
-      formatted = formatted.slice(0, 3) + "12" + formatted.slice(5);
-    }
-    if (year > currentYear) {
-      formatted = formatted.slice(0, 6) + currentYear.toString();
-    }
-
-    setDate(formatted);
-  };
-
-  {
-    /* Funsion para los checkbox */
-  }
+  /* Función para los checkbox */
   const Checkbox = ({ label, checked, onChange }) => {
     return (
       <TouchableOpacity onPress={onChange} style={styles.checkboxContainer}>
@@ -211,20 +166,21 @@ export default function PrototypingForm() {
     );
   };
 
-  {
-    /* Funcion para elegir el tipo de usuario que solicita el prototipo */
-  }
+  /* Función para elegir el tipo de usuario que solicita el prototipo */
   const handleRoleChange = (role) => {
     setRoles((prev) => ({ ...prev, [role]: !prev[role] }));
   };
 
   return (
     <ScrollView contentContainerStyle={styles.formContainer}>
+      {/* Coloca la barra de estado por encima de las ventanas */}
       <StatusBar
         barStyle="light-content"
         backgroundColor="black"
         translucent={true}
       />
+      <View style={styles.backTriangle} />
+      <View style={styles.mainTriangle} />
       <Text style={styles.title}>
         Formato de requerimiento de servicio de maquinado de prototipo.
       </Text>
@@ -253,14 +209,6 @@ export default function PrototypingForm() {
           onChangeText={setPhone}
           placeholder="Número de teléfono"
           keyboardType="phone-pad"
-        />
-        <Text style={styles.label}>date de solicitud:</Text>
-        <TextInput
-          style={styles.input}
-          value={date}
-          onChangeText={handleDateChange}
-          placeholder="DD/MM/AAAA"
-          keyboardType="numeric"
           maxLength={10}
         />
         <Text style={styles.sectionSubTitle}>
@@ -278,6 +226,8 @@ export default function PrototypingForm() {
             onChange={() => handleRoleChange("profesor")}
           />
         </View>
+
+        {/* Función para desplegar los inputs del checkbox seleccionado para el tipo de usuario */}
         {roles.alumno ? (
           <View style={styles.formGroup}>
             <Text style={styles.label}>Código de Alumno</Text>
@@ -287,10 +237,10 @@ export default function PrototypingForm() {
               onChangeText={setStudentCode}
               placeholder="Código de Alumno"
               keyboardType="numeric"
+              maxLength={9}
             />
           </View>
         ) : null}
-
         {roles.profesor ? (
           <View style={styles.formGroup}>
             <Text style={styles.label}>Código de Profesor</Text>
@@ -300,6 +250,7 @@ export default function PrototypingForm() {
               onChangeText={setTeacherCode}
               placeholder="Código de Profesor"
               keyboardType="numeric"
+              maxLength={9}
             />
           </View>
         ) : null}
@@ -361,43 +312,6 @@ export default function PrototypingForm() {
             onSelect={setPrototypeType}
           />
         </View>
-        {/* Si se selecciona el tipo de prototipo "impreso", muestra opciones adicionales */}
-        {prototypeType === "impreso" && (
-          <View>
-            <Text style={styles.sectionSubTitle}>Número de caras PCB:</Text>
-            <View style={styles.radioGroupImpreso}>
-              <RadioButton
-                label="1 Cara"
-                value="unaCara"
-                selected={circuitType === "unaCara"}
-                onSelect={setCircuitType}
-              />
-              <RadioButton
-                label="2 Caras"
-                value="dosCaras"
-                selected={circuitType === "dosCaras"}
-                onSelect={setCircuitType}
-              />
-            </View>
-            <Text style={styles.sectionSubTitle}>
-              ¿PCB proporcionado por ti?
-            </Text>
-            <View style={styles.radioGroupImpreso}>
-              <RadioButton
-                label="Si"
-                value="si"
-                selected={provided === "si"}
-                onSelect={setProvided}
-              />
-              <RadioButton
-                label="No"
-                value="no"
-                selected={provided === "no"}
-                onSelect={setProvided}
-              />
-            </View>
-          </View>
-        )}
         <Text style={styles.label}>Descripción del prototipo:</Text>
         <TextInput
           style={styles.input}
@@ -411,8 +325,8 @@ export default function PrototypingForm() {
         <Text style={styles.label}>Dimensiones:</Text>
         <TextInput
           style={styles.input}
-          value={dimensions}
-          onChangeText={setDimensions}
+          value={specificRequirementsDimensions}
+          onChangeText={setspecificRequirementsDimensions}
           placeholder="Dime tus dimensiones"
         />
         <Text style={styles.label}>Corte especial:</Text>
@@ -438,7 +352,7 @@ export default function PrototypingForm() {
         />
       </View>
 
-      {/* Botón de envío */}
+      {/* Botón de envío del formulario */}
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
         <Text style={styles.submitButtonText}>Enviar</Text>
       </TouchableOpacity>
@@ -446,15 +360,14 @@ export default function PrototypingForm() {
   );
 }
 
-{
-  /* Styles */
-}
+/* Estilos */
 const styles = StyleSheet.create({
   formContainer: {
     flexGrow: 1,
     padding: 20,
     backgroundColor: "#f2f2f2",
     alignItems: "center",
+    marginLeft: 0,
   },
   title: {
     fontSize: 24,
@@ -500,13 +413,14 @@ const styles = StyleSheet.create({
     color: "#2c3e50",
   },
   input: {
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1.5,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 15,
-    backgroundColor: "white",
+    height: Scale > 400 ? 60 : 40,
+    width: "100%",
+    backgroundColor: "#C5E0F2",
+    borderRadius: Scale > 400 ? 20 : 15,
+    padding: 10,
+    margin: 10,
+    marginLeft: 0,
+    fontSize: Scale > 400 ? 30 : 15,
   },
   radioGroup: {
     flexDirection: "column",
@@ -530,7 +444,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   radioButtonSelected: {
-    backgroundColor: "#394f66",
+    backgroundColor: "#C5E0F2",
   },
   radioButtonLabel: {
     fontSize: 16,
@@ -538,11 +452,13 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   submitButton: {
-    backgroundColor: "#394f66",
-    padding: 15,
-    borderRadius: 5,
+    width: Scale * 0.25,
+    height: Scale * 0.1,
+    backgroundColor: "#2272A7",
+    justifyContent: "center",
     alignItems: "center",
-    width: "100%",
+    borderRadius: 10,
+    marginBottom: Scale * 0.0,
   },
   submitButtonText: {
     color: "white",
@@ -570,7 +486,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   checkboxChecked: {
-    backgroundColor: "#394f66",
+    backgroundColor: "#C5E0F2",
   },
   checkboxLabel: {
     fontSize: 16,
@@ -578,5 +494,37 @@ const styles = StyleSheet.create({
   },
   formGroup: {
     marginTop: 15,
+  },
+  mainTriangle: {
+    width: 0,
+    height: 0,
+    backgroundColor: "transparent",
+    borderStyle: "solid",
+    borderLeftWidth: 450,
+    borderRightWidth: 280,
+    borderBottomWidth: 280,
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
+    borderBottomColor: "#328EC5",
+    transform: [{ rotate: "30deg" }],
+    marginTop: "-70%",
+    marginBottom: "10%",
+    marginRight: "-30%",
+  },
+  backTriangle: {
+    width: 0,
+    height: 0,
+    backgroundColor: "transparent",
+    borderStyle: "solid",
+    borderLeftWidth: 350,
+    borderRightWidth: 200,
+    borderBottomWidth: 250,
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
+    borderBottomColor: "#57A9D9",
+    transform: [{ rotate: "95deg" }],
+    marginTop: "-40%",
+    marginBottom: "5%",
+    marginLeft: "-70%",
   },
 });
