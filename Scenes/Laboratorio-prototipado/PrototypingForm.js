@@ -179,12 +179,9 @@ export default function PrototypingForm() {
         backgroundColor="black"
         translucent={true}
       />
-      <View style={styles.backTriangle} />
-      <View style={styles.mainTriangle} />
       <Text style={styles.title}>
         Formato de requerimiento de servicio de maquinado de prototipo.
       </Text>
-
       {/* Seccion 1: Datos de contacto */}
       <View style={styles.formSection}>
         <Text style={styles.titleSection}>Datos de contacto</Text>
@@ -494,37 +491,5 @@ const styles = StyleSheet.create({
   },
   formGroup: {
     marginTop: 15,
-  },
-  mainTriangle: {
-    width: 0,
-    height: 0,
-    backgroundColor: "transparent",
-    borderStyle: "solid",
-    borderLeftWidth: 450,
-    borderRightWidth: 280,
-    borderBottomWidth: 280,
-    borderLeftColor: "transparent",
-    borderRightColor: "transparent",
-    borderBottomColor: "#328EC5",
-    transform: [{ rotate: "30deg" }],
-    marginTop: "-70%",
-    marginBottom: "10%",
-    marginRight: "-30%",
-  },
-  backTriangle: {
-    width: 0,
-    height: 0,
-    backgroundColor: "transparent",
-    borderStyle: "solid",
-    borderLeftWidth: 350,
-    borderRightWidth: 200,
-    borderBottomWidth: 250,
-    borderLeftColor: "transparent",
-    borderRightColor: "transparent",
-    borderBottomColor: "#57A9D9",
-    transform: [{ rotate: "95deg" }],
-    marginTop: "-40%",
-    marginBottom: "5%",
-    marginLeft: "-70%",
   },
 });
