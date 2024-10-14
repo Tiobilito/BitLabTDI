@@ -136,31 +136,31 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   errorText: {
-    fontSize: width > 400 ? 20 : 16,
+    fontSize: "90%",
     color: "#ff0000",
     textAlign: "center",
   },
   text: {
-    fontSize: width > 400 ? 100 : 90, // Escalabilidad en función del ancho
+    fontSize: "90%", // Escalabilidad en función del ancho
     fontWeight: "bold",
     color: "#2272A7",
   },
   textShowStats: {
-    fontSize: width > 400 ? 80 : 60, // Ajuste del tamaño del texto en función del ancho
+    fontSize: "90%", // Ajuste del tamaño del texto en función del ancho
     fontWeight: "bold",
     color: "#2272A7",
   },
   textFlatlist: {
-    fontSize: width > 400 ? 80 : 60, // Ajuste del tamaño del texto en función del ancho
+    fontSize: "80%", // Ajuste del tamaño del texto en función del ancho
     fontWeight: "bold",
     color: "white",
   },
   iconAction: {
-    fontSize: width > 400 ? 100 : 85, // Escalar el tamaño del ícono
+    fontSize: "90%", // Escalar el tamaño del ícono
     color: "#2272A7",
   },
   iconShowStats: {
-    fontSize: width > 400 ? 80 : 60, // Ajustar el tamaño de los íconos de estado
+    fontSize: "90%", // Ajustar el tamaño de los íconos de estado
     color: "#2272A7",
   },
   btnAction: {
