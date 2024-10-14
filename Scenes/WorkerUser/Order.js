@@ -14,6 +14,8 @@ import { Picker } from "@react-native-picker/picker";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
 import {
+  addCostSupa,
+  addOrder,
   getAllDepartamentos,
   getClientById,
   getDispoById,
@@ -29,7 +31,7 @@ const OrderPage = ({ navigation }) => {
   const [partsUsed, setPartsUsed] = useState("");
   const [geneDiag, setGeneDiag] = useState("");
   const [status, setStatus] = useState("");
-  const [department, setDepartment] = useState("");
+  const [department, setDepartment] = useState(0);
   const [depData, setDepData] = useState([]);
   const [cost, setCost] = useState([]);
   const [descripCost, setDescripCost] = useState("");
@@ -42,6 +44,27 @@ const OrderPage = ({ navigation }) => {
     GetDepData();
     GetClientDeviceData();
   }, []);
+
+  const sendData = async () => {
+    const totalCost = calculateTotalCost();
+    const orderData = {
+      customer_id: clientData.code,
+      department_id: department,
+      device_id: deviceData.id,
+      date_received: new Date(deviceData.received_date),
+      closing_date: new Date(),
+      status: status,
+      total: totalCost,
+      diagnosis: geneDiag,
+      payment_type: null
+    };
+    const idOrder = await addOrder(orderData);
+  
+    for (let i = 0; i < cost.length; i++) {
+      //console.log(cost[i]);
+      await addCostSupa(cost[i], idOrder);
+    }
+  };  
 
   const GetClientDeviceData = async () => {
     const deviceD = await getDispoById(idDevice);
@@ -83,6 +106,7 @@ const OrderPage = ({ navigation }) => {
       setCost([...cost, newCost]);
       setDescripCost("");
       setPrice("");
+      setIva(false);
       setShowCost(false); // Ocultar ventana emergente al agregar
     }
   };
@@ -224,6 +248,7 @@ const OrderPage = ({ navigation }) => {
       base64: false,
       fileName: "OrderDetails.pdf",
     });
+    
     await shareAsync(file.uri);
   };
 
@@ -326,6 +351,7 @@ const OrderPage = ({ navigation }) => {
         contentContainerStyle={styles.flatlist}
       />
       <Button onPress={createPDF} title="Generar PDF" />
+      <Button onPress={sendData} title="Añadir registro" />
     </View>
   );
 };
