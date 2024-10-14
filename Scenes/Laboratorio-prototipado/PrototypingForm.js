@@ -180,6 +180,14 @@ export default function PrototypingForm() {
         translucent={true}
       />
       <Text style={styles.title}>
+        UNIVERSIDAD DE GUADALAJARA - CENTRO UNIVERSITARIO DE CIENCIAS EXACTAS E
+        INGENIERIAS
+      </Text>
+      <Text style={styles.title}>
+        DEPARTAMENTO DE ELECTRONICA - LABORATORIO DE ELECTRONICA
+      </Text>
+      <Text style={styles.titleTwo}>LABORATORIO DE PROTOTIPADO</Text>
+      <Text style={styles.titleTwo}>
         Formato de requerimiento de servicio de maquinado de prototipo.
       </Text>
       {/* Seccion 1: Datos de contacto */}
@@ -373,6 +381,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: "#394f66",
   },
+  titleTwo: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    marginTop: 20,
+    color: "#394f66",
+  },
   titleSection: {
     fontSize: 20,
     fontWeight: "bold",
@@ -449,8 +464,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   submitButton: {
-    width: Scale * 0.25,
-    height: Scale * 0.1,
+    width: "10%",
+    height: Scale * 0.04,
     backgroundColor: "#2272A7",
     justifyContent: "center",
     alignItems: "center",

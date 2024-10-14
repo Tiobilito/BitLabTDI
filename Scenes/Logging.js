@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     marginBottom: height * 0.05,
   },
   title: {
-    fontSize: "100%",  // Escalado de la fuente
+    fontSize: "100%", // Escalado de la fuente
     fontWeight: "bold",
     marginBottom: height * 0.05,
   },
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     marginBottom: height * 0.05,
   },
   textForm: {
-    fontSize: "80%",  // Escalado de la fuente para etiquetas
+    fontSize: "100%", // Escalado de la fuente para etiquetas
     marginBottom: 8,
     color: "#333",
   },
@@ -115,11 +115,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#C5E0F2",
     borderRadius: 10,
     paddingHorizontal: 10,
-    fontSize: "60%",  // Escalado de la fuente dentro de inputs
+    fontSize: "80%", // Escalado de la fuente dentro de inputs
     marginBottom: 15,
   },
   loginButton: {
-    width: "60%",
+    width: "10%",
     height: height * 0.08,
     backgroundColor: "#2272A7",
     justifyContent: "center",
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   },
   loginButtonText: {
     color: "#fff",
-    fontSize: "20%",  // Escalado de la fuente del botón
+    fontSize: "100%", // Escalado de la fuente del botón
     fontWeight: "bold",
   },
   separator: {
@@ -143,11 +143,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
   },
   orText: {
-    fontSize: "20%",  // Escalado del texto "Ó"
+    fontSize: "100%", // Escalado del texto "Ó"
     marginHorizontal: 10,
   },
   registerPrompt: {
-    fontSize: "100%",  // Escalado de la sugerencia de registro
+    fontSize: "100%", // Escalado de la sugerencia de registro
     marginBottom: height * 0.02,
     textAlign: "center",
   },
@@ -158,12 +158,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: height * 0.08,
-    width: "60%",
+    width: "100%",
   },
   registerButtonText: {
     color: "#2272A7",
     fontWeight: "bold",
-    fontSize: "60%",  // Escalado del texto del botón "Registrar"
+    fontSize: "100%", // Escalado del texto del botón "Registrar"
   },
 });
 
