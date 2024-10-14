@@ -1,8 +1,16 @@
 import React from "react";
+import {
+  View,
+  Dimensions,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 // Scenes
 import LoggingPage from "./Scenes/Logging";
@@ -17,10 +25,16 @@ import EditDevicePage from "./Scenes/WorkerUser/EditDevice";
 import OrderPage from "./Scenes/WorkerUser/Order";
 import PrototypingForm from "./Scenes/Laboratorio-prototipado/PrototypingForm";
 
+import DevicesTest from "./Scenes/WorkerUser/DevicesTest";
+import Reports from "./Scenes/WorkerUser/Reports";
+
 const Stack = createNativeStackNavigator();
 const WorkerTap = createBottomTabNavigator();
 const MainWorkerStack = createNativeStackNavigator();
 const RepairClientDevicesStack = createNativeStackNavigator();
+
+const WIDTH = Dimensions.get("screen").width;
+const HEIGHT = Dimensions.get("screen").height;
 
 function Worker() {
   return (
@@ -112,3 +126,37 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    resizeMode: "cover",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#095ea7",
+    marginTop: 30,
+  },
+  Buttons: {
+    width: 200,
+    height: 200,
+  },
+  text: {
+    fontSize: WIDTH > 400 ? 32 : 24,
+    fontWeight: "bold",
+    color: "#2272A7",
+  },
+  icon: {
+    fontSize: WIDTH > 400 ? 32 : 24,
+    color: "#2272A7",
+  },
+  btnAction: {
+    width: WIDTH * 0.85,
+    height: HEIGHT * 0.08,
+    flexDirection: "row",
+    backgroundColor: "#FFFFFF",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 40,
+    gap: WIDTH * 0.04,
+  },
+});

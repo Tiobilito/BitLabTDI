@@ -13,8 +13,10 @@ import {
 import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
 import { getAllClients } from "../../Modules/OperacionesBD";
+import { CustomViewReverse } from "../components/CustomViewReverse";
 
-const Scale = Dimensions.get("window").width;
+const WIDTH = Dimensions.get("window").width;
+const HEIGHT = Dimensions.get("window").height;
 
 const SearchPage = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -74,7 +76,10 @@ const SearchPage = ({ navigation }) => {
   }
 
   const contains = ({ name, email }, query) => {
-    return name.toLowerCase().includes(query.toLowerCase()) || email.toLowerCase().includes(query.toLowerCase());
+    return (
+      name.toLowerCase().includes(query.toLowerCase()) ||
+      email.toLowerCase().includes(query.toLowerCase())
+    );
   };
 
   const navigateToEditClient = (code) => {
@@ -86,61 +91,101 @@ const SearchPage = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.background}>
-      <TextInput
-        style={styles.searchBox}
-        onChangeText={(query) => {
-          setSearchQuery(query);
-          const filteredData = filter(fullData, (item) => contains(item, query));
-          setData(filteredData);
+    <CustomViewReverse>
+      <View
+        style={{
+          height: HEIGHT * 0.88,
+          width: WIDTH * 0.9,
+          marginTop: HEIGHT * 0.04,
         }}
-        value={searchQuery}
-        placeholder="Buscar contactos"
-      />
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item.code.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.itemContainer}>
-            <TouchableOpacity onPress={() => toggleDetails(item.code)} style={styles.item}>
-              <View style={styles.avatarContainer}>
-                <Image
-                  source={item.avatar ? { uri: item.avatar } : require("../../Resources/imagenes/default-avatar.jpg")}
-                  style={styles.avatar}
-                />
-              </View>
-              <View style={styles.info}>
-                <Text style={styles.name}>{item.name}</Text>
-                <Text style={styles.email}>{item.email}</Text>
-              </View>
-            </TouchableOpacity>
-            {item.Details && (
-              <View style={styles.details}>
-                <Text style={styles.detailText}>Código: {item.code}</Text>
-                <Text style={styles.detailText}>Dirección: {item.address}</Text>
-                <Text style={styles.detailText}>Código Postal: {item.zip_code}</Text>
-                <Text style={styles.detailText}>Teléfono: {item.number}</Text>
-                <Text style={styles.detailText}>Otro Teléfono: {item.second_number}</Text>
-                <View style={styles.buttons}>
-                  <TouchableOpacity onPress={() => navigateToEditClient(item.code)}>
+      >
+        <TextInput
+          style={styles.searchBox}
+          onChangeText={(query) => {
+            setSearchQuery(query);
+            const filteredData = filter(fullData, (item) =>
+              contains(item, query)
+            );
+            setData(filteredData);
+          }}
+          value={searchQuery}
+          placeholder="Buscar contactos"
+        />
+        <View
+          style={{
+            width: WIDTH * 0.9,
+            height: HEIGHT * 0.8,
+            backgroundColor: "#FFFFFF",
+            borderRadius: 12,
+            padding: 8,
+            marginTop: 8,
+          }}
+        >
+          <FlatList
+            data={data}
+            keyExtractor={(item) => item.code.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.itemContainer}>
+                <TouchableOpacity
+                  onPress={() => toggleDetails(item.code)}
+                  style={styles.item}
+                >
+                  <View style={styles.avatarContainer}>
                     <Image
-                      source={require("../../Resources/imagenes/editar.png")}
-                      style={styles.buttonImage}
+                      source={
+                        item.avatar
+                          ? { uri: item.avatar }
+                          : require("../../Resources/imagenes/default-avatar.jpg")
+                      }
+                      style={styles.avatar}
                     />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => navigateToDevices(item.code)}>
-                    <Image
-                      source={require("../../Resources/imagenes/device.png")}
-                      style={styles.buttonImage}
-                    />
-                  </TouchableOpacity>
-                </View>
+                  </View>
+                  <View style={styles.info}>
+                    <Text style={styles.name}>{item.name}</Text>
+                    <Text style={styles.email}>{item.email}</Text>
+                  </View>
+                </TouchableOpacity>
+                {item.Details && (
+                  <View style={styles.details}>
+                    <Text style={styles.detailText}>Código: {item.code}</Text>
+                    <Text style={styles.detailText}>
+                      Dirección: {item.address}
+                    </Text>
+                    <Text style={styles.detailText}>
+                      Código Postal: {item.zip_code}
+                    </Text>
+                    <Text style={styles.detailText}>
+                      Teléfono: {item.number}
+                    </Text>
+                    <Text style={styles.detailText}>
+                      Otro Teléfono: {item.second_number}
+                    </Text>
+                    <View style={styles.buttons}>
+                      <TouchableOpacity
+                        onPress={() => navigateToEditClient(item.code)}
+                      >
+                        <Image
+                          source={require("../../Resources/imagenes/editar.png")}
+                          style={styles.buttonImage}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => navigateToDevices(item.code)}
+                      >
+                        <Image
+                          source={require("../../Resources/imagenes/device.png")}
+                          style={styles.buttonImage}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                )}
               </View>
             )}
-          </View>
-        )}
-      />
-    </View>
+          />
+        </View>
+      </View>
+    </CustomViewReverse>
   );
 };
 
@@ -148,7 +193,7 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: "#ffffff",
-    marginTop: 30
+    marginTop: 30,
   },
   centered: {
     flex: 1,
@@ -172,9 +217,9 @@ const styles = StyleSheet.create({
   itemContainer: {
     marginVertical: 8,
     marginHorizontal: 16,
-    backgroundColor: "#0a75d1",
+    backgroundColor: "#2272A7",
     borderRadius: 8,
-    overflow: "hidden",
+    //overflow: "hidden",
   },
   item: {
     flexDirection: "row",
@@ -207,7 +252,9 @@ const styles = StyleSheet.create({
   },
   details: {
     padding: 10,
-    backgroundColor: "#0a75d1",
+    backgroundColor: "#2272A7",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
   detailText: {
     fontSize: 14,
