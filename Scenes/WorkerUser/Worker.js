@@ -15,12 +15,10 @@ import { CustomViewReverse } from "../components/CustomViewReverse";
 
 import { getAllDevices } from "../../Modules/OperacionesBD";
 
-const WIDTH = Dimensions.get("screen").width;
-const HEIGHT = Dimensions.get("screen").height;
+const { width, height } = Dimensions.get("window");
 
 const WorkerPage = ({ navigation }) => {
   const route = useRoute();
-  //const { idClient } = route.params;
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -45,23 +43,12 @@ const WorkerPage = ({ navigation }) => {
       }));
       setData(BData);
       setFullData(BData);
-      console.log(BData);
       setIsLoading(false);
     } catch (error) {
       setError(error);
-      console.log(error);
       setIsLoading(false);
     }
   };
-
-  // const toggleList = () => {
-
-  // };
-
-  // const toggleListReports = () => {
-  //   setShowListReport(!showListReport);
-  //   console.log("Presionado reportes");
-  // };
 
   if (isLoading) {
     return (
@@ -79,49 +66,37 @@ const WorkerPage = ({ navigation }) => {
     );
   }
 
-  const navigateToEditClient = (code) => {
-    navigation.navigate("EditDevice", { id: code });
-  };
-
-  const navigateToDevices = (code) => {
-    navigation.navigate("Devices", { id: code });
-  };
-
   return (
     <CustomViewReverse>
-      <View style={{ marginTop: HEIGHT * 0.05, gap: HEIGHT * 0.02 }}>
-        {/*  View para los botones */}
+      <View style={{ marginTop: height * 0.05, gap: height * 0.02 }}>
+        {/* Botones */}
         <TouchableOpacity
           style={styles.btnAction}
           onPress={() => navigation.navigate("AddClient")}
         >
           <Ionicons
             name="add-circle"
-            style={{
-              fontSize: WIDTH > 400 ? 32 : 24,
-              color: "#2272A7",
-            }}
+            style={styles.iconAction}
           />
           <Text style={styles.text}>Añadir Cliente</Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           style={styles.btnAction}
           onPress={() => navigation.navigate("SearchClient")}
         >
           <Ionicons
             name="clipboard"
-            style={{
-              fontSize: WIDTH > 400 ? 32 : 24,
-              color: "#2272A7",
-            }}
+            style={styles.iconAction}
           />
           <Text style={styles.text}>Añadir Reporte</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Botones de visualización */}
       <View style={styles.btnShowStats}>
         <TouchableOpacity
           style={styles.btnShow}
-          //onPress={() => console.log("Devices")}
           onPress={() => toggleList()}
         >
           <Ionicons name="add-circle" style={styles.iconShowStats} />
@@ -129,22 +104,23 @@ const WorkerPage = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.btnShow}
-          //onPress={() => console.log("Reports")}
           onPress={() => toggleList()}
         >
           <Ionicons name="clipboard" style={styles.iconShowStats} />
           <Text style={styles.textShowStats}>Reportes</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Tabla de dispositivos */}
       <View style={styles.tables}>
         <FlatList
           data={fullData}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <View style={styles.itemContainer}>
-              <Text>ID del trabajador: {item.customer_id}</Text>
-              <Text>Nombre del dispositivo: {item.model}</Text>
-              <Text>Fecha de recibido: {item.received_date}</Text>
+              <Text style= {styles.textFlatlist}>ID del trabajador: {item.customer_id}</Text>
+              <Text style= {styles.textFlatlist}>Nombre del dispositivo: {item.model}</Text>
+              <Text style= {styles.textFlatlist}>Fecha de recibido: {item.received_date}</Text>
             </View>
           )}
         />
@@ -154,72 +130,76 @@ const WorkerPage = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  background: {
+  centered: {
     flex: 1,
-    resizeMode: "cover",
-    alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#095ea7",
-    marginTop: 30,
+    alignItems: "center",
   },
-  Buttons: {
-    width: 200,
-    height: 200,
+  errorText: {
+    fontSize: "90%",
+    color: "#ff0000",
+    textAlign: "center",
   },
   text: {
-    fontSize: WIDTH > 400 ? 32 : 24,
+    fontSize: "90%", // Escalabilidad en función del ancho
     fontWeight: "bold",
     color: "#2272A7",
   },
   textShowStats: {
-    fontSize: WIDTH > 400 ? 24 : 16,
+    fontSize: "90%", // Ajuste del tamaño del texto en función del ancho
     fontWeight: "bold",
     color: "#2272A7",
   },
-  icon: {
-    fontSize: WIDTH > 400 ? 32 : 24,
+  textFlatlist: {
+    fontSize: "80%", // Ajuste del tamaño del texto en función del ancho
+    fontWeight: "bold",
+    color: "white",
+  },
+  iconAction: {
+    fontSize: "90%", // Escalar el tamaño del ícono
     color: "#2272A7",
   },
   iconShowStats: {
-    fontSize: WIDTH > 400 ? 24 : 16,
+    fontSize: "90%", // Ajustar el tamaño de los íconos de estado
     color: "#2272A7",
   },
   btnAction: {
-    width: WIDTH * 0.85,
-    height: HEIGHT * 0.08,
+    width: width * 0.85,
+    height: height * 0.08,
     flexDirection: "row",
     backgroundColor: "#FFFFFF",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 40,
-    gap: WIDTH * 0.04,
+    padding: 10,
+    marginBottom: height * 0.02,
   },
   btnShowStats: {
     flexDirection: "row",
-    gap: WIDTH * 0.04,
-    marginTop: HEIGHT * 0.02,
+    gap: width * 0.04,
+    marginTop: height * 0.02,
   },
   btnShow: {
-    width: WIDTH * 0.45,
-    height: HEIGHT * 0.07,
+    width: width * 0.45,
+    height: height * 0.07,
     flexDirection: "row",
     backgroundColor: "#FFFFFF",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    gap: WIDTH * 0.04,
+    padding: 10,
   },
   tables: {
-    width: WIDTH * 0.9,
-    height: HEIGHT * 0.55,
+    width: width * 0.9,
+    height: height * 0.55,
     backgroundColor: "#FFFFFF",
     borderRadius: 10,
     margin: 10,
   },
   itemContainer: {
     backgroundColor: "#2272A7",
-    margin: HEIGHT * 0.008,
-    padding: WIDTH * 0.02,
+    margin: height * 0.008,
+    padding: width * 0.02,
     borderRadius: 10,
   },
 });

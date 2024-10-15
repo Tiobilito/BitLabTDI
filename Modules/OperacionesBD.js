@@ -2,6 +2,7 @@ import { supabase } from "./Supabase";
 import { Alert } from "react-native";
 
 export async function CheckUser(code, contraseña) {
+  console.log(code, " ", contraseña);
   const { data, error } = await supabase
     .from("users")
     .select("*")

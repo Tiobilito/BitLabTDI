@@ -87,7 +87,8 @@ const WorkerApp = () => {
               ? "hardware-chip-sharp"
               : "hardware-chip-outline";
           }
-          return <Ionicons name={iconName} size={size} color={color} />;
+          // Ajustamos el tamaño de los íconos
+          return <Ionicons name={iconName} size={size * 1.5} color={color} />;
         },
         tabBarActiveTintColor: "black",
         tabBarInactiveTintColor: "gray",

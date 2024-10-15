@@ -11,8 +11,6 @@ import {
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
-import { printToFileAsync } from "expo-print";
-import { shareAsync } from "expo-sharing";
 import {
   addCostSupa,
   addOrder,
@@ -56,15 +54,15 @@ const OrderPage = ({ navigation }) => {
       status: status,
       total: totalCost,
       diagnosis: geneDiag,
-      payment_type: null
+      payment_type: null,
     };
     const idOrder = await addOrder(orderData);
-  
+
     for (let i = 0; i < cost.length; i++) {
       //console.log(cost[i]);
       await addCostSupa(cost[i], idOrder);
     }
-  };  
+  };
 
   const GetClientDeviceData = async () => {
     const deviceD = await getDispoById(idDevice);
@@ -243,13 +241,11 @@ const OrderPage = ({ navigation }) => {
       </html>
     `;
 
-    const file = await printToFileAsync({
-      html: htmlContent,
-      base64: false,
-      fileName: "OrderDetails.pdf",
-    });
-    
-    await shareAsync(file.uri);
+    const pW = window.open("", "", "height=500, width=500");
+    pW.document.write(htmlContent);
+    pW.document.close();
+    pW.print();
+    pW.close();
   };
 
   return (
