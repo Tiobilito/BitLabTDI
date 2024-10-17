@@ -14,7 +14,7 @@ import { CheckUser } from "../Modules/OperacionesBD";
 
 import { CustomView } from "./components/CustomView";
 
-const { width, height } = Dimensions.get("window");
+const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
 const LoggingPage = ({ navigation }) => {
   const [username, setUsername] = useState("");
@@ -92,19 +92,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   logo: {
-    width: width * 0.6,
-    height: height * 0.2,
+    width: WIDTH * 0.6,
+    height: HEIGHT * 0.2,
     resizeMode: "contain",
-    marginBottom: height * 0.05,
+    marginBottom: HEIGHT * 0.05,
   },
   title: {
     fontSize: "100%", // Escalado de la fuente
     fontWeight: "bold",
-    marginBottom: height * 0.05,
+    marginBottom: HEIGHT * 0.05,
   },
   formCont: {
     width: "80%",
-    marginBottom: height * 0.05,
+    marginBottom: HEIGHT * 0.05,
   },
   textForm: {
     fontSize: "100%", // Escalado de la fuente para etiquetas
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   input: {
-    height: height * 0.06,
+    height: HEIGHT * 0.06,
     backgroundColor: "#C5E0F2",
     borderRadius: 10,
     paddingHorizontal: 10,
@@ -121,12 +121,12 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     width: "10%",
-    height: height * 0.08,
+    height: HEIGHT * 0.08,
     backgroundColor: "#2272A7",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    marginBottom: height * 0.05,
+    marginBottom: HEIGHT * 0.05,
   },
   loginButtonText: {
     color: "#fff",
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   separator: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: height * 0.05,
+    marginBottom: HEIGHT * 0.05,
   },
   line: {
     height: 1,
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   },
   registerPrompt: {
     fontSize: "100%", // Escalado de la sugerencia de registro
-    marginBottom: height * 0.02,
+    marginBottom: HEIGHT * 0.02,
     textAlign: "center",
   },
   registerButton: {
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    height: height * 0.08,
+    height: HEIGHT * 0.08,
     width: "100%",
   },
   registerButtonText: {
