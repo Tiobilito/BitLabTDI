@@ -33,14 +33,18 @@ const RadioButton = ({ label, value, selected, onSelect }) => {
 export default function PrototypingForm() {
   const SentProject = async () => {
     try {
+      // Asignar null al rol no seleccionado
+      const finalStudentCode = roles.alumno ? Number(studentCode) : null;
+      const finalTeacherCode = roles.profesor ? Number(teacherCode) : null;
+
       const newProject = {
         submission_date: new Date().toISOString().split("T")[0], // Fecha actual
         applicant_name: name, // Nombre del usuario que solicita el servicio
         contact_email: email, // Email
         contact_phone: phone, // Número de teléfono
         application: application, // Aplicación del proyecto
-        student_user_code: Number(studentCode), // Código del alumno
-        professor_user_code: Number(teacherCode), // Código del profesor seleccionado
+        student_user_code: finalStudentCode, // Código del alumno (o null)
+        professor_user_code: finalTeacherCode, // Código del profesor (o null)
         project_type: projectType, // Tipo de proyecto
         prototype_type: prototypeType, // Tipo de prototipo
         prototype_description: descriptionPrototype, // Descripción del prototipo
