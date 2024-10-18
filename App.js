@@ -15,18 +15,18 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 // Scenes
 import LoggingPage from "./Scenes/Logging";
 import Register from "./Scenes/Register";
-import WorkerPage from "./Scenes/WorkerUser/Worker";
-import AddClientPage from "./Scenes/WorkerUser/AddClient";
-import AddDevicePage from "./Scenes/WorkerUser/AddDevice";
-import SearchClientPage from "./Scenes/WorkerUser/SearchClient";
-import DevicesPage from "./Scenes/WorkerUser/Devices";
-import EditClientPage from "./Scenes/WorkerUser/EditClient";
-import EditDevicePage from "./Scenes/WorkerUser/EditDevice";
-import OrderPage from "./Scenes/WorkerUser/Order";
+import WorkerPage from "./Scenes/Prestador de servicio/Prestador de Servicio";
+import AddClientPage from "./Scenes/Prestador de servicio/AddClient";
+import AddDevicePage from "./Scenes/Prestador de servicio/AddDevice";
+import SearchClientPage from "./Scenes/Prestador de servicio/SearchClient";
+import DevicesPage from "./Scenes/Prestador de servicio/Devices";
+import EditClientPage from "./Scenes/Prestador de servicio/EditClient";
+import EditDevicePage from "./Scenes/Prestador de servicio/EditDevice";
+import OrderPage from "./Scenes/Prestador de servicio/Order";
 import PrototypingForm from "./Scenes/Laboratorio-prototipado/PrototypingForm";
 
-import DevicesTest from "./Scenes/WorkerUser/DevicesTest";
-import Reports from "./Scenes/WorkerUser/Reports";
+import DevicesTest from "./Scenes/Prestador de servicio/DevicesTest";
+import Reports from "./Scenes/Prestador de servicio/Reports";
 
 const Stack = createNativeStackNavigator();
 const WorkerTap = createBottomTabNavigator();
@@ -70,7 +70,7 @@ function Fixes() {
   );
 }
 
-const WorkerApp = () => {
+const PrestadorApp = () => {
   return (
     <WorkerTap.Navigator
       initialRouteName="Principal"
@@ -112,7 +112,7 @@ export default function App() {
         <Stack.Screen name="Logging" component={LoggingPage} />
         <Stack.Screen name="PrototypingForm" component={PrototypingForm} />
         <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="WorkerApp" component={WorkerApp} />
+        <Stack.Screen name="WorkerApp" component={PrestadorApp} />
       </Stack.Navigator>
     </NavigationContainer>
   );
