@@ -8,6 +8,7 @@ import {
   Dimensions,
   Text,
   View,
+  ScrollView,
 } from "react-native";
 import { GetUserData, StoreUserData } from "../Modules/DataInfo";
 import { CheckUser } from "../Modules/OperacionesBD";
@@ -38,89 +39,93 @@ const LoggingPage = ({ navigation }) => {
 
   return (
     <CustomView>
-      <Image
-        source={require("../Resources/imagenes/BITLABTDI.png")}
-        style={styles.Logo}
-      />
-      <Text style={{ fontSize: Scale > 400 ? 50 : 20 }}>
-        Ingresa a tu cuenta
-      </Text>
-      <View style={styles.formCont}>
-        <Text style={styles.textForm}>Nombre de usuario</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={(text) => {
-            setUsername(text);
-          }}
-          value={username}
-          placeholder="Username"
-        />
-        <Text style={styles.textForm}>Contraseña</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={(text) => {
-            setPassword(text);
-          }}
-          value={password}
-          placeholder="Password"
-          secureTextEntry={true}
-        />
-      </View>
-
-      <TouchableOpacity
-        style={styles.loginButton}
-        onPress={() => Verify(username, password)}
-      >
-        <Text style={{ color: "white", fontWeight: "bold" }}>Iniciar</Text>
-      </TouchableOpacity>
-
-      <View style={{ marginBottom: Scale * 0.1 }}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: Scale * 0.04,
-          }}
-        >
-          <View
-            style={{
-              height: Scale * 0.002,
-              width: Scale * 0.3,
-              backgroundColor: "#000000",
-            }}
+      <ScrollView>
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <Image
+            source={require("../Resources/imagenes/BITLABTDI.png")}
+            style={styles.Logo}
           />
-          <Text> Ó </Text>
-          <View
-            style={{
-              height: Scale * 0.002,
-              width: Scale * 0.3,
-              backgroundColor: "#000000",
-            }}
-          />
-        </View>
-      </View>
-
-      <View>
-        <Text style={{ marginBottom: Scale * 0.04 }}>
-          Si no estás registrado
-        </Text>
-        <TouchableOpacity
-          style={{
-            borderWidth: 1,
-            borderColor: "#2272A7",
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 10,
-            height: Scale * 0.1,
-          }}
-          onPress={() => navigation.navigate("Register")}
-        >
-          <Text style={{ color: "#2272A7", fontWeight: "bold" }}>
-            Registrar
+          <Text style={{ fontSize: Scale > 400 ? 50 : 20 }}>
+            Ingresa a tu cuenta
           </Text>
-        </TouchableOpacity>
-      </View>
+          <View style={styles.formCont}>
+            <Text style={styles.textForm}>Nombre de usuario</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(text) => {
+                setUsername(text);
+              }}
+              value={username}
+              placeholder="Username"
+            />
+            <Text style={styles.textForm}>Contraseña</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(text) => {
+                setPassword(text);
+              }}
+              value={password}
+              placeholder="Password"
+              secureTextEntry={true}
+            />
+          </View>
+
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={() => Verify(username, password)}
+          >
+            <Text style={{ color: "white", fontWeight: "bold" }}>Iniciar</Text>
+          </TouchableOpacity>
+
+          <View style={{ marginBottom: Scale * 0.1 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: Scale * 0.04,
+              }}
+            >
+              <View
+                style={{
+                  height: Scale * 0.002,
+                  width: Scale * 0.3,
+                  backgroundColor: "#000000",
+                }}
+              />
+              <Text> Ó </Text>
+              <View
+                style={{
+                  height: Scale * 0.002,
+                  width: Scale * 0.3,
+                  backgroundColor: "#000000",
+                }}
+              />
+            </View>
+          </View>
+
+          <View>
+            <Text style={{ marginBottom: Scale * 0.04 }}>
+              Si no estás registrado
+            </Text>
+            <TouchableOpacity
+              style={{
+                borderWidth: 1,
+                borderColor: "#2272A7",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 10,
+                height: Scale * 0.1,
+              }}
+              onPress={() => navigation.navigate("Register")}
+            >
+              <Text style={{ color: "#2272A7", fontWeight: "bold" }}>
+                Registrar
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
     </CustomView>
   );
 };
