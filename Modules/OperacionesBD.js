@@ -280,6 +280,7 @@ export async function addProjectSub(Project) {
       department_head: Project.department_head,
       laboratory_head: Project.laboratory_head,
       service_staff: Project.service_staff,
+      status: Project.status,
     },
   ]);
   if (error) {
@@ -291,19 +292,22 @@ export async function addProjectSub(Project) {
 }
 
 export async function addOrder(Order) {
-  const { data, error } = await supabase.from("orders").insert([
-    {
-      customer_id: Order.customer_id,
-      department_id: Order.department_id,
-      device_id: Order.device_id,
-      date_received: Order.date_received,
-      closing_date: Order.closing_date,
-      status: Order.status,
-      total: Order.total,
-      diagnosis: Order.diagnosis,
-      payment_type: Order.payment_type,
-    },
-  ]).select('id'); // Selecciona el campo 'id'
+  const { data, error } = await supabase
+    .from("orders")
+    .insert([
+      {
+        customer_id: Order.customer_id,
+        department_id: Order.department_id,
+        device_id: Order.device_id,
+        date_received: Order.date_received,
+        closing_date: Order.closing_date,
+        status: Order.status,
+        total: Order.total,
+        diagnosis: Order.diagnosis,
+        payment_type: Order.payment_type,
+      },
+    ])
+    .select("id"); // Selecciona el campo 'id'
   if (error) {
     console.error("Error al insertar registro:", error);
     return null;
@@ -314,4 +318,3 @@ export async function addOrder(Order) {
   }
   return null;
 }
-

@@ -52,9 +52,10 @@ export default function PrototypingForm() {
         specific_requirements_special_cut: specialCut, // Corte específico (Opcional)
         specific_requirements_other: others, // Otros (Opcional)
         specific_requirements_comments: remarks, // Observaciones (Opcional)
-        department_head: "awaiting_revision", // Estado pendiente de revisión
-        laboratory_head: "awaiting_revision",
-        service_staff: "awaiting_revision",
+        department_head: null, // Estado pendiente de revisión
+        laboratory_head: null,
+        service_staff: null,
+        status: "awaiting_revision",
       };
 
       // Llamada a la función para agregar el proyecto
