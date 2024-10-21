@@ -126,7 +126,9 @@ const PrototypingSearch = ({ navigation }) => {
           style={styles.toggleButton}
         >
           <Text style={styles.toggleButtonText}>
-            {showNameFilter ? "Ocultar filtro por nombre" : "Mostrar filtro por nombre"}
+            {showNameFilter
+              ? "Ocultar filtro por nombre"
+              : "Mostrar filtro por nombre"}
           </Text>
         </TouchableOpacity>
 
@@ -168,16 +170,33 @@ const PrototypingSearch = ({ navigation }) => {
                   </View>
 
                   {/* Mostrar icono si los campos department_head, laboratory_head o service_staff son false */}
-                  {(!item.department_head ||
-                    !item.laboratory_head ||
-                    !item.service_staff) && (
+
+                  {/* Mostrar el icono de advertencia o el icono de aprobado */}
+                  {!item.department_head ||
+                  !item.laboratory_head ||
+                  !item.service_staff ? (
                     <Icon
-                      name="alert-circle"
+                      name="timer-outline"
                       size={24}
                       color="#ffcc00"
                       style={styles.warningIcon}
                     />
+                  ) : (
+                    <Icon
+                      name="checkmark-circle-outline"
+                      size={24}
+                      color="green"
+                    />
                   )}
+                  {item.department_head &&
+                    item.laboratory_head &&
+                    item.service_staff && (
+                      <Icon
+                        name="checkmark-circle-outline"
+                        size={24}
+                        color="green"
+                      />
+                    )}
                 </TouchableOpacity>
 
                 {item.Details && (
