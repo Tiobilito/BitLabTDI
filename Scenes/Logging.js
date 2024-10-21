@@ -33,7 +33,7 @@ const LoggingPage = ({ navigation }) => {
     const BVerify = await CheckUser(username, password);
     if (BVerify == true) {
       await StoreUserData(username, password);
-      navigation.navigate("WorkerApp");
+      navigation.navigate("StudentsApp");
     }
   };
 

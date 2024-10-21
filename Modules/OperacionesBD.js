@@ -315,3 +315,16 @@ export async function addOrder(Order) {
   return null;
 }
 
+// Función para obtener todos los registros de la tabla project_submissions
+export async function getAllProjectSubmissions() {
+  const { data, error } = await supabase
+    .from("project_submissions")
+    .select("*"); // Selecciona todas las columnas
+
+  if (error) {
+    console.error("Error al obtener registros:", error);
+    return null;
+  }
+  console.log("Registros de project submissions:", data);
+  return data;
+}

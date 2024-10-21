@@ -27,9 +27,12 @@ import PrototypingForm from "./Scenes/Laboratorio-prototipado/PrototypingForm";
 
 import DevicesTest from "./Scenes/Prestador de servicio/DevicesTest";
 import Reports from "./Scenes/Prestador de servicio/Reports";
+import StudentPage from "./Scenes/Academic Group Users/Student";
+import PrototypingSearch from "./Scenes/Laboratorio-prototipado/PrototypingSearchReports";
 
 const Stack = createNativeStackNavigator();
 const WorkerTap = createBottomTabNavigator();
+const StudentsTap = createBottomTabNavigator();
 const MainWorkerStack = createNativeStackNavigator();
 const RepairClientDevicesStack = createNativeStackNavigator();
 
@@ -70,6 +73,36 @@ function Fixes() {
   );
 }
 
+const StudentsApp = () => {
+  return (
+    <StudentsTap.Navigator
+      initialRouteName="Principal"
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          if (route.name === "Principal") {
+            iconName = focused ? "home" : "home-outline";
+          } else if (route.name === "Registros") {
+            iconName = focused ? "reader" : "reader-outline";
+          } else if (route.name === "Prototipo") {
+            iconName = focused
+              ? "hardware-chip-sharp"
+              : "hardware-chip-outline";
+          }
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: "black",
+        tabBarInactiveTintColor: "gray",
+      })}
+    >
+      <WorkerTap.Screen name="Principal" component={StudentPage} />
+      <WorkerTap.Screen name="Registros" component={PrototypingSearch} />
+      <WorkerTap.Screen name="Prototipo" component={PrototypingForm} />
+    </StudentsTap.Navigator>
+  );
+};
+
 const PrestadorApp = () => {
   return (
     <WorkerTap.Navigator
@@ -109,8 +142,8 @@ export default function App() {
         }}
       >
         <Stack.Screen name="Logging" component={LoggingPage} />
-        <Stack.Screen name="PrototypingForm" component={PrototypingForm} />
         <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="StudentsApp" component={StudentsApp} />
         <Stack.Screen name="WorkerApp" component={PrestadorApp} />
       </Stack.Navigator>
     </NavigationContainer>
