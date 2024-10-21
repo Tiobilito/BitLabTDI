@@ -12,9 +12,10 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
-// Scenes
+// Scenes principal
 import LoggingPage from "./Scenes/Logging";
 import Register from "./Scenes/Register";
+// Scenes Prestador de servicio
 import WorkerPage from "./Scenes/Prestador de servicio/Prestador de Servicio";
 import AddClientPage from "./Scenes/Prestador de servicio/AddClient";
 import AddDevicePage from "./Scenes/Prestador de servicio/AddDevice";
@@ -23,7 +24,9 @@ import DevicesPage from "./Scenes/Prestador de servicio/Devices";
 import EditClientPage from "./Scenes/Prestador de servicio/EditClient";
 import EditDevicePage from "./Scenes/Prestador de servicio/EditDevice";
 import OrderPage from "./Scenes/Prestador de servicio/Order";
+// Scenes Laboratorio de Prototipado
 import PrototypingForm from "./Scenes/Laboratorio-prototipado/PrototypingForm";
+import PrototypesOnStandby from "./Scenes/Laboratorio-prototipado/PrototypesOnStandby";
 
 import DevicesTest from "./Scenes/Prestador de servicio/DevicesTest";
 import Reports from "./Scenes/Prestador de servicio/Reports";
@@ -86,6 +89,10 @@ const PrestadorApp = () => {
             iconName = focused
               ? "hardware-chip-sharp"
               : "hardware-chip-outline";
+          } else if (route.name === "Standby") {
+            iconName = focused
+              ? "hardware-chip-sharp"
+              : "hardware-chip-outline";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -112,6 +119,10 @@ export default function App() {
         <Stack.Screen name="PrototypingForm" component={PrototypingForm} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="WorkerApp" component={PrestadorApp} />
+        <Stack.Screen
+          name="PrototypesOnStandby"
+          component={PrototypesOnStandby}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

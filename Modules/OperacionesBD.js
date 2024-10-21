@@ -318,3 +318,18 @@ export async function addOrder(Order) {
   }
   return null;
 }
+
+//Funcion para obtener todas las solicitudes de prototipo con status "awaiting_revision"
+export async function getPrototypeStndby() {
+  const { data, error } = await supabase
+    .from("project_submissions")
+    .select("*")
+    .eq("status", "awaiting_revision"); // Selecciona todas las columnas
+
+  if (error) {
+    console.error("Error al obtener solicitudes:", error);
+    return null;
+  }
+  //console.log("Registros de clientes:", data);
+  return data;
+}
