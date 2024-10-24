@@ -33,9 +33,9 @@ const LoggingPage = ({ navigation }) => {
   }, []);
   
   const Verify = async () => {
-    const BVerify = await CheckUser(code, password);
-    if (BVerify == true) {
-      await StoreUserData(code, password); // Esperar a que termine de guardar los datos
+    const Verify = await CheckUser(code, password);
+    if (Verify) {
+      await StoreUserData(Verify.code, Verify.password, Verify.user_type); // Esperar a que termine de guardar los datos
       navigation.navigate("StudentsApp");
     }
   };  

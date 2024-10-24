@@ -14,16 +14,17 @@ export const GetUserData = async () => {
   }
 };
 
-export const StoreUserData = async (code, password) => {
+export const StoreUserData = async (code, password, user_type) => {
   var UserData = {
     Code: "",
     Password: "",
+    User_type: "",
   };
   UserData.Code = code;
   UserData.Password = password;
+  UserData.User_type = user_type;
   try {
     const UDjson = JSON.stringify(UserData);
-    console.log(UDjson);
     await AsyncStorage.setItem("@UserCr", UDjson);
   } catch (error) {
     console.error("Error al guardar datos:", error);

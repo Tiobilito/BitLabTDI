@@ -11,10 +11,10 @@ export async function CheckUser(code, contraseña) {
     console.log("hubo un error", error);
   }
   if (data.length > 0) {
-    return true;
+    return data[0];
   } else {
     Alert.alert("Datos incorrectos");
-    return false;
+    return null;
   }
 }
 
