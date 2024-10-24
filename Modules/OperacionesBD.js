@@ -5,7 +5,7 @@ export async function CheckUser(code, contraseña) {
   const { data, error } = await supabase
     .from("users")
     .select("*")
-    .eq("name", code)
+    .eq("code", code)
     .eq("password", contraseña);
   if (error) {
     console.log("hubo un error", error);

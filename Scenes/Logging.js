@@ -18,24 +18,27 @@ import { CustomView } from "./components/CustomView";
 const Scale = Dimensions.get("window").width;
 
 const LoggingPage = ({ navigation }) => {
-  const [username, setUsername] = useState("");
+  const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    const data = GetUserData();
-    if (data) {
-      setUsername(data.Username);
-      setPassword(data.Password);
-    }
+    const loadUserData = async () => {
+      const data = await GetUserData();
+      if (data) {
+        setCode(data.Code);
+        setPassword(data.Password);
+      }
+    };
+    loadUserData(); // Llamar la función que maneja la promesa
   }, []);
-
+  
   const Verify = async () => {
-    const BVerify = await CheckUser(username, password);
+    const BVerify = await CheckUser(code, password);
     if (BVerify == true) {
-      await StoreUserData(username, password);
+      await StoreUserData(code, password); // Esperar a que termine de guardar los datos
       navigation.navigate("StudentsApp");
     }
-  };
+  };  
 
   return (
     <CustomView>
@@ -53,10 +56,11 @@ const LoggingPage = ({ navigation }) => {
             <TextInput
               style={styles.input}
               onChangeText={(text) => {
-                setUsername(text);
+                setCode(text);
               }}
-              value={username}
-              placeholder="Username"
+              value={code}
+              keyboardType="numeric"
+              placeholder="Codigo"
             />
             <Text style={styles.textForm}>Contraseña</Text>
             <TextInput
@@ -72,7 +76,7 @@ const LoggingPage = ({ navigation }) => {
 
           <TouchableOpacity
             style={styles.loginButton}
-            onPress={() => Verify(username, password)}
+            onPress={() => Verify(code, password)}
           >
             <Text style={{ color: "white", fontWeight: "bold" }}>Iniciar</Text>
           </TouchableOpacity>

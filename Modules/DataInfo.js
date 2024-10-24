@@ -1,4 +1,3 @@
-import { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const GetUserData = async () => {
@@ -15,15 +14,16 @@ export const GetUserData = async () => {
   }
 };
 
-export const StoreUserData = async (username, password) => {
+export const StoreUserData = async (code, password) => {
   var UserData = {
-    Username: "",
+    Code: "",
     Password: "",
   };
-  UserData.Username = username;
+  UserData.Code = code;
   UserData.Password = password;
   try {
     const UDjson = JSON.stringify(UserData);
+    console.log(UDjson);
     await AsyncStorage.setItem("@UserCr", UDjson);
   } catch (error) {
     console.error("Error al guardar datos:", error);
