@@ -12,9 +12,10 @@ import {
 } from "react-native";
 import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
-import { getAllProjectSubmissions } from "../../Modules/OperacionesBD"; // Asegúrate de implementar correctamente esta función
+import { getAllProjectSubmissions, getAllProjectSubmissionsCheckDH, getAllProjectSubmissionsCheckLH, getAllProjectSubmissionsCheckSS } from "../../Modules/OperacionesBD"; // Asegúrate de implementar correctamente esta función
 import { CustomViewReverse } from "../components/CustomViewReverse";
 import Icon from "react-native-vector-icons/Ionicons"; // Asegúrate de tener esta librería instalada
+import { GetUserData } from "../../Modules/DataInfo";
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
@@ -36,8 +37,16 @@ const PrototypingCheck = ({ navigation }) => {
   );
 
   const fetchData = async () => {
+    let Data;
     try {
-      const Data = await getAllProjectSubmissions();
+      const UData = await GetUserData();
+      if(UData.User_type == "0") {
+        Data = await getAllProjectSubmissionsCheckDH();
+      } else if(UData.User_type == "1") {
+        Data = await getAllProjectSubmissionsCheckLH();
+      } else if(UData.User_type == "2") {
+        Data = await getAllProjectSubmissionsCheckSS();
+      }
       const BData = Data.map((registro) => ({
         ...registro,
         Details: false,
