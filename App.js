@@ -24,6 +24,7 @@ import EditClientPage from "./Scenes/Prestador de servicio/EditClient";
 import EditDevicePage from "./Scenes/Prestador de servicio/EditDevice";
 import OrderPage from "./Scenes/Prestador de servicio/Order";
 import PrototypingForm from "./Scenes/Laboratorio-prototipado/PrototypingForm";
+import PrototypingCheck from "./Scenes/Laboratorio-prototipado/PrototypingReportCheck";
 
 import DevicesTest from "./Scenes/Prestador de servicio/DevicesTest";
 import Reports from "./Scenes/Prestador de servicio/Reports";
@@ -33,6 +34,7 @@ import PrototypingSearch from "./Scenes/Laboratorio-prototipado/PrototypingSearc
 const Stack = createNativeStackNavigator();
 const WorkerTap = createBottomTabNavigator();
 const StudentsTap = createBottomTabNavigator();
+const StaffTap = createBottomTabNavigator();
 const MainWorkerStack = createNativeStackNavigator();
 const RepairClientDevicesStack = createNativeStackNavigator();
 
@@ -96,10 +98,35 @@ const StudentsApp = () => {
         tabBarInactiveTintColor: "gray",
       })}
     >
-      <WorkerTap.Screen name="Principal" component={StudentPage} />
-      <WorkerTap.Screen name="Registros" component={PrototypingSearch} />
-      <WorkerTap.Screen name="Prototipo" component={PrototypingForm} />
+      <StudentsTap.Screen name="Principal" component={StudentPage} />
+      <StudentsTap.Screen name="Registros" component={PrototypingSearch} />
+      <StudentsTap.Screen name="Prototipo" component={PrototypingForm} />
     </StudentsTap.Navigator>
+  );
+};
+
+const StaffApp = () => {
+  return (
+    <StaffTap.Navigator
+      initialRouteName="Principal"
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          if (route.name === "Principal") {
+            iconName = focused ? "home" : "home-outline";
+          } else if (route.name === "Registros") {
+            iconName = focused ? "reader" : "reader-outline";
+          }
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: "black",
+        tabBarInactiveTintColor: "gray",
+      })}
+    >
+      <StaffTap.Screen name="Principal" component={StudentPage} />
+      <StaffTap.Screen name="Registros" component={PrototypingCheck} />
+    </StaffTap.Navigator>
   );
 };
 
@@ -145,41 +172,8 @@ export default function App() {
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="StudentsApp" component={StudentsApp} />
         <Stack.Screen name="WorkerApp" component={PrestadorApp} />
+        <Stack.Screen name="StaffApp" component={StaffApp} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    resizeMode: "cover",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#095ea7",
-    marginTop: 30,
-  },
-  Buttons: {
-    width: 200,
-    height: 200,
-  },
-  text: {
-    fontSize: WIDTH > 400 ? 32 : 24,
-    fontWeight: "bold",
-    color: "#2272A7",
-  },
-  icon: {
-    fontSize: WIDTH > 400 ? 32 : 24,
-    color: "#2272A7",
-  },
-  btnAction: {
-    width: WIDTH * 0.85,
-    height: HEIGHT * 0.08,
-    flexDirection: "row",
-    backgroundColor: "#FFFFFF",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 40,
-    gap: WIDTH * 0.04,
-  },
-});

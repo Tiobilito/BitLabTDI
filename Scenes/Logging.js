@@ -29,14 +29,30 @@ const LoggingPage = ({ navigation }) => {
         setPassword(data.Password);
       }
     };
-    loadUserData(); // Llamar la función que maneja la promesa
+    loadUserData();
   }, []);
   
   const Verify = async () => {
     const Verify = await CheckUser(code, password);
     if (Verify) {
       await StoreUserData(Verify.code, Verify.password, Verify.user_type); // Esperar a que termine de guardar los datos
-      navigation.navigate("StudentsApp");
+      switch(Verify.user_type) {
+        case 0:
+          navigation.navigate("StaffApp");
+          break
+        case 1:
+          navigation.navigate("StaffApp");
+          break
+        case 2:
+          navigation.navigate("WorkerApp");
+          break
+        case 3:
+          navigation.navigate("StudentsApp");
+          break
+        case 4:
+          navigation.navigate("StudentsApp");
+          break
+      }
     }
   };  
 
@@ -58,9 +74,8 @@ const LoggingPage = ({ navigation }) => {
               onChangeText={(text) => {
                 setCode(text);
               }}
-              value={code}
+              value={code.toString()}
               keyboardType="numeric"
-              placeholder="Codigo"
             />
             <Text style={styles.textForm}>Contraseña</Text>
             <TextInput
