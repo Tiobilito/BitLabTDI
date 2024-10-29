@@ -14,6 +14,7 @@ import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
 import { getPrototypeStndby } from "../../Modules/OperacionesBD";
 import { CustomViewReverse } from "../components/CustomViewReverse";
+import PDFGenerator from "./PDFGenerator";
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
@@ -24,6 +25,7 @@ const PrototypesOnStandby = ({ navigation }) => {
   const [error, setError] = useState(null);
   const [fullData, setFullData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedData, setSelectedData] = useState(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -82,12 +84,8 @@ const PrototypesOnStandby = ({ navigation }) => {
     );
   };
 
-  const navigateToEditClient = (id) => {
-    navigation.navigate("EditClient", { idClient: id });
-  };
-
-  const navigateToDevices = (id) => {
-    navigation.navigate("Devices", { idClient: id });
+  const handleGeneratePDF = (item) => {
+    setSelectedData(item); // Guarda los datos seleccionados para pasar al generador de PDF
   };
 
   return (
@@ -210,12 +208,22 @@ const PrototypesOnStandby = ({ navigation }) => {
                     ) : (
                       ""
                     )}
+
+                    {/* Botón para generar PDF */}
+                    <TouchableOpacity
+                      onPress={() => handleGeneratePDF(item)}
+                      style={styles.generatePDFButton}
+                    >
+                      <Text style={styles.buttonText}>Generar PDF</Text>
+                    </TouchableOpacity>
                   </View>
                 )}
               </View>
             )}
           />
         </View>
+        {/* Renderiza el componente PDFGenerator solo si hay datos seleccionados */}
+        {selectedData && <PDFGenerator data={selectedData} />}
       </View>
     </CustomViewReverse>
   );
@@ -301,6 +309,17 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     marginHorizontal: 10,
+  },
+  generatePDFButton: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: "#4CAF50",
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#ffffff",
+    fontWeight: "bold",
   },
 });
 
