@@ -27,6 +27,7 @@ import OrderPage from "./Scenes/Prestador de servicio/Order";
 // Scenes Laboratorio de Prototipado
 import PrototypingForm from "./Scenes/Laboratorio-prototipado/PrototypingForm";
 import PrototypesOnStandby from "./Scenes/Laboratorio-prototipado/PrototypesOnStandby";
+import PrototypingFormReadOnly from "./Scenes/Laboratorio-prototipado/PrototypingFormReadOnly";
 
 import DevicesTest from "./Scenes/Prestador de servicio/DevicesTest";
 import Reports from "./Scenes/Prestador de servicio/Reports";
@@ -115,13 +116,17 @@ export default function App() {
           headerShown: false,
         }}
       >
+        <Stack.Screen
+          name="PrototypesOnStandby"
+          component={PrototypesOnStandby}
+        />
         <Stack.Screen name="Logging" component={LoggingPage} />
         <Stack.Screen name="PrototypingForm" component={PrototypingForm} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="WorkerApp" component={PrestadorApp} />
         <Stack.Screen
-          name="PrototypesOnStandby"
-          component={PrototypesOnStandby}
+          name="PrototypingFormReadOnly"
+          component={PrototypingFormReadOnly}
         />
       </Stack.Navigator>
     </NavigationContainer>

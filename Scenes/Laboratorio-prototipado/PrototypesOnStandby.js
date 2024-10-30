@@ -15,6 +15,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { getPrototypeStndby } from "../../Modules/OperacionesBD";
 import { CustomViewReverse } from "../components/CustomViewReverse";
 import PDFGenerator from "./PDFGenerator";
+import PrototypingFormReadOnly from "./PrototypingFormReadOnly";
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
@@ -51,14 +52,8 @@ const PrototypesOnStandby = ({ navigation }) => {
     }
   };
 
-  const toggleDetails = (itemId) => {
-    const updatedData = data.map((registro) => {
-      if (registro.id === itemId) {
-        return { ...registro, Details: !registro.Details };
-      }
-      return registro;
-    });
-    setData(updatedData);
+  const toggleDetails = (item) => {
+    navigation.navigate("PrototypingFormReadOnly");
   };
 
   if (isLoading) {

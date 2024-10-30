@@ -1,0 +1,131 @@
+import React from "react";
+import { View, Text, StyleSheet, ScrollView, StatusBar } from "react-native";
+
+export default function PrototypingFormReadOnly({ route }) {
+  // Datos de la solicitud obtenidos de la navegación
+  /* const {
+    applicant_name,
+    contact_email,
+    contact_phone,
+    application,
+    student_user_code,
+    professor_user_code,
+    project_type,
+    prototype_type,
+    prototype_description,
+    specific_requirements_dimensions,
+    specific_requirements_special_cut,
+    specific_requirements_other,
+    specific_requirements_comments,
+  } = route.params.item;
+  */
+  return (
+    <ScrollView contentContainerStyle={styles.formContainer}>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor="black"
+        translucent={true}
+      />
+      <View style={styles.backTriangle} />
+      <View style={styles.mainTriangle} />
+      <Text style={styles.title}>
+        Detalles de la solicitud de servicio de prototipo
+      </Text>
+      {/* 
+      <View style={styles.formSection}>
+        <Text style={styles.titleSection}>Datos de contacto</Text>
+        <Text style={styles.label}>Nombre completo:</Text>
+        <Text style={styles.value}>{applicant_name}</Text>
+        <Text style={styles.label}>Correo electrónico:</Text>
+        <Text style={styles.value}>{contact_email}</Text>
+        <Text style={styles.label}>Número de Teléfono:</Text>
+        <Text style={styles.value}>{contact_phone}</Text>
+      </View>
+
+      <View style={styles.formSection}>
+        <Text style={styles.titleSection}>Información del Proyecto</Text>
+        <Text style={styles.label}>Tipo de proyecto:</Text>
+        <Text style={styles.value}>{project_type}</Text>
+        <Text style={styles.label}>Aplicación:</Text>
+        <Text style={styles.value}>{application}</Text>
+      </View>
+
+      <View style={styles.formSection}>
+        <Text style={styles.titleSection}>Detalles del Usuario</Text>
+        {student_user_code && (
+          <>
+            <Text style={styles.label}>Código de Alumno:</Text>
+            <Text style={styles.value}>{student_user_code}</Text>
+          </>
+        )}
+        {professor_user_code && (
+          <>
+            <Text style={styles.label}>Código de Profesor:</Text>
+            <Text style={styles.value}>{professor_user_code}</Text>
+          </>
+        )}
+      </View>
+
+      <View style={styles.formSection}>
+        <Text style={styles.titleSection}>Datos del Prototipo</Text>
+        <Text style={styles.label}>Tipo de Prototipo:</Text>
+        <Text style={styles.value}>{prototype_type}</Text>
+        <Text style={styles.label}>Descripción del Prototipo:</Text>
+        <Text style={styles.value}>{prototype_description}</Text>
+        <Text style={styles.label}>Dimensiones:</Text>
+        <Text style={styles.value}>{specific_requirements_dimensions}</Text>
+        <Text style={styles.label}>Corte especial:</Text>
+        <Text style={styles.value}>
+          {specific_requirements_special_cut || "No especificado"}
+        </Text>
+        <Text style={styles.label}>Otros:</Text>
+        <Text style={styles.value}>
+          {specific_requirements_other || "No especificado"}
+        </Text>
+        <Text style={styles.label}>Observaciones:</Text>
+        <Text style={styles.value}>
+          {specific_requirements_comments || "Sin comentarios adicionales"}
+        </Text>
+      </View>
+      */}
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  formContainer: {
+    flexGrow: 1,
+    padding: 20,
+    backgroundColor: "#f5f5f5",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginVertical: 20,
+    color: "#394f66",
+  },
+  formSection: {
+    marginBottom: 20,
+    padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    elevation: 2,
+  },
+  titleSection: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#394f66",
+    marginBottom: 10,
+  },
+  label: {
+    fontSize: 16,
+    color: "#394f66",
+    marginTop: 10,
+  },
+  value: {
+    fontSize: 16,
+    color: "#333",
+    paddingVertical: 5,
+  },
+});
