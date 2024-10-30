@@ -104,6 +104,7 @@ const PrestadorApp = () => {
       <WorkerTap.Screen name="Principal" component={Worker} />
       <WorkerTap.Screen name="Reparaciones" component={Fixes} />
       <WorkerTap.Screen name="Prototipo" component={PrototypingForm} />
+      <WorkerTap.Screen name="Standby" component={PrototypesOnStandby} />
     </WorkerTap.Navigator>
   );
 };
@@ -116,18 +117,15 @@ export default function App() {
           headerShown: false,
         }}
       >
+        <Stack.Screen name="Logging" component={LoggingPage} />
+        <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="WorkerApp" component={PrestadorApp} />
+        <Stack.Screen name="PrototypingForm" component={PrototypingForm} />
         <Stack.Screen
           name="PrototypesOnStandby"
           component={PrototypesOnStandby}
         />
-        <Stack.Screen name="Logging" component={LoggingPage} />
-        <Stack.Screen name="PrototypingForm" component={PrototypingForm} />
-        <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="WorkerApp" component={PrestadorApp} />
-        <Stack.Screen
-          name="PrototypingFormReadOnly"
-          component={PrototypingFormReadOnly}
-        />
+        <Stack.Screen name="FormRead" component={PrototypingFormReadOnly} />
       </Stack.Navigator>
     </NavigationContainer>
   );

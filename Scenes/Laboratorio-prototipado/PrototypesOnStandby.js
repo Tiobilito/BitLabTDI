@@ -14,8 +14,6 @@ import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
 import { getPrototypeStndby } from "../../Modules/OperacionesBD";
 import { CustomViewReverse } from "../components/CustomViewReverse";
-import PDFGenerator from "./PDFGenerator";
-import PrototypingFormReadOnly from "./PrototypingFormReadOnly";
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
@@ -26,7 +24,6 @@ const PrototypesOnStandby = ({ navigation }) => {
   const [error, setError] = useState(null);
   const [fullData, setFullData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedData, setSelectedData] = useState(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -52,8 +49,8 @@ const PrototypesOnStandby = ({ navigation }) => {
     }
   };
 
-  const toggleDetails = (item) => {
-    navigation.navigate("PrototypingFormReadOnly");
+  const handleItemPress = (id) => {
+    navigation.navigate("FormRead", { id });
   };
 
   if (isLoading) {
@@ -77,10 +74,6 @@ const PrototypesOnStandby = ({ navigation }) => {
       applicant_name.toLowerCase().includes(query.toLowerCase()) ||
       contact_email.toLowerCase().includes(query.toLowerCase())
     );
-  };
-
-  const handleGeneratePDF = (item) => {
-    setSelectedData(item); // Guarda los datos seleccionados para pasar al generador de PDF
   };
 
   return (
@@ -120,7 +113,7 @@ const PrototypesOnStandby = ({ navigation }) => {
             renderItem={({ item }) => (
               <View style={styles.itemContainer}>
                 <TouchableOpacity
-                  onPress={() => toggleDetails(item.id)}
+                  onPress={() => handleItemPress(item.id)}
                   style={styles.item}
                 >
                   <View style={styles.avatarContainer}>
@@ -142,83 +135,10 @@ const PrototypesOnStandby = ({ navigation }) => {
                     </Text>
                   </View>
                 </TouchableOpacity>
-                {item.Details && (
-                  <View style={styles.details}>
-                    <Text style={styles.detailText}>
-                      Fecha de solicitud: {item.submission_date}
-                    </Text>
-                    {/* Verifica si hay un código de estudiante */}
-                    {item.student_user_code ? (
-                      <Text style={styles.detailText}>
-                        Codigo: {item.student_user_code}
-                      </Text>
-                    ) : (
-                      ""
-                    )}
-                    {/* Verifica si hay un código de profesor */}
-                    {item.professor_user_code ? (
-                      <Text style={styles.detailText}>
-                        Codigo de Profesor: {item.professor_user_code}
-                      </Text>
-                    ) : (
-                      ""
-                    )}
-                    <Text style={styles.detailText}>
-                      Teléfono: {item.contact_phone}
-                    </Text>
-                    <Text style={styles.detailText}>
-                      Tipo de proyecto: {item.project_type}
-                    </Text>
-                    <Text style={styles.detailText}>
-                      Aplicación del proyecto: {item.application}
-                    </Text>
-                    <Text style={styles.detailText}>
-                      Descripción del prototipo: {item.prototype_description}
-                    </Text>
-                    <Text style={styles.detailText}>
-                      Dimensiones específicas:{" "}
-                      {item.specific_requirements_dimensions}
-                    </Text>
-                    {/* Verifica si hay algún corte especial */}
-                    {item.specific_requirements_special_cut ? (
-                      <Text style={styles.detailText}>
-                        Corte especial: {item.specific_requirements_special_cut}
-                      </Text>
-                    ) : (
-                      ""
-                    )}
-                    {/* Verifica si hay algún requerimiento extra */}
-                    {item.specific_requirements_other ? (
-                      <Text style={styles.detailText}>
-                        Otros: {item.specific_requirements_other}
-                      </Text>
-                    ) : (
-                      ""
-                    )}
-                    {/* Verifica si hay algúna observación extra */}
-                    {item.specific_requirements_comments ? (
-                      <Text style={styles.detailText}>
-                        Observaciónes: {item.specific_requirements_comments}
-                      </Text>
-                    ) : (
-                      ""
-                    )}
-
-                    {/* Botón para generar PDF */}
-                    <TouchableOpacity
-                      onPress={() => handleGeneratePDF(item)}
-                      style={styles.generatePDFButton}
-                    >
-                      <Text style={styles.buttonText}>Generar PDF</Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
               </View>
             )}
           />
         </View>
-        {/* Renderiza el componente PDFGenerator solo si hay datos seleccionados */}
-        {selectedData && <PDFGenerator data={selectedData} />}
       </View>
     </CustomViewReverse>
   );
@@ -254,7 +174,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     backgroundColor: "#2272A7",
     borderRadius: 8,
-    //overflow: "hidden",
   },
   item: {
     flexDirection: "row",
@@ -303,18 +222,21 @@ const styles = StyleSheet.create({
   buttonImage: {
     width: 24,
     height: 24,
-    marginHorizontal: 10,
+    resizeMode: "contain",
+    tintColor: "#ffffff",
   },
   generatePDFButton: {
-    marginTop: 10,
-    padding: 10,
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#ffffff",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
     borderRadius: 5,
-    alignItems: "center",
+    marginTop: 10,
   },
   buttonText: {
-    color: "#ffffff",
+    fontSize: 14,
     fontWeight: "bold",
+    color: "#2272A7",
+    textAlign: "center",
   },
 });
 

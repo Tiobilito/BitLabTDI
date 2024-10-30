@@ -333,3 +333,19 @@ export async function getPrototypeStndby() {
   //console.log("Registros de clientes:", data);
   return data;
 }
+
+// Función para obtener una solicitud de prototipo por ID
+export async function getPrototypeById(id) {
+  const { data, error } = await supabase
+    .from("project_submissions")
+    .select("*")
+    .eq("id", id) // Filtra por el ID recibido
+    .single(); // Asegúrate de obtener solo un registro
+
+  if (error) {
+    console.error("Error al obtener la solicitud:", error);
+    return null; // Manejo de errores
+  }
+
+  return data; // Retorna el registro encontrado
+}

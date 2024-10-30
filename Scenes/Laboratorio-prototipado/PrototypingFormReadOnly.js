@@ -1,9 +1,60 @@
-import React from "react";
-import { View, Text, StyleSheet, ScrollView, StatusBar } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  StatusBar,
+  ActivityIndicator,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
+import { getPrototypeById } from "../../Modules/OperacionesBD"; // Asegúrate de que la función getPrototypeById esté correctamente importada
+
+const Scale = Dimensions.get("window").width;
 
 export default function PrototypingFormReadOnly({ route }) {
-  // Datos de la solicitud obtenidos de la navegación
-  /* const {
+  const { id } = route.params;
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const fetchedData = await getPrototypeById(id);
+        setData(fetchedData);
+      } catch (error) {
+        setError("Error al cargar los datos del prototipo");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color="#394f66" />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.centered}>
+        <Text style={styles.errorText}>{error}</Text>
+      </View>
+    );
+  }
+
+  if (!data) {
+    return null;
+  }
+
+  const {
     applicant_name,
     contact_email,
     contact_phone,
@@ -17,8 +68,8 @@ export default function PrototypingFormReadOnly({ route }) {
     specific_requirements_special_cut,
     specific_requirements_other,
     specific_requirements_comments,
-  } = route.params.item;
-  */
+  } = data;
+
   return (
     <ScrollView contentContainerStyle={styles.formContainer}>
       <StatusBar
@@ -31,7 +82,7 @@ export default function PrototypingFormReadOnly({ route }) {
       <Text style={styles.title}>
         Detalles de la solicitud de servicio de prototipo
       </Text>
-      {/* 
+
       <View style={styles.formSection}>
         <Text style={styles.titleSection}>Datos de contacto</Text>
         <Text style={styles.label}>Nombre completo:</Text>
@@ -87,7 +138,16 @@ export default function PrototypingFormReadOnly({ route }) {
           {specific_requirements_comments || "Sin comentarios adicionales"}
         </Text>
       </View>
-      */}
+
+      {/* Botones para aprobar o rechazar la solicitud*/}
+      <View style={styles.approval}>
+        <TouchableOpacity style={styles.submitButton}>
+          <Text style={styles.submitButtonText}>Aprobar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.submitButton}>
+          <Text style={styles.submitButtonText}>Rechazar</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 }
@@ -127,5 +187,68 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#333",
     paddingVertical: 5,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f5f5f5",
+  },
+  errorText: {
+    fontSize: 16,
+    color: "red",
+  },
+  mainTriangle: {
+    width: 0,
+    height: 0,
+    backgroundColor: "transparent",
+    borderStyle: "solid",
+    borderLeftWidth: 450,
+    borderRightWidth: 280,
+    borderBottomWidth: 280,
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
+    borderBottomColor: "#328EC5",
+    transform: [{ rotate: "30deg" }],
+    marginTop: "-70%",
+    marginBottom: "10%",
+    marginRight: "-30%",
+  },
+  backTriangle: {
+    width: 0,
+    height: 0,
+    backgroundColor: "transparent",
+    borderStyle: "solid",
+    borderLeftWidth: 350,
+    borderRightWidth: 200,
+    borderBottomWidth: 250,
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
+    borderBottomColor: "#57A9D9",
+    transform: [{ rotate: "95deg" }],
+    marginTop: "-40%",
+    marginBottom: "5%",
+    marginLeft: "-70%",
+  },
+  submitButton: {
+    width: Scale * 0.25,
+    height: Scale * 0.1,
+    backgroundColor: "#2272A7",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    marginBottom: Scale * 0.0,
+    marginRight: 10,
+  },
+
+  submitButtonText: {
+    color: "white",
+    fontSize: 18,
+  },
+  approval: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
   },
 });
