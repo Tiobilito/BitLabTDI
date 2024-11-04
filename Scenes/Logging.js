@@ -18,24 +18,43 @@ import { CustomView } from "./components/CustomView";
 const Scale = Dimensions.get("window").width;
 
 const LoggingPage = ({ navigation }) => {
-  const [username, setUsername] = useState("");
+  const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    const data = GetUserData();
-    if (data) {
-      setUsername(data.Username);
-      setPassword(data.Password);
-    }
+    const loadUserData = async () => {
+      const data = await GetUserData();
+      if (data) {
+        setCode(data.Code);
+        setPassword(data.Password);
+      }
+    };
+    loadUserData();
   }, []);
-
+  
   const Verify = async () => {
-    const BVerify = await CheckUser(username, password);
-    if (BVerify == true) {
-      await StoreUserData(username, password);
-      navigation.navigate("WorkerApp");
+    const Verify = await CheckUser(code, password);
+    if (Verify) {
+      await StoreUserData(Verify.code, Verify.password, Verify.user_type); // Esperar a que termine de guardar los datos
+      switch(Verify.user_type) {
+        case 0:
+          navigation.navigate("StaffApp");
+          break
+        case 1:
+          navigation.navigate("StaffApp");
+          break
+        case 2:
+          navigation.navigate("WorkerApp");
+          break
+        case 3:
+          navigation.navigate("StudentsApp");
+          break
+        case 4:
+          navigation.navigate("StudentsApp");
+          break
+      }
     }
-  };
+  };  
 
   return (
     <CustomView>
@@ -53,10 +72,10 @@ const LoggingPage = ({ navigation }) => {
             <TextInput
               style={styles.input}
               onChangeText={(text) => {
-                setUsername(text);
+                setCode(text);
               }}
-              value={username}
-              placeholder="Username"
+              value={code.toString()}
+              keyboardType="numeric"
             />
             <Text style={styles.textForm}>Contraseña</Text>
             <TextInput
@@ -72,7 +91,7 @@ const LoggingPage = ({ navigation }) => {
 
           <TouchableOpacity
             style={styles.loginButton}
-            onPress={() => Verify(username, password)}
+            onPress={() => Verify(code, password)}
           >
             <Text style={{ color: "white", fontWeight: "bold" }}>Iniciar</Text>
           </TouchableOpacity>

@@ -5,16 +5,16 @@ export async function CheckUser(code, contraseña) {
   const { data, error } = await supabase
     .from("users")
     .select("*")
-    .eq("name", code)
+    .eq("code", code)
     .eq("password", contraseña);
   if (error) {
     console.log("hubo un error", error);
   }
   if (data.length > 0) {
-    return true;
+    return data[0];
   } else {
     Alert.alert("Datos incorrectos");
-    return false;
+    return null;
   }
 }
 
@@ -319,6 +319,64 @@ export async function addOrder(Order) {
   return null;
 }
 
+// Función para obtener todos los registros de la tabla project_submissions
+export async function getAllProjectSubmissions() {
+  const { data, error } = await supabase
+    .from("project_submissions")
+    .select("*"); // Selecciona todas las columnas
+
+  if (error) {
+    console.error("Error al obtener registros:", error);
+    return null;
+  }
+  console.log("Registros de project submissions:", data);
+  return data;
+}
+
+// Función para obtener todos los registros de la tabla project_submissions que tiene que revisar el jefe de division
+export async function getAllProjectSubmissionsCheckDH() {
+  const { data, error } = await supabase
+    .from("project_submissions")
+    .select("*") // Selecciona todas las columnas
+    .eq("department_head", false);
+  if (error) {
+    console.error("Error al obtener registros:", error);
+    return null;
+  }
+  console.log("Registros de project submissions:", data);
+  return data;
+}
+
+// Función para obtener todos los registros de la tabla project_submissions que tiene que revisar el jefe de laboratorio
+export async function getAllProjectSubmissionsCheckLH() {
+  const { data, error } = await supabase
+    .from("project_submissions")
+    .select("*") // Selecciona todas las columnas
+    .eq("department_head", true)
+    .eq("laboratory_head", false);
+  if (error) {
+    console.error("Error al obtener registros:", error);
+    return null;
+  }
+  console.log("Registros de project submissions:", data);
+  return data;
+}
+
+// Función para obtener todos los registros de la tabla project_submissions que tiene que revisar el prestador de servicio
+export async function getAllProjectSubmissionsCheckSS() {
+  const { data, error } = await supabase
+    .from("project_submissions")
+    .select("*") // Selecciona todas las columnas
+    .eq("department_head", true)
+    .eq("laboratory_head", true)
+    .eq("service_staff", false);
+  if (error) {
+    console.error("Error al obtener registros:", error);
+    return null;
+  }
+  console.log("Registros de project submissions:", data);
+  return data;
+}
 //Funcion para obtener todas las solicitudes de prototipo con status "awaiting_revision"
 export async function getPrototypeStndby() {
   const { data, error } = await supabase

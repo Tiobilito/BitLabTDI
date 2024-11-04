@@ -1,4 +1,3 @@
-import { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const GetUserData = async () => {
@@ -15,13 +14,15 @@ export const GetUserData = async () => {
   }
 };
 
-export const StoreUserData = async (username, password) => {
+export const StoreUserData = async (code, password, user_type) => {
   var UserData = {
-    Username: "",
+    Code: "",
     Password: "",
+    User_type: "",
   };
-  UserData.Username = username;
+  UserData.Code = code;
   UserData.Password = password;
+  UserData.User_type = user_type;
   try {
     const UDjson = JSON.stringify(UserData);
     await AsyncStorage.setItem("@UserCr", UDjson);
