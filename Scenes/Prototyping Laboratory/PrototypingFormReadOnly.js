@@ -10,11 +10,13 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { getPrototypeById } from "../../Modules/OperacionesBD"; // Asegúrate de que la función getPrototypeById esté correctamente importada
+import { useRoute } from "@react-navigation/native";
 
 const Scale = Dimensions.get("window").width;
 
-export default function PrototypingFormReadOnly({ route }) {
-  const { id } = route.params;
+export default function PrototypingFormReadOnly({ navigation }) {
+  const route = useRoute();
+  const { idReport } = route.params;
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -22,7 +24,7 @@ export default function PrototypingFormReadOnly({ route }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const fetchedData = await getPrototypeById(id);
+        const fetchedData = await getPrototypeById(idReport);
         setData(fetchedData);
       } catch (error) {
         setError("Error al cargar los datos del prototipo");
@@ -32,7 +34,7 @@ export default function PrototypingFormReadOnly({ route }) {
     };
 
     fetchData();
-  }, [id]);
+  }, [idReport]);
 
   if (isLoading) {
     return (

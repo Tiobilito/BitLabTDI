@@ -10,7 +10,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 // Scenes principal
 import LoggingPage from "./Scenes/Logging";
@@ -41,10 +40,18 @@ const StudentsTap = createBottomTabNavigator();
 const StaffTap = createBottomTabNavigator();
 const MainWorkerStack = createNativeStackNavigator();
 const RepairClientDevicesStack = createNativeStackNavigator();
+const ReportCheckStack = createNativeStackNavigator();
 
-const WIDTH = Dimensions.get("screen").width;
-const HEIGHT = Dimensions.get("screen").height;
+function StRepCheck() {
+  return(
+    <ReportCheckStack.Navigator screenOptions={{ headerShown: false }}>
+      <ReportCheckStack.Screen name="Check" component={PrototypingCheck} />
+      <ReportCheckStack.Screen name="ReportCheck" component={PrototypingFormReadOnly} />
+    </ReportCheckStack.Navigator>
+  );
+}
 
+//Stack que abarca todas las ventanas relacionadas con el chequeo de los reportes del laboratorio de prototipado
 function Worker() {
   return (
     <MainWorkerStack.Navigator screenOptions={{ headerShown: false }}>
@@ -54,6 +61,7 @@ function Worker() {
   );
 }
 
+//Stack que abarca todas las ventanas relacionadas con las reparaciones
 function Fixes() {
   return (
     <RepairClientDevicesStack.Navigator screenOptions={{ headerShown: false }}>
@@ -79,7 +87,8 @@ function Fixes() {
   );
 }
 
-const StudentsApp = () => {
+//Tap que abarca todas las ventanas relacionadas con los estudiantes y maestros
+const AcademicGroupApp = () => {
   return (
     <StudentsTap.Navigator
       initialRouteName="Principal"
@@ -109,6 +118,7 @@ const StudentsApp = () => {
   );
 };
 
+//Tap que abarca todas las ventanas ralacionadas con el jefe de division y de laboratorio
 const StaffApp = () => {
   return (
     <StaffTap.Navigator
@@ -134,7 +144,7 @@ const StaffApp = () => {
   );
 };
 
-const PrestadorApp = () => {
+const SocialServiceApp = () => {
   return (
     <WorkerTap.Navigator
       initialRouteName="Principal"
@@ -179,8 +189,8 @@ export default function App() {
       >
         <Stack.Screen name="Logging" component={LoggingPage} />
         <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="StudentsApp" component={StudentsApp} />
-        <Stack.Screen name="WorkerApp" component={PrestadorApp} />
+        <Stack.Screen name="StudentsApp" component={AcademicGroupApp} />
+        <Stack.Screen name="WorkerApp" component={SocialServiceApp} />
         <Stack.Screen name="PrototypingForm" component={PrototypingForm} />
         <Stack.Screen
           name="PrototypesOnStandby"
