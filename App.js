@@ -15,24 +15,24 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import LoggingPage from "./Scenes/Logging";
 import Register from "./Scenes/Register";
 // Scenes Prestador de servicio
-import WorkerPage from "./Scenes/Prestador de servicio/Prestador de Servicio";
-import AddClientPage from "./Scenes/Prestador de servicio/AddClient";
-import AddDevicePage from "./Scenes/Prestador de servicio/AddDevice";
-import SearchClientPage from "./Scenes/Prestador de servicio/SearchClient";
-import DevicesPage from "./Scenes/Prestador de servicio/Devices";
-import EditClientPage from "./Scenes/Prestador de servicio/EditClient";
-import EditDevicePage from "./Scenes/Prestador de servicio/EditDevice";
-import OrderPage from "./Scenes/Prestador de servicio/Order";
+import WorkerPage from "./Scenes/Social Service Provider/Prestador de Servicio";
+import AddClientPage from "./Scenes/Social Service Provider/AddClient";
+import AddDevicePage from "./Scenes/Social Service Provider/AddDevice";
+import SearchClientPage from "./Scenes/Social Service Provider/SearchClient";
+import DevicesPage from "./Scenes/Social Service Provider/Devices";
+import EditClientPage from "./Scenes/Social Service Provider/EditClient";
+import EditDevicePage from "./Scenes/Social Service Provider/EditDevice";
+import OrderPage from "./Scenes/Social Service Provider/Order";
 // Scenes Laboratorio de Prototipado
-import PrototypingForm from "./Scenes/Laboratorio-prototipado/PrototypingForm";
-import PrototypingCheck from "./Scenes/Laboratorio-prototipado/PrototypingReportCheck";
-import PrototypesOnStandby from "./Scenes/Laboratorio-prototipado/PrototypesOnStandby";
-import PrototypingFormReadOnly from "./Scenes/Laboratorio-prototipado/PrototypingFormReadOnly";
+import PrototypingForm from "./Scenes/Prototyping Laboratory/PrototypingForm";
+import PrototypingCheck from "./Scenes/Prototyping Laboratory/PrototypingReportCheck";
+import PrototypesOnStandby from "./Scenes/Prototyping Laboratory/PrototypesOnStandby";
+import PrototypingFormReadOnly from "./Scenes/Prototyping Laboratory/PrototypingFormReadOnly";
 
-import DevicesTest from "./Scenes/Prestador de servicio/DevicesTest";
-import Reports from "./Scenes/Prestador de servicio/Reports";
+import DevicesTest from "./Scenes/Social Service Provider/DevicesTest";
+import Reports from "./Scenes/Social Service Provider/Reports";
 import StudentPage from "./Scenes/Academic Group Users/Student";
-import PrototypingSearch from "./Scenes/Laboratorio-prototipado/PrototypingSearchReports";
+import PrototypingSearch from "./Scenes/Prototyping Laboratory/PrototypingSearchReports";
 
 const Stack = createNativeStackNavigator();
 const WorkerTap = createBottomTabNavigator();
