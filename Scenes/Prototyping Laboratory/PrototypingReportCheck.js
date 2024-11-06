@@ -105,8 +105,8 @@ const PrototypingCheck = ({ navigation }) => {
     );
   }
 
-  const navigateToEditSubmission = (id) => {
-    navigation.navigate("EditSubmission", { idSubmission: id });
+  const navigateToCheck = (id) => {
+    navigation.navigate("ReportCheck", { idReport: id });
   };
 
   return (
@@ -223,7 +223,7 @@ const PrototypingCheck = ({ navigation }) => {
                     {/* Agrega más campos según sea necesario */}
                     <View style={styles.buttons}>
                       <TouchableOpacity
-                        onPress={() => navigateToEditSubmission(item.id)}
+                        onPress={() => navigateToCheck(item.id)}
                       >
                         <Image
                           source={require("../../Resources/imagenes/editar.png")}

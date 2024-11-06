@@ -329,7 +329,6 @@ export async function getAllProjectSubmissions() {
     console.error("Error al obtener registros:", error);
     return null;
   }
-  console.log("Registros de project submissions:", data);
   return data;
 }
 
@@ -343,7 +342,6 @@ export async function getAllProjectSubmissionsCheckDH() {
     console.error("Error al obtener registros:", error);
     return null;
   }
-  console.log("Registros de project submissions:", data);
   return data;
 }
 
@@ -358,7 +356,6 @@ export async function getAllProjectSubmissionsCheckLH() {
     console.error("Error al obtener registros:", error);
     return null;
   }
-  console.log("Registros de project submissions:", data);
   return data;
 }
 
@@ -374,9 +371,9 @@ export async function getAllProjectSubmissionsCheckSS() {
     console.error("Error al obtener registros:", error);
     return null;
   }
-  console.log("Registros de project submissions:", data);
   return data;
 }
+
 //Funcion para obtener todas las solicitudes de prototipo con status "awaiting_revision"
 export async function getPrototypeStndby() {
   const { data, error } = await supabase

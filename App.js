@@ -139,11 +139,12 @@ const StaffApp = () => {
       })}
     >
       <StaffTap.Screen name="Principal" component={StudentPage} />
-      <StaffTap.Screen name="Registros" component={PrototypingCheck} />
+      <StaffTap.Screen name="Registros" component={StRepCheck} />
     </StaffTap.Navigator>
   );
 };
 
+//Tap que abarca todas las ventanas ralacionadas con el prestador de servicio
 const SocialServiceApp = () => {
   return (
     <WorkerTap.Navigator
@@ -191,12 +192,10 @@ export default function App() {
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="StudentsApp" component={AcademicGroupApp} />
         <Stack.Screen name="WorkerApp" component={SocialServiceApp} />
-        <Stack.Screen name="PrototypingForm" component={PrototypingForm} />
         <Stack.Screen
           name="PrototypesOnStandby"
           component={PrototypesOnStandby}
         />
-        <Stack.Screen name="FormRead" component={PrototypingFormReadOnly} />
         <Stack.Screen name="StaffApp" component={StaffApp} />
       </Stack.Navigator>
     </NavigationContainer>
