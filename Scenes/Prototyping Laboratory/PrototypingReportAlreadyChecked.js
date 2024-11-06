@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
-import { getAllProjectSubmissionsCheckDH, getAllProjectSubmissionsCheckLH, getAllProjectSubmissionsCheckSS } from "../../Modules/OperacionesBD"; // Asegúrate de implementar correctamente esta función
+import { getAllProjectSubmissionsCheckedDH, getAllProjectSubmissionsCheckedLH, getAllProjectSubmissionsCheckedSS } from "../../Modules/OperacionesBD"; // Asegúrate de implementar correctamente esta función
 import { CustomViewReverse } from "../components/CustomViewReverse";
 import Icon from "react-native-vector-icons/Ionicons"; 
 import { GetUserData } from "../../Modules/DataInfo";
@@ -20,7 +20,7 @@ import { GetUserData } from "../../Modules/DataInfo";
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
 
-const PrototypingCheck = ({ navigation }) => {
+const PrototypingAlreadyChecked = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -41,11 +41,11 @@ const PrototypingCheck = ({ navigation }) => {
     try {
       const UData = await GetUserData();
       if(UData.User_type == "0") {
-        Data = await getAllProjectSubmissionsCheckDH();
+        Data = await getAllProjectSubmissionsCheckedDH();
       } else if(UData.User_type == "1") {
-        Data = await getAllProjectSubmissionsCheckLH();
+        Data = await getAllProjectSubmissionsCheckedLH();
       } else if(UData.User_type == "2") {
-        Data = await getAllProjectSubmissionsCheckSS();
+        Data = await getAllProjectSubmissionsCheckedSS();
       }
       const BData = Data.map((registro) => ({
         ...registro,
@@ -325,4 +325,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PrototypingCheck;
+export default PrototypingAlreadyChecked;
