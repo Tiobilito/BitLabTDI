@@ -9,12 +9,17 @@ import {
   FlatList,
   ActivityIndicator,
   Dimensions,
+  Pressable,
 } from "react-native";
 import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
-import { getAllProjectSubmissionsCheckDH, getAllProjectSubmissionsCheckLH, getAllProjectSubmissionsCheckSS } from "../../Modules/OperacionesBD"; // Asegúrate de implementar correctamente esta función
+import {
+  getAllProjectSubmissionsCheckDH,
+  getAllProjectSubmissionsCheckLH,
+  getAllProjectSubmissionsCheckSS,
+} from "../../Modules/OperacionesBD"; // Asegúrate de implementar correctamente esta función
 import { CustomViewReverse } from "../components/CustomViewReverse";
-import Icon from "react-native-vector-icons/Ionicons"; 
+import Icon from "react-native-vector-icons/Ionicons";
 import { GetUserData } from "../../Modules/DataInfo";
 
 const WIDTH = Dimensions.get("window").width;
@@ -40,11 +45,11 @@ const PrototypingCheck = ({ navigation }) => {
     let Data;
     try {
       const UData = await GetUserData();
-      if(UData.User_type == "0") {
+      if (UData.User_type == "0") {
         Data = await getAllProjectSubmissionsCheckDH();
-      } else if(UData.User_type == "1") {
+      } else if (UData.User_type == "1") {
         Data = await getAllProjectSubmissionsCheckLH();
-      } else if(UData.User_type == "2") {
+      } else if (UData.User_type == "2") {
         Data = await getAllProjectSubmissionsCheckSS();
       }
       const BData = Data.map((registro) => ({
@@ -109,7 +114,7 @@ const PrototypingCheck = ({ navigation }) => {
     navigation.navigate("ReportCheck", { idReport: id });
   };
 
-  const navigateToAlreadyChecked = (id) => {
+  const navigateToAlreadyChecked = () => {
     navigation.navigate("AlreadyCheckedReports");
   };
 
@@ -122,6 +127,12 @@ const PrototypingCheck = ({ navigation }) => {
           marginTop: HEIGHT * 0.04,
         }}
       >
+        <Pressable
+          style={{ marginLeft: "80%" }}
+          onPress={navigateToAlreadyChecked}
+        >
+          <Icon name="checkbox-outline" size={50} color="green" />
+        </Pressable>
         {/* Input para filtrar por application */}
         <TextInput
           style={styles.searchBox}

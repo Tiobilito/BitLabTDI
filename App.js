@@ -33,6 +33,7 @@ import DevicesTest from "./Scenes/Social Service Provider/DevicesTest";
 import Reports from "./Scenes/Social Service Provider/Reports";
 import StudentPage from "./Scenes/Academic Group Users/Student";
 import PrototypingSearch from "./Scenes/Prototyping Laboratory/PrototypingSearchReports";
+import PrototypingAlreadyChecked from "./Scenes/Prototyping Laboratory/PrototypingReportAlreadyChecked";
 
 const Stack = createNativeStackNavigator();
 const WorkerTap = createBottomTabNavigator();
@@ -47,6 +48,7 @@ function StRepCheck() {
     <ReportCheckStack.Navigator screenOptions={{ headerShown: false }}>
       <ReportCheckStack.Screen name="Check" component={PrototypingCheck} />
       <ReportCheckStack.Screen name="ReportCheck" component={PrototypingFormReadOnly} />
+      <ReportCheckStack.Screen name="AlreadyCheckedReports" component={PrototypingAlreadyChecked}/>
     </ReportCheckStack.Navigator>
   );
 }

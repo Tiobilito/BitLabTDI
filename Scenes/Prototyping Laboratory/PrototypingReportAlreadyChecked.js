@@ -4,6 +4,7 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  Pressable,
   Image,
   View,
   FlatList,
@@ -12,9 +13,13 @@ import {
 } from "react-native";
 import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
-import { getAllProjectSubmissionsCheckedDH, getAllProjectSubmissionsCheckedLH, getAllProjectSubmissionsCheckedSS } from "../../Modules/OperacionesBD"; // Asegúrate de implementar correctamente esta función
+import {
+  getAllProjectSubmissionsCheckedDH,
+  getAllProjectSubmissionsCheckedLH,
+  getAllProjectSubmissionsCheckedSS,
+} from "../../Modules/OperacionesBD"; // Asegúrate de implementar correctamente esta función
 import { CustomViewReverse } from "../components/CustomViewReverse";
-import Icon from "react-native-vector-icons/Ionicons"; 
+import Icon from "react-native-vector-icons/Ionicons";
 import { GetUserData } from "../../Modules/DataInfo";
 
 const WIDTH = Dimensions.get("window").width;
@@ -40,11 +45,11 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
     let Data;
     try {
       const UData = await GetUserData();
-      if(UData.User_type == "0") {
+      if (UData.User_type == "0") {
         Data = await getAllProjectSubmissionsCheckedDH();
-      } else if(UData.User_type == "1") {
+      } else if (UData.User_type == "1") {
         Data = await getAllProjectSubmissionsCheckedLH();
-      } else if(UData.User_type == "2") {
+      } else if (UData.User_type == "2") {
         Data = await getAllProjectSubmissionsCheckedSS();
       }
       const BData = Data.map((registro) => ({
@@ -109,8 +114,8 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
     navigation.navigate("ReportCheck", { idReport: id });
   };
 
-  const navigateToAlreadyChecked = (id) => {
-    navigation.navigate("AlreadyCheckedReports");
+  const navigateToRemaning = () => {
+    navigation.navigate("Check");
   };
 
   return (
@@ -122,6 +127,12 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
           marginTop: HEIGHT * 0.04,
         }}
       >
+        <Pressable
+          style={{ marginLeft: "80%" }}
+          onPress={navigateToRemaning}
+        >
+          <Icon name="timer-outline" size={50} color="orange" />
+        </Pressable>
         {/* Input para filtrar por application */}
         <TextInput
           style={styles.searchBox}
