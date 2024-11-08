@@ -47,10 +47,10 @@ const LoggingPage = ({ navigation }) => {
           navigation.navigate("WorkerApp");
           break
         case 3:
-          navigation.navigate("StudentsApp");
+          navigation.navigate("AcademicApp");
           break
         case 4:
-          navigation.navigate("StudentsApp");
+          navigation.navigate("AcademicApp");
           break
       }
     }

@@ -192,7 +192,7 @@ export default function App() {
       >
         <Stack.Screen name="Logging" component={LoggingPage} />
         <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="StudentsApp" component={AcademicGroupApp} />
+        <Stack.Screen name="AcademicApp" component={AcademicGroupApp} />
         <Stack.Screen name="WorkerApp" component={SocialServiceApp} />
         <Stack.Screen
           name="PrototypesOnStandby"
