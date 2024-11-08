@@ -5,7 +5,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 // Scenes principal
-import LoggingPage from "./Scenes/Logging";
+import LoginPage from "./Scenes/Login";
 import Register from "./Scenes/Register";
 // Scenes Prestador de servicio
 import WorkerPage from "./Scenes/Social Service/Prestador de Servicio";
@@ -185,7 +185,7 @@ export default function App() {
         }}
         //initialRouteName="Test"
       >
-        <Stack.Screen name="Logging" component={LoggingPage} />
+        <Stack.Screen name="Login" component={LoginPage} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="AcademicApp" component={AcademicGroupApp} />
         <Stack.Screen name="WorkerApp" component={SocialServiceApp} />

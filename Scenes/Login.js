@@ -17,7 +17,7 @@ import { CustomView } from "./components/CustomView";
 
 const Scale = Dimensions.get("window").width;
 
-const LoggingPage = ({ navigation }) => {
+const LoginPage = ({ navigation }) => {
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
 
@@ -218,4 +218,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoggingPage;
+export default LoginPage;
