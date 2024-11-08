@@ -16,7 +16,6 @@ import { useFocusEffect } from "@react-navigation/native";
 import { getAllProjectSubmissionsFinished } from "../../Modules/OperacionesBD"; // Asegúrate de implementar correctamente esta función
 import { CustomViewReverse } from "../components/CustomViewReverse";
 import Icon from "react-native-vector-icons/Ionicons";
-import { GetUserData } from "../../Modules/DataInfo";
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;

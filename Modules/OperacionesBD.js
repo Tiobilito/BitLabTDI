@@ -430,26 +430,28 @@ export async function getPrototypeById(id) {
 }
 
 // Función para modificar un registro en project submissions basado en el id (check)
-export async function updateProject(id, check, userType) {
-  let updateField = {};
-  // Asignar el campo a actualizar dependiendo del userType
+export async function UpdateProjectCheck(id, check, userType) {
+  let query = supabase.from("project_submissions").eq("id", id);
+  // Configura la consulta según el userType
   if (userType === 0) {
-    updateField = { department_head: check };
-  } else if (userType === 1) {
-    updateField = { laboratory_head: check };
+    console.log("department_head");
+    query = query.update({ department_head: check })
   } else if (userType === 2) {
-    updateField = { service_staff: check };
-  }
-  // Realizar la actualización en la tabla
-  const { data, error } = await supabase
-    .from("project_submissions")
-    .update(updateField)
-    .eq("id", id);
-  if (error) {
-    console.error("Error al actualizar registro:", error);
+    console.log("laboratory_head");
+    query = query.update({ laboratory_head: check })
+  } else if (userType === 3) {
+    console.log("service_staff");
+    query = query.update({ service_staff: check })
+  } else {
+    console.error("Tipo de usuario no válido");
     return null;
   }
-  console.log("Registro actualizado:", data);
+  // Ejecuta la consulta
+  const { data, error } = await query;
+  if (error) {
+    console.error("Error al obtener registros:", error);
+    return null;
+  }
+  console.log("Registros obtenidos:", data);
   return data;
 }
-

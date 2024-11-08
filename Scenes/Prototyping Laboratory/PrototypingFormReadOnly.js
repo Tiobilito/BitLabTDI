@@ -9,8 +9,9 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import { getPrototypeById } from "../../Modules/OperacionesBD"; // Asegúrate de que la función getPrototypeById esté correctamente importada
+import { getPrototypeById, UpdateProjectCheck } from "../../Modules/OperacionesBD"; // Asegúrate de que la función getPrototypeById esté correctamente importada
 import { useRoute } from "@react-navigation/native";
+import { GetUserData } from "../../Modules/DataInfo";
 
 const Scale = Dimensions.get("window").width;
 
@@ -21,8 +22,9 @@ export default function PrototypingFormReadOnly({ navigation }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const Accept = async() => {
-    
+  const UpdateCheck = async(Check) => {
+    const uData = GetUserData();
+    await UpdateProjectCheck(idReport, Check, uData.User_type);
   }
 
   useEffect(() => {
@@ -147,10 +149,10 @@ export default function PrototypingFormReadOnly({ navigation }) {
 
       {/* Botones para aprobar o rechazar la solicitud*/}
       <View style={styles.approval}>
-        <TouchableOpacity style={styles.submitButton}>
+        <TouchableOpacity style={styles.submitButton} onPress={() => UpdateCheck(true)}>
           <Text style={styles.submitButtonText}>Aprobar</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.submitButton}>
+        <TouchableOpacity style={styles.submitButton} onPress={() => UpdateCheck(false)}>
           <Text style={styles.submitButtonText}>Rechazar</Text>
         </TouchableOpacity>
       </View>
