@@ -25,6 +25,7 @@ export default function PrototypingFormReadOnly({ navigation }) {
   const UpdateCheck = async(Check) => {
     const uData = await GetUserData();
     await updateProjectCheck(idReport, Check, uData.User_type);
+    navigation.goBack();
   }
 
   useEffect(() => {
