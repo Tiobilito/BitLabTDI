@@ -48,7 +48,7 @@ function StRepCheck() {
       <ReportCheckStack.Screen name="Check" component={PrototypingCheck} />
       <ReportCheckStack.Screen name="ReportCheck" component={PrototypingFormReadOnly} />
       <ReportCheckStack.Screen name="AlreadyCheckedReports" component={PrototypingAlreadyChecked}/>
-      <ReportCheckStack.Screen name="RepDone" component={PrototypingReportStDone} />
+      <ReportCheckStack.Screen name="DoneReports" component={PrototypingReportStDone} />
     </ReportCheckStack.Navigator>
   );
 }

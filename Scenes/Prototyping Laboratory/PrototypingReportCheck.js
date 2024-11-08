@@ -113,6 +113,10 @@ const PrototypingCheck = ({ navigation }) => {
     navigation.navigate("AlreadyCheckedReports");
   };
 
+  const navigateToDone = () => {
+    navigation.navigate("DoneReports");
+  };
+
   return (
     <CustomViewReverse>
       <View
@@ -122,12 +126,20 @@ const PrototypingCheck = ({ navigation }) => {
           marginTop: HEIGHT * 0.04,
         }}
       >
-        <Pressable
-          style={{ marginLeft: "80%" }}
-          onPress={navigateToAlreadyChecked}
-        >
-          <Icon name="checkbox-outline" size={50} color="green" />
-        </Pressable>
+        <View>
+          <Pressable
+            style={{ marginLeft: "50%", marginTop: "5%", backgroundColor: "gray", height: 40, width: 70 }}
+            onPress={navigateToDone}
+          >
+            <Text style={{ marginLeft: 4 }}>Reportes Cerrados</Text>
+          </Pressable>
+          <Pressable
+            style={{ marginLeft: "75%", marginTop: "-12%", marginBottom: 10, backgroundColor: "gray", height: 42, width: 72 }}
+            onPress={navigateToAlreadyChecked}
+          >
+            <Text style={{ marginLeft: 2, marginTop: 2 }}>Reportes Aprovados</Text>
+          </Pressable>
+        </View>
         {/* Input para filtrar por application */}
         <TextInput
           style={styles.searchBox}
@@ -167,7 +179,7 @@ const PrototypingCheck = ({ navigation }) => {
         <View
           style={{
             width: WIDTH * 0.9,
-            height: HEIGHT * 0.8,
+            height: HEIGHT * 0.65,
             backgroundColor: "#FFFFFF",
             borderRadius: 12,
             padding: 8,
