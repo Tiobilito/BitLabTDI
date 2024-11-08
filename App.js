@@ -15,14 +15,14 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import LoggingPage from "./Scenes/Logging";
 import Register from "./Scenes/Register";
 // Scenes Prestador de servicio
-import WorkerPage from "./Scenes/Social Service Provider/Prestador de Servicio";
-import AddClientPage from "./Scenes/Social Service Provider/AddClient";
-import AddDevicePage from "./Scenes/Social Service Provider/AddDevice";
-import SearchClientPage from "./Scenes/Social Service Provider/SearchClient";
-import DevicesPage from "./Scenes/Social Service Provider/Devices";
-import EditClientPage from "./Scenes/Social Service Provider/EditClient";
-import EditDevicePage from "./Scenes/Social Service Provider/EditDevice";
-import OrderPage from "./Scenes/Social Service Provider/Order";
+import WorkerPage from "./Scenes/Social Service/Prestador de Servicio";
+import AddClientPage from "./Scenes/Social Service/AddClient";
+import AddDevicePage from "./Scenes/Social Service/AddDevice";
+import SearchClientPage from "./Scenes/Social Service/SearchClient";
+import DevicesPage from "./Scenes/Social Service/Devices";
+import EditClientPage from "./Scenes/Social Service/EditClient";
+import EditDevicePage from "./Scenes/Social Service/EditDevice";
+import OrderPage from "./Scenes/Social Service/Order";
 // Scenes Laboratorio de Prototipado
 import PrototypingForm from "./Scenes/Prototyping Laboratory/PrototypingForm";
 import PrototypingCheck from "./Scenes/Prototyping Laboratory/PrototypingReportCheck";
