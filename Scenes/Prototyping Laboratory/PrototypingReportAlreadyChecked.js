@@ -14,6 +14,7 @@ import {
 import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
 import {
+  getAllProjectSubmissionsChecked,
   getAllProjectSubmissionsCheckedDH,
   getAllProjectSubmissionsCheckedLH,
   getAllProjectSubmissionsCheckedSS,
@@ -45,13 +46,7 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
     let Data;
     try {
       const UData = await GetUserData();
-      if (UData.User_type == "0") {
-        Data = await getAllProjectSubmissionsCheckedDH();
-      } else if (UData.User_type == "1") {
-        Data = await getAllProjectSubmissionsCheckedLH();
-      } else if (UData.User_type == "2") {
-        Data = await getAllProjectSubmissionsCheckedSS();
-      }
+      Data = await getAllProjectSubmissionsChecked(UData.User_type);
       const BData = Data.map((registro) => ({
         ...registro,
         Details: false,

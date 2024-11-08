@@ -355,51 +355,34 @@ export async function getAllProjectSubmissionsCheck(userType) {
     console.error("Error al obtener registros:", error);
     return null;
   }
-  
   console.log("Registros obtenidos:", data);
   return data;
 }
 
-
-// Función para obtener todos los registros de la tabla project_submissions que ya le dio el visto bueno el jefe de division
-export async function getAllProjectSubmissionsCheckedDH() {
-  const { data, error } = await supabase
-    .from("project_submissions")
-    .select("*") // Selecciona todas las columnas
-    .eq("department_head", true);
+// Función para obtener registros de project_submissions basados en el userType
+export async function getAllProjectSubmissionsChecked(userType) {
+  let query = supabase.from("project_submissions").select("*");
+  // Configura la consulta según el userType
+  if (userType === 0) {
+    console.log("department_head");
+    query = query.eq("department_head", true);
+  } else if (userType === 2) {
+    console.log("laboratory_head");
+    query = query.eq("department_head", true).eq("laboratory_head", true);
+  } else if (userType === 3) {
+    console.log("service_staff");
+    query = query.eq("department_head", true).eq("laboratory_head", true).eq("service_staff", true);
+  } else {
+    console.error("Tipo de usuario no válido");
+    return null;
+  }
+  // Ejecuta la consulta
+  const { data, error } = await query;
   if (error) {
     console.error("Error al obtener registros:", error);
     return null;
   }
-  return data;
-}
-
-// Función para obtener todos los registros de la tabla project_submissions que dio el visto bueno el jefe de laboratorio
-export async function getAllProjectSubmissionsCheckedLH() {
-  const { data, error } = await supabase
-    .from("project_submissions")
-    .select("*") // Selecciona todas las columnas
-    .eq("department_head", true)
-    .eq("laboratory_head", true);
-  if (error) {
-    console.error("Error al obtener registros:", error);
-    return null;
-  }
-  return data;
-}
-
-// Función para obtener todos los registros de la tabla project_submissions que dio el visto bueno el prestador de servicio
-export async function getAllProjectSubmissionsCheckedSS() {
-  const { data, error } = await supabase
-    .from("project_submissions")
-    .select("*") // Selecciona todas las columnas
-    .eq("department_head", true)
-    .eq("laboratory_head", true)
-    .eq("service_staff", true);
-  if (error) {
-    console.error("Error al obtener registros:", error);
-    return null;
-  }
+  console.log("Registros obtenidos:", data);
   return data;
 }
 
