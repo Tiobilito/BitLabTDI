@@ -180,6 +180,40 @@ export async function getAllDevices() {
   return data;
 }
 
+export async function getOrderById(OrderId) {
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*")
+    .eq("id", OrderId);
+  if (error) {
+    console.error("Error al obtener registro:", error);
+    return null;
+  }
+  if (data.length === 0) {
+    console.log("No se encontró la orden con el id:", id);
+    return null;
+  }
+  console.log("Registro de la orden: ", data[0]);
+  return data[0];
+}
+
+export async function getConstByOrderId(OrderId) {
+  const { data, error } = await supabase
+    .from("costs")
+    .select("*")
+    .eq("order_id", OrderId);
+  if (error) {
+    console.error("Error al obtener los registros: ", error);
+    return null;
+  }
+  if (data.length === 0) {
+    console.log("No se encontraron los costos o no existen");
+    return null;
+  }
+  console.log("Costos: ", data[0]);
+  return data[0];
+}
+
 // Función para obtener un registro basado en id
 export async function getDispoById(id) {
   const { data, error } = await supabase
@@ -344,7 +378,10 @@ export async function getAllProjectSubmissionsCheck(userType) {
     query = query.eq("department_head", true).eq("laboratory_head", false);
   } else if (userType === 3) {
     console.log("service_staff");
-    query = query.eq("department_head", true).eq("laboratory_head", true).eq("service_staff", false);
+    query = query
+      .eq("department_head", true)
+      .eq("laboratory_head", true)
+      .eq("service_staff", false);
   } else {
     console.error("Tipo de usuario no válido");
     return null;
@@ -371,7 +408,10 @@ export async function getAllProjectSubmissionsChecked(userType) {
     query = query.eq("department_head", true).eq("laboratory_head", true);
   } else if (userType === 3) {
     console.log("service_staff");
-    query = query.eq("department_head", true).eq("laboratory_head", true).eq("service_staff", true);
+    query = query
+      .eq("department_head", true)
+      .eq("laboratory_head", true)
+      .eq("service_staff", true);
   } else {
     console.error("Tipo de usuario no válido");
     return null;
@@ -455,4 +495,3 @@ export async function updateProjectCheck(id, check, userType) {
   }
   console.log("Registro actualizado:", data);
 }
-
