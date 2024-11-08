@@ -19,7 +19,7 @@ import Icon from "react-native-vector-icons/Ionicons"; // Asegúrate de tener es
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
 
-const PrototypingSearch = ({ navigation }) => {
+const PrototypingReportsPage = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -312,4 +312,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PrototypingSearch;
+export default PrototypingReportsPage;

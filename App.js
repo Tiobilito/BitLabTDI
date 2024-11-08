@@ -1,11 +1,4 @@
 import React from "react";
-import {
-  View,
-  Dimensions,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -30,9 +23,10 @@ import PrototypesOnStandby from "./Scenes/Prototyping Laboratory/PrototypesOnSta
 import PrototypingFormReadOnly from "./Scenes/Prototyping Laboratory/PrototypingFormReadOnly";
 
 import StudentPage from "./Scenes/Academic Group Users/Student";
-import PrototypingSearch from "./Scenes/Prototyping Laboratory/PrototypingSearchReports";
+import PrototypingReportsPage from "./Scenes/Prototyping Laboratory/PrototypingReports";
 import PrototypingAlreadyChecked from "./Scenes/Prototyping Laboratory/PrototypingReportAlreadyChecked";
 import PrototypingReportStDone from "./Scenes/Prototyping Laboratory/PrototypingReportStDone";
+import OrderPageReadOnly from "./Scenes/Social Service/OrderReports";
 
 const Stack = createNativeStackNavigator();
 const WorkerTap = createBottomTabNavigator();
@@ -114,7 +108,7 @@ const AcademicGroupApp = () => {
       })}
     >
       <StudentsTap.Screen name="Principal" component={StudentPage} />
-      <StudentsTap.Screen name="Registros" component={PrototypingSearch} />
+      <StudentsTap.Screen name="Registros" component={PrototypingReportsPage} />
       <StudentsTap.Screen name="Prototipo" component={PrototypingForm} />
     </StudentsTap.Navigator>
   );
@@ -177,7 +171,7 @@ const SocialServiceApp = () => {
       <WorkerTap.Screen name="Principal" component={Worker} />
       <WorkerTap.Screen name="Reparaciones" component={Fixes} />
       <WorkerTap.Screen name="Prototipo" component={PrototypingForm} />
-      <WorkerTap.Screen name="Standby" component={PrototypesOnStandby} />
+      <WorkerTap.Screen name="RepProjects" component={PrototypesOnStandby} />
     </WorkerTap.Navigator>
   );
 };
@@ -189,6 +183,7 @@ export default function App() {
         screenOptions={{
           headerShown: false,
         }}
+        //initialRouteName="Test"
       >
         <Stack.Screen name="Logging" component={LoggingPage} />
         <Stack.Screen name="Register" component={Register} />
@@ -199,6 +194,7 @@ export default function App() {
           component={PrototypesOnStandby}
         />
         <Stack.Screen name="StaffApp" component={StaffApp} />
+        <Stack.Screen name="Test" component={OrderPageReadOnly} />
       </Stack.Navigator>
     </NavigationContainer>
   );
