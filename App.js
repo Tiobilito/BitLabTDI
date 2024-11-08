@@ -29,11 +29,10 @@ import PrototypingCheck from "./Scenes/Prototyping Laboratory/PrototypingReportC
 import PrototypesOnStandby from "./Scenes/Prototyping Laboratory/PrototypesOnStandby";
 import PrototypingFormReadOnly from "./Scenes/Prototyping Laboratory/PrototypingFormReadOnly";
 
-import DevicesTest from "./Scenes/Social Service Provider/DevicesTest";
-import Reports from "./Scenes/Social Service Provider/Reports";
 import StudentPage from "./Scenes/Academic Group Users/Student";
 import PrototypingSearch from "./Scenes/Prototyping Laboratory/PrototypingSearchReports";
 import PrototypingAlreadyChecked from "./Scenes/Prototyping Laboratory/PrototypingReportAlreadyChecked";
+import PrototypingReportStDone from "./Scenes/Prototyping Laboratory/PrototypingReportStDone";
 
 const Stack = createNativeStackNavigator();
 const WorkerTap = createBottomTabNavigator();
@@ -49,6 +48,7 @@ function StRepCheck() {
       <ReportCheckStack.Screen name="Check" component={PrototypingCheck} />
       <ReportCheckStack.Screen name="ReportCheck" component={PrototypingFormReadOnly} />
       <ReportCheckStack.Screen name="AlreadyCheckedReports" component={PrototypingAlreadyChecked}/>
+      <ReportCheckStack.Screen name="RepDone" component={PrototypingReportStDone} />
     </ReportCheckStack.Navigator>
   );
 }

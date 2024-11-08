@@ -4,21 +4,16 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  Pressable,
   Image,
   View,
   FlatList,
   ActivityIndicator,
   Dimensions,
-  Pressable,
 } from "react-native";
 import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
-import {
-  getAllProjectSubmissionsCheck,
-  getAllProjectSubmissionsCheckDH,
-  getAllProjectSubmissionsCheckLH,
-  getAllProjectSubmissionsCheckSS,
-} from "../../Modules/OperacionesBD"; // Asegúrate de implementar correctamente esta función
+import { getAllProjectSubmissionsFinished } from "../../Modules/OperacionesBD"; // Asegúrate de implementar correctamente esta función
 import { CustomViewReverse } from "../components/CustomViewReverse";
 import Icon from "react-native-vector-icons/Ionicons";
 import { GetUserData } from "../../Modules/DataInfo";
@@ -26,7 +21,7 @@ import { GetUserData } from "../../Modules/DataInfo";
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
 
-const PrototypingCheck = ({ navigation }) => {
+const PrototypingReportStDone = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -45,8 +40,7 @@ const PrototypingCheck = ({ navigation }) => {
   const fetchData = async () => {
     let Data;
     try {
-      const UData = await GetUserData();
-      Data = await getAllProjectSubmissionsCheck(UData.User_type);
+      Data = getAllProjectSubmissionsFinished();
       const BData = Data.map((registro) => ({
         ...registro,
         Details: false,
@@ -109,8 +103,8 @@ const PrototypingCheck = ({ navigation }) => {
     navigation.navigate("ReportCheck", { idReport: id });
   };
 
-  const navigateToAlreadyChecked = () => {
-    navigation.navigate("AlreadyCheckedReports");
+  const navigateToRemaning = () => {
+    navigation.navigate("Check");
   };
 
   return (
@@ -122,11 +116,8 @@ const PrototypingCheck = ({ navigation }) => {
           marginTop: HEIGHT * 0.04,
         }}
       >
-        <Pressable
-          style={{ marginLeft: "80%" }}
-          onPress={navigateToAlreadyChecked}
-        >
-          <Icon name="checkbox-outline" size={50} color="green" />
+        <Pressable style={{ marginLeft: "80%" }} onPress={navigateToRemaning}>
+          <Icon name="timer-outline" size={50} color="orange" />
         </Pressable>
         {/* Input para filtrar por application */}
         <TextInput
@@ -331,4 +322,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PrototypingCheck;
+export default PrototypingReportStDone;

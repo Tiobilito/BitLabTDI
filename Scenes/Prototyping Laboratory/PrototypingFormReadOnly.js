@@ -21,6 +21,10 @@ export default function PrototypingFormReadOnly({ navigation }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const Accept = async() => {
+    
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {

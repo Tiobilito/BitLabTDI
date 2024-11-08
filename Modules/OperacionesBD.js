@@ -332,47 +332,34 @@ export async function getAllProjectSubmissions() {
   return data;
 }
 
-// Función para obtener todos los registros de la tabla project_submissions que tiene que revisar el jefe de division
-export async function getAllProjectSubmissionsCheckDH() {
-  const { data, error } = await supabase
-    .from("project_submissions")
-    .select("*") // Selecciona todas las columnas
-    .eq("department_head", false);
+// Función para obtener registros de project_submissions basados en el userType
+export async function getAllProjectSubmissionsCheck(userType) {
+  let query = supabase.from("project_submissions").select("*");
+  // Configura la consulta según el userType
+  if (userType === 0) {
+    console.log("department_head");
+    query = query.eq("department_head", false);
+  } else if (userType === 2) {
+    console.log("laboratory_head");
+    query = query.eq("department_head", true).eq("laboratory_head", false);
+  } else if (userType === 3) {
+    console.log("service_staff");
+    query = query.eq("department_head", true).eq("laboratory_head", true).eq("service_staff", false);
+  } else {
+    console.error("Tipo de usuario no válido");
+    return null;
+  }
+  // Ejecuta la consulta
+  const { data, error } = await query;
   if (error) {
     console.error("Error al obtener registros:", error);
     return null;
   }
+  
+  console.log("Registros obtenidos:", data);
   return data;
 }
 
-// Función para obtener todos los registros de la tabla project_submissions que tiene que revisar el jefe de laboratorio
-export async function getAllProjectSubmissionsCheckLH() {
-  const { data, error } = await supabase
-    .from("project_submissions")
-    .select("*") // Selecciona todas las columnas
-    .eq("department_head", true)
-    .eq("laboratory_head", false);
-  if (error) {
-    console.error("Error al obtener registros:", error);
-    return null;
-  }
-  return data;
-}
-
-// Función para obtener todos los registros de la tabla project_submissions que tiene que revisar el prestador de servicio
-export async function getAllProjectSubmissionsCheckSS() {
-  const { data, error } = await supabase
-    .from("project_submissions")
-    .select("*") // Selecciona todas las columnas
-    .eq("department_head", true)
-    .eq("laboratory_head", true)
-    .eq("service_staff", false);
-  if (error) {
-    console.error("Error al obtener registros:", error);
-    return null;
-  }
-  return data;
-}
 
 // Función para obtener todos los registros de la tabla project_submissions que ya le dio el visto bueno el jefe de division
 export async function getAllProjectSubmissionsCheckedDH() {
@@ -416,6 +403,19 @@ export async function getAllProjectSubmissionsCheckedSS() {
   return data;
 }
 
+// Función para obtener todos los registros de project submissions en los que status sea aproved o disapproved
+export async function getAllProjectSubmissionsFinished() {
+  const { data, error } = await supabase
+    .from("project_submissions")
+    .select("*") // Selecciona todas las columnas
+    .in("status", ["aproved", "disapproved"]); // Filtra por 'aproved' o 'disapproved'
+  if (error) {
+    console.error("Error al obtener registros:", error);
+    return null;
+  }
+  return data;
+}
+
 //Funcion para obtener todas las solicitudes de prototipo con status "awaiting_revision"
 export async function getPrototypeStndby() {
   const { data, error } = await supabase
@@ -443,6 +443,30 @@ export async function getPrototypeById(id) {
     console.error("Error al obtener la solicitud:", error);
     return null; // Manejo de errores
   }
-
   return data; // Retorna el registro encontrado
 }
+
+// Función para modificar un registro en project submissions basado en el id (check)
+export async function updateProject(id, check, userType) {
+  let updateField = {};
+  // Asignar el campo a actualizar dependiendo del userType
+  if (userType === 0) {
+    updateField = { department_head: check };
+  } else if (userType === 1) {
+    updateField = { laboratory_head: check };
+  } else if (userType === 2) {
+    updateField = { service_staff: check };
+  }
+  // Realizar la actualización en la tabla
+  const { data, error } = await supabase
+    .from("project_submissions")
+    .update(updateField)
+    .eq("id", id);
+  if (error) {
+    console.error("Error al actualizar registro:", error);
+    return null;
+  }
+  console.log("Registro actualizado:", data);
+  return data;
+}
+
