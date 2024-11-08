@@ -9,7 +9,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import { getPrototypeById, UpdateProjectCheck } from "../../Modules/OperacionesBD"; // Asegúrate de que la función getPrototypeById esté correctamente importada
+import { getPrototypeById, updateProjectCheck } from "../../Modules/OperacionesBD"; // Asegúrate de que la función getPrototypeById esté correctamente importada
 import { useRoute } from "@react-navigation/native";
 import { GetUserData } from "../../Modules/DataInfo";
 
@@ -23,8 +23,8 @@ export default function PrototypingFormReadOnly({ navigation }) {
   const [error, setError] = useState(null);
 
   const UpdateCheck = async(Check) => {
-    const uData = GetUserData();
-    await UpdateProjectCheck(idReport, Check, uData.User_type);
+    const uData = await GetUserData();
+    await updateProjectCheck(idReport, Check, uData.User_type);
   }
 
   useEffect(() => {
