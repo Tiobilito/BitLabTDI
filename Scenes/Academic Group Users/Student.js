@@ -23,9 +23,7 @@ const StudentPage = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [fullData, setFullData] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
   const [showListDevice, setShowListDevice] = useState(false);
-  const [showListReport, setShowListReport] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
