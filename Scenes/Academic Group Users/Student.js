@@ -13,14 +13,15 @@ import { useFocusEffect } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { CustomViewReverse } from "../components/CustomViewReverse";
 
-import { getAllDevices } from "../../Modules/OperacionesBD";
+import { getAllDevices, getAllOrdersByUserId } from "../../Modules/OperacionesBD";
+import { GetUserData } from "../../Modules/DataInfo";
 
 const WIDTH = Dimensions.get("screen").width;
 const HEIGHT = Dimensions.get("screen").height;
 
 const StudentPage = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState([]);
+  const [dataOrders, setDataOrders] = useState([]);
   const [error, setError] = useState(null);
   const [fullData, setFullData] = useState([]);
   const [showListDevice, setShowListDevice] = useState(false);
@@ -34,14 +35,14 @@ const StudentPage = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const Data = await getAllDevices();
-      const BData = Data.map((registro) => ({
+      const UData = await GetUserData();
+      let Data = await getAllOrdersByUserId(UData.code);
+      let BData = Data.map((registro) => ({
         ...registro,
         Details: false,
       }));
-      setData(BData);
-      setFullData(BData);
-      console.log(BData);
+      setDataOrders(BData);
+      
       setIsLoading(false);
     } catch (error) {
       setError(error);

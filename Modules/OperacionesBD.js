@@ -180,6 +180,32 @@ export async function getAllDevices() {
   return data;
 }
 
+// Función para obtener todos los registros de la tabla orders relacionadas con un usuario en especifico
+export async function getAllOrdersByUserId(idUser) {
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*")
+    .eq("costumer_id", idUser); // Selecciona todas las columnas
+  if (error) {
+    console.error("Error al obtener registros:", error);
+    return null;
+  }
+  return data;
+}
+
+// Función para obtener todos los registros de la tabla orders relacionadas con un usuario en especifico
+export async function getAllProjectSubmissionsByUserId(idUser) {
+  const { data, error } = await supabase
+    .from("Project")
+    .select("*")
+    .eq("costumer_id", idUser); // Selecciona todas las columnas
+  if (error) {
+    console.error("Error al obtener registros:", error);
+    return null;
+  }
+  return data;
+}
+
 export async function getOrderById(OrderId) {
   const { data, error } = await supabase
     .from("orders")
