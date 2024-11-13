@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,7 +8,6 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
-import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { CustomViewReverse } from "../components/CustomViewReverse";
@@ -22,9 +21,9 @@ const HEIGHT = Dimensions.get("screen").height;
 const StudentPage = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [dataOrders, setDataOrders] = useState([]);
+  const [dataReports, setDataReports] = useState([]); // Nueva lista de reportes
   const [error, setError] = useState(null);
-  const [fullData, setFullData] = useState([]);
-  const [showListDevice, setShowListDevice] = useState(false);
+  const [showListDevice, setShowListDevice] = useState(true); // Estado para alternar entre listas
 
   useFocusEffect(
     useCallback(() => {
@@ -36,29 +35,23 @@ const StudentPage = ({ navigation }) => {
   const fetchData = async () => {
     try {
       const UData = await GetUserData();
-      let Data = await getAllOrdersByUserId(UData.code);
+      let Data = await getAllOrdersByUserId(UData.Code);
       let BData = Data.map((registro) => ({
         ...registro,
         Details: false,
       }));
       setDataOrders(BData);
-      
+      Data = await geta
       setIsLoading(false);
     } catch (error) {
       setError(error);
-      console.log(error);
       setIsLoading(false);
     }
   };
 
-  // const toggleList = () => {
-
-  // };
-
-  // const toggleListReports = () => {
-  //   setShowListReport(!showListReport);
-  //   console.log("Presionado reportes");
-  // };
+  const toggleList = () => {
+    setShowListDevice(!showListDevice);
+  };
 
   if (isLoading) {
     return (
@@ -68,26 +61,9 @@ const StudentPage = ({ navigation }) => {
     );
   }
 
-  if (error) {
-    return (
-      <View style={styles.centered}>
-        <Text style={styles.errorText}>Error en la obtención de datos</Text>
-      </View>
-    );
-  }
-
-  const navigateToEditClient = (code) => {
-    navigation.navigate("EditDevice", { id: code });
-  };
-
-  const navigateToDevices = (code) => {
-    navigation.navigate("Devices", { id: code });
-  };
-
   return (
     <CustomViewReverse>
       <View style={{ marginTop: HEIGHT * 0.05, gap: HEIGHT * 0.02 }}>
-        {/*  View para los botones */}
         <TouchableOpacity
           style={styles.btnAction}
           onPress={() => navigation.navigate("AddClient")}
@@ -118,15 +94,13 @@ const StudentPage = ({ navigation }) => {
       <View style={styles.btnShowStats}>
         <TouchableOpacity
           style={styles.btnShow}
-          //onPress={() => console.log("Devices")}
           onPress={() => toggleList()}
         >
           <Ionicons name="add-circle" style={styles.iconShowStats} />
-          <Text style={styles.textShowStats}>Dispositivos</Text>
+          <Text style={styles.textShowStats}>Ordenes</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.btnShow}
-          //onPress={() => console.log("Reports")}
           onPress={() => toggleList()}
         >
           <Ionicons name="clipboard" style={styles.iconShowStats} />
@@ -134,34 +108,46 @@ const StudentPage = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.tables}>
-        <FlatList
-          data={fullData}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.itemContainer}>
-              <Text>ID del trabajador: {item.customer_id}</Text>
-              <Text>Nombre del dispositivo: {item.model}</Text>
-              <Text>Fecha de recibido: {item.received_date}</Text>
-            </View>
-          )}
-        />
+        {showListDevice ? (
+          <FlatList
+            data={dataOrders}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <View style={styles.itemContainer}>
+                <Text>{item.id}</Text>
+              </View>
+            )}
+            ListEmptyComponent={
+              <Text style={styles.emptyText}>No hay ordenes disponibles</Text>
+            }
+          />
+        ) : (
+          <FlatList
+            data={dataReports}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <View style={styles.itemContainer}>
+                <Text>{item.id}</Text>
+              </View>
+            )}
+            ListEmptyComponent={
+              <Text style={styles.emptyText}>No hay reportes disponibles</Text>
+            }
+          />
+        )}
       </View>
     </CustomViewReverse>
   );
 };
 
 const styles = StyleSheet.create({
-  background: {
+  centered: {
     flex: 1,
-    resizeMode: "cover",
-    alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#095ea7",
-    marginTop: 30,
+    alignItems: "center",
   },
-  Buttons: {
-    width: 200,
-    height: 200,
+  errorText: {
+    color: "red",
   },
   text: {
     fontSize: WIDTH > 400 ? 32 : 24,
@@ -171,10 +157,6 @@ const styles = StyleSheet.create({
   textShowStats: {
     fontSize: WIDTH > 400 ? 24 : 16,
     fontWeight: "bold",
-    color: "#2272A7",
-  },
-  icon: {
-    fontSize: WIDTH > 400 ? 32 : 24,
     color: "#2272A7",
   },
   iconShowStats: {
@@ -218,6 +200,12 @@ const styles = StyleSheet.create({
     margin: HEIGHT * 0.008,
     padding: WIDTH * 0.02,
     borderRadius: 10,
+  },
+  emptyText: {
+    textAlign: "center",
+    color: "#2272A7",
+    fontSize: 16,
+    marginTop: HEIGHT * 0.02,
   },
 });
 

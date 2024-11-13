@@ -185,7 +185,7 @@ export async function getAllOrdersByUserId(idUser) {
   const { data, error } = await supabase
     .from("orders")
     .select("*")
-    .eq("costumer_id", idUser); // Selecciona todas las columnas
+    .eq("customer_id", idUser); // Selecciona todas las columnas
   if (error) {
     console.error("Error al obtener registros:", error);
     return null;
@@ -196,9 +196,9 @@ export async function getAllOrdersByUserId(idUser) {
 // Función para obtener todos los registros de la tabla orders relacionadas con un usuario en especifico
 export async function getAllProjectSubmissionsByUserId(idUser) {
   const { data, error } = await supabase
-    .from("Project")
+    .from("project_submissions")
     .select("*")
-    .eq("costumer_id", idUser); // Selecciona todas las columnas
+    .eq("customer_id", idUser); // Selecciona todas las columnas
   if (error) {
     console.error("Error al obtener registros:", error);
     return null;
