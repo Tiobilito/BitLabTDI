@@ -9,7 +9,10 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import { getPrototypeById, updateProjectCheck } from "../../Modules/OperacionesBD"; // Asegúrate de que la función getPrototypeById esté correctamente importada
+import {
+  getPrototypeById,
+  updateProjectCheck,
+} from "../../Modules/OperacionesBD"; // Asegúrate de que la función getPrototypeById esté correctamente importada
 import { useRoute } from "@react-navigation/native";
 import { GetUserData } from "../../Modules/DataInfo";
 
@@ -22,11 +25,11 @@ export default function PrototypingFormReadOnly({ navigation }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const UpdateCheck = async(Check) => {
+  const UpdateCheck = async (Check) => {
     const uData = await GetUserData();
     await updateProjectCheck(idReport, Check, uData.User_type);
     navigation.goBack();
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,6 +82,18 @@ export default function PrototypingFormReadOnly({ navigation }) {
     specific_requirements_comments,
   } = data;
 
+  // Verifica el tipo de prototipo y muestra una mejor descripción al usuario
+  const getPrototypeDisplayName = (prototypeType) => {
+    switch (prototypeType) {
+      case "impreso":
+        return "Diseño de tipo impreso";
+      case "tresD":
+        return "Diseño de prototipo en 3D";
+      default:
+        return "Diseño desconocido";
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.formContainer}>
       <StatusBar
@@ -129,7 +144,9 @@ export default function PrototypingFormReadOnly({ navigation }) {
       <View style={styles.formSection}>
         <Text style={styles.titleSection}>Datos del Prototipo</Text>
         <Text style={styles.label}>Tipo de Prototipo:</Text>
-        <Text style={styles.value}>{prototype_type}</Text>
+        <Text style={styles.value}>
+          {getPrototypeDisplayName(prototype_type)}
+        </Text>
         <Text style={styles.label}>Descripción del Prototipo:</Text>
         <Text style={styles.value}>{prototype_description}</Text>
         <Text style={styles.label}>Dimensiones:</Text>
@@ -150,10 +167,16 @@ export default function PrototypingFormReadOnly({ navigation }) {
 
       {/* Botones para aprobar o rechazar la solicitud*/}
       <View style={styles.approval}>
-        <TouchableOpacity style={styles.submitButton} onPress={() => UpdateCheck(true)}>
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={() => UpdateCheck(true)}
+        >
           <Text style={styles.submitButtonText}>Aprobar</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.submitButton} onPress={() => UpdateCheck(false)}>
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={() => UpdateCheck(false)}
+        >
           <Text style={styles.submitButtonText}>Rechazar</Text>
         </TouchableOpacity>
       </View>

@@ -104,6 +104,10 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
     navigation.navigate("ReportCheck", { idReport: id });
   };
 
+  const navigateToPDF = (id) => {
+    navigation.navigate("GeneratePDF", { idReport: id });
+  };
+
   const navigateToRemaning = () => {
     navigation.navigate("Check");
   };
@@ -229,6 +233,12 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
                       >
                         <Image
                           source={require("../../Resources/imagenes/editar.png")}
+                          style={styles.buttonImage}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => navigateToPDF(item.id)}>
+                        <Image
+                          source={require("../../Resources/imagenes/pdf.png")}
                           style={styles.buttonImage}
                         />
                       </TouchableOpacity>
