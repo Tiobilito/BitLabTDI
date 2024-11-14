@@ -318,6 +318,11 @@ const styles = StyleSheet.create({
     height: 24,
     marginHorizontal: 10,
   },
+  buttonImageP: {
+    width: 24,
+    height: 24,
+    marginHorizontal: 10,
+  },
   warningIcon: {
     marginLeft: 10,
   },

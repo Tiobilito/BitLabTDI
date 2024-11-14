@@ -21,6 +21,7 @@ import PrototypingForm from "./Scenes/Prototyping Laboratory/PrototypingForm";
 import PrototypingCheck from "./Scenes/Prototyping Laboratory/PrototypingReportCheck";
 import PrototypesOnStandby from "./Scenes/Prototyping Laboratory/PrototypesOnStandby";
 import PrototypingFormReadOnly from "./Scenes/Prototyping Laboratory/PrototypingFormReadOnly";
+import GeneratePrototypePDF from "./Scenes/Prototyping Laboratory/GeneratePrototypePDF";
 
 import StudentPage from "./Scenes/Academic Group Users/Student";
 import PrototypingReportsPage from "./Scenes/Prototyping Laboratory/PrototypingReports";
@@ -37,12 +38,21 @@ const RepairClientDevicesStack = createNativeStackNavigator();
 const ReportCheckStack = createNativeStackNavigator();
 
 function StRepCheck() {
-  return(
+  return (
     <ReportCheckStack.Navigator screenOptions={{ headerShown: false }}>
       <ReportCheckStack.Screen name="Check" component={PrototypingCheck} />
-      <ReportCheckStack.Screen name="ReportCheck" component={PrototypingFormReadOnly} />
-      <ReportCheckStack.Screen name="AlreadyCheckedReports" component={PrototypingAlreadyChecked}/>
-      <ReportCheckStack.Screen name="DoneReports" component={PrototypingReportStDone} />
+      <ReportCheckStack.Screen
+        name="ReportCheck"
+        component={PrototypingFormReadOnly}
+      />
+      <ReportCheckStack.Screen
+        name="AlreadyCheckedReports"
+        component={PrototypingAlreadyChecked}
+      />
+      <ReportCheckStack.Screen
+        name="DoneReports"
+        component={PrototypingReportStDone}
+      />
     </ReportCheckStack.Navigator>
   );
 }
@@ -195,6 +205,7 @@ export default function App() {
         />
         <Stack.Screen name="StaffApp" component={StaffApp} />
         <Stack.Screen name="Test" component={OrderPageReadOnly} />
+        <Stack.Screen name="GeneratePDF" component={GeneratePrototypePDF} />
       </Stack.Navigator>
     </NavigationContainer>
   );

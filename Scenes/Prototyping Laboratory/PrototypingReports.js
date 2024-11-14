@@ -100,6 +100,10 @@ const PrototypingReportsPage = ({ navigation }) => {
     navigation.navigate("EditSubmission", { idSubmission: id });
   };
 
+  const navigateToPDF = (id) => {
+    navigation.navigate("GeneratePDF", { idReport: id });
+  };
+
   return (
     <CustomViewReverse>
       <View
@@ -221,6 +225,12 @@ const PrototypingReportsPage = ({ navigation }) => {
                           style={styles.buttonImage}
                         />
                       </TouchableOpacity>
+                      <TouchableOpacity onPress={() => navigateToPDF(item.id)}>
+                        <Image
+                          source={require("../../Resources/imagenes/pdf.png")}
+                          style={styles.buttonImage}
+                        />
+                      </TouchableOpacity>
                     </View>
                   </View>
                 )}
@@ -305,7 +315,7 @@ const styles = StyleSheet.create({
   buttonImage: {
     width: 24,
     height: 24,
-    marginHorizontal: 10,
+    justifyContent: "center",
   },
   warningIcon: {
     marginLeft: 10,
