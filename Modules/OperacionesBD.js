@@ -521,3 +521,48 @@ export async function updateProjectCheck(id, check, userType) {
   }
   console.log("Registro actualizado:", data);
 }
+
+// Función para actualizar un reporte en la tabla project_submissions
+export async function updateProjectSub(idReport, Project) {
+  const { data, error } = await supabase
+    .from("project_submissions")
+    .update({
+      submission_date: Project.submission_date,
+      applicant_name: Project.applicant_name,
+      contact_email: Project.contact_email,
+      contact_phone: Project.contact_phone,
+      application: Project.application,
+      student_user_code: Project.student_user_code,
+      professor_user_code: Project.professor_user_code,
+      project_type: Project.project_type,
+      prototype_type: Project.prototype_type,
+      prototype_description: Project.prototype_description,
+      specific_requirements_dimensions:
+        Project.specific_requirements_dimensions,
+      specific_requirements_special_cut:
+        Project.specific_requirements_special_cut,
+      specific_requirements_other: Project.specific_requirements_other,
+      specific_requirements_comments: Project.specific_requirements_comments,
+      internal_use_pcb_faces: Project.internal_use_pcb_faces,
+      internal_use_pcb_provided_by_user:
+        Project.internal_use_pcb_provided_by_user,
+      internal_use_required_inputs: Project.internal_use_required_inputs,
+      internal_use_comments: Project.internal_use_comments,
+      prototype_approved_date: Project.prototype_approved_date,
+      prototype_approved_signature: Project.prototype_approved_signature,
+      prototype_delivered_date: Project.prototype_delivered_date,
+      prototype_delivered_signature: Project.prototype_delivered_signature,
+      department_head: Project.department_head,
+      laboratory_head: Project.laboratory_head,
+      service_staff: Project.service_staff,
+      status: Project.status,
+    })
+    .eq("id", idReport); // Asegúrate de que "id" sea la columna identificadora
+
+  if (error) {
+    console.error("Error al actualizar el registro:", error);
+    return null;
+  }
+  console.log("Registro actualizado:", data);
+  return data;
+}

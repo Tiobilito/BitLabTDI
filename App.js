@@ -22,6 +22,7 @@ import PrototypingCheck from "./Scenes/Prototyping Laboratory/PrototypingReportC
 import PrototypesOnStandby from "./Scenes/Prototyping Laboratory/PrototypesOnStandby";
 import PrototypingFormReadOnly from "./Scenes/Prototyping Laboratory/PrototypingFormReadOnly";
 import GeneratePrototypePDF from "./Scenes/Prototyping Laboratory/GeneratePrototypePDF";
+import PrototypingFormEdit from "./Scenes/Prototyping Laboratory/PrototypingFormEditable";
 
 import TeacherStudentPage from "./Scenes/Academic Group Users/TeacherStudent";
 import PrototypingReportsPage from "./Scenes/Prototyping Laboratory/PrototypingReports";
@@ -225,6 +226,7 @@ export default function App() {
         <Stack.Screen name="StaffApp" component={StaffApp} />
         <Stack.Screen name="Test" component={OrderPageReadOnly} />
         <Stack.Screen name="GeneratePDF" component={GeneratePrototypePDF} />
+        <Stack.Screen name="EditSubmission" component={PrototypingFormEdit} />
       </Stack.Navigator>
     </NavigationContainer>
   );
