@@ -46,13 +46,13 @@ const AddCPage = ({ navigation }) => {
       };
 
       await AddClient(data);
-      navigateToWorker();
+      navigateToSocialService();
     } else {
       Alert.alert("Por favor rellene todos los datos obligatorios");
     }
   };
 
-  const navigateToWorker = () => {
+  const navigateToSocialService = () => {
     navigation.goBack();
   };
 
@@ -153,7 +153,7 @@ const AddCPage = ({ navigation }) => {
             <Text style={styles.buttonText}>Registrar</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.buttonCancel} onPress={navigateToWorker}>
+          <TouchableOpacity style={styles.buttonCancel} onPress={navigateToSocialService}>
             <Text style={styles.buttonText}>Cancelar</Text>
           </TouchableOpacity>
         </View>

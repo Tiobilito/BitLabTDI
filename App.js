@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import LoginPage from "./Scenes/Login";
 import Register from "./Scenes/Register";
 // Scenes Prestador de servicio
-import WorkerPage from "./Scenes/Social Service/Prestador de Servicio";
+import SocialServicePage from "./Scenes/Social Service/Prestador de Servicio";
 import AddClientPage from "./Scenes/Social Service/AddClient";
 import AddDevicePage from "./Scenes/Social Service/AddDevice";
 import SearchClientPage from "./Scenes/Social Service/SearchClient";
@@ -31,13 +31,14 @@ import OrderPageReadOnly from "./Scenes/Social Service/OrderReports";
 import HeadDivisionLaboratoryPage from "./Scenes/Academic Group Users/Head of Division and Laboratory";
 
 const Stack = createNativeStackNavigator();
-const WorkerTap = createBottomTabNavigator();
+const SocialServiceTap = createBottomTabNavigator();
 const StudentsTap = createBottomTabNavigator();
 const StaffTap = createBottomTabNavigator();
-const MainWorkerStack = createNativeStackNavigator();
+const SocialServiceStack = createNativeStackNavigator();
 const RepairClientDevicesStack = createNativeStackNavigator();
 const ReportCheckStack = createNativeStackNavigator();
 const AcademicGroupStack = createNativeStackNavigator();
+const StaffStack = createNativeStackNavigator();
 
 function AcademicGroupHome() {
   return (
@@ -45,6 +46,24 @@ function AcademicGroupHome() {
       <AcademicGroupStack.Screen name="Home" component={TeacherStudentPage} />
       <AcademicGroupStack.Screen name="ReportForm" component={PrototypingForm} />
     </AcademicGroupStack.Navigator>
+  );
+}
+
+function StaffHome() {
+  return (
+    <StaffStack.Navigator screenOptions={{headerShown: false}}>
+      <StaffStack.Screen name="Home" component={HeadDivisionLaboratoryPage} />
+      <StaffStack.Screen name="ReportForm" component={PrototypingForm} />
+    </StaffStack.Navigator>
+  );
+}
+
+function SocialService() {
+  return (
+    <SocialServiceStack.Navigator screenOptions={{ headerShown: false }}>
+      <SocialServiceStack.Screen name="SocialService" component={SocialServicePage} />
+      <SocialServiceStack.Screen name="AddClient" component={AddClientPage} />
+    </SocialServiceStack.Navigator>
   );
 }
 
@@ -65,16 +84,6 @@ function StRepCheck() {
         component={PrototypingReportStDone}
       />
     </ReportCheckStack.Navigator>
-  );
-}
-
-//Stack que abarca todas las ventanas relacionadas con el chequeo de los reportes del laboratorio de prototipado
-function Worker() {
-  return (
-    <MainWorkerStack.Navigator screenOptions={{ headerShown: false }}>
-      <MainWorkerStack.Screen name="Worker" component={WorkerPage} />
-      <MainWorkerStack.Screen name="AddClient" component={AddClientPage} />
-    </MainWorkerStack.Navigator>
   );
 }
 
@@ -154,7 +163,7 @@ const StaffApp = () => {
         tabBarInactiveTintColor: "gray",
       })}
     >
-      <StaffTap.Screen name="Principal" component={HeadDivisionLaboratoryPage} />
+      <StaffTap.Screen name="Principal" component={StaffHome} />
       <StaffTap.Screen name="Registros" component={StRepCheck} />
     </StaffTap.Navigator>
   );
@@ -163,7 +172,7 @@ const StaffApp = () => {
 //Tap que abarca todas las ventanas ralacionadas con el prestador de servicio
 const SocialServiceApp = () => {
   return (
-    <WorkerTap.Navigator
+    <SocialServiceTap.Navigator
       initialRouteName="Principal"
       screenOptions={({ route }) => ({
         headerShown: false,
@@ -188,11 +197,11 @@ const SocialServiceApp = () => {
         tabBarInactiveTintColor: "gray",
       })}
     >
-      <WorkerTap.Screen name="Principal" component={Worker} />
-      <WorkerTap.Screen name="Reparaciones" component={Fixes} />
-      <WorkerTap.Screen name="Prototipo" component={PrototypingForm} />
-      <WorkerTap.Screen name="RepProjects" component={PrototypesOnStandby} />
-    </WorkerTap.Navigator>
+      <SocialServiceTap.Screen name="Principal" component={SocialService} />
+      <SocialServiceTap.Screen name="Reparaciones" component={Fixes} />
+      <SocialServiceTap.Screen name="Prototipo" component={PrototypingForm} />
+      <SocialServiceTap.Screen name="RepProjects" component={PrototypesOnStandby} />
+    </SocialServiceTap.Navigator>
   );
 };
 
@@ -208,7 +217,7 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginPage} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="AcademicApp" component={AcademicGroupApp} />
-        <Stack.Screen name="WorkerApp" component={SocialServiceApp} />
+        <Stack.Screen name="SocialServiceApp" component={SocialServiceApp} />
         <Stack.Screen
           name="PrototypesOnStandby"
           component={PrototypesOnStandby}

@@ -45,7 +45,7 @@ const LoginPage = ({ navigation }) => {
           navigation.navigate("StaffApp");
           break;
         case 2:
-          navigation.navigate("WorkerApp");
+          navigation.navigate("SocialServiceApp");
           break;
         case 3:
           navigation.navigate("AcademicApp");

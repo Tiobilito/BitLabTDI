@@ -21,7 +21,7 @@ import { GetUserData } from "../../Modules/DataInfo";
 const WIDTH = Dimensions.get("screen").width;
 const HEIGHT = Dimensions.get("screen").height;
 
-const WorkerPage = ({ navigation }) => {
+const SocialServicePage = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [dataOrders, setDataOrders] = useState([]);
   const [dataReports, setDataReports] = useState([]); // Nueva lista de reportes
@@ -233,4 +233,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WorkerPage;
+export default SocialServicePage;
