@@ -25,7 +25,6 @@ const StudentPage = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [dataOrders, setDataOrders] = useState([]);
   const [dataReports, setDataReports] = useState([]); // Nueva lista de reportes
-  const [error, setError] = useState(null);
   const [showListOrders, setShowListOrders] = useState(true); // Estado para alternar entre listas
 
   useFocusEffect(
@@ -50,10 +49,9 @@ const StudentPage = ({ navigation }) => {
       }));
       setDataOrders(BData);
       setDataReports(BRData);
-      Data = await geta;
       setIsLoading(false);
     } catch (error) {
-      setError(error);
+      console.log(error);
       setIsLoading(false);
     }
   };
