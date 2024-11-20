@@ -21,7 +21,7 @@ import { GetUserData } from "../../Modules/DataInfo";
 const WIDTH = Dimensions.get("screen").width;
 const HEIGHT = Dimensions.get("screen").height;
 
-const WorkerPage = ({ navigation }) => {
+const TeacherStudentPage = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [dataOrders, setDataOrders] = useState([]);
   const [dataReports, setDataReports] = useState([]); // Nueva lista de reportes
@@ -83,20 +83,7 @@ const WorkerPage = ({ navigation }) => {
       <View style={{ marginTop: HEIGHT * 0.05, gap: HEIGHT * 0.02 }}>
         <TouchableOpacity
           style={styles.btnAction}
-          onPress={() => navigation.navigate("AddClient")}
-        >
-          <Ionicons
-            name="add-circle"
-            style={{
-              fontSize: WIDTH > 400 ? 32 : 24,
-              color: "#2272A7",
-            }}
-          />
-          <Text style={styles.text}>Añadir Cliente</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.btnAction}
-          onPress={() => navigation.navigate("SearchClient")}
+          onPress={() => navigation.navigate("ReportForm")}
         >
           <Ionicons
             name="clipboard"
@@ -233,4 +220,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WorkerPage;
+export default TeacherStudentPage;

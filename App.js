@@ -23,11 +23,12 @@ import PrototypesOnStandby from "./Scenes/Prototyping Laboratory/PrototypesOnSta
 import PrototypingFormReadOnly from "./Scenes/Prototyping Laboratory/PrototypingFormReadOnly";
 import GeneratePrototypePDF from "./Scenes/Prototyping Laboratory/GeneratePrototypePDF";
 
-import StudentPage from "./Scenes/Academic Group Users/Student";
+import TeacherStudentPage from "./Scenes/Academic Group Users/TeacherStudent";
 import PrototypingReportsPage from "./Scenes/Prototyping Laboratory/PrototypingReports";
 import PrototypingAlreadyChecked from "./Scenes/Prototyping Laboratory/PrototypingReportAlreadyChecked";
 import PrototypingReportStDone from "./Scenes/Prototyping Laboratory/PrototypingReportStDone";
 import OrderPageReadOnly from "./Scenes/Social Service/OrderReports";
+import HeadDivisionLaboratoryPage from "./Scenes/Academic Group Users/Head of Division and Laboratory";
 
 const Stack = createNativeStackNavigator();
 const WorkerTap = createBottomTabNavigator();
@@ -36,6 +37,16 @@ const StaffTap = createBottomTabNavigator();
 const MainWorkerStack = createNativeStackNavigator();
 const RepairClientDevicesStack = createNativeStackNavigator();
 const ReportCheckStack = createNativeStackNavigator();
+const AcademicGroupStack = createNativeStackNavigator();
+
+function AcademicGroupHome() {
+  return (
+    <AcademicGroupStack.Navigator screenOptions={{headerShown: false}}>
+      <AcademicGroupStack.Screen name="Home" component={TeacherStudentPage} />
+      <AcademicGroupStack.Screen name="ReportForm" component={PrototypingForm} />
+    </AcademicGroupStack.Navigator>
+  );
+}
 
 function StRepCheck() {
   return (
@@ -117,9 +128,8 @@ const AcademicGroupApp = () => {
         tabBarInactiveTintColor: "gray",
       })}
     >
-      <StudentsTap.Screen name="Principal" component={StudentPage} />
+      <StudentsTap.Screen name="Principal" component={AcademicGroupHome} />
       <StudentsTap.Screen name="Registros" component={PrototypingReportsPage} />
-      <StudentsTap.Screen name="Prototipo" component={PrototypingForm} />
     </StudentsTap.Navigator>
   );
 };
@@ -144,7 +154,7 @@ const StaffApp = () => {
         tabBarInactiveTintColor: "gray",
       })}
     >
-      <StaffTap.Screen name="Principal" component={StudentPage} />
+      <StaffTap.Screen name="Principal" component={HeadDivisionLaboratoryPage} />
       <StaffTap.Screen name="Registros" component={StRepCheck} />
     </StaffTap.Navigator>
   );
