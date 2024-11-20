@@ -198,7 +198,7 @@ export async function getAllProjectSubmissionsByUserId(idUser) {
   const { data, error } = await supabase
     .from("project_submissions")
     .select("*")
-    .eq("customer_id", idUser); // Selecciona todas las columnas
+    .or(`student_user_code.eq.${idUser},professor_user_code.eq.${idUser}`); // Selecciona todas las columnas
   if (error) {
     console.error("Error al obtener registros:", error);
     return null;

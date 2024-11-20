@@ -7,12 +7,15 @@ import {
   Dimensions,
   FlatList,
   ActivityIndicator,
+  Pressable,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { CustomViewReverse } from "../components/CustomViewReverse";
-
-import { getAllDevices, getAllOrdersByUserId } from "../../Modules/OperacionesBD";
+import {
+  getAllOrdersByUserId,
+  getAllProjectSubmissionsByUserId,
+} from "../../Modules/OperacionesBD";
 import { GetUserData } from "../../Modules/DataInfo";
 
 const WIDTH = Dimensions.get("screen").width;
@@ -23,7 +26,7 @@ const StudentPage = ({ navigation }) => {
   const [dataOrders, setDataOrders] = useState([]);
   const [dataReports, setDataReports] = useState([]); // Nueva lista de reportes
   const [error, setError] = useState(null);
-  const [showListDevice, setShowListDevice] = useState(true); // Estado para alternar entre listas
+  const [showListOrders, setShowListOrders] = useState(true); // Estado para alternar entre listas
 
   useFocusEffect(
     useCallback(() => {
@@ -36,12 +39,18 @@ const StudentPage = ({ navigation }) => {
     try {
       const UData = await GetUserData();
       let Data = await getAllOrdersByUserId(UData.Code);
+      let ReportsData = await getAllProjectSubmissionsByUserId(UData.Code);
       let BData = Data.map((registro) => ({
         ...registro,
         Details: false,
       }));
+      let BRData = ReportsData.map((registro) => ({
+        ...registro,
+        Details: false,
+      }));
       setDataOrders(BData);
-      Data = await geta
+      setDataReports(BRData);
+      Data = await geta;
       setIsLoading(false);
     } catch (error) {
       setError(error);
@@ -50,7 +59,17 @@ const StudentPage = ({ navigation }) => {
   };
 
   const toggleList = () => {
-    setShowListDevice(!showListDevice);
+    setShowListOrders(!showListOrders);
+  };
+
+  const toggleDetailsReports = (itemId) => {
+    const updatedData = dataReports.map((registro) => {
+      if (registro.id === itemId) {
+        return { ...registro, Details: !registro.Details };
+      }
+      return registro;
+    });
+    setDataReports(updatedData);
   };
 
   if (isLoading) {
@@ -92,23 +111,17 @@ const StudentPage = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.btnShowStats}>
-        <TouchableOpacity
-          style={styles.btnShow}
-          onPress={() => toggleList()}
-        >
+        <TouchableOpacity style={styles.btnShow} onPress={() => toggleList()}>
           <Ionicons name="add-circle" style={styles.iconShowStats} />
           <Text style={styles.textShowStats}>Ordenes</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.btnShow}
-          onPress={() => toggleList()}
-        >
+        <TouchableOpacity style={styles.btnShow} onPress={() => toggleList()}>
           <Ionicons name="clipboard" style={styles.iconShowStats} />
           <Text style={styles.textShowStats}>Reportes</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.tables}>
-        {showListDevice ? (
+        {showListOrders ? (
           <FlatList
             data={dataOrders}
             keyExtractor={(item) => item.id}
@@ -127,7 +140,15 @@ const StudentPage = ({ navigation }) => {
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <View style={styles.itemContainer}>
-                <Text>{item.id}</Text>
+                <Pressable
+                  onPress={() => toggleDetailsReports(item.id)}
+                >
+                  <Text style={styles.TextHeader}>{item.application}</Text>
+                </Pressable>
+                {item.Details && (<View>
+                  <Text style={{color: "white", fontSize: 20}}>{item.submission_date}</Text>
+                  <Text style={{color: "white", fontSize: 20}}>{item.status}</Text>
+                  </View>)}
               </View>
             )}
             ListEmptyComponent={
@@ -206,6 +227,11 @@ const styles = StyleSheet.create({
     color: "#2272A7",
     fontSize: 16,
     marginTop: HEIGHT * 0.02,
+  },
+  TextHeader: {
+    color: "white",
+    fontSize: 35,
+    fontWeight: "bold",
   },
 });
 
