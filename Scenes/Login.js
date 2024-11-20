@@ -20,7 +20,7 @@ const Scale = Dimensions.get("window").width;
 const LoginPage = ({ navigation }) => {
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
-
+  /*
   useEffect(() => {
     const loadUserData = async () => {
       const data = await GetUserData();
@@ -31,30 +31,31 @@ const LoginPage = ({ navigation }) => {
     };
     loadUserData();
   }, []);
-  
+  */
+
   const Verify = async () => {
     const Verify = await CheckUser(code, password);
     if (Verify) {
       await StoreUserData(Verify.code, Verify.password, Verify.user_type); // Esperar a que termine de guardar los datos
-      switch(Verify.user_type) {
+      switch (Verify.user_type) {
         case 0:
           navigation.navigate("StaffApp");
-          break
+          break;
         case 1:
           navigation.navigate("StaffApp");
-          break
+          break;
         case 2:
           navigation.navigate("WorkerApp");
-          break
+          break;
         case 3:
           navigation.navigate("AcademicApp");
-          break
+          break;
         case 4:
           navigation.navigate("AcademicApp");
-          break
+          break;
       }
     }
-  };  
+  };
 
   return (
     <CustomView>
@@ -68,7 +69,7 @@ const LoginPage = ({ navigation }) => {
             Ingresa a tu cuenta
           </Text>
           <View style={styles.formCont}>
-            <Text style={styles.textForm}>Nombre de usuario</Text>
+            <Text style={styles.textForm}>Código de usuario</Text>
             <TextInput
               style={styles.input}
               onChangeText={(text) => {

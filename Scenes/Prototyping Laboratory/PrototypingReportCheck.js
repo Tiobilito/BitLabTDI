@@ -109,6 +109,10 @@ const PrototypingCheck = ({ navigation }) => {
     navigation.navigate("ReportCheck", { idReport: id });
   };
 
+  const navigateToPDF = (id) => {
+    navigation.navigate("GeneratePDF", { idReport: id });
+  };
+
   const navigateToAlreadyChecked = () => {
     navigation.navigate("AlreadyCheckedReports");
   };
@@ -128,16 +132,31 @@ const PrototypingCheck = ({ navigation }) => {
       >
         <View>
           <Pressable
-            style={{ marginLeft: "50%", marginTop: "5%", backgroundColor: "gray", height: 40, width: 70 }}
+            style={{
+              marginLeft: "50%",
+              marginTop: "5%",
+              backgroundColor: "gray",
+              height: 40,
+              width: 70,
+            }}
             onPress={navigateToDone}
           >
             <Text style={{ marginLeft: 4 }}>Reportes Cerrados</Text>
           </Pressable>
           <Pressable
-            style={{ marginLeft: "75%", marginTop: "-12%", marginBottom: 10, backgroundColor: "gray", height: 42, width: 72 }}
+            style={{
+              marginLeft: "75%",
+              marginTop: "-12%",
+              marginBottom: 10,
+              backgroundColor: "gray",
+              height: 42,
+              width: 72,
+            }}
             onPress={navigateToAlreadyChecked}
           >
-            <Text style={{ marginLeft: 2, marginTop: 2 }}>Reportes Aprovados</Text>
+            <Text style={{ marginLeft: 2, marginTop: 2 }}>
+              Reportes Aprovados
+            </Text>
           </Pressable>
         </View>
         {/* Input para filtrar por application */}
@@ -249,6 +268,12 @@ const PrototypingCheck = ({ navigation }) => {
                       >
                         <Image
                           source={require("../../Resources/imagenes/editar.png")}
+                          style={styles.buttonImage}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => navigateToPDF(item.id)}>
+                        <Image
+                          source={require("../../Resources/imagenes/pdf.png")}
                           style={styles.buttonImage}
                         />
                       </TouchableOpacity>

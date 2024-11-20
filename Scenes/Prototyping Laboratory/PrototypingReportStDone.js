@@ -103,6 +103,10 @@ const PrototypingReportStDone = ({ navigation }) => {
     navigation.navigate("ReportCheck", { idReport: id });
   };
 
+  const navigateToPDF = (id) => {
+    navigation.navigate("GeneratePDF", { idReport: id });
+  };
+
   const navigateToRemaning = () => {
     navigation.navigate("Check");
   };
@@ -179,8 +183,7 @@ const PrototypingReportStDone = ({ navigation }) => {
                     <Text style={styles.email}>{item.application}</Text>
                   </View>
 
-                  {/* Mostrar icono si los campos department_head, laboratory_head o service_staff son false */}
-
+                  {/* Verifica que la solicitud ya fue aprobada po el jefe de departamento, el jefe de laboratorio y el prestador de servicio */}
                   {/* Mostrar el icono de advertencia o el icono de aprobado */}
                   {!item.department_head ||
                   !item.laboratory_head ||
@@ -228,6 +231,12 @@ const PrototypingReportStDone = ({ navigation }) => {
                       >
                         <Image
                           source={require("../../Resources/imagenes/editar.png")}
+                          style={styles.buttonImage}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => navigateToPDF(item.id)}>
+                        <Image
+                          source={require("../../Resources/imagenes/pdf.png")}
                           style={styles.buttonImage}
                         />
                       </TouchableOpacity>

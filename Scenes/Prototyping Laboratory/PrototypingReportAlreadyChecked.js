@@ -104,6 +104,10 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
     navigation.navigate("ReportCheck", { idReport: id });
   };
 
+  const navigateToPDF = (id) => {
+    navigation.navigate("GeneratePDF", { idReport: id });
+  };
+
   const navigateToRemaning = () => {
     navigation.navigate("Check");
   };
@@ -232,6 +236,12 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
                           style={styles.buttonImage}
                         />
                       </TouchableOpacity>
+                      <TouchableOpacity onPress={() => navigateToPDF(item.id)}>
+                        <Image
+                          source={require("../../Resources/imagenes/pdf.png")}
+                          style={styles.buttonImage}
+                        />
+                      </TouchableOpacity>
                     </View>
                   </View>
                 )}
@@ -314,6 +324,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   buttonImage: {
+    width: 24,
+    height: 24,
+    marginHorizontal: 10,
+  },
+  buttonImageP: {
     width: 24,
     height: 24,
     marginHorizontal: 10,
