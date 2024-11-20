@@ -58,7 +58,7 @@ function StaffHome() {
   );
 }
 
-function SocialService() {
+function SocialServiceHome() {
   return (
     <SocialServiceStack.Navigator screenOptions={{ headerShown: false }}>
       <SocialServiceStack.Screen name="SocialService" component={SocialServicePage} />
@@ -197,7 +197,7 @@ const SocialServiceApp = () => {
         tabBarInactiveTintColor: "gray",
       })}
     >
-      <SocialServiceTap.Screen name="Principal" component={SocialService} />
+      <SocialServiceTap.Screen name="Principal" component={SocialServiceHome} />
       <SocialServiceTap.Screen name="Reparaciones" component={Fixes} />
       <SocialServiceTap.Screen name="Prototipo" component={PrototypingForm} />
       <SocialServiceTap.Screen name="RepProjects" component={PrototypesOnStandby} />
