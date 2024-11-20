@@ -21,11 +21,11 @@ const Register = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userType, setUserType] = useState(""); 
+  const [userType, setUserType] = useState("");
   const [address, setAddress] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [phoneNum, setPhoneNum] = useState("");
-  const [nss, setNss] = useState(""); 
+  const [nss, setNss] = useState("");
   const [rfc, setRfc] = useState("");
   const [salary, setSalary] = useState("");
   const [departmentID, setDepartmentID] = useState("");
@@ -50,7 +50,7 @@ const Register = ({ navigation }) => {
       Alert.alert("Error", "El nombre es obligatorio.");
       return false;
     }
-    if (!userType && userType!="null") {
+    if (!userType || userType != "null") {
       Alert.alert("Error", "El tipo de usuario es obligatorio.");
       return false;
     }
@@ -69,7 +69,7 @@ const Register = ({ navigation }) => {
 
   const handleUserTypeChange = (value) => {
     setUserType(value);
-    if (value !== "Fixer") {
+    if (value !== "2") {
       resetFields();
     }
   };
@@ -79,19 +79,20 @@ const Register = ({ navigation }) => {
       const UserData = {
         code: parseInt(code), // Convertir a entero
         name: username,
-        user_type: userType,
+        user_type: parseInt(userType, 10),
         address: address,
         zip_code: zipCode,
         email: email,
-        nss: userType === "Fixer" ? nss : "",
-        rfc: userType === "Fixer" ? rfc : "",
-        salary: userType === "Fixer" ? parseFloat(salary) : null, // Convertir a número con decimales
+        nss: userType === "2" ? nss : "",
+        rfc: userType === "2" ? rfc : "",
+        salary: userType === "2" ? parseFloat(salary) : null, // Convertir a número con decimales
         number: phoneNum,
         department_id: departmentID ? parseInt(departmentID) : null, // Convertir a entero si existe
         password: password,
       };
       await addUser(UserData);
       Alert.alert("Éxito", "Usuario registrado exitosamente.");
+      navigation.goBack();
     }
   };
 
@@ -101,7 +102,9 @@ const Register = ({ navigation }) => {
         source={require("../Resources/imagenes/BITLABTDI.png")}
         style={styles.Logo}
       />
-      <Text style={{ fontSize: Scale > 400 ? 50 : 20, marginBottom: Scale * 0.05 }}>
+      <Text
+        style={{ fontSize: Scale > 400 ? 50 : 20, marginBottom: Scale * 0.05 }}
+      >
         Registra tu nueva cuenta
       </Text>
       <ScrollView style={{ height: Scale * 1.1 }}>
@@ -123,14 +126,6 @@ const Register = ({ navigation }) => {
             placeholder="Username"
           />
 
-          <Text style={styles.textForm}>Correo Electrónico</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setEmail}
-            value={email}
-            placeholder="something@email.com"
-          />
-
           <Text style={styles.textForm}>Contraseña</Text>
           <TextInput
             style={styles.input}
@@ -138,19 +133,17 @@ const Register = ({ navigation }) => {
             value={password}
             placeholder="Password"
             secureTextEntry={true}
+            keyboardType="visible-password"
           />
 
           <Text style={styles.textForm}>Rol:</Text>
-          <Picker
-            selectedValue={userType}
-            onValueChange={handleUserTypeChange}
-          >
+          <Picker selectedValue={userType} onValueChange={handleUserTypeChange}>
             <Picker.Item label="Selecciona un rol" value="null" />
-            <Picker.Item label="Prestador de servicio" value="2" />
+            <Picker.Item label="Profesor" value="3" />
             <Picker.Item label="Alumno" value="4" />
           </Picker>
 
-          <Text style={styles.textForm}>Dirección</Text>
+          <Text style={styles.textForm}>Dirección (opcional)</Text>
           <TextInput
             style={styles.input}
             onChangeText={setAddress}
@@ -158,7 +151,7 @@ const Register = ({ navigation }) => {
             placeholder="Ejemplo 1234"
           />
 
-          <Text style={styles.textForm}>Código Postal</Text>
+          <Text style={styles.textForm}>Código Postal (opcional)</Text>
           <TextInput
             style={styles.input}
             onChangeText={setZipCode}
@@ -167,7 +160,7 @@ const Register = ({ navigation }) => {
             keyboardType="numeric"
           />
 
-          <Text style={styles.textForm}>Número de teléfono</Text>
+          <Text style={styles.textForm}>Número de teléfono (opcional)</Text>
           <TextInput
             style={styles.input}
             onChangeText={setPhoneNum}
@@ -176,7 +169,16 @@ const Register = ({ navigation }) => {
             keyboardType="numeric"
           />
 
-          {userType === "Fixer" && (
+          <Text style={styles.textForm}>Correo Electrónico (opcional)</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={setEmail}
+            value={email}
+            keyboardType="email-address"
+            placeholder="something@email.com"
+          />
+
+          {userType === "2" && (
             <>
               <Text style={styles.textForm}>Número de Seguro Social</Text>
               <TextInput
@@ -218,9 +220,17 @@ const Register = ({ navigation }) => {
           </Picker>
         </View>
 
-        <View style={{ width: Scale * 0.8, justifyContent: "center", alignItems: "center" }}>
+        <View
+          style={{
+            width: Scale * 0.8,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <TouchableOpacity style={styles.loginButton} onPress={Verify}>
-            <Text style={{ color: "white", fontWeight: "bold" }}>Registrar</Text>
+            <Text style={{ color: "white", fontWeight: "bold" }}>
+              Registrar
+            </Text>
           </TouchableOpacity>
         </View>
 
