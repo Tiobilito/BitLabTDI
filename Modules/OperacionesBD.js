@@ -511,7 +511,7 @@ export async function updateProjectCheck(id, check, userType) {
   } else {
     console.error("Tipo de usuario no válido");
   }
-  // Realiza la actualización en la tabla
+    // Realiza la actualización en la tabla 
   const { data, error } = await supabase
     .from("project_submissions")
     .update(updateField)
@@ -538,14 +538,14 @@ export async function updateProjectSub(idReport, Project) {
       prototype_type: Project.prototype_type,
       prototype_description: Project.prototype_description,
       specific_requirements_dimensions:
-        Project.specific_requirements_dimensions,
+      Project.specific_requirements_dimensions,
       specific_requirements_special_cut:
-        Project.specific_requirements_special_cut,
+      Project.specific_requirements_special_cut,
       specific_requirements_other: Project.specific_requirements_other,
       specific_requirements_comments: Project.specific_requirements_comments,
       internal_use_pcb_faces: Project.internal_use_pcb_faces,
       internal_use_pcb_provided_by_user:
-        Project.internal_use_pcb_provided_by_user,
+      Project.internal_use_pcb_provided_by_user,
       internal_use_required_inputs: Project.internal_use_required_inputs,
       internal_use_comments: Project.internal_use_comments,
       prototype_approved_date: Project.prototype_approved_date,

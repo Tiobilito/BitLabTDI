@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,7 +10,8 @@ import {
   Alert,
   Dimensions,
 } from "react-native";
-import { getPrototypeById, updatePrototype } from "../../Modules/OperacionesBD";
+import { getPrototypeById, updateProjectSub } from "../../Modules/OperacionesBD";
+import { useRoute } from "@react-navigation/native";
 
 const Scale = Dimensions.get("window").width;
 
@@ -30,12 +31,54 @@ const RadioButton = ({ label, value, selected, onSelect }) => {
 };
 
 export default function PrototypingFormEdit() {
-  const { idReport } = route.params;
+  const route = useRoute();
+  console.log("route.params:", route.params); // Verifica que los parámetros llegan correctamente
+
+  const { idReport } = route.params || {};
+  console.log("idReport recibido:", idReport); // Esto debe mostrar un valor válido
+
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [projectType, setProjectType] = useState("");
+  const [roles, setRoles] = useState({ alumno: false, profesor: false });
+  const [studentCode, setStudentCode] = useState("");
+  const [teacherCode, setTeacherCode] = useState("");
+  const [application, setApplication] = useState("");
+  const [descriptionProject, setDescriptionProject] = useState("");
+  const [prototypeType, setPrototypeType] = useState("");
+  const [descriptionPrototype, setDescriptionPrototype] = useState("");
+  const [specificRequirementsDimensions, setspecificRequirementsDimensions] = useState("");
+  const [specialCut, setSpecialCut] = useState("");
+  const [others, setOthers] = useState("");
+  const [remarks, setRemarks] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const fetchedData = await getPrototypeById(idReport);
-        setData(fetchedData);
+        // Prellenar los campos con la data obtenida
+        setName(fetchedData.applicant_name);
+        setEmail(fetchedData.contact_email);
+        setPhone(fetchedData.contact_phone);
+        setProjectType(fetchedData.project_type);
+        setRoles({
+          alumno: !!fetchedData.student_user_code,
+          profesor: !!fetchedData.professor_user_code,
+        });
+        setStudentCode(fetchedData.student_user_code || "");
+        setTeacherCode(fetchedData.professor_user_code || "");
+        setApplication(fetchedData.application);
+        setDescriptionProject(fetchedData.descriptionProject);
+        setPrototypeType(fetchedData.prototype_type);
+        setDescriptionPrototype(fetchedData.prototype_description);
+        setspecificRequirementsDimensions(fetchedData.specific_requirements_dimensions);
+        setSpecialCut(fetchedData.specific_requirements_special_cut);
+        setOthers(fetchedData.specific_requirements_other);
+        setRemarks(fetchedData.specific_requirements_comments);
       } catch (error) {
         setError("Error al cargar los datos del prototipo");
       } finally {
@@ -46,72 +89,31 @@ export default function PrototypingFormEdit() {
     fetchData();
   }, [idReport]);
 
-  const SentProject = async () => {
+  const handleUpdate = async () => {
     try {
-      // Asignar null al rol no seleccionado
-      const finalStudentCode = roles.alumno ? Number(studentCode) : null;
-      const finalTeacherCode = roles.profesor ? Number(teacherCode) : null;
-
-      const newProject = {
-        submission_date: new Date().toISOString().split("T")[0], // Fecha actual
-        applicant_name: name, // Nombre del usuario que solicita el servicio
-        contact_email: email, // Email
-        contact_phone: phone, // Número de teléfono
-        application: application, // Aplicación del proyecto
-        student_user_code: finalStudentCode, // Código del alumno (o null)
-        professor_user_code: finalTeacherCode, // Código del profesor (o null)
-        project_type: projectType, // Tipo de proyecto
-        prototype_type: prototypeType, // Tipo de prototipo
-        prototype_description: descriptionPrototype, // Descripción del prototipo
-        specific_requirements_dimensions: specificRequirementsDimensions, // Dimensiones del prototipo
-        specific_requirements_special_cut: specialCut, // Corte específico (Opcional)
-        specific_requirements_other: others, // Otros (Opcional)
-        specific_requirements_comments: remarks, // Observaciones (Opcional)
-        department_head: null, // Estado pendiente de revisión
-        laboratory_head: null,
-        service_staff: null,
-        status: "awaiting_revision",
+      const updatedProject = {
+        applicant_name: name,
+        contact_email: email,
+        contact_phone: phone,
+        project_type: projectType,
+        student_user_code: roles.alumno ? Number(studentCode) : null,
+        professor_user_code: roles.profesor ? Number(teacherCode) : null,
+        application,
+        descriptionProject,
+        prototype_type: prototypeType,
+        prototype_description: descriptionPrototype,
+        specific_requirements_dimensions: specificRequirementsDimensions,
+        specific_requirements_special_cut: specialCut,
+        specific_requirements_other: others,
+        specific_requirements_comments: remarks,
       };
 
-      // Llamada a la función para agregar el proyecto
-      await addProjectSub(newProject);
-
-      // Mostrar mensaje de éxito si todo va bien
-      Alert.alert("Éxito", "Solicitud enviada exitosamente.");
+      await updateProjectSub(idReport, updatedProject); // Llama a la función para actualizar
+      Alert.alert("Éxito", "Prototipo actualizado exitosamente.");
     } catch (error) {
-      // Mostrar mensaje de error si ocurre algún problema
-      Alert.alert(
-        "Error",
-        "Hubo un problema al enviar el formulario. Inténtalo de nuevo."
-      );
-      console.error("Error al enviar el proyecto:", error);
+      Alert.alert("Error", "Hubo un problema al actualizar el prototipo.");
     }
   };
-
-  /* Datos del contacto */
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [date, setDate] = useState("");
-  const [phone, setPhone] = useState("");
-  const [projectType, setProjectType] = useState("");
-  const [error, setError] = useState("");
-  const [roles, setRoles] = useState({ alumno: false, profesor: false });
-  const [studentCode, setStudentCode] = useState("");
-  const [teacherCode, setTeacherCode] = useState("");
-  const [application, setApplication] = useState("");
-  const [descriptionProject, setDescriptionProject] = useState("");
-
-  /* Datos del prototipo */
-  const [prototypeType, setPrototypeType] = useState("");
-  const [descriptionPrototype, setDescriptionPrototype] = useState({
-    impreso: false,
-    tresD: false,
-  });
-  const [specificRequirementsDimensions, setspecificRequirementsDimensions] =
-    useState("");
-  const [specialCut, setSpecialCut] = useState("");
-  const [others, setOthers] = useState("");
-  const [remarks, setRemarks] = useState("");
 
   const handleSubmit = () => {
     // Validaciones de los campos de contacto
@@ -172,9 +174,18 @@ export default function PrototypingFormEdit() {
 
     // Si todas las validaciones pasan, limpiar errores y enviar el formulario
     //Alert.alert("Éxito", "Formulario enviado exitosamente");
-    SentProject();
-    // Aquí va la lógica para enviar el formulario
+    
+    // Llama a la funcion para actualizar el formulario
+    handleUpdate();
   };
+
+  if (isLoading) {
+    return (
+      <View style={styles.loaderContainer}>
+        <Text>Cargando datos...</Text>
+      </View>
+    );
+  }
 
   /* Función para los checkbox */
   const Checkbox = ({ label, checked, onChange }) => {
@@ -213,7 +224,6 @@ export default function PrototypingFormEdit() {
           style={styles.input}
           value={name}
           onChangeText={setName}
-          placeholder=""
         />
         <Text style={styles.label}>Correo electrónico:</Text>
         <TextInput

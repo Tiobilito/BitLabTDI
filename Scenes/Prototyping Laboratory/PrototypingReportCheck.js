@@ -108,6 +108,12 @@ const PrototypingCheck = ({ navigation }) => {
     navigation.navigate("GeneratePDF", { idReport: id });
   };
 
+  const navigateToEditForm = (id) => {
+    
+    navigation.navigate("EditSubmission", { idReport: id });
+    
+  };
+
   const navigateToAlreadyChecked = () => {
     navigation.navigate("AlreadyCheckedReports");
   };
@@ -259,7 +265,7 @@ const PrototypingCheck = ({ navigation }) => {
                     {/* Agrega más campos según sea necesario */}
                     <View style={styles.buttons}>
                       <TouchableOpacity
-                        onPress={() => navigateToCheck(item.id)}
+                        onPress={() => navigateToEditForm(item.id)}
                       >
                         <Image
                           source={require("../../Resources/imagenes/editar.png")}
