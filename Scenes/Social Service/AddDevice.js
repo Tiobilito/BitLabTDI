@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { addDispo } from "../../Modules/OperacionesBD";
+import { addDispo } from "../../Modules/Operations DB Fixes";
 
 const AddDevicePage = ({ navigation }) => {
   const route = useRoute();

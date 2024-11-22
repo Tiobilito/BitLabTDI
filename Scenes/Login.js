@@ -2,7 +2,6 @@ import { React, useState, useEffect } from "react";
 import {
   StyleSheet,
   TextInput,
-  ImageBackground,
   Image,
   TouchableOpacity,
   Dimensions,
@@ -11,7 +10,7 @@ import {
   ScrollView,
 } from "react-native";
 import { GetUserData, StoreUserData } from "../Modules/DataInfo";
-import { CheckUser } from "../Modules/OperacionesBD";
+import { CheckUser } from "../Modules/Operations DB Users";
 
 import { CustomView } from "./components/CustomView";
 

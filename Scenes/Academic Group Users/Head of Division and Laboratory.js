@@ -15,7 +15,7 @@ import { CustomViewReverse } from "../components/CustomViewReverse";
 import {
   getAllOrdersByUserId,
   getAllProjectSubmissionsByUserId,
-} from "../../Modules/OperacionesBD";
+} from "../../Modules/Operations DB Fixes";
 import { GetUserData } from "../../Modules/DataInfo";
 
 const WIDTH = Dimensions.get("screen").width;
@@ -138,15 +138,19 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <View style={styles.itemContainer}>
-                <Pressable
-                  onPress={() => toggleDetailsReports(item.id)}
-                >
+                <Pressable onPress={() => toggleDetailsReports(item.id)}>
                   <Text style={styles.TextHeader}>{item.application}</Text>
                 </Pressable>
-                {item.Details && (<View>
-                  <Text style={{color: "white", fontSize: 20}}>{item.submission_date}</Text>
-                  <Text style={{color: "white", fontSize: 20}}>{item.status}</Text>
-                  </View>)}
+                {item.Details && (
+                  <View>
+                    <Text style={{ color: "white", fontSize: 20 }}>
+                      {item.submission_date}
+                    </Text>
+                    <Text style={{ color: "white", fontSize: 20 }}>
+                      {item.status}
+                    </Text>
+                  </View>
+                )}
               </View>
             )}
             ListEmptyComponent={

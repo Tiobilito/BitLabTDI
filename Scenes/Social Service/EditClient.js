@@ -9,7 +9,7 @@ import {
   Alert,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import { getClientById, updateClient } from "../../Modules/OperacionesBD";
+import { getUserById, updateUser } from "../../Modules/Operations DB Users";
 
 const EditClientPage = ({ navigation }) => {
   const route = useRoute();
@@ -29,7 +29,7 @@ const EditClientPage = ({ navigation }) => {
   }, []);
 
   const getClientData = async () => {
-    const item = await getClientById(idClient);
+    const item = await getUserById(idClient);
     if (item) {
       setFormData({
         name: item.name,
@@ -72,7 +72,7 @@ const EditClientPage = ({ navigation }) => {
       second_number: formData.phone2,
     };
 
-    await updateClient(idClient, updatedData);
+    await updateUser(idClient, updatedData);
     navigation.goBack();
   };
 

@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import filter from "lodash.filter";
 import { useRoute, useFocusEffect } from "@react-navigation/native";
-import { getAllDevices } from "../../Modules/OperacionesBD";
+import { getAllDevices } from "../../Modules/Operations DB Fixes";
 
 const DevicesPage = ({ navigation }) => {
   const route = useRoute();

@@ -13,19 +13,15 @@ import { useRoute } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
-import {
-  addCostSupa,
-  addOrder,
-  getAllDepartamentos,
-  getClientById,
-  getDispoById,
-} from "../../Modules/OperacionesBD";
+
+import { getUserById } from "../../Modules/Operations DB Users";
+import { getDispoById, addOrder, addCostSupa } from "../../Modules/Operations DB Fixes";
+import { getAllDepartamentos } from "../../Modules/Operations DB Generals";
 
 const OrderPage = ({ navigation }) => {
   const route = useRoute();
   const { idDevice } = route.params;
   const [ShowCost, setShowCost] = useState(false);
-  const [idOrder, setIdOrder] = useState(0);
   const [deviceData, setDeviceData] = useState(null);
   const [clientData, setClientData] = useState(null);
   const [partsUsed, setPartsUsed] = useState("");
@@ -68,7 +64,7 @@ const OrderPage = ({ navigation }) => {
 
   const GetClientDeviceData = async () => {
     const deviceD = await getDispoById(idDevice);
-    const clientD = await getClientById(deviceD.customer_id);
+    const clientD = await getUserById(deviceD.customer_id);
     setDeviceData(deviceD);
     setClientData(clientD);
     console.log("Cliente: ", clientData);
