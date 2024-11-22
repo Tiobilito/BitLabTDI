@@ -1,5 +1,4 @@
 import { supabase } from "./Supabase";
-import { Alert } from "react-native";
 
 //Devices
 // Función para añadir un registro
