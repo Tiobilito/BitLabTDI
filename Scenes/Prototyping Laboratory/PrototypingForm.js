@@ -157,7 +157,9 @@ export default function PrototypingForm() {
                     style={styles.input}
                     value={formData.studentCode}
                     placeholder="Ingresa código del alumno"
-                    onChangeText={(text) => handleInputChange("studentCode", text)}
+                    onChangeText={(text) =>
+                      handleInputChange("studentCode", text)
+                    }
                   />
                 </View>
               )}
@@ -169,13 +171,15 @@ export default function PrototypingForm() {
                     style={styles.input}
                     value={formData.teacherCode}
                     placeholder="Ingresa código del profesor"
-                    onChangeText={(text) => handleInputChange("teacherCode", text)}
+                    onChangeText={(text) =>
+                      handleInputChange("teacherCode", text)
+                    }
                   />
                 </View>
               )}
             </View>
           ),
-        }
+        },
       ],
     },
     {
@@ -310,7 +314,7 @@ export default function PrototypingForm() {
   ];
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, marginTop: "5%" }}>
       <StatusBar barStyle="light-content" backgroundColor="black" />
       <FlatList
         data={formSections}
@@ -347,18 +351,22 @@ export default function PrototypingForm() {
 
 const styles = StyleSheet.create({
   formSection: {
-    marginVertical: 10,
-    padding: 15,
-    backgroundColor: "#f9f9f9",
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#ddd",
+    width: "100%",
+    marginBottom: 20,
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 3,
   },
   titleSection: {
     fontSize: 18,
-    fontWeight: "bold",
     marginBottom: 10,
-    color: "#333",
+    color: "#2c3e50",
+    textAlign: "center",
   },
   formGroup: {
     marginBottom: 15,
@@ -369,12 +377,14 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
+    height: Scale > 400 ? 60 : 40,
+    width: "100%",
+    backgroundColor: "#C5E0F2",
+    borderRadius: Scale > 400 ? 20 : 15,
     padding: 10,
-    fontSize: 16,
-    backgroundColor: "#fff",
+    margin: 10,
+    marginLeft: 0,
+    fontSize: Scale > 400 ? 30 : 15,
   },
   radioGroup: {
     flexDirection: "row",
@@ -405,16 +415,46 @@ const styles = StyleSheet.create({
     color: "#555",
   },
   submitButton: {
-    marginTop: 20,
-    backgroundColor: "#007bff",
-    borderRadius: 5,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
+    width: Scale * 0.25,
+    height: Scale * 0.1,
+    backgroundColor: "#2272A7",
+    justifyContent: "center",
     alignItems: "center",
+    borderRadius: 10,
+    marginBottom: Scale * 0.0,
+    marginLeft: "35%",
+    marginBottom: "2%",
   },
   submitButtonText: {
     fontSize: 16,
     color: "#fff",
     fontWeight: "bold",
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 10,
+    paddingHorizontal: 5,
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderWidth: 2,
+    borderRadius: 5,
+    marginRight: 10,
+    borderColor: "#007bff", // Puedes ajustar el color del borde
+  },
+  checkboxSelected: {
+    backgroundColor: "#007bff", // Color cuando está seleccionado
+  },
+  checkboxLabel: {
+    fontSize: 16,
+    color: "#333",
+  },
+  checkboxGroup: {
+    flexDirection: "row",
+    flexWrap: "wrap", // Si tienes más checkboxes, estos se distribuirán en varias filas
+    justifyContent: "flex-start",
+    marginVertical: 10,
   },
 });
