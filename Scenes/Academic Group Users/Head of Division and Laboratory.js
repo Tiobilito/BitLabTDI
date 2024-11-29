@@ -80,23 +80,10 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
 
   return (
     <CustomViewReverse>
-      <View style={{ marginTop: HEIGHT * 0.05, gap: HEIGHT * 0.02 }}>
+      <View style={{ marginTop: "2%", marginBottom: "2%"}}>
         <TouchableOpacity
           style={styles.btnAction}
-          onPress={() => navigation.navigate("AddClient")}
-        >
-          <Ionicons
-            name="add-circle"
-            style={{
-              fontSize: WIDTH > 400 ? 32 : 24,
-              color: "#2272A7",
-            }}
-          />
-          <Text style={styles.text}>Añadir Cliente</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.btnAction}
-          onPress={() => navigation.navigate("SearchClient")}
+          onPress={() => navigation.navigate("ReportForm")}
         >
           <Ionicons
             name="clipboard"
@@ -187,14 +174,14 @@ const styles = StyleSheet.create({
     color: "#2272A7",
   },
   btnAction: {
-    width: WIDTH * 0.85,
-    height: HEIGHT * 0.08,
+    width: "150%",
+    height: "140%",
     flexDirection: "row",
     backgroundColor: "#FFFFFF",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 40,
-    gap: WIDTH * 0.04,
+    borderRadius: "6%",
+    marginLeft: "-25%"
   },
   btnShowStats: {
     flexDirection: "row",
