@@ -128,14 +128,7 @@ const LoginPage = ({ navigation }) => {
               Si no estás registrado
             </Text>
             <TouchableOpacity
-              style={{
-                borderWidth: 1,
-                borderColor: "#2272A7",
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 10,
-                height: Scale * 0.1,
-              }}
+              style={styles.RegButton}
               onPress={() => navigation.navigate("Register")}
             >
               <Text style={{ color: "#2272A7", fontWeight: "bold" }}>
@@ -151,16 +144,16 @@ const LoginPage = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   input: {
-    height: Scale > 400 ? 60 : 40,
-    width: "93%",
+    height: "20%",
+    width: "90%",
     backgroundColor: "#C5E0F2",
     borderRadius: Scale > 400 ? 20 : 15,
     padding: 10,
     margin: 10,
-    fontSize: Scale > 400 ? 30 : 15,
+    fontSize: "100%",
   },
   textForm: {
-    fontSize: Scale > 400 ? 50 : 15,
+    fontSize: "100%",
     fontWeight: "regular",
     marginLeft: "5%",
     color: "#000000",
@@ -171,18 +164,28 @@ const styles = StyleSheet.create({
     marginTop: Scale * 0.08,
   },
   Logo: {
-    width: Scale > 400 ? 400 : 250, // Ancho de la imagen
-    height: Scale > 400 ? 400 : 250, // Alto de la imagen
+    width: "30%", // Ancho de la imagen
+    height: "30%", // Alto de la imagen
     marginTop: "10%",
   },
   loginButton: {
-    width: Scale * 0.25,
-    height: Scale * 0.1,
+    width: "30%",
+    height: "8%",
     backgroundColor: "#2272A7",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
     marginBottom: Scale * 0.08,
+  },
+  RegButton: {
+    borderWidth: 1,
+    borderColor: "#2272A7",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    height: "80%",
+    width: "120%",
+    marginLeft: "-15%"
   },
   mainTriangle: {
     width: 0,

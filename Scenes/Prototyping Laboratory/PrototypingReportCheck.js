@@ -122,14 +122,14 @@ const PrototypingCheck = ({ navigation }) => {
         style={{
           height: HEIGHT * 0.88,
           width: WIDTH * 0.9,
-          marginTop: HEIGHT * 0.04,
+          marginTop: "10%",
         }}
       >
-        <View>
+        <View style={{marginBottom: "-4%"}}>
           <Pressable
             style={{
-              marginLeft: "50%",
-              marginTop: "5%",
+              marginLeft: "70%",
+              marginTop: "-10%",
               backgroundColor: "gray",
               height: 40,
               width: 70,
@@ -140,9 +140,8 @@ const PrototypingCheck = ({ navigation }) => {
           </Pressable>
           <Pressable
             style={{
-              marginLeft: "75%",
-              marginTop: "-12%",
-              marginBottom: 10,
+              marginLeft: "85%",
+              marginTop: "-6%",
               backgroundColor: "gray",
               height: 42,
               width: 72,
