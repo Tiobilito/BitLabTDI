@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, FlatList, Image } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import { getAllDepartamentos, getClientById, getConstByOrderId, getDispoById, getOrderById } from "../../Modules/OperacionesBD";
+import { getCostsByOrderId, getOrderById } from "../../Modules/Operations DB Fixes";
 
 const OrderPageReadOnly = ({ navigation }) => {
   const route = useRoute();
   const { idOrder } = route.params;
-  const [ orderData, SetOrderData ] = useEffect(null);
-  const [ costData, SetCostData ] = useEffect(null);
+  const [ orderData, SetOrderData ] = useState(null);
+  const [ costData, SetCostData ] = useState(null);
 
   useEffect(() => {
     const getData = async() => {
       SetOrderData(await getOrderById(idOrder));
-      SetCostData(await getConstByOrderId(idOrder));
+      SetCostData(await getCostsByOrderId(idOrder));
       console.log(orderData);
       console.log(costData);
     }

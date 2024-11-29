@@ -9,10 +9,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import {
-  getPrototypeById,
-  updateProjectCheck,
-} from "../../Modules/OperacionesBD"; // Asegúrate de que la función getPrototypeById esté correctamente importada
+import { getPrototypeById, updateProjectCheck } from "../../Modules/Operations DB Prototyping";
 import { useRoute } from "@react-navigation/native";
 import { GetUserData } from "../../Modules/DataInfo";
 

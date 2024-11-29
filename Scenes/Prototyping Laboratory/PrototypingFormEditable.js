@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { getPrototypeById, updateProjectSub } from "../../Modules/OperacionesBD";
 import { useRoute } from "@react-navigation/native";
+import { getPrototypeById } from "../../Modules/Operations DB Prototyping";
 
 const Scale = Dimensions.get("window").width;
 

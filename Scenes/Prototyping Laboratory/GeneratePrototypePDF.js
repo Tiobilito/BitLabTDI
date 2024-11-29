@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { View, ActivityIndicator, Alert } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
-import { getPrototypeById } from "../../Modules/OperacionesBD"; // Asegúrate de que esta función esté correctamente implementada
+import { getPrototypeById } from "../../Modules/Operations DB Prototyping";
 import { generatePDF } from "./PDFGenerator"; // Archivo PDFGenerator.js que genera el PDF
 
 export default function GeneratePrototypePDF() {

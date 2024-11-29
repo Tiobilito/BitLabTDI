@@ -10,7 +10,8 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { addUser, getAllDepartamentos } from "../Modules/OperacionesBD";
+import { getAllDepartamentos } from "../Modules/Operations DB Generals";
+import { addUser } from "../Modules/Operations DB Users";
 import { Picker } from "@react-native-picker/picker";
 import { CustomView } from "./components/CustomView";
 

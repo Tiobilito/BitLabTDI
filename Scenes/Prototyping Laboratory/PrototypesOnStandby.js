@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
-import { getPrototypeStndby } from "../../Modules/OperacionesBD";
+import { getPrototypeStandby } from "../../Modules/Operations DB Prototyping";
 import { CustomViewReverse } from "../components/CustomViewReverse";
 
 const WIDTH = Dimensions.get("window").width;
@@ -34,7 +34,7 @@ const PrototypesOnStandby = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const Data = await getPrototypeStndby();
+      const Data = await getPrototypeStandby();
       const BData = Data.map((registro) => ({
         ...registro,
         Details: false,
