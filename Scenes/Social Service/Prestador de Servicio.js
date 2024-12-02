@@ -96,7 +96,7 @@ const SocialServicePage = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.btnAction}
-          onPress={() => navigation.navigate("SearchClient")}
+          onPress={() => navigation.navigate("ReportForm")}
         >
           <Ionicons
             name="clipboard"

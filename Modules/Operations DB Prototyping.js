@@ -154,16 +154,18 @@ export async function getAllProjectSubmissionsCheck(userType) {
   // Configura la consulta según el userType
   if (userType === 0) {
     console.log("department_head");
-    query = query.eq("department_head", false);
+    query = query.or("department_head.is.null"); // Solo registros con null
   } else if (userType === 2) {
     console.log("laboratory_head");
-    query = query.eq("department_head", true).eq("laboratory_head", false);
+    query = query
+      .eq("department_head", true)
+      .or("laboratory_head.is.null"); // Solo registros con null
   } else if (userType === 3) {
     console.log("service_staff");
     query = query
       .eq("department_head", true)
       .eq("laboratory_head", true)
-      .eq("service_staff", false);
+      .or("service_staff.is.null"); // Solo registros con null
   } else {
     console.error("Tipo de usuario no válido");
     return null;
@@ -178,22 +180,26 @@ export async function getAllProjectSubmissionsCheck(userType) {
   return data;
 }
 
+
 // Función para obtener registros de project_submissions basados en el userType
 export async function getAllProjectSubmissionsChecked(userType) {
   let query = supabase.from("project_submissions").select("*");
   // Configura la consulta según el userType
   if (userType === 0) {
     console.log("department_head");
-    query = query.eq("department_head", true);
+    query = query
+      .not("department_head", "is", null);
   } else if (userType === 2) {
     console.log("laboratory_head");
-    query = query.eq("department_head", true).eq("laboratory_head", true);
+    query = query
+      .eq("department_head", true)
+      .not("laboratory_head", "is", null);
   } else if (userType === 3) {
     console.log("service_staff");
     query = query
       .eq("department_head", true)
       .eq("laboratory_head", true)
-      .eq("service_staff", true);
+      .not("service_staff", "is", null);
   } else {
     console.error("Tipo de usuario no válido");
     return null;

@@ -108,6 +108,12 @@ const PrototypingCheck = ({ navigation }) => {
     navigation.navigate("GeneratePDF", { idReport: id });
   };
 
+  const navigateToEditForm = (id) => {
+    
+    navigation.navigate("EditSubmission", { idReport: id });
+    
+  };
+
   const navigateToAlreadyChecked = () => {
     navigation.navigate("AlreadyCheckedReports");
   };
@@ -149,7 +155,7 @@ const PrototypingCheck = ({ navigation }) => {
             onPress={navigateToAlreadyChecked}
           >
             <Text style={{ marginLeft: 2, marginTop: 2 }}>
-              Reportes Aprovados
+              Reportes Revisados
             </Text>
           </Pressable>
         </View>
