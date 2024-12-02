@@ -140,7 +140,7 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
         }}
       >
         <Pressable style={{ marginLeft: "80%" }} onPress={navigateToRemaning}>
-          <Icon name="timer-outline" size={50} color="orange" />
+          <Icon name="arrow-back-outline" size={50} color="black" />
         </Pressable>
         {/* Input para filtrar por application */}
         <TextInput
