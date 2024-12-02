@@ -32,10 +32,10 @@ const RadioButton = ({ label, value, selected, onSelect }) => {
 
 export default function PrototypingFormEdit() {
   const route = useRoute();
-  console.log("route.params:", route.params); // Verifica que los parámetros llegan correctamente
+  //console.log("route.params:", route.params); // Verifica que los parámetros llegan correctamente
 
   const { idReport } = route.params || {};
-  console.log("idReport recibido:", idReport); // Esto debe mostrar un valor válido
+  //console.log("idReport recibido:", idReport); // Esto debe mostrar un valor válido
 
 
   const [name, setName] = useState("");

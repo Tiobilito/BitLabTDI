@@ -156,7 +156,7 @@ const PrototypingCheck = ({ navigation }) => {
             onPress={navigateToAlreadyChecked}
           >
             <Text style={{ marginLeft: 2, marginTop: 2 }}>
-              Reportes Aprovados
+              Reportes Revisados
             </Text>
           </Pressable>
         </View>
@@ -265,7 +265,7 @@ const PrototypingCheck = ({ navigation }) => {
                     {/* Agrega más campos según sea necesario */}
                     <View style={styles.buttons}>
                       <TouchableOpacity
-                        onPress={() => navigateToEditForm(item.id)}
+                        onPress={() => navigateToCheck(item.id)}
                       >
                         <Image
                           source={require("../../Resources/imagenes/editar.png")}
