@@ -10,17 +10,31 @@ const Scale = Dimensions.get("window").width;
 export const CustomView = ({ children }: Props) => {
   return (
     <View style={[styles.background]}>
-      <View style={styles.backTriangle} />
-      <View style={styles.mainTriangle} />
-      <View style={{ justifyContent: "center", alignItems: "center" }}>
+      {/* Evitar el uso de posiciones absolutas en los triángulos */}
+      <View style={styles.triangleBackground}>
+        <View style={styles.mainTriangle} />
+        <View style={styles.backTriangle} />
+      </View>
+      <View style={styles.centeredContainer}>
         {children}
       </View>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   background: {
     flex: 1,
+    justifyContent: "center", // Asegura que los hijos estén centrados
+    alignItems: "center", // Centra los elementos
+  },
+  triangleBackground: {
+    position: "absolute", // Mantiene la posición de los triángulos en el fondo
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: -1, // Asegura que los triángulos no tapen los elementos principales
   },
   mainTriangle: {
     width: 0,
@@ -36,7 +50,6 @@ const styles = StyleSheet.create({
     transform: [{ rotate: "30deg" }],
     marginTop: "-35%",
     marginLeft: "-30%",
-    position: "absolute",
   },
   backTriangle: {
     width: 0,
@@ -52,18 +65,11 @@ const styles = StyleSheet.create({
     transform: [{ rotate: "95deg" }],
     marginTop: "-25%",
     marginLeft: "-70%",
-    position: "absolute",
   },
-  triangle: {
-    width: 0,
-    height: 0,
-    backgroundColor: "transparent",
-    borderStyle: "solid",
-    borderLeftWidth: 60,
-    borderRightWidth: 60,
-    borderBottomWidth: 120,
-    borderLeftColor: "transparent",
-    borderRightColor: "transparent",
-    borderBottomColor: "#328EC5",
+  centeredContainer: {
+    justifyContent: "center", // Centra los elementos
+    alignItems: "center", // Centra los elementos
+    flex: 1, // Ocupa todo el espacio disponible
+    zIndex: 1, // Asegura que los elementos hijos estén sobre los triángulos
   },
 });

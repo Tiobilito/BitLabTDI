@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState } from "react";
 import {
   StyleSheet,
   TextInput,
@@ -7,7 +7,7 @@ import {
   Dimensions,
   Text,
   View,
-  ScrollView,
+  FlatList,
 } from "react-native";
 import { GetUserData, StoreUserData } from "../Modules/DataInfo";
 import { CheckUser } from "../Modules/Operations DB Users";
@@ -19,18 +19,6 @@ const Scale = Dimensions.get("window").width;
 const LoginPage = ({ navigation }) => {
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
-  /*
-  useEffect(() => {
-    const loadUserData = async () => {
-      const data = await GetUserData();
-      if (data) {
-        setCode(data.Code);
-        setPassword(data.Password);
-      }
-    };
-    loadUserData();
-  }, []);
-  */
 
   const Verify = async () => {
     const Verify = await CheckUser(code, password);
@@ -56,126 +44,153 @@ const LoginPage = ({ navigation }) => {
     }
   };
 
-  return (
-    <CustomView>
-      <ScrollView>
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
+  const data = [
+    {
+      key: "logo",
+      component: (
+        <View style={styles.logoContainer}>
           <Image
             source={require("../Resources/imagenes/BITLABTDI.png")}
             style={styles.Logo}
           />
-          <Text style={{ fontSize: Scale > 400 ? 50 : 20 }}>
-            Ingresa a tu cuenta
-          </Text>
-          <View style={styles.formCont}>
-            <Text style={styles.textForm}>Código de usuario</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(text) => {
-                setCode(text);
-              }}
-              value={code.toString()}
-              keyboardType="numeric"
-            />
-            <Text style={styles.textForm}>Contraseña</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(text) => {
-                setPassword(text);
-              }}
-              value={password}
-              placeholder="Password"
-              secureTextEntry={true}
-            />
-          </View>
-
-          <TouchableOpacity
-            style={styles.loginButton}
-            onPress={() => Verify(code, password)}
-          >
-            <Text style={{ color: "white", fontWeight: "bold" }}>Iniciar</Text>
-          </TouchableOpacity>
-
-          <View style={{ marginBottom: Scale * 0.1 }}>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: Scale * 0.04,
-              }}
-            >
-              <View
-                style={{
-                  height: Scale * 0.002,
-                  width: Scale * 0.3,
-                  backgroundColor: "#000000",
-                }}
-              />
-              <Text> Ó </Text>
-              <View
-                style={{
-                  height: Scale * 0.002,
-                  width: Scale * 0.3,
-                  backgroundColor: "#000000",
-                }}
-              />
-            </View>
-          </View>
-
-          <View>
-            <Text style={{ marginBottom: Scale * 0.04 }}>
-              Si no estás registrado
-            </Text>
-            <TouchableOpacity
-              style={styles.RegButton}
-              onPress={() => navigation.navigate("Register")}
-            >
-              <Text style={{ color: "#2272A7", fontWeight: "bold" }}>
-                Registrar
-              </Text>
-            </TouchableOpacity>
-          </View>
         </View>
-      </ScrollView>
+      ),
+    },
+    {
+      key: "title",
+      component: (
+        <Text style={[styles.textTitle, { fontSize: Scale > 400 ? 50 : 20 }]}>
+          Ingresa a tu cuenta
+        </Text>
+      ),
+    },
+    {
+      key: "form",
+      component: (
+        <View style={styles.formCont}>
+          <Text style={styles.textForm}>Código de usuario</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => setCode(text)}
+            value={code.toString()}
+            keyboardType="numeric"
+          />
+          <Text style={styles.textForm}>Contraseña</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => setPassword(text)}
+            value={password}
+            placeholder="Password"
+            secureTextEntry={true}
+          />
+        </View>
+      ),
+    },
+    {
+      key: "loginButton",
+      component: (
+        <TouchableOpacity
+          style={styles.loginButton}
+          onPress={() => Verify(code, password)}
+        >
+          <Text style={{ color: "white", fontWeight: "bold" }}>Iniciar</Text>
+        </TouchableOpacity>
+      ),
+    },
+    {
+      key: "divider",
+      component: (
+        <View style={styles.dividerContainer}>
+          <View style={styles.divider}></View>
+          <Text> Ó </Text>
+          <View style={styles.divider}></View>
+        </View>
+      ),
+    },
+    {
+      key: "register",
+      component: (
+        <View style={styles.registerContainer}>
+          <Text style={{ marginBottom: Scale * 0.04 }}>Si no estás registrado</Text>
+          <TouchableOpacity
+            style={styles.RegButton}
+            onPress={() => navigation.navigate("Register")}
+          >
+            <Text style={{ color: "#2272A7", fontWeight: "bold" }}>Registrar</Text>
+          </TouchableOpacity>
+        </View>
+      ),
+    },
+  ];
+
+  return (
+    <CustomView>
+      <FlatList
+        data={data}
+        renderItem={({ item }) => <View style={styles.centered}>{item.component}</View>}
+        keyExtractor={(item) => item.key}
+        contentContainerStyle={styles.flatListContainer}
+      />
     </CustomView>
   );
 };
 
 const styles = StyleSheet.create({
+  flatListContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: 5, // Evitar que el último elemento quede pegado al borde inferior
+    paddingTop: 5, // Espacio adicional en la parte superior
+  },
+  centered: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    marginBottom: Scale * 0.02, // Reducir la separación entre componentes
+  },
+  logoContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: Scale * 0.05, // Reducir espacio debajo del logo
+  },
+  Logo: {
+    width: Scale * 0.6, // Ajustar el tamaño del logo
+    height: Scale * 0.2, // Ajustar el tamaño del logo
+    resizeMode: "contain", // Asegura que el logo no se distorsione
+  },
+  textTitle: {
+    textAlign: "center",
+    marginBottom: Scale * 0.03, // Reducir el espacio entre el título y el siguiente componente
+    fontWeight: "bold",
+  },
   input: {
-    height: "20%",
+    height: 50,
     width: "90%",
     backgroundColor: "#C5E0F2",
     borderRadius: Scale > 400 ? 20 : 15,
     padding: 10,
-    margin: 10,
-    fontSize: "100%",
+    marginVertical: 10, // Usar marginVertical para controlar el espacio arriba y abajo del input
+    fontSize: 16,
   },
   textForm: {
-    fontSize: "100%",
+    fontSize: 16,
     fontWeight: "regular",
     marginLeft: "5%",
     color: "#000000",
   },
   formCont: {
     width: Scale * 0.8,
-    marginBottom: Scale * 0.08,
-    marginTop: Scale * 0.08,
-  },
-  Logo: {
-    width: "30%", // Ancho de la imagen
-    height: "30%", // Alto de la imagen
-    marginTop: "10%",
+    marginBottom: Scale * 0.05, // Reducir el margen debajo del formulario
+    marginTop: Scale * 0.05, // Reducir el margen superior
   },
   loginButton: {
-    width: "30%",
-    height: "8%",
+    width: "160%",
+    height: "50%",
     backgroundColor: "#2272A7",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    marginBottom: Scale * 0.08,
+    marginBottom: Scale * 0.05, // Reducir el espacio debajo del botón
   },
   RegButton: {
     borderWidth: 1,
@@ -183,41 +198,25 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    height: "80%",
-    width: "120%",
-    marginLeft: "-15%"
+    height: 50,
+    width: "80%",
+    alignSelf: "center",
   },
-  mainTriangle: {
-    width: 0,
-    height: 0,
-    backgroundColor: "transparent",
-    borderStyle: "solid",
-    borderLeftWidth: 450,
-    borderRightWidth: 280,
-    borderBottomWidth: 280,
-    borderLeftColor: "transparent",
-    borderRightColor: "transparent",
-    borderBottomColor: "#328EC5",
-    transform: [{ rotate: "30deg" }],
-    marginTop: "-70%",
-    marginBottom: "30%",
-    marginRight: "-30%",
+  dividerContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: Scale * 0.03, // Reducir el espacio entre el divisor y otros componentes
   },
-  backTriangle: {
-    width: 0,
-    height: 0,
-    backgroundColor: "transparent",
-    borderStyle: "solid",
-    borderLeftWidth: 350,
-    borderRightWidth: 200,
-    borderBottomWidth: 250,
-    borderLeftColor: "transparent",
-    borderRightColor: "transparent",
-    borderBottomColor: "#57A9D9",
-    transform: [{ rotate: "95deg" }],
-    marginTop: "-40%",
-    marginBottom: "10%",
-    marginLeft: "-70%",
+  divider: {
+    height: Scale * 0.002,
+    width: Scale * 0.3,
+    backgroundColor: "#000000",
+  },
+  registerContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: Scale * 0.03, // Reducir el espacio arriba del contenedor de registro
   },
 });
 
