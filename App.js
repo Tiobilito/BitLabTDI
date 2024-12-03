@@ -127,9 +127,14 @@ const AcademicGroupApp = () => {
           let iconName;
           if (route.name === "Principal") {
             iconName = focused ? "home" : "home-outline";
-          } else if (route.name === "Registros") {
+          } else if (route.name === "RegistrosOSB") {
             iconName = focused ? "reader" : "reader-outline";
           } else if (route.name === "Prototipo") {
+            iconName = focused
+              ? "hardware-chip-sharp"
+              : "hardware-chip-outline";
+          }
+          else if (route.name === "Prototipo") {
             iconName = focused
               ? "hardware-chip-sharp"
               : "hardware-chip-outline";
@@ -141,7 +146,8 @@ const AcademicGroupApp = () => {
       })}
     >
       <StudentsTap.Screen name="Principal" component={AcademicGroupHome} />
-      <StudentsTap.Screen name="Registros" component={PrototypingReportsPage} />
+      <StudentsTap.Screen name="RegistrosOSB" component={PrototypesOnStandby} />
+      <StudentsTap.Screen name="Prototipo" component={PrototypingForm} />
     </StudentsTap.Navigator>
   );
 };

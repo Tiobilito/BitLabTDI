@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
-import { getAllProjectSubmissions } from "../../Modules/OperacionesBD";
+import { getAllProjectSubmissions } from "../../Modules/Operations DB Prototyping";
 import { GetUserData } from "../../Modules/DataInfo";
 import { CustomViewReverse } from "../components/CustomViewReverse";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -41,7 +41,8 @@ const PrototypesOnStandby = ({ navigation }) => {
       const fetchedPrototypes = await getAllProjectSubmissions();
       const filteredPrototypes = filterPrototypesByRole(
         fetchedPrototypes,
-        userData.User_type
+        userData.User_type,
+        userData.Code
       );
 
       setData(filteredPrototypes);
@@ -54,21 +55,33 @@ const PrototypesOnStandby = ({ navigation }) => {
     }
   };
 
-  const filterPrototypesByRole = (prototypes, role) => {
+  const filterPrototypesByRole = (prototypes, role, userCode) => {
     let filteredPrototypes;
 
     switch (role) {
       case 0:
-        filteredPrototypes = prototypes.filter((p) => !p.department_head);
+        filteredPrototypes = prototypes.filter(
+          (p) => !p.department_head && p.status !== "rejected" // Excluir rechazados
+        );
         break;
       case 1:
         filteredPrototypes = prototypes.filter(
-          (p) => p.department_head && !p.laboratory_head
+          (p) => p.department_head && !p.laboratory_head && p.status !== "rejected"
         );
         break;
       case 2:
         filteredPrototypes = prototypes.filter(
-          (p) => p.department_head && p.laboratory_head && !p.service_staff
+          (p) => p.department_head && p.laboratory_head && !p.service_staff && p.status !== "rejected"
+        );
+        break;
+      case 3:
+        filteredPrototypes = prototypes.filter(
+          (p) => p.professor_user_code === userCode
+        );
+        break;
+      case 4:
+        filteredPrototypes = prototypes.filter(
+          (p) => (p) => p.student_user_code === userCode
         );
         break;
       default:
@@ -179,7 +192,14 @@ const PrototypesOnStandby = ({ navigation }) => {
                   </View>
 
                   {/* Verificar si alguno de los campos está pendiente */}
-                  {!item.department_head || !item.laboratory_head || !item.service_staff ? (
+                  {item.status === "rejected" ? (
+                    <Icon
+                      name="close-circle-outline" // Ícono de rechazado
+                      size={24}
+                      color="#ff0000"
+                      style={styles.rejectedIcon}
+                    />
+                  ) :!item.department_head || !item.laboratory_head || !item.service_staff ? (
                     <Icon
                       name="timer-outline" // Ícono de advertencia
                       size={24}
@@ -190,7 +210,7 @@ const PrototypesOnStandby = ({ navigation }) => {
                     <Icon
                       name="checkmark-circle-outline" // Ícono de aprobado
                       size={24}
-                      color="green"
+                      color="00ff32"
                       style={styles.approvedIcon}
                     />
                   )}
