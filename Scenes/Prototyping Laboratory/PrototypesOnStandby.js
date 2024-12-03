@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
-import { getAllProjectSubmissions } from "../../Modules/OperacionesBD"; // Asegúrate de tener esta función
+import { getAllProjectSubmissions } from "../../Modules/OperacionesBD";
 import { GetUserData } from "../../Modules/DataInfo";
 import { CustomViewReverse } from "../components/CustomViewReverse";
 import Icon from "react-native-vector-icons/Ionicons";
