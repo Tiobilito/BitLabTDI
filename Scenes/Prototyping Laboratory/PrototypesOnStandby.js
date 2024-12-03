@@ -12,8 +12,10 @@ import {
 } from "react-native";
 import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
-import { getPrototypeStndby } from "../../Modules/OperacionesBD";
+import { getAllProjectSubmissions } from "../../Modules/OperacionesBD"; // Asegúrate de tener esta función
+import { GetUserData } from "../../Modules/DataInfo";
 import { CustomViewReverse } from "../components/CustomViewReverse";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
@@ -21,6 +23,7 @@ const HEIGHT = Dimensions.get("window").height;
 const PrototypesOnStandby = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [dataUser, setDataUser] = useState([]);
   const [error, setError] = useState(null);
   const [fullData, setFullData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -34,23 +37,77 @@ const PrototypesOnStandby = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const Data = await getPrototypeStndby();
-      const BData = Data.map((registro) => ({
-        ...registro,
-        Details: false,
-      }));
-      setData(BData);
-      setFullData(BData);
-      setIsLoading(false);
+      const userData = await GetUserData();
+      const fetchedPrototypes = await getAllProjectSubmissions();
+      const filteredPrototypes = filterPrototypesByRole(
+        fetchedPrototypes,
+        userData.User_type
+      );
+
+      setData(filteredPrototypes);
+      setFullData(filteredPrototypes);
+      setDataUser(userData);
     } catch (error) {
-      setError(error);
-      console.log(error);
+      setError("Error en la obtención de datos");
+    } finally {
       setIsLoading(false);
     }
   };
 
-  const handleItemPress = (id) => {
-    navigation.navigate("FormRead", { id });
+  const filterPrototypesByRole = (prototypes, role) => {
+    let filteredPrototypes;
+
+    switch (role) {
+      case 0:
+        filteredPrototypes = prototypes.filter((p) => !p.department_head);
+        break;
+      case 1:
+        filteredPrototypes = prototypes.filter(
+          (p) => p.department_head && !p.laboratory_head
+        );
+        break;
+      case 2:
+        filteredPrototypes = prototypes.filter(
+          (p) => p.department_head && p.laboratory_head && !p.service_staff
+        );
+        break;
+      default:
+        filteredPrototypes = [];
+    }
+
+    if (filteredPrototypes.length === 0) {
+      alert("Sin solicitudes pendientes");
+    }
+
+    return filteredPrototypes;
+  };
+
+  const toggleDetails = (itemId) => {
+    const updatedData = data.map((registro) => {
+      if (registro.id === itemId) {
+        return { ...registro, showDetails: !registro.showDetails };
+      }
+      return registro;
+    });
+    setData(updatedData);
+  };
+
+  const navigateToEditSubmission = (id,user) => {
+    switch (user){
+      case 0:
+      case 1:
+        navigation.navigate("ReportCheck", { idReport: id });
+        break;
+      case 2:
+        navigation.navigate("EditSubmission", { idReport: id });
+        break;
+      default:
+        alert("Hola");
+    }
+  };
+
+  const navigateToPDF = (id) => {
+    navigation.navigate("GeneratePDF", { idReport: id });
   };
 
   if (isLoading) {
@@ -64,7 +121,7 @@ const PrototypesOnStandby = ({ navigation }) => {
   if (error) {
     return (
       <View style={styles.centered}>
-        <Text style={styles.errorText}>Error en la obtención de datos</Text>
+        <Text style={styles.errorText}>{error}</Text>
       </View>
     );
   }
@@ -113,28 +170,64 @@ const PrototypesOnStandby = ({ navigation }) => {
             renderItem={({ item }) => (
               <View style={styles.itemContainer}>
                 <TouchableOpacity
-                  onPress={() => handleItemPress(item.id)}
+                  onPress={() => toggleDetails(item.id)}
                   style={styles.item}
                 >
-                  <View style={styles.avatarContainer}>
-                    <Image
-                      source={
-                        item.avatar
-                          ? { uri: item.avatar }
-                          : require("../../Resources/imagenes/default-avatar.jpg")
-                      }
-                      style={styles.avatar}
-                    />
-                  </View>
                   <View style={styles.info}>
-                    <Text style={styles.applicant_name}>
-                      {item.applicant_name}
-                    </Text>
-                    <Text style={styles.contact_email}>
-                      {item.contact_email}
-                    </Text>
+                    <Text style={styles.name}>{item.applicant_name}</Text>
+                    <Text style={styles.email}>{item.application}</Text>
                   </View>
+
+                  {/* Verificar si alguno de los campos está pendiente */}
+                  {!item.department_head || !item.laboratory_head || !item.service_staff ? (
+                    <Icon
+                      name="timer-outline" // Ícono de advertencia
+                      size={24}
+                      color="#ffcc00"
+                      style={styles.warningIcon}
+                    />
+                  ) : (
+                    <Icon
+                      name="checkmark-circle-outline" // Ícono de aprobado
+                      size={24}
+                      color="green"
+                      style={styles.approvedIcon}
+                    />
+                  )}
                 </TouchableOpacity>
+
+
+                {item.showDetails && (
+                  <View style={styles.details}>
+                    <Text style={styles.detailText}>
+                      Fecha de Solicitud: {item.submission_date}
+                    </Text>
+                    <Text style={styles.detailText}>
+                      Teléfono de Contacto: {item.contact_phone}
+                    </Text>
+                    <Text style={styles.detailText}>
+                      Proyecto: {item.application}
+                    </Text>
+                    <View style={styles.buttons}>
+                      <TouchableOpacity
+                        onPress={() => navigateToEditSubmission(item.id,dataUser.User_type)}
+                      >
+                        <Image
+                          source={require("../../Resources/imagenes/editar.png")}
+                          style={styles.buttonImage}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => navigateToPDF(item.id)}
+                      >
+                        <Image
+                          source={require("../../Resources/imagenes/pdf.png")}
+                          style={styles.buttonImage}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                )}
               </View>
             )}
           />
@@ -145,11 +238,6 @@ const PrototypesOnStandby = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-    marginTop: 30,
-  },
   centered: {
     flex: 1,
     justifyContent: "center",
@@ -190,25 +278,29 @@ const styles = StyleSheet.create({
   avatar: {
     width: "100%",
     height: "100%",
-    resizeMode: "cover",
   },
   info: {
     flex: 1,
   },
-  applicant_name: {
+  name: {
     fontSize: 18,
     fontWeight: "bold",
     color: "#ffffff",
   },
-  contact_email: {
+  email: {
     fontSize: 14,
     color: "#ffffff",
   },
+  toggleText: {
+    fontSize: 18,
+    color: "#ffffff",
+    paddingHorizontal: 5,
+  },
   details: {
     padding: 10,
-    backgroundColor: "#2272A7",
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    backgroundColor: "#095ea7",
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
   },
   detailText: {
     fontSize: 14,
@@ -222,21 +314,6 @@ const styles = StyleSheet.create({
   buttonImage: {
     width: 24,
     height: 24,
-    resizeMode: "contain",
-    tintColor: "#ffffff",
-  },
-  generatePDFButton: {
-    backgroundColor: "#ffffff",
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 5,
-    marginTop: 10,
-  },
-  buttonText: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#2272A7",
-    textAlign: "center",
   },
 });
 
