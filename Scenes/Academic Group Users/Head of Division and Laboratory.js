@@ -14,8 +14,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { CustomViewReverse } from "../components/CustomViewReverse";
 import {
   getAllOrdersByUserId,
-  getAllProjectSubmissionsByUserId,
-} from "../../Modules/OperacionesBD";
+} from "../../Modules/Operations DB Fixes";
+import { getAllProjectSubmissionsByUserId } from "../../Modules/Operations DB Prototyping";
 import { GetUserData } from "../../Modules/DataInfo";
 
 const WIDTH = Dimensions.get("screen").width;
@@ -81,32 +81,6 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
   return (
     <CustomViewReverse>
       <View style={{ marginTop: HEIGHT * 0.05, gap: HEIGHT * 0.02 }}>
-        <TouchableOpacity
-          style={styles.btnAction}
-          onPress={() => navigation.navigate("AddClient")}
-        >
-          <Ionicons
-            name="add-circle"
-            style={{
-              fontSize: WIDTH > 400 ? 32 : 24,
-              color: "#2272A7",
-            }}
-          />
-          <Text style={styles.text}>Añadir Cliente</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.btnAction}
-          onPress={() => navigation.navigate("SearchClient")}
-        >
-          <Ionicons
-            name="clipboard"
-            style={{
-              fontSize: WIDTH > 400 ? 32 : 24,
-              color: "#2272A7",
-            }}
-          />
-          <Text style={styles.text}>Añadir Reporte</Text>
-        </TouchableOpacity>
       </View>
       <View style={styles.btnShowStats}>
         <TouchableOpacity style={styles.btnShow} onPress={() => toggleList()}>
@@ -138,15 +112,19 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <View style={styles.itemContainer}>
-                <Pressable
-                  onPress={() => toggleDetailsReports(item.id)}
-                >
+                <Pressable onPress={() => toggleDetailsReports(item.id)}>
                   <Text style={styles.TextHeader}>{item.application}</Text>
                 </Pressable>
-                {item.Details && (<View>
-                  <Text style={{color: "white", fontSize: 20}}>{item.submission_date}</Text>
-                  <Text style={{color: "white", fontSize: 20}}>{item.status}</Text>
-                  </View>)}
+                {item.Details && (
+                  <View>
+                    <Text style={{ color: "white", fontSize: 20 }}>
+                      {item.submission_date}
+                    </Text>
+                    <Text style={{ color: "white", fontSize: 20 }}>
+                      {item.status}
+                    </Text>
+                  </View>
+                )}
               </View>
             )}
             ListEmptyComponent={

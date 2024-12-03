@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
-import { getAllProjectSubmissionsFinished } from "../../Modules/OperacionesBD"; // Asegúrate de implementar correctamente esta función
+import { getAllProjectSubmissionsFinished } from "../../Modules/Operations DB Prototyping";
 import { CustomViewReverse } from "../components/CustomViewReverse";
 import Icon from "react-native-vector-icons/Ionicons";
 
@@ -121,7 +121,7 @@ const PrototypingReportStDone = ({ navigation }) => {
         }}
       >
         <Pressable style={{ marginLeft: "80%" }} onPress={navigateToRemaning}>
-          <Icon name="timer-outline" size={50} color="orange" />
+          <Icon name="arrow-back-outline" size={50} color="black" />
         </Pressable>
         {/* Input para filtrar por application */}
         <TextInput

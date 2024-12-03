@@ -10,7 +10,7 @@ import {
   Alert,
   Dimensions,
 } from "react-native";
-import { addProjectSub } from "../../Modules/OperacionesBD";
+import { addProjectSub } from "../../Modules/Operations DB Prototyping";
 
 const Scale = Dimensions.get("window").width;
 

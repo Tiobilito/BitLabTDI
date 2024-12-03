@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
-import { getAllProjectSubmissionsCheck } from "../../Modules/OperacionesBD"; // Asegúrate de implementar correctamente esta función
+import { getAllProjectSubmissionsCheck } from "../../Modules/Operations DB Prototyping";
 import { CustomViewReverse } from "../components/CustomViewReverse";
 import Icon from "react-native-vector-icons/Ionicons";
 import { GetUserData } from "../../Modules/DataInfo";
@@ -156,7 +156,7 @@ const PrototypingCheck = ({ navigation }) => {
             onPress={navigateToAlreadyChecked}
           >
             <Text style={{ marginLeft: 2, marginTop: 2 }}>
-              Reportes Aprovados
+              Reportes Revisados
             </Text>
           </Pressable>
         </View>
@@ -265,7 +265,7 @@ const PrototypingCheck = ({ navigation }) => {
                     {/* Agrega más campos según sea necesario */}
                     <View style={styles.buttons}>
                       <TouchableOpacity
-                        onPress={() => navigateToEditForm(item.id)}
+                        onPress={() => navigateToCheck(item.id)}
                       >
                         <Image
                           source={require("../../Resources/imagenes/editar.png")}

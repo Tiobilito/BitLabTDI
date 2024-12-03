@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
-import { getAllProjectSubmissionsChecked } from "../../Modules/OperacionesBD"; // Asegúrate de implementar correctamente esta función
+import { getAllProjectSubmissionsChecked } from "../../Modules/Operations DB Prototyping";
 import { CustomViewReverse } from "../components/CustomViewReverse";
 import Icon from "react-native-vector-icons/Ionicons";
 import { GetUserData } from "../../Modules/DataInfo";
@@ -42,10 +42,28 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
     try {
       const UData = await GetUserData();
       Data = await getAllProjectSubmissionsChecked(UData.User_type);
-      const BData = Data.map((registro) => ({
+      let BData = Data.map((registro) => ({
         ...registro,
         Details: false,
+        Status: false,
       }));
+      // Ciclo que evalúa cada elemento de BData
+      BData.forEach((registro) => {
+        switch (UData.User_type) {
+          case 0: // Caso 0: Jefe de división
+            registro.Status = registro.department_head;
+            break;
+          case 1: // Caso 1: Jefe de laboratorio
+            registro.Status = registro.laboratory_head;
+            break;
+          case 2: // Caso 2: Prestador de servicio
+            registro.Status = registro.service_staff;
+            break;
+          default:
+            // Lógica para otros casos si es necesario
+            break;
+        }
+      });
       setData(BData);
       setFullData(BData);
       setIsLoading(false);
@@ -122,7 +140,7 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
         }}
       >
         <Pressable style={{ marginLeft: "80%" }} onPress={navigateToRemaning}>
-          <Icon name="timer-outline" size={50} color="orange" />
+          <Icon name="arrow-back-outline" size={50} color="black" />
         </Pressable>
         {/* Input para filtrar por application */}
         <TextInput
@@ -187,31 +205,16 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
                   {/* Mostrar icono si los campos department_head, laboratory_head o service_staff son false */}
 
                   {/* Mostrar el icono de advertencia o el icono de aprobado */}
-                  {!item.department_head ||
-                  !item.laboratory_head ||
-                  !item.service_staff ? (
-                    <Icon
-                      name="timer-outline"
-                      size={24}
-                      color="#ffcc00"
-                      style={styles.warningIcon}
-                    />
-                  ) : (
+                  {item.Status ? (
                     <Icon
                       name="checkmark-circle-outline"
                       size={24}
                       color="green"
+                      style={styles.warningIcon}
                     />
+                  ) : (
+                    <Icon name="close-circle-outline" size={24} color="red" />
                   )}
-                  {item.department_head &&
-                    item.laboratory_head &&
-                    item.service_staff && (
-                      <Icon
-                        name="checkmark-circle-outline"
-                        size={24}
-                        color="green"
-                      />
-                    )}
                 </TouchableOpacity>
 
                 {item.Details && (

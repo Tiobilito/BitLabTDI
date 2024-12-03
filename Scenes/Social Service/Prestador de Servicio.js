@@ -12,10 +12,10 @@ import {
 import { useFocusEffect } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { CustomViewReverse } from "../components/CustomViewReverse";
-import {
-  getAllOrdersByUserId,
-  getAllProjectSubmissionsByUserId,
-} from "../../Modules/OperacionesBD";
+
+import { getAllOrdersByUserId } from "../../Modules/Operations DB Fixes";
+import { getAllProjectSubmissionsByUserId } from "../../Modules/Operations DB Prototyping";
+
 import { GetUserData } from "../../Modules/DataInfo";
 
 const WIDTH = Dimensions.get("screen").width;
@@ -96,7 +96,7 @@ const SocialServicePage = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.btnAction}
-          onPress={() => navigation.navigate("SearchClient")}
+          onPress={() => navigation.navigate("ReportForm")}
         >
           <Ionicons
             name="clipboard"

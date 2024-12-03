@@ -7,11 +7,8 @@ import {
   View,
   ScrollView,
   Alert,
-  Dimensions,
 } from "react-native";
-import { AddClient } from "../../Modules/OperacionesBD";
-
-const Scale = Dimensions.get("window").width;
+import { addUser } from "../../Modules/Operations DB Users";
 
 const AddCPage = ({ navigation }) => {
   const [formData, setFormData] = useState({
@@ -45,7 +42,7 @@ const AddCPage = ({ navigation }) => {
         password: password,  // Agregar la contraseña
       };
 
-      await AddClient(data);
+      await addUser(data);
       navigateToSocialService();
     } else {
       Alert.alert("Por favor rellene todos los datos obligatorios");
