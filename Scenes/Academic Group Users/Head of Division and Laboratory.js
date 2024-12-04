@@ -12,9 +12,7 @@ import {
 import { useFocusEffect } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { CustomViewReverse } from "../components/CustomViewReverse";
-import {
-  getAllOrdersByUserId,
-} from "../../Modules/Operations DB Fixes";
+import { getAllOrdersByUserId } from "../../Modules/Operations DB Fixes";
 import { getAllProjectSubmissionsByUserId } from "../../Modules/Operations DB Prototyping";
 import { GetUserData } from "../../Modules/DataInfo";
 
@@ -33,6 +31,10 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
       fetchData();
     }, [])
   );
+
+  const navigateToPDF = (id) => {
+    navigation.navigate("GeneratePDF", { idReport: id });
+  };
 
   const fetchData = async () => {
     try {
@@ -80,8 +82,7 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
 
   return (
     <CustomViewReverse>
-      <View style={{ marginTop: HEIGHT * 0.05, gap: HEIGHT * 0.02 }}>
-      </View>
+      <View style={{ marginTop: HEIGHT * 0.05, gap: HEIGHT * 0.02 }}></View>
       <View style={styles.btnShowStats}>
         <TouchableOpacity style={styles.btnShow} onPress={() => toggleList()}>
           <Ionicons name="add-circle" style={styles.iconShowStats} />
@@ -115,6 +116,18 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
                 <Pressable onPress={() => toggleDetailsReports(item.id)}>
                   <Text style={styles.TextHeader}>{item.application}</Text>
                 </Pressable>
+                {item.department_head &&
+                  item.laboratory_head &&
+                  item.service_staff && (
+                    <View>
+                      <Pressable
+                        onPress={() => navigateToPDF(item.id)}
+                        style={styles.btnPrint}
+                      >
+                        <Ionicons name="print" style={styles.iconPrint} />
+                      </Pressable>
+                    </View>
+                  )}
                 {item.Details && (
                   <View>
                     <Text style={{ color: "white", fontSize: 20 }}>
@@ -159,6 +172,16 @@ const styles = StyleSheet.create({
   iconShowStats: {
     fontSize: WIDTH > 400 ? 24 : 16,
     color: "#2272A7",
+  },
+  iconPrint: {
+    fontSize: WIDTH > 400 ? 60 : 55,
+    color: "red",
+  },
+  btnPrint: {
+    //backgroundColor: "yellow",
+    width: 55,
+    marginLeft: 180,
+    marginTop: -45,
   },
   btnAction: {
     width: WIDTH * 0.85,
