@@ -3,7 +3,7 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
+  FlatList,
   StatusBar,
   ActivityIndicator,
   Dimensions,
@@ -79,7 +79,6 @@ export default function PrototypingFormReadOnly({ navigation }) {
     specific_requirements_comments,
   } = data;
 
-  // Verifica el tipo de prototipo y muestra una mejor descripción al usuario
   const getPrototypeDisplayName = (prototypeType) => {
     switch (prototypeType) {
       case "impreso":
@@ -91,93 +90,91 @@ export default function PrototypingFormReadOnly({ navigation }) {
     }
   };
 
+  const sections = [
+    {
+      title: "Datos de contacto",
+      items: [
+        { label: "Nombre completo", value: applicant_name },
+        { label: "Correo electrónico", value: contact_email },
+        { label: "Número de Teléfono", value: contact_phone },
+      ],
+    },
+    {
+      title: "Información del Proyecto",
+      items: [
+        { label: "Tipo de proyecto", value: project_type },
+        { label: "Aplicación", value: application },
+      ],
+    },
+    {
+      title: "Detalles del Usuario",
+      items: [
+        student_user_code && { label: "Código de Alumno", value: student_user_code },
+        professor_user_code && { label: "Código de Profesor", value: professor_user_code },
+      ].filter(Boolean),
+    },
+    {
+      title: "Datos del Prototipo",
+      items: [
+        { label: "Tipo de Prototipo", value: getPrototypeDisplayName(prototype_type) },
+        { label: "Descripción del Prototipo", value: prototype_description },
+        { label: "Dimensiones", value: specific_requirements_dimensions },
+        { label: "Corte especial", value: specific_requirements_special_cut || "No especificado" },
+        { label: "Otros", value: specific_requirements_other || "No especificado" },
+        { label: "Observaciones", value: specific_requirements_comments || "Sin comentarios adicionales" },
+      ],
+    },
+  ];
+
+  const renderSection = ({ item }) => (
+    <View style={styles.formSection}>
+      <Text style={styles.titleSection}>{item.title}</Text>
+      {item.items.map(({ label, value }, index) => (
+        <View key={index}>
+          <Text style={styles.label}>{label}:</Text>
+          <Text style={styles.value}>{value}</Text>
+        </View>
+      ))}
+    </View>
+  );
+
   return (
-    <ScrollView contentContainerStyle={styles.formContainer}>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor="black"
-        translucent={true}
-      />
-      <View style={styles.backTriangle} />
-      <View style={styles.mainTriangle} />
-      <Text style={styles.title}>
-        Detalles de la solicitud de servicio de prototipo
-      </Text>
-
-      <View style={styles.formSection}>
-        <Text style={styles.titleSection}>Datos de contacto</Text>
-        <Text style={styles.label}>Nombre completo:</Text>
-        <Text style={styles.value}>{applicant_name}</Text>
-        <Text style={styles.label}>Correo electrónico:</Text>
-        <Text style={styles.value}>{contact_email}</Text>
-        <Text style={styles.label}>Número de Teléfono:</Text>
-        <Text style={styles.value}>{contact_phone}</Text>
-      </View>
-
-      <View style={styles.formSection}>
-        <Text style={styles.titleSection}>Información del Proyecto</Text>
-        <Text style={styles.label}>Tipo de proyecto:</Text>
-        <Text style={styles.value}>{project_type}</Text>
-        <Text style={styles.label}>Aplicación:</Text>
-        <Text style={styles.value}>{application}</Text>
-      </View>
-
-      <View style={styles.formSection}>
-        <Text style={styles.titleSection}>Detalles del Usuario</Text>
-        {student_user_code && (
-          <>
-            <Text style={styles.label}>Código de Alumno:</Text>
-            <Text style={styles.value}>{student_user_code}</Text>
-          </>
-        )}
-        {professor_user_code && (
-          <>
-            <Text style={styles.label}>Código de Profesor:</Text>
-            <Text style={styles.value}>{professor_user_code}</Text>
-          </>
-        )}
-      </View>
-
-      <View style={styles.formSection}>
-        <Text style={styles.titleSection}>Datos del Prototipo</Text>
-        <Text style={styles.label}>Tipo de Prototipo:</Text>
-        <Text style={styles.value}>
-          {getPrototypeDisplayName(prototype_type)}
-        </Text>
-        <Text style={styles.label}>Descripción del Prototipo:</Text>
-        <Text style={styles.value}>{prototype_description}</Text>
-        <Text style={styles.label}>Dimensiones:</Text>
-        <Text style={styles.value}>{specific_requirements_dimensions}</Text>
-        <Text style={styles.label}>Corte especial:</Text>
-        <Text style={styles.value}>
-          {specific_requirements_special_cut || "No especificado"}
-        </Text>
-        <Text style={styles.label}>Otros:</Text>
-        <Text style={styles.value}>
-          {specific_requirements_other || "No especificado"}
-        </Text>
-        <Text style={styles.label}>Observaciones:</Text>
-        <Text style={styles.value}>
-          {specific_requirements_comments || "Sin comentarios adicionales"}
-        </Text>
-      </View>
-
-      {/* Botones para aprobar o rechazar la solicitud*/}
-      <View style={styles.approval}>
-        <TouchableOpacity
-          style={styles.submitButton}
-          onPress={() => UpdateCheck(true)}
-        >
-          <Text style={styles.submitButtonText}>Aprobar</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.submitButton}
-          onPress={() => UpdateCheck(false)}
-        >
-          <Text style={styles.submitButtonText}>Rechazar</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+    <FlatList
+      data={sections}
+      renderItem={renderSection}
+      keyExtractor={(item, index) => index.toString()}
+      contentContainerStyle={styles.formContainer}
+      ListHeaderComponent={() => (
+        <>
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="black"
+            translucent={true}
+          />
+          <View style={styles.backTriangle} />
+          <View style={styles.mainTriangle} />
+          <Text style={styles.title}>
+            Detalles de la solicitud de servicio de prototipo
+          </Text>
+        </>
+      )}
+      ListFooterComponent={() => (
+        <View style={styles.approval}>
+          <TouchableOpacity
+            style={styles.submitButton}
+            onPress={() => UpdateCheck(true)}
+          >
+            <Text style={styles.submitButtonText}>Aprobar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.submitButton}
+            onPress={() => UpdateCheck(false)}
+          >
+            <Text style={styles.submitButtonText}>Rechazar</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    />
   );
 }
 
