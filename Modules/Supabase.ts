@@ -15,9 +15,9 @@ const ExpoSecureStoreAdapter = {
 }
 
 //Project URL
-const supabaseUrl = "https://lpxsgoriiklrtkyfoxtk.supabase.co"
+const supabaseUrl = process.env.EXPO_PUBLIC_API_URL;
 //API Key
-const supabaseAnonKey= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxweHNnb3JpaWtscnRreWZveHRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTY5MzkyNDUsImV4cCI6MjAzMjUxNTI0NX0.HSSUL1zoy944xHop9X36WGHDvdE4zUe9Y7Fb0GNVUj0"
+const supabaseAnonKey= process.env.EXPO_PUBLIC_API_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
