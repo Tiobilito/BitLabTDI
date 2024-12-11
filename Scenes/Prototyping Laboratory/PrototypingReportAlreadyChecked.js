@@ -206,14 +206,17 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
 
                   {/* Mostrar el icono de advertencia o el icono de aprobado */}
                   {item.Status ? (
-                    <Icon
-                      name="checkmark-circle-outline"
-                      size={24}
-                      color="green"
-                      style={styles.warningIcon}
-                    />
+                    <View style={styles.iconCheck}>
+                      <Icon
+                        name="checkmark-circle-outline"
+                        size={24}
+                        color="green"
+                      />
+                    </View>
                   ) : (
-                    <Icon name="close-circle-outline" size={24} color="red" />
+                    <View style={styles.iconCheck}>
+                      <Icon name="close-circle-outline" size={24} color="red" />
+                    </View>
                   )}
                 </TouchableOpacity>
 
@@ -336,8 +339,9 @@ const styles = StyleSheet.create({
     height: 24,
     marginHorizontal: 10,
   },
-  warningIcon: {
-    marginLeft: 10,
+  iconCheck: {
+    backgroundColor: "white",
+    borderRadius: 80,
   },
 });
 
