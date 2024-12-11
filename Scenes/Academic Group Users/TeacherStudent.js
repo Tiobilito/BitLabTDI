@@ -6,6 +6,7 @@ import {
   View,
   Dimensions,
   FlatList,
+  Image,
   ActivityIndicator,
   Pressable,
 } from "react-native";
