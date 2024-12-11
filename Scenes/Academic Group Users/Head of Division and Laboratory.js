@@ -6,6 +6,7 @@ import {
   View,
   Dimensions,
   FlatList,
+  Image,
   ActivityIndicator,
   Pressable,
 } from "react-native";
@@ -120,21 +121,26 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
                   item.laboratory_head &&
                   item.service_staff && (
                     <View>
+                      <View style={styles.statusMargin}>
+                        <Text style={{ fontSize: 15, fontWeight: "bold", marginTop: 5 }}>
+                          {item.status}
+                        </Text>
+                      </View>
                       <Pressable
                         onPress={() => navigateToPDF(item.id)}
                         style={styles.btnPrint}
                       >
-                        <Ionicons name="print" style={styles.iconPrint} />
+                        <Image
+                          source={require("../../Resources/imagenes/pdf.png")}
+                          style={styles.buttonImage}
+                        />
                       </Pressable>
                     </View>
                   )}
                 {item.Details && (
                   <View>
-                    <Text style={{ color: "white", fontSize: 20 }}>
+                    <Text style={{ color: "white", fontSize: 20, marginLeft: 15, marginTop: 5 }}>
                       {item.submission_date}
-                    </Text>
-                    <Text style={{ color: "white", fontSize: 20 }}>
-                      {item.status}
                     </Text>
                   </View>
                 )}
@@ -178,10 +184,18 @@ const styles = StyleSheet.create({
     color: "red",
   },
   btnPrint: {
-    //backgroundColor: "yellow",
-    width: 55,
-    marginLeft: 180,
-    marginTop: -45,
+    backgroundColor: "white",
+    width: 35,
+    height: 35,
+    borderRadius: 80,
+    marginLeft: 250,
+    marginTop: -35,
+  },
+  buttonImage: {
+    width: 24,
+    height: 24,
+    marginLeft: 5,
+    marginTop: 5,
   },
   btnAction: {
     width: WIDTH * 0.85,
@@ -232,6 +246,15 @@ const styles = StyleSheet.create({
     fontSize: 35,
     fontWeight: "bold",
   },
+  statusMargin: {
+    backgroundColor: "white",
+    borderRadius: 80,
+    alignItems: "center",
+    height: 30,
+    width: 130,
+    marginLeft: 110,
+    marginTop: -35
+  }
 });
 
 export default HeadDivisionLaboratoryPage;
