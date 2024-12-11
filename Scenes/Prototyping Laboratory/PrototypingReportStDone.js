@@ -188,28 +188,23 @@ const PrototypingReportStDone = ({ navigation }) => {
                   {!item.department_head ||
                   !item.laboratory_head ||
                   !item.service_staff ? (
-                    <Icon
-                      name="timer-outline"
-                      size={24}
-                      color="#ffcc00"
-                      style={styles.warningIcon}
-                    />
+                    <View style={styles.iconCheck}>
+                      <Icon
+                        name="timer-outline"
+                        size={24}
+                        color="#ffcc00"
+                        style={styles.warningIcon}
+                      />
+                    </View>
                   ) : (
-                    <Icon
-                      name="checkmark-circle-outline"
-                      size={24}
-                      color="green"
-                    />
-                  )}
-                  {item.department_head &&
-                    item.laboratory_head &&
-                    item.service_staff && (
+                    <View style={styles.iconCheck}>
                       <Icon
                         name="checkmark-circle-outline"
                         size={24}
                         color="green"
                       />
-                    )}
+                    </View>
+                  )}
                 </TouchableOpacity>
 
                 {item.Details && (
@@ -328,6 +323,10 @@ const styles = StyleSheet.create({
   },
   warningIcon: {
     marginLeft: 10,
+  },
+  iconCheck: {
+    backgroundColor: "white",
+    borderRadius: 80,
   },
 });
 
