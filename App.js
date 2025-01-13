@@ -43,16 +43,19 @@ const StaffStack = createNativeStackNavigator();
 
 function AcademicGroupHome() {
   return (
-    <AcademicGroupStack.Navigator screenOptions={{headerShown: false}}>
+    <AcademicGroupStack.Navigator screenOptions={{ headerShown: false }}>
       <AcademicGroupStack.Screen name="Home" component={TeacherStudentPage} />
-      <AcademicGroupStack.Screen name="ReportForm" component={PrototypingForm} />
+      <AcademicGroupStack.Screen
+        name="ReportForm"
+        component={PrototypingForm}
+      />
     </AcademicGroupStack.Navigator>
   );
 }
 
 function StaffHome() {
   return (
-    <StaffStack.Navigator screenOptions={{headerShown: false}}>
+    <StaffStack.Navigator screenOptions={{ headerShown: false }}>
       <StaffStack.Screen name="Home" component={HeadDivisionLaboratoryPage} />
       <StaffStack.Screen name="ReportForm" component={PrototypingForm} />
     </StaffStack.Navigator>
@@ -62,7 +65,10 @@ function StaffHome() {
 function SocialServiceHome() {
   return (
     <SocialServiceStack.Navigator screenOptions={{ headerShown: false }}>
-      <SocialServiceStack.Screen name="SocialService" component={SocialServicePage} />
+      <SocialServiceStack.Screen
+        name="SocialService"
+        component={SocialServicePage}
+      />
       <SocialServiceStack.Screen name="AddClient" component={AddClientPage} />
     </SocialServiceStack.Navigator>
   );
@@ -71,9 +77,12 @@ function SocialServiceHome() {
 function StRepCheck() {
   return (
     <ReportCheckStack.Navigator screenOptions={{ headerShown: false }}>
-      <ReportCheckStack.Screen name="RepProjects" component={PrototypesOnStandby} />
+      <ReportCheckStack.Screen
+        name="RepProjects"
+        component={PrototypesOnStandby}
+      />
       <ReportCheckStack.Screen name="Check" component={PrototypingCheck} />
-      
+
       <ReportCheckStack.Screen
         name="ReportCheck"
         component={PrototypingFormReadOnly}
@@ -133,8 +142,7 @@ const AcademicGroupApp = () => {
             iconName = focused
               ? "hardware-chip-sharp"
               : "hardware-chip-outline";
-          }
-          else if (route.name === "Prototipo") {
+          } else if (route.name === "Prototipo") {
             iconName = focused
               ? "hardware-chip-sharp"
               : "hardware-chip-outline";
@@ -199,6 +207,8 @@ const SocialServiceApp = () => {
             iconName = focused
               ? "hardware-chip-sharp"
               : "hardware-chip-outline";
+          } else if (route.name === "RepProjects") {
+            iconName = focused ? "reader" : "reader-outline";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -208,8 +218,10 @@ const SocialServiceApp = () => {
     >
       <SocialServiceTap.Screen name="Principal" component={SocialServiceHome} />
       <SocialServiceTap.Screen name="Reparaciones" component={Fixes} />
-      <SocialServiceTap.Screen name="Prototipo" component={PrototypingForm} />
-      <SocialServiceTap.Screen name="RepProjects" component={PrototypesOnStandby} />
+      <SocialServiceTap.Screen
+        name="RepProjects"
+        component={PrototypesOnStandby}
+      />
     </SocialServiceTap.Navigator>
   );
 };
@@ -235,7 +247,6 @@ export default function App() {
         <Stack.Screen name="Test" component={OrderPageReadOnly} />
         <Stack.Screen name="GeneratePDF" component={GeneratePrototypePDF} />
         <Stack.Screen name="EditSubmission" component={PrototypingFormEdit} />
-        
       </Stack.Navigator>
     </NavigationContainer>
   );

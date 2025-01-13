@@ -157,9 +157,7 @@ export async function getAllProjectSubmissionsCheck(userType) {
     query = query.or("department_head.is.null"); // Solo registros con null
   } else if (userType === 2) {
     console.log("laboratory_head");
-    query = query
-      .eq("department_head", true)
-      .or("laboratory_head.is.null"); // Solo registros con null
+    query = query.eq("department_head", true).or("laboratory_head.is.null"); // Solo registros con null
   } else if (userType === 3) {
     console.log("service_staff");
     query = query
@@ -180,15 +178,13 @@ export async function getAllProjectSubmissionsCheck(userType) {
   return data;
 }
 
-
 // Función para obtener registros de project_submissions basados en el userType
 export async function getAllProjectSubmissionsChecked(userType) {
   let query = supabase.from("project_submissions").select("*");
   // Configura la consulta según el userType
   if (userType === 0) {
     console.log("department_head");
-    query = query
-      .not("department_head", "is", null);
+    query = query.not("department_head", "is", null);
   } else if (userType === 2) {
     console.log("laboratory_head");
     query = query
@@ -234,10 +230,10 @@ export async function updateProjectCheck(id, check, userType) {
   if (userType == 0) {
     console.log("department_head");
     updateField = { department_head: check };
-  } else if (userType == 2) {
+  } else if (userType == 1) {
     console.log("laboratory_head");
     updateField = { laboratory_head: check };
-  } else if (userType == 3) {
+  } else if (userType == 2) {
     console.log("service_staff");
     updateField = { service_staff: check };
   } else {

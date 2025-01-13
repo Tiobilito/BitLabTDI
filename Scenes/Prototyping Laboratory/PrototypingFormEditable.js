@@ -11,7 +11,11 @@ import {
   Dimensions,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import { getPrototypeById, updateProjectSub } from "../../Modules/Operations DB Prototyping";
+import {
+  getPrototypeById,
+  updateProjectSub,
+} from "../../Modules/Operations DB Prototyping";
+import { GetUserData } from "../../Modules/DataInfo";
 
 const Scale = Dimensions.get("window").width;
 
@@ -37,7 +41,6 @@ export default function PrototypingFormEdit() {
   const { idReport } = route.params || {};
   //console.log("idReport recibido:", idReport); // Esto debe mostrar un valor válido
 
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -49,12 +52,14 @@ export default function PrototypingFormEdit() {
   const [descriptionProject, setDescriptionProject] = useState("");
   const [prototypeType, setPrototypeType] = useState("");
   const [descriptionPrototype, setDescriptionPrototype] = useState("");
-  const [specificRequirementsDimensions, setspecificRequirementsDimensions] = useState("");
+  const [specificRequirementsDimensions, setspecificRequirementsDimensions] =
+    useState("");
   const [specialCut, setSpecialCut] = useState("");
   const [others, setOthers] = useState("");
   const [remarks, setRemarks] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [dataUser, setDataUserType] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,7 +80,9 @@ export default function PrototypingFormEdit() {
         setDescriptionProject(fetchedData.descriptionProject);
         setPrototypeType(fetchedData.prototype_type);
         setDescriptionPrototype(fetchedData.prototype_description);
-        setspecificRequirementsDimensions(fetchedData.specific_requirements_dimensions);
+        setspecificRequirementsDimensions(
+          fetchedData.specific_requirements_dimensions
+        );
         setSpecialCut(fetchedData.specific_requirements_special_cut);
         setOthers(fetchedData.specific_requirements_other);
         setRemarks(fetchedData.specific_requirements_comments);
@@ -88,6 +95,30 @@ export default function PrototypingFormEdit() {
 
     fetchData();
   }, [idReport]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userData = await GetUserData();
+        setDataUserType(userData.User_type);
+        console.log(userData.User_type);
+      } catch (error) {
+        setError("Error al obtener datos del usuario");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <View style={styles.loaderContainer}>
+        <Text>Cargando datos...</Text>
+      </View>
+    );
+  }
 
   const handleUpdate = async () => {
     try {
@@ -174,7 +205,7 @@ export default function PrototypingFormEdit() {
 
     // Si todas las validaciones pasan, limpiar errores y enviar el formulario
     //Alert.alert("Éxito", "Formulario enviado exitosamente");
-    
+
     // Llama a la funcion para actualizar el formulario
     handleUpdate();
   };
@@ -220,11 +251,7 @@ export default function PrototypingFormEdit() {
       <View style={styles.formSection}>
         <Text style={styles.titleSection}>Datos de contacto</Text>
         <Text style={styles.label}>Nombre completo:</Text>
-        <TextInput
-          style={styles.input}
-          value={name}
-          onChangeText={setName}
-        />
+        <TextInput style={styles.input} value={name} onChangeText={setName} />
         <Text style={styles.label}>Correo electrónico:</Text>
         <TextInput
           style={styles.input}
@@ -381,6 +408,16 @@ export default function PrototypingFormEdit() {
           placeholder="Menciona alguna observación que tengas"
         />
       </View>
+
+      {/* Seccion para llenado de datos del staff */}
+      {dataUser.User_type === 2 && (
+        <View style={styles.formSection}>
+          <Text style={styles.titleSection}>Datos de contacto</Text>
+          <Text style={styles.label}>Nombre completo:</Text>
+          <TextInput style={styles.input} value={name} onChangeText={setName} />
+          <Text style={styles.label}>Correo electrónico:</Text>
+        </View>
+      )}
 
       {/* Botón de envío del formulario */}
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>

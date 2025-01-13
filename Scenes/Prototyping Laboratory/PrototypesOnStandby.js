@@ -66,12 +66,17 @@ const PrototypesOnStandby = ({ navigation }) => {
         break;
       case 1:
         filteredPrototypes = prototypes.filter(
-          (p) => p.department_head && !p.laboratory_head && p.status !== "rejected"
+          (p) =>
+            p.department_head && !p.laboratory_head && p.status !== "rejected"
         );
         break;
       case 2:
         filteredPrototypes = prototypes.filter(
-          (p) => p.department_head && p.laboratory_head && !p.service_staff && p.status !== "rejected"
+          (p) =>
+            p.department_head &&
+            p.laboratory_head &&
+            !p.service_staff &&
+            p.status !== "rejected"
         );
         break;
       case 3:
@@ -81,7 +86,7 @@ const PrototypesOnStandby = ({ navigation }) => {
         break;
       case 4:
         filteredPrototypes = prototypes.filter(
-          (p) => (p) => p.student_user_code === userCode
+          (p) => p.student_user_code === userCode
         );
         break;
       default:
@@ -105,8 +110,8 @@ const PrototypesOnStandby = ({ navigation }) => {
     setData(updatedData);
   };
 
-  const navigateToEditSubmission = (id,user) => {
-    switch (user){
+  const navigateToEditSubmission = (id, user) => {
+    switch (user) {
       case 0:
       case 1:
         navigation.navigate("ReportCheck", { idReport: id });
@@ -199,7 +204,9 @@ const PrototypesOnStandby = ({ navigation }) => {
                       color="#ff0000"
                       style={styles.rejectedIcon}
                     />
-                  ) :!item.department_head || !item.laboratory_head || !item.service_staff ? (
+                  ) : !item.department_head ||
+                    !item.laboratory_head ||
+                    !item.service_staff ? (
                     <Icon
                       name="timer-outline" // Ícono de advertencia
                       size={24}
@@ -216,7 +223,6 @@ const PrototypesOnStandby = ({ navigation }) => {
                   )}
                 </TouchableOpacity>
 
-
                 {item.showDetails && (
                   <View style={styles.details}>
                     <Text style={styles.detailText}>
@@ -230,16 +236,16 @@ const PrototypesOnStandby = ({ navigation }) => {
                     </Text>
                     <View style={styles.buttons}>
                       <TouchableOpacity
-                        onPress={() => navigateToEditSubmission(item.id,dataUser.User_type)}
+                        onPress={() =>
+                          navigateToEditSubmission(item.id, dataUser.User_type)
+                        }
                       >
                         <Image
                           source={require("../../Resources/imagenes/editar.png")}
                           style={styles.buttonImage}
                         />
                       </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => navigateToPDF(item.id)}
-                      >
+                      <TouchableOpacity onPress={() => navigateToPDF(item.id)}>
                         <Image
                           source={require("../../Resources/imagenes/pdf.png")}
                           style={styles.buttonImage}
