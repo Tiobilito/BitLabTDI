@@ -117,6 +117,8 @@ const PrototypesOnStandby = ({ navigation }) => {
         navigation.navigate("ReportCheck", { idReport: id });
         break;
       case 2:
+      case 3:
+      case 4:
         navigation.navigate("EditSubmission", { idReport: id });
         break;
       default:

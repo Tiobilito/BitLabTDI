@@ -39,8 +39,7 @@ export default function PrototypingFormEdit() {
   //console.log("route.params:", route.params); // Verifica que los parámetros llegan correctamente
 
   const { idReport } = route.params || {};
-  //console.log("idReport recibido:", idReport); // Esto debe mostrar un valor válido
-
+  //Datos del reporte
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -60,6 +59,21 @@ export default function PrototypingFormEdit() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [dataUser, setDataUserType] = useState("");
+  //Datos de uso interno
+  const [internal_use_pcb_faces, setPcbFaces] = useState({
+    one: false,
+    two: false,
+  });
+  const [internal_use_pcb_provided_by_user, setProved] = useState({
+    yes: false,
+    no: false,
+  });
+  const [internal_use_required_inputs, setUseRequired] = useState("");
+  const [internal_use_comments, setInternalComments] = useState("");
+  const [prototype_approved, setApproved] = useState({
+    approved: false,
+    desapproved: false,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -101,7 +115,7 @@ export default function PrototypingFormEdit() {
       try {
         const userData = await GetUserData();
         setDataUserType(userData.User_type);
-        console.log(userData.User_type);
+        console.log(dataUser);
       } catch (error) {
         setError("Error al obtener datos del usuario");
       } finally {
@@ -123,6 +137,7 @@ export default function PrototypingFormEdit() {
   const handleUpdate = async () => {
     try {
       const updatedProject = {
+        //Datos del reporte
         applicant_name: name,
         contact_email: email,
         contact_phone: phone,
@@ -137,6 +152,14 @@ export default function PrototypingFormEdit() {
         specific_requirements_special_cut: specialCut,
         specific_requirements_other: others,
         specific_requirements_comments: remarks,
+        //Datos ingresados por el staff
+        ...(dataUser === 2 && {
+          internal_use_pcb_faces: internal_use_pcb_faces,
+          internal_use_pcb_provided_by_user: internal_use_pcb_provided_by_user,
+          internal_use_required_inputs: internal_use_required_inputs,
+          internal_use_comments: internal_use_comments,
+          prototype_approved_date: new Date().toISOString().split("T")[0],
+        }),
       };
 
       await updateProjectSub(idReport, updatedProject); // Llama a la función para actualizar
@@ -202,6 +225,37 @@ export default function PrototypingFormEdit() {
       Alert.alert("Error", "Por favor, ingresa las dimensiones del prototipo.");
       return;
     }
+    if (dataUser === 2) {
+      if (!internal_use_pcb_faces.one && !internal_use_pcb_faces.two) {
+        Alert.alert("Error", "Por favor, selecciona una opcion (1 o 2).");
+        return;
+      }
+      if (
+        !internal_use_pcb_provided_by_user.yes &&
+        !internal_use_pcb_provided_by_user.no
+      ) {
+        Alert.alert("Error", "Por favor, selecciona una opcion (SI o NO).");
+        return;
+      }
+      if (!internal_use_required_inputs) {
+        Alert.alert(
+          "Error",
+          "Por favor, ingresa los insumos requeridos o escribe (Ninguno)."
+        );
+        return;
+      }
+      if (!internal_use_comments) {
+        Alert.alert(
+          "Error",
+          "Por favor, ingresa algun comentario o escribe (Ninguno)."
+        );
+        return;
+      }
+      if (!prototype_approved.approved && !prototype_approved.desapproved) {
+        Alert.alert("Error", "Por favor, selecciona una opcion (SI o NO).");
+        return;
+      }
+    }
 
     // Si todas las validaciones pasan, limpiar errores y enviar el formulario
     //Alert.alert("Éxito", "Formulario enviado exitosamente");
@@ -231,6 +285,18 @@ export default function PrototypingFormEdit() {
   /* Función para elegir el tipo de usuario que solicita el prototipo */
   const handleRoleChange = (role) => {
     setRoles((prev) => ({ ...prev, [role]: !prev[role] }));
+  };
+
+  const handleSelectApproved = (value) => {
+    setApproved({
+      approved: value === "approved",
+      desapproved: value === "desapproved",
+    });
+  };
+
+  const UpdateCheck = async (check) => {
+    await updateProjectCheck(idReport, prototype_approved, dataUser);
+    navigation.goBack();
   };
 
   return (
@@ -410,12 +476,67 @@ export default function PrototypingFormEdit() {
       </View>
 
       {/* Seccion para llenado de datos del staff */}
-      {dataUser.User_type === 2 && (
+      {dataUser === 2 && (
         <View style={styles.formSection}>
-          <Text style={styles.titleSection}>Datos de contacto</Text>
-          <Text style={styles.label}>Nombre completo:</Text>
-          <TextInput style={styles.input} value={name} onChangeText={setName} />
-          <Text style={styles.label}>Correo electrónico:</Text>
+          <Text style={styles.titleSection}>Información interna</Text>
+          <Text style={styles.label}>Número de caras PCB:</Text>
+          <View style={styles.radioGroup}>
+            <RadioButton
+              label="1"
+              value="one"
+              selected={internal_use_pcb_faces === 1}
+              onSelect={setPcbFaces}
+            />
+            <RadioButton
+              label="2"
+              value="two"
+              selected={internal_use_pcb_faces === 2}
+              onSelect={setPrototypeType}
+            />
+          </View>
+          <Text style={styles.label}>¿PCB proporcionado por el usuario?</Text>
+          <View style={styles.radioGroup}>
+            <RadioButton
+              label="SI"
+              value="yes"
+              selected={internal_use_pcb_provided_by_user === true}
+              onSelect={setProved}
+            />
+            <RadioButton
+              label="NO"
+              value="no"
+              selected={internal_use_pcb_provided_by_user === false}
+              onSelect={setProved}
+            />
+          </View>
+          <Text style={styles.label}>Insumos requeridos:</Text>
+          <TextInput
+            style={styles.input}
+            value={internal_use_required_inputs}
+            onChangeText={setUseRequired}
+          />
+          <Text style={styles.label}>Observaciones:</Text>
+          <TextInput
+            style={styles.input}
+            value={internal_use_comments}
+            onChangeText={setInternalComments}
+          />
+          <Text style={styles.label}>Prototipo aprobado:</Text>
+          <View style={styles.radioGroup}>
+            {" "}
+            <RadioButton
+              label="SI"
+              value="approved"
+              selected={prototype_approved.approved}
+              onSelect={handleSelectApproved}
+            />{" "}
+            <RadioButton
+              label="NO"
+              value="desapproved"
+              selected={prototype_approved.desapproved}
+              onSelect={handleSelectApproved}
+            />{" "}
+          </View>
         </View>
       )}
 
