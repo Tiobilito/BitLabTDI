@@ -225,37 +225,6 @@ export default function PrototypingFormEdit() {
       Alert.alert("Error", "Por favor, ingresa las dimensiones del prototipo.");
       return;
     }
-    if (dataUser === 2) {
-      if (!internal_use_pcb_faces.one && !internal_use_pcb_faces.two) {
-        Alert.alert("Error", "Por favor, selecciona una opcion (1 o 2).");
-        return;
-      }
-      if (
-        !internal_use_pcb_provided_by_user.yes &&
-        !internal_use_pcb_provided_by_user.no
-      ) {
-        Alert.alert("Error", "Por favor, selecciona una opcion (SI o NO).");
-        return;
-      }
-      if (!internal_use_required_inputs) {
-        Alert.alert(
-          "Error",
-          "Por favor, ingresa los insumos requeridos o escribe (Ninguno)."
-        );
-        return;
-      }
-      if (!internal_use_comments) {
-        Alert.alert(
-          "Error",
-          "Por favor, ingresa algun comentario o escribe (Ninguno)."
-        );
-        return;
-      }
-      if (!prototype_approved.approved && !prototype_approved.desapproved) {
-        Alert.alert("Error", "Por favor, selecciona una opcion (SI o NO).");
-        return;
-      }
-    }
 
     // Si todas las validaciones pasan, limpiar errores y enviar el formulario
     //Alert.alert("Éxito", "Formulario enviado exitosamente");
@@ -288,14 +257,41 @@ export default function PrototypingFormEdit() {
   };
 
   const handleSelectApproved = (value) => {
-    setApproved({
-      approved: value === "approved",
-      desapproved: value === "desapproved",
-    });
+    if (!internal_use_pcb_faces.one && !internal_use_pcb_faces.two) {
+      Alert.alert("Error", "Por favor, selecciona una opcion (1 o 2).");
+      return;
+    }
+    if (
+      !internal_use_pcb_provided_by_user.yes &&
+      !internal_use_pcb_provided_by_user.no
+    ) {
+      Alert.alert("Error", "Por favor, selecciona una opcion (SI o NO).");
+      return;
+    }
+    if (!internal_use_required_inputs) {
+      Alert.alert(
+        "Error",
+        "Por favor, ingresa los insumos requeridos o escribe (Ninguno)."
+      );
+      return;
+    }
+    if (!internal_use_comments) {
+      Alert.alert(
+        "Error",
+        "Por favor, ingresa algun comentario o escribe (Ninguno)."
+      );
+      return;
+    }
+
+    {
+      value === true
+        ? Alert.alert("Error", "Se aprobado.")
+        : Alert.alert("Error", "Rechazado.");
+    }
   };
 
   const UpdateCheck = async (check) => {
-    await updateProjectCheck(idReport, prototype_approved, dataUser);
+    await updateProjectCheck(idReport, check, dataUser);
     navigation.goBack();
   };
 
@@ -312,7 +308,6 @@ export default function PrototypingFormEdit() {
       <Text style={styles.title}>
         Formato de requerimiento de servicio de maquinado de prototipo.
       </Text>
-
       {/* Seccion 1: Datos de contacto */}
       <View style={styles.formSection}>
         <Text style={styles.titleSection}>Datos de contacto</Text>
@@ -414,7 +409,6 @@ export default function PrototypingFormEdit() {
         />
         {error && <Text style={styles.errorMessage}>{error}</Text>}
       </View>
-
       {/* Sección 2: Datos del Prototipo */}
       <View style={styles.formSection}>
         <Text style={styles.titleSection}>Datos del Prototipo</Text>
@@ -474,7 +468,6 @@ export default function PrototypingFormEdit() {
           placeholder="Menciona alguna observación que tengas"
         />
       </View>
-
       {/* Seccion para llenado de datos del staff */}
       {dataUser === 2 && (
         <View style={styles.formSection}>
@@ -484,13 +477,13 @@ export default function PrototypingFormEdit() {
             <RadioButton
               label="1"
               value="one"
-              selected={internal_use_pcb_faces === 1}
+              selected={internal_use_pcb_faces === "one"}
               onSelect={setPcbFaces}
             />
             <RadioButton
               label="2"
               value="two"
-              selected={internal_use_pcb_faces === 2}
+              selected={internal_use_pcb_faces === "two"}
               onSelect={setPrototypeType}
             />
           </View>
@@ -521,29 +514,29 @@ export default function PrototypingFormEdit() {
             value={internal_use_comments}
             onChangeText={setInternalComments}
           />
-          <Text style={styles.label}>Prototipo aprobado:</Text>
-          <View style={styles.radioGroup}>
-            {" "}
-            <RadioButton
-              label="SI"
-              value="approved"
-              selected={prototype_approved.approved}
-              onSelect={handleSelectApproved}
-            />{" "}
-            <RadioButton
-              label="NO"
-              value="desapproved"
-              selected={prototype_approved.desapproved}
-              onSelect={handleSelectApproved}
-            />{" "}
-          </View>
         </View>
       )}
-
-      {/* Botón de envío del formulario */}
-      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitButtonText}>Enviar</Text>
-      </TouchableOpacity>
+      {/* Botónes de envío, aprovacion y rechazo del formulario */}
+      {dataUser === 2 ? (
+        <View style={styles.approval}>
+          <TouchableOpacity
+            style={styles.submitButton}
+            onPress={() => handleSelectApproved(true)}
+          >
+            <Text style={styles.submitButtonText}>Aprobar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.submitButton}
+            onPress={() => handleSelectApproved(false)}
+          >
+            <Text style={styles.submitButtonText}>Rechazar</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+          <Text style={styles.submitButtonText}>Enviar</Text>
+        </TouchableOpacity>
+      )}
     </ScrollView>
   );
 }
@@ -647,6 +640,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
     marginBottom: Scale * 0.0,
+    marginRight: 10,
   },
   submitButtonText: {
     color: "white",
@@ -714,5 +708,11 @@ const styles = StyleSheet.create({
     marginTop: "-40%",
     marginBottom: "5%",
     marginLeft: "-70%",
+  },
+  approval: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
   },
 });
