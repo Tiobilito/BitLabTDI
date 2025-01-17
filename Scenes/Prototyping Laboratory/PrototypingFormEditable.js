@@ -10,10 +10,11 @@ import {
   Alert,
   Dimensions,
 } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 import {
   getPrototypeById,
   updateProjectSub,
+  updateProjectCheck,
 } from "../../Modules/Operations DB Prototyping";
 import { GetUserData } from "../../Modules/DataInfo";
 
@@ -36,7 +37,7 @@ const RadioButton = ({ label, value, selected, onSelect }) => {
 
 export default function PrototypingFormEdit() {
   const route = useRoute();
-  //console.log("route.params:", route.params); // Verifica que los parámetros llegan correctamente
+  const navigation = useNavigation();
 
   const { idReport } = route.params || {};
   //Datos del reporte
@@ -60,20 +61,11 @@ export default function PrototypingFormEdit() {
   const [error, setError] = useState("");
   const [dataUser, setDataUserType] = useState("");
   //Datos de uso interno
-  const [internal_use_pcb_faces, setPcbFaces] = useState({
-    one: false,
-    two: false,
-  });
-  const [internal_use_pcb_provided_by_user, setProved] = useState({
-    yes: false,
-    no: false,
-  });
+  const [internal_use_pcb_faces, setPcbFaces] = useState(0);
+  const [internal_use_pcb_provided_by_user, setProved] = useState(null);
   const [internal_use_required_inputs, setUseRequired] = useState("");
   const [internal_use_comments, setInternalComments] = useState("");
-  const [prototype_approved, setApproved] = useState({
-    approved: false,
-    desapproved: false,
-  });
+  const [state, setState] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -115,7 +107,6 @@ export default function PrototypingFormEdit() {
       try {
         const userData = await GetUserData();
         setDataUserType(userData.User_type);
-        console.log(dataUser);
       } catch (error) {
         setError("Error al obtener datos del usuario");
       } finally {
@@ -136,8 +127,17 @@ export default function PrototypingFormEdit() {
 
   const handleUpdate = async () => {
     try {
-      const updatedProject = {
-        //Datos del reporte
+      // Validar si el estado tiene un valor correcto
+      if (!state) {
+        Alert.alert(
+          "Error",
+          "El estado no está definido. Por favor, selecciona una opción."
+        );
+        return;
+      }
+
+      // Crear el objeto base con los datos comunes
+      const baseProject = {
         applicant_name: name,
         contact_email: email,
         contact_phone: phone,
@@ -152,19 +152,36 @@ export default function PrototypingFormEdit() {
         specific_requirements_special_cut: specialCut,
         specific_requirements_other: others,
         specific_requirements_comments: remarks,
-        //Datos ingresados por el staff
-        ...(dataUser === 2 && {
-          internal_use_pcb_faces: internal_use_pcb_faces,
-          internal_use_pcb_provided_by_user: internal_use_pcb_provided_by_user,
-          internal_use_required_inputs: internal_use_required_inputs,
-          internal_use_comments: internal_use_comments,
-          prototype_approved_date: new Date().toISOString().split("T")[0],
-        }),
       };
 
-      await updateProjectSub(idReport, updatedProject); // Llama a la función para actualizar
+      // Solo agregar los datos del staff si el `dataUser` es 2
+      const updatedProject =
+        dataUser === 2
+          ? {
+              ...baseProject,
+              internal_use_pcb_faces,
+              internal_use_pcb_provided_by_user,
+              internal_use_required_inputs,
+              internal_use_comments,
+              prototype_approved_date: new Date().toISOString().split("T")[0],
+              status: state,
+            }
+          : baseProject;
+
+      console.log("Project update", updatedProject);
+
+      // Llamar a la API para actualizar el proyecto
+      await updateProjectSub(idReport, updatedProject);
+
+      // Confirmación
       Alert.alert("Éxito", "Prototipo actualizado exitosamente.");
+      console.log("Estado:", state);
+
+      // Volver a la pantalla anterior
+      navigation.goBack();
     } catch (error) {
+      // Mostrar error con detalles del mismo
+      console.error("Error al actualizar el prototipo:", error);
       Alert.alert("Error", "Hubo un problema al actualizar el prototipo.");
     }
   };
@@ -257,42 +274,55 @@ export default function PrototypingFormEdit() {
   };
 
   const handleSelectApproved = (value) => {
-    if (!internal_use_pcb_faces.one && !internal_use_pcb_faces.two) {
-      Alert.alert("Error", "Por favor, selecciona una opcion (1 o 2).");
-      return;
-    }
+    // Mensajes de error
+    const errorMessages = {
+      pcbFaces: "Por favor, selecciona una opción (1 o 2).",
+      pcbProvided: "Por favor, selecciona una opción (SI o NO).",
+      requiredInputs:
+        "Por favor, ingresa los insumos requeridos o escribe (Ninguno).",
+      comments: "Por favor, ingresa algún comentario o escribe (Ninguno).",
+    };
+
+    // Función auxiliar para validaciones
+    const validate = (condition, errorMessage) => {
+      if (!condition) {
+        Alert.alert("Error", errorMessage);
+        return false;
+      }
+      return true;
+    };
+
+    // Validaciones
     if (
-      !internal_use_pcb_provided_by_user.yes &&
-      !internal_use_pcb_provided_by_user.no
+      !validate(internal_use_pcb_faces !== null, errorMessages.pcbFaces) ||
+      !validate(
+        internal_use_pcb_provided_by_user !== null,
+        errorMessages.pcbProvided
+      ) ||
+      !validate(internal_use_required_inputs, errorMessages.requiredInputs) ||
+      !validate(internal_use_comments, errorMessages.comments)
     ) {
-      Alert.alert("Error", "Por favor, selecciona una opcion (SI o NO).");
-      return;
-    }
-    if (!internal_use_required_inputs) {
-      Alert.alert(
-        "Error",
-        "Por favor, ingresa los insumos requeridos o escribe (Ninguno)."
-      );
-      return;
-    }
-    if (!internal_use_comments) {
-      Alert.alert(
-        "Error",
-        "Por favor, ingresa algun comentario o escribe (Ninguno)."
-      );
       return;
     }
 
-    {
-      value === true
-        ? Alert.alert("Error", "Se aprobado.")
-        : Alert.alert("Error", "Rechazado.");
-    }
+    console.log("Valor de state antes de handleUpdate:", state);
+
+    // Acciones finales
+    handleUpdate();
+    UpdateCheck(value);
   };
 
   const UpdateCheck = async (check) => {
     await updateProjectCheck(idReport, check, dataUser);
-    navigation.goBack();
+  };
+
+  useEffect(() => {
+    console.log("El estado ha cambiado:", state);
+  }, [state]); // Este efecto se ejecutará cuando el estado cambie
+
+  const update = (value) => {
+    value ? setState("approved") : setState("rejected");
+    handleSelectApproved(value);
   };
 
   return (
@@ -476,28 +506,28 @@ export default function PrototypingFormEdit() {
           <View style={styles.radioGroup}>
             <RadioButton
               label="1"
-              value="one"
-              selected={internal_use_pcb_faces === "one"}
+              value={1}
+              selected={internal_use_pcb_faces === 1}
               onSelect={setPcbFaces}
             />
             <RadioButton
               label="2"
-              value="two"
-              selected={internal_use_pcb_faces === "two"}
-              onSelect={setPrototypeType}
+              value={2}
+              selected={internal_use_pcb_faces === 2}
+              onSelect={setPcbFaces}
             />
           </View>
           <Text style={styles.label}>¿PCB proporcionado por el usuario?</Text>
           <View style={styles.radioGroup}>
             <RadioButton
               label="SI"
-              value="yes"
+              value={true}
               selected={internal_use_pcb_provided_by_user === true}
               onSelect={setProved}
             />
             <RadioButton
               label="NO"
-              value="no"
+              value={false}
               selected={internal_use_pcb_provided_by_user === false}
               onSelect={setProved}
             />
@@ -521,13 +551,13 @@ export default function PrototypingFormEdit() {
         <View style={styles.approval}>
           <TouchableOpacity
             style={styles.submitButton}
-            onPress={() => handleSelectApproved(true)}
+            onPress={() => update(true)}
           >
             <Text style={styles.submitButtonText}>Aprobar</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.submitButton}
-            onPress={() => handleSelectApproved(false)}
+            onPress={() => update(false)}
           >
             <Text style={styles.submitButtonText}>Rechazar</Text>
           </TouchableOpacity>
