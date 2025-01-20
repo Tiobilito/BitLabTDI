@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import { GetUserData, StoreUserData } from "../Modules/DataInfo";
 import { CheckUser } from "../Modules/Operations DB Users";
-
 import { CustomView } from "./components/CustomView";
 
 const Scale = Dimensions.get("window").width;

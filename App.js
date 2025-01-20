@@ -30,6 +30,7 @@ import PrototypingAlreadyChecked from "./Scenes/Prototyping Laboratory/Prototypi
 import PrototypingReportStDone from "./Scenes/Prototyping Laboratory/PrototypingReportStDone";
 import OrderPageReadOnly from "./Scenes/Social Service/OrderReports";
 import HeadDivisionLaboratoryPage from "./Scenes/Academic Group Users/Head of Division and Laboratory";
+import SettingsPage from "./Scenes/Settings";
 
 const Stack = createNativeStackNavigator();
 const SocialServiceTap = createBottomTabNavigator();
@@ -146,6 +147,8 @@ const AcademicGroupApp = () => {
             iconName = focused
               ? "hardware-chip-sharp"
               : "hardware-chip-outline";
+          } else if (route.name === "Configuración") {
+            iconName = focused ? "settings" : "settings-outline";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -156,6 +159,7 @@ const AcademicGroupApp = () => {
       <StudentsTap.Screen name="Principal" component={AcademicGroupHome} />
       <StudentsTap.Screen name="RegistrosOSB" component={PrototypesOnStandby} />
       <StudentsTap.Screen name="Prototipo" component={PrototypingForm} />
+      <StudentsTap.Screen name="Configuración" component={SettingsPage} />
     </StudentsTap.Navigator>
   );
 };
@@ -173,6 +177,12 @@ const StaffApp = () => {
             iconName = focused ? "home" : "home-outline";
           } else if (route.name === "Registros") {
             iconName = focused ? "reader" : "reader-outline";
+          } else if (route.name === "Prototipo") {
+            iconName = focused
+              ? "hardware-chip-sharp"
+              : "hardware-chip-outline";
+          } else if (route.name === "Configuración") {
+            iconName = focused ? "settings" : "settings-outline";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -182,6 +192,7 @@ const StaffApp = () => {
     >
       <StaffTap.Screen name="Principal" component={StaffHome} />
       <StaffTap.Screen name="Registros" component={StRepCheck} />
+      <StaffTap.Screen name="Configuración" component={SettingsPage} />
     </StaffTap.Navigator>
   );
 };
@@ -209,6 +220,8 @@ const SocialServiceApp = () => {
               : "hardware-chip-outline";
           } else if (route.name === "RepProjects") {
             iconName = focused ? "reader" : "reader-outline";
+          } else if (route.name === "Configuración") {
+            iconName = focused ? "settings" : "settings-outline";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -222,6 +235,7 @@ const SocialServiceApp = () => {
         name="RepProjects"
         component={PrototypesOnStandby}
       />
+      <SocialServiceTap.Screen name="Configuración" component={SettingsPage} />
     </SocialServiceTap.Navigator>
   );
 };

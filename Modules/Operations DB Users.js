@@ -71,11 +71,17 @@ export async function updateUser(id_cliente, updatedUser) {
     .from("users")
     .update({
       name: updatedUser.name,
+      user_type: parseInt(updatedUser.user_type, 10),
       address: updatedUser.address,
       zip_code: updatedUser.zip_code,
       email: updatedUser.email,
+      nss: updatedUser.nss,
+      rfc: updatedUser.rfc,
       number: updatedUser.number,
       second_number: updatedUser.second_number,
+      salary: parseInt(updatedUser.salary, 10),
+      password: updatedUser.password,
+      department_id: updatedUser.department_id,
     })
     .eq("code", id_cliente);
   if (error) {
