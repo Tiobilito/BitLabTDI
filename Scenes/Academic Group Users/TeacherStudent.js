@@ -59,8 +59,17 @@ const TeacherStudentPage = ({ navigation }) => {
     }
   };
 
-  const toggleList = () => {
-    setShowListOrders(!showListOrders);
+  const toggleList = (Option) => {
+    switch (Option) {
+      case "Ordenes":
+        setShowListOrders(true);
+        break;
+      case "Reportes":
+        setShowListOrders(false);
+        break;
+      default:
+        break;
+    }
   };
 
   const toggleDetailsReports = (itemId) => {
@@ -99,11 +108,11 @@ const TeacherStudentPage = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.btnShowStats}>
-        <TouchableOpacity style={styles.btnShow} onPress={() => toggleList()}>
+        <TouchableOpacity style={styles.btnShow} onPress={() => toggleList("Ordenes")}>
           <Ionicons name="add-circle" style={styles.iconShowStats} />
           <Text style={styles.textShowStats}>Ordenes</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnShow} onPress={() => toggleList()}>
+        <TouchableOpacity style={styles.btnShow} onPress={() => toggleList("Reportes")}>
           <Ionicons name="clipboard" style={styles.iconShowStats} />
           <Text style={styles.textShowStats}>Reportes</Text>
         </TouchableOpacity>
