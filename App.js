@@ -77,7 +77,7 @@ function SocialServiceHome() {
 
 function StRepCheck() {
   return (
-    <ReportCheckStack.Navigator screenOptions={{ headerShown: false }}>
+    <ReportCheckStack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Check">
       <ReportCheckStack.Screen
         name="RepProjects"
         component={PrototypesOnStandby}

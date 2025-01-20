@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   Dimensions,
   Pressable,
+  ScrollView,
 } from "react-native";
 import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
@@ -131,35 +132,33 @@ const PrototypingCheck = ({ navigation }) => {
           marginTop: HEIGHT * 0.04,
         }}
       >
-        <View>
+        <ScrollView horizontal={true} style={{ marginTop: 6, marginLeft: 160 }}>
           <Pressable
             style={{
-              marginLeft: "50%",
-              marginTop: "5%",
-              backgroundColor: "gray",
-              height: 40,
+              backgroundColor: "#2272A7",
+              height: 42,
               width: 70,
+              borderRadius: 12,
             }}
             onPress={navigateToDone}
           >
-            <Text style={{ marginLeft: 4 }}>Reportes Cerrados</Text>
+            <Text style={{ marginLeft: 6, marginTop: 2, color: "white", fontWeight: "bold" }}>Reportes Cerrados</Text>
           </Pressable>
           <Pressable
             style={{
-              marginLeft: "75%",
-              marginTop: "-12%",
-              marginBottom: 10,
-              backgroundColor: "gray",
+              backgroundColor: "#2272A7",
               height: 42,
-              width: 72,
+              width: 70,
+              borderRadius: 12,
+              marginLeft: 10,
             }}
             onPress={navigateToAlreadyChecked}
           >
-            <Text style={{ marginLeft: 2, marginTop: 2 }}>
+            <Text style={{ marginLeft: 4, marginTop: 2, color: "white", fontWeight: "bold" }}>
               Reportes Revisados
             </Text>
           </Pressable>
-        </View>
+        </ScrollView>
         {/* Input para filtrar por application */}
         <TextInput
           style={styles.searchBox}
