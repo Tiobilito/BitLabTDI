@@ -9,7 +9,10 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import { getPrototypeById, updateProjectCheck } from "../../Modules/Operations DB Prototyping";
+import {
+  getPrototypeById,
+  updateProjectCheck,
+} from "../../Modules/Operations DB Prototyping";
 import { useRoute } from "@react-navigation/native";
 import { GetUserData } from "../../Modules/DataInfo";
 

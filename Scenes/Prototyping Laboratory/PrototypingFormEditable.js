@@ -57,7 +57,6 @@ export default function PrototypingFormEdit() {
   const [specialCut, setSpecialCut] = useState("");
   const [others, setOthers] = useState("");
   const [remarks, setRemarks] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [dataUser, setDataUserType] = useState("");
   //Datos de uso interno
@@ -65,7 +64,7 @@ export default function PrototypingFormEdit() {
   const [internal_use_pcb_provided_by_user, setProved] = useState(null);
   const [internal_use_required_inputs, setUseRequired] = useState("");
   const [internal_use_comments, setInternalComments] = useState("");
-  const [state, setState] = useState("");
+  const [state, setState] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -94,8 +93,6 @@ export default function PrototypingFormEdit() {
         setRemarks(fetchedData.specific_requirements_comments);
       } catch (error) {
         setError("Error al cargar los datos del prototipo");
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -117,25 +114,9 @@ export default function PrototypingFormEdit() {
     fetchData();
   }, []);
 
-  if (isLoading) {
-    return (
-      <View style={styles.loaderContainer}>
-        <Text>Cargando datos...</Text>
-      </View>
-    );
-  }
-
-  const handleUpdate = async () => {
+  const handleUpdate = async (value) => {
     try {
-      // Validar si el estado tiene un valor correcto
-      if (!state) {
-        Alert.alert(
-          "Error",
-          "El estado no está definido. Por favor, selecciona una opción."
-        );
-        return;
-      }
-
+      const estado = value ? "approved" : "rejected";
       // Crear el objeto base con los datos comunes
       const baseProject = {
         applicant_name: name,
@@ -164,7 +145,7 @@ export default function PrototypingFormEdit() {
               internal_use_required_inputs,
               internal_use_comments,
               prototype_approved_date: new Date().toISOString().split("T")[0],
-              status: state,
+              status: estado,
             }
           : baseProject;
 
@@ -175,7 +156,7 @@ export default function PrototypingFormEdit() {
 
       // Confirmación
       Alert.alert("Éxito", "Prototipo actualizado exitosamente.");
-      console.log("Estado:", state);
+      console.log("Estado:", estado);
 
       // Volver a la pantalla anterior
       navigation.goBack();
@@ -187,76 +168,59 @@ export default function PrototypingFormEdit() {
   };
 
   const handleSubmit = () => {
-    // Validaciones de los campos de contacto
-    if (!name) {
-      Alert.alert("Error", "Por favor, ingresa tu nombre.");
-      return;
-    }
-    if (!email) {
-      Alert.alert("Error", "Por favor, ingresa tu correo electrónico.");
-      return;
-    }
-    if (!phone) {
-      Alert.alert("Error", "Por favor, ingresa tu número de teléfono.");
-      return;
+    const validationFields = [
+      { field: name, message: "Por favor, ingresa tu nombre." },
+      { field: email, message: "Por favor, ingresa tu correo electrónico." },
+      { field: phone, message: "Por favor, ingresa tu número de teléfono." },
+      {
+        field: roles.alumno || roles.profesor,
+        message: "Por favor, selecciona un rol (Alumno o Profesor).",
+      },
+      {
+        field: roles.alumno && !studentCode,
+        message: "Por favor, ingresa el código de alumno.",
+      },
+      {
+        field: roles.profesor && !teacherCode,
+        message: "Por favor, ingresa el código de profesor.",
+      },
+      {
+        field: projectType,
+        message: "Por favor, selecciona el tipo de proyecto.",
+      },
+      {
+        field: application,
+        message: "Por favor, ingresa la aplicación de tu proyecto.",
+      },
+      {
+        field: descriptionProject,
+        message: "Por favor, ingresa una descripción del proyecto.",
+      },
+      {
+        field: prototypeType,
+        message: "Por favor, selecciona el tipo de prototipo.",
+      },
+      {
+        field: descriptionPrototype,
+        message: "Por favor, ingresa una descripción del prototipo.",
+      },
+      {
+        field: specificRequirementsDimensions,
+        message: "Por favor, ingresa las dimensiones del prototipo.",
+      },
+    ];
+
+    // Validación general
+    for (const { field, message } of validationFields) {
+      if (!field) {
+        Alert.alert("Error", message);
+        return;
+      }
     }
 
-    // Validaciones de roles y códigos correspondientes
-    if (!roles.alumno && !roles.profesor) {
-      Alert.alert("Error", "Por favor, selecciona un rol (Alumno o Profesor).");
-      return;
-    }
-    if (roles.alumno && !studentCode) {
-      Alert.alert("Error", "Por favor, ingresa el código de alumno.");
-      return;
-    }
-    if (roles.profesor && !teacherCode) {
-      Alert.alert("Error", "Por favor, ingresa el código de profesor.");
-      return;
-    }
-
-    // Validaciones adicionales
-    if (!projectType) {
-      Alert.alert("Error", "Por favor, selecciona el tipo de proyecto.");
-      return;
-    }
-    if (!application) {
-      Alert.alert("Error", "Por favor, ingresa la aplicación de tu proyecto.");
-      return;
-    }
-    if (!descriptionProject) {
-      Alert.alert("Error", "Por favor, ingresa una descripción del proyecto.");
-      return;
-    }
-
-    // Validaciones del prototipo
-    if (!prototypeType) {
-      Alert.alert("Error", "Por favor, selecciona el tipo de prototipo.");
-      return;
-    }
-    if (!descriptionPrototype) {
-      Alert.alert("Error", "Por favor, ingresa una descripción del prototipo.");
-      return;
-    }
-    if (!specificRequirementsDimensions) {
-      Alert.alert("Error", "Por favor, ingresa las dimensiones del prototipo.");
-      return;
-    }
-
-    // Si todas las validaciones pasan, limpiar errores y enviar el formulario
-    //Alert.alert("Éxito", "Formulario enviado exitosamente");
-
-    // Llama a la funcion para actualizar el formulario
-    handleUpdate();
+    // Si todas las validaciones pasan, llamar a la función para actualizar el formulario
+    handleUpdate(true);
   };
-
-  if (isLoading) {
-    return (
-      <View style={styles.loaderContainer}>
-        <Text>Cargando datos...</Text>
-      </View>
-    );
-  }
 
   /* Función para los checkbox */
   const Checkbox = ({ label, checked, onChange }) => {
@@ -305,10 +269,10 @@ export default function PrototypingFormEdit() {
       return;
     }
 
-    console.log("Valor de state antes de handleUpdate:", state);
+    console.log("Valor de state antes de handleUpdate:", value);
 
     // Acciones finales
-    handleUpdate();
+    handleUpdate(value);
     UpdateCheck(value);
   };
 
@@ -317,13 +281,10 @@ export default function PrototypingFormEdit() {
   };
 
   useEffect(() => {
-    console.log("El estado ha cambiado:", state);
-  }, [state]); // Este efecto se ejecutará cuando el estado cambie
-
-  const update = (value) => {
-    value ? setState("approved") : setState("rejected");
-    handleSelectApproved(value);
-  };
+    if (state !== null) {
+      handleSelectApproved(state);
+    }
+  }, [state]);
 
   return (
     <ScrollView contentContainerStyle={styles.formContainer}>
@@ -551,13 +512,17 @@ export default function PrototypingFormEdit() {
         <View style={styles.approval}>
           <TouchableOpacity
             style={styles.submitButton}
-            onPress={() => update(true)}
+            onPress={() => {
+              setState(true); // Acción 1
+            }}
           >
             <Text style={styles.submitButtonText}>Aprobar</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.submitButton}
-            onPress={() => update(false)}
+            onPress={() => {
+              setState(false); // Acción 1
+            }}
           >
             <Text style={styles.submitButtonText}>Rechazar</Text>
           </TouchableOpacity>
