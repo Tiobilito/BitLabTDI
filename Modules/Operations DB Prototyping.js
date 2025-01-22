@@ -226,26 +226,38 @@ export async function getAllProjectSubmissionsFinished() {
 // Función para modificar un registro en project_submissions basado en el id y el userType
 export async function updateProjectCheck(id, check, userType) {
   let updateField = {};
+  let status = "";
+
+  // Si check es true asigna la primera opcion a status, si es false entonces asigna rejected
+  status = check ? "awaiting_revision" : "rejected";
+
   // Configura el campo a actualizar según el userType
   if (userType == 0) {
     console.log("department_head");
-    updateField = { department_head: check };
+    updateField = { department_head: check }; // Envia el verificado true o false
+    updateField.status = status; // Agrega el cambio de estado al campo de actualización
   } else if (userType == 1) {
     console.log("laboratory_head");
     updateField = { laboratory_head: check };
+    updateField.status = status;
   } else if (userType == 2) {
     console.log("service_staff");
     updateField = { service_staff: check };
   } else {
     console.error("Tipo de usuario no válido");
+    return;
   }
+
   // Realiza la actualización en la tabla
   const { data, error } = await supabase
     .from("project_submissions")
     .update(updateField)
     .eq("id", id);
+
   if (error) {
     console.error("Error al actualizar el registro:", error);
+    return;
   }
+
   console.log("Registro actualizado:", data);
 }
