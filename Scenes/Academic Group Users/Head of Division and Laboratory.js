@@ -14,7 +14,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { CustomViewReverse } from "../components/CustomViewReverse";
 import { getAllOrdersByUserId } from "../../Modules/Operations DB Fixes";
-import { getAllProjectSubmissionsByUserId } from "../../Modules/Operations DB Prototyping";
+import { getAllProjectSubmissions, getAllProjectSubmissionsByUserId } from "../../Modules/Operations DB Prototyping";
 import { GetUserData } from "../../Modules/DataInfo";
 
 const WIDTH = Dimensions.get("screen").width;
@@ -41,7 +41,7 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
     try {
       const UData = await GetUserData();
       let Data = await getAllOrdersByUserId(UData.Code);
-      let ReportsData = await getAllProjectSubmissionsByUserId(UData.Code);
+      let ReportsData = await getAllProjectSubmissions(UData.Code);
       let BData = Data.map((registro) => ({
         ...registro,
         Details: false,
