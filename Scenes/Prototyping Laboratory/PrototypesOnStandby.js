@@ -219,7 +219,7 @@ const PrototypesOnStandby = ({ navigation }) => {
                     <Icon
                       name="checkmark-circle-outline" // Ícono de aprobado
                       size={24}
-                      color="00ff32"
+                      color="#20ff86"
                       style={styles.approvedIcon}
                     />
                   )}

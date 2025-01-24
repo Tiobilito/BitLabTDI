@@ -42,6 +42,7 @@ export const generatePDF = async (data) => {
       corteEspecial: { x: 128, y: 353 },
       otros: { x: 78, y: 336 },
       observaciones: { x: 130, y: 280 },
+      carasPCB: { x: 78, y: 300 },
     };
 
     // Cambiar las coordenadas de tipoProyecto dinámicamente
@@ -73,6 +74,18 @@ export const generatePDF = async (data) => {
         coordenadas.tipoPrototipo = { x: 209, y: 500 }; // Valor por defecto
         coordenadas.descripcion = { x: 209, y: 500 };
     }
+    // Cambiar las coordenadas de Numero de caras PCB dinámicamente
+    switch (data.internal_use_pcb_faces) {
+      case 1:
+        coordenadas.carasPCB = { x: 78, y: 174 };
+        break;
+      case 2:
+        coordenadas.carasPCB = { x: 145, y: 174 };
+        break;
+      default:
+        coordenadas.carasPCB; // Valor por defecto
+    }
+    console.log("PCB: ", data.internal_use_pcb_faces);
 
     // Insertar datos
     page.drawText(String(data.applicant_name || ""), {
@@ -177,6 +190,12 @@ export const generatePDF = async (data) => {
         color: rgb(0, 0, 0),
       }
     );
+    page.drawText(String("X" || ""), {
+      x: coordenadas.carasPCB.x,
+      y: coordenadas.carasPCB.y,
+      size: 12,
+      color: rgb(0, 0, 0),
+    });
 
     // Guardar PDF modificado
     const pdfBytes = await pdfDoc.saveAsBase64();

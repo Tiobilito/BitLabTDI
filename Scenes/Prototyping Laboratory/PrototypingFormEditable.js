@@ -21,242 +21,233 @@ import { GetUserData } from "../../Modules/DataInfo";
 const Scale = Dimensions.get("window").width;
 
 // Componente personalizado de RadioButton
-const RadioButton = ({ label, value, selected, onSelect }) => {
-  return (
-    <TouchableOpacity
-      onPress={() => onSelect(value)}
-      style={styles.radioButtonContainer}
-    >
-      <View
-        style={[styles.radioButton, selected && styles.radioButtonSelected]}
-      />
-      <Text style={styles.radioButtonLabel}>{label}</Text>
-    </TouchableOpacity>
-  );
+const RadioButton = ({ label, value, selected, onSelect }) => (
+  <TouchableOpacity
+    onPress={() => onSelect(value)}
+    style={styles.radioButtonContainer}
+  >
+    <View
+      style={[styles.radioButton, selected && styles.radioButtonSelected]}
+    />
+    <Text style={styles.radioButtonLabel}>{label}</Text>
+  </TouchableOpacity>
+);
+
+// Función auxiliar para las validaciones
+const validateField = (field, message) => {
+  if (!field) {
+    Alert.alert("Error", message);
+    return false;
+  }
+  return true;
 };
 
 export default function PrototypingFormEdit() {
   const route = useRoute();
   const navigation = useNavigation();
-
   const { idReport } = route.params || {};
-  //Datos del reporte
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [projectType, setProjectType] = useState("");
-  const [roles, setRoles] = useState({ alumno: false, profesor: false });
-  const [studentCode, setStudentCode] = useState("");
-  const [teacherCode, setTeacherCode] = useState("");
-  const [application, setApplication] = useState("");
-  const [descriptionProject, setDescriptionProject] = useState("");
-  const [prototypeType, setPrototypeType] = useState("");
-  const [descriptionPrototype, setDescriptionPrototype] = useState("");
-  const [specificRequirementsDimensions, setspecificRequirementsDimensions] =
-    useState("");
-  const [specialCut, setSpecialCut] = useState("");
-  const [others, setOthers] = useState("");
-  const [remarks, setRemarks] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    projectType: "",
+    roles: { alumno: false, profesor: false },
+    studentCode: "",
+    teacherCode: "",
+    application: "",
+    descriptionProject: "",
+    prototypeType: "",
+    descriptionPrototype: "",
+    specificRequirementsDimensions: "",
+    specialCut: "",
+    others: "",
+    remarks: "",
+  });
+
   const [error, setError] = useState("");
   const [dataUser, setDataUserType] = useState("");
-  //Datos de uso interno
-  const [internal_use_pcb_faces, setPcbFaces] = useState(0);
-  const [internal_use_pcb_provided_by_user, setProved] = useState(null);
-  const [internal_use_required_inputs, setUseRequired] = useState("");
-  const [internal_use_comments, setInternalComments] = useState("");
-  const [state, setState] = useState("");
+  const [internalData, setInternalData] = useState({
+    pcbFaces: 0,
+    pcbProvidedByUser: null,
+    requiredInputs: "",
+    comments: "",
+  });
+
+  const [state, setState] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const fetchedData = await getPrototypeById(idReport);
-        // Prellenar los campos con la data obtenida
-        setName(fetchedData.applicant_name);
-        setEmail(fetchedData.contact_email);
-        setPhone(fetchedData.contact_phone);
-        setProjectType(fetchedData.project_type);
-        setRoles({
-          alumno: !!fetchedData.student_user_code,
-          profesor: !!fetchedData.professor_user_code,
+        const [fetchedData, userData] = await Promise.all([
+          getPrototypeById(idReport),
+          GetUserData(),
+        ]);
+        console.log(fetchedData.student_user_code);
+        console.log(fetchedData.professor_user_code);
+        setFormData({
+          name: fetchedData.applicant_name,
+          email: fetchedData.contact_email,
+          phone: fetchedData.contact_phone,
+          projectType: fetchedData.project_type,
+          roles: {
+            alumno: !!fetchedData.student_user_code,
+            profesor: !!fetchedData.professor_user_code,
+          },
+          studentCode:
+            fetchedData.student_user_code !== null
+              ? String(fetchedData.student_user_code)
+              : "",
+          teacherCode:
+            fetchedData.professor_user_code !== null
+              ? String(fetchedData.professor_user_code)
+              : "",
+          application: fetchedData.application,
+          descriptionProject: fetchedData.descriptionProject,
+          prototypeType: fetchedData.prototype_type,
+          descriptionPrototype: fetchedData.prototype_description,
+          specificRequirementsDimensions:
+            fetchedData.specific_requirements_dimensions,
+          specialCut: fetchedData.specific_requirements_special_cut,
+          others: fetchedData.specific_requirements_other,
+          remarks: fetchedData.specific_requirements_comments,
         });
-        setStudentCode(fetchedData.student_user_code || "");
-        setTeacherCode(fetchedData.professor_user_code || "");
-        setApplication(fetchedData.application);
-        setDescriptionProject(fetchedData.descriptionProject);
-        setPrototypeType(fetchedData.prototype_type);
-        setDescriptionPrototype(fetchedData.prototype_description);
-        setspecificRequirementsDimensions(
-          fetchedData.specific_requirements_dimensions
-        );
-        setSpecialCut(fetchedData.specific_requirements_special_cut);
-        setOthers(fetchedData.specific_requirements_other);
-        setRemarks(fetchedData.specific_requirements_comments);
+        setDataUserType(userData.User_type);
       } catch (error) {
-        setError("Error al cargar los datos del prototipo");
-      } finally {
-        setIsLoading(false);
+        setError("Error al cargar los datos.");
       }
     };
 
     fetchData();
   }, [idReport]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userData = await GetUserData();
-        setDataUserType(userData.User_type);
-      } catch (error) {
-        setError("Error al obtener datos del usuario");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (isLoading) {
-    return (
-      <View style={styles.loaderContainer}>
-        <Text>Cargando datos...</Text>
-      </View>
-    );
-  }
-
-  const handleUpdate = async () => {
+  const handleUpdate = async (value) => {
     try {
-      // Validar si el estado tiene un valor correcto
-      if (!state) {
-        Alert.alert(
-          "Error",
-          "El estado no está definido. Por favor, selecciona una opción."
-        );
-        return;
-      }
-
-      // Crear el objeto base con los datos comunes
+      const estado = value ? "approved" : "rejected";
       const baseProject = {
-        applicant_name: name,
-        contact_email: email,
-        contact_phone: phone,
-        project_type: projectType,
-        student_user_code: roles.alumno ? Number(studentCode) : null,
-        professor_user_code: roles.profesor ? Number(teacherCode) : null,
-        application,
-        descriptionProject,
-        prototype_type: prototypeType,
-        prototype_description: descriptionPrototype,
-        specific_requirements_dimensions: specificRequirementsDimensions,
-        specific_requirements_special_cut: specialCut,
-        specific_requirements_other: others,
-        specific_requirements_comments: remarks,
+        applicant_name: formData.name,
+        contact_email: formData.email,
+        contact_phone: formData.phone,
+        project_type: formData.projectType,
+        student_user_code: formData.roles.alumno
+          ? Number(formData.studentCode)
+          : null,
+        professor_user_code: formData.roles.profesor
+          ? Number(formData.teacherCode)
+          : null,
+        application: formData.application,
+        descriptionProject: formData.descriptionProject,
+        prototype_type: formData.prototypeType,
+        prototype_description: formData.descriptionPrototype,
+        specific_requirements_dimensions:
+          formData.specificRequirementsDimensions,
+        specific_requirements_special_cut: formData.specialCut,
+        specific_requirements_other: formData.others,
+        specific_requirements_comments: formData.remarks,
+        internal_use_pcb_faces: null,
+        internal_use_pcb_provided_by_user: null,
+        internal_use_required_inputs: null,
+        internal_use_comments: null,
+        prototype_approved_date: null,
+        department_head: null,
+        laboratory_head: null,
+        service_staff: null,
+        status: "awaiting_revision",
       };
 
-      // Solo agregar los datos del staff si el `dataUser` es 2
       const updatedProject =
         dataUser === 2
           ? {
-              ...baseProject,
-              internal_use_pcb_faces,
-              internal_use_pcb_provided_by_user,
-              internal_use_required_inputs,
-              internal_use_comments,
+              internal_use_pcb_faces: internalData.pcbFaces,
+              internal_use_pcb_provided_by_user: internalData.pcbProvidedByUser,
+              internal_use_required_inputs: internalData.requiredInputs,
+              internal_use_comments: internalData.comments,
               prototype_approved_date: new Date().toISOString().split("T")[0],
-              status: state,
+              status: estado,
             }
           : baseProject;
 
-      console.log("Project update", updatedProject);
-
-      // Llamar a la API para actualizar el proyecto
       await updateProjectSub(idReport, updatedProject);
-
-      // Confirmación
       Alert.alert("Éxito", "Prototipo actualizado exitosamente.");
-      console.log("Estado:", state);
-
-      // Volver a la pantalla anterior
       navigation.goBack();
     } catch (error) {
-      // Mostrar error con detalles del mismo
-      console.error("Error al actualizar el prototipo:", error);
       Alert.alert("Error", "Hubo un problema al actualizar el prototipo.");
     }
   };
 
   const handleSubmit = () => {
-    // Validaciones de los campos de contacto
-    if (!name) {
-      Alert.alert("Error", "Por favor, ingresa tu nombre.");
-      return;
-    }
-    if (!email) {
-      Alert.alert("Error", "Por favor, ingresa tu correo electrónico.");
-      return;
-    }
-    if (!phone) {
-      Alert.alert("Error", "Por favor, ingresa tu número de teléfono.");
+    // Validar que al menos uno de los roles esté seleccionado
+    if (!formData.roles.alumno && !formData.roles.profesor) {
+      alert("Por favor, selecciona al menos un rol (alumno o profesor).");
       return;
     }
 
-    // Validaciones de roles y códigos correspondientes
-    if (!roles.alumno && !roles.profesor) {
-      Alert.alert("Error", "Por favor, selecciona un rol (Alumno o Profesor).");
-      return;
-    }
-    if (roles.alumno && !studentCode) {
-      Alert.alert("Error", "Por favor, ingresa el código de alumno.");
-      return;
-    }
-    if (roles.profesor && !teacherCode) {
-      Alert.alert("Error", "Por favor, ingresa el código de profesor.");
-      return;
+    // Validaciones generales
+    const validationFields = [
+      { field: formData.name, message: "Por favor, ingresa tu nombre." },
+      {
+        field: formData.email,
+        message: "Por favor, ingresa tu correo electrónico.",
+      },
+      {
+        field: formData.phone,
+        message: "Por favor, ingresa tu número de teléfono.",
+      },
+      // Validar el código de alumno solo si el rol de alumno está seleccionado
+      ...(formData.roles.alumno
+        ? [
+            {
+              field: formData.studentCode,
+              message: "Por favor, ingresa el código de alumno.",
+            },
+          ]
+        : []),
+      // Validar el código de profesor solo si el rol de profesor está seleccionado
+      ...(formData.roles.profesor
+        ? [
+            {
+              field: formData.teacherCode,
+              message: "Por favor, ingresa el código de profesor.",
+            },
+          ]
+        : []),
+      {
+        field: formData.projectType,
+        message: "Por favor, selecciona el tipo de proyecto.",
+      },
+      {
+        field: formData.application,
+        message: "Por favor, ingresa la aplicación de tu proyecto.",
+      },
+      {
+        field: formData.descriptionProject,
+        message: "Por favor, ingresa una descripción del proyecto.",
+      },
+      {
+        field: formData.prototypeType,
+        message: "Por favor, selecciona el tipo de prototipo.",
+      },
+      {
+        field: formData.descriptionPrototype,
+        message: "Por favor, ingresa una descripción del prototipo.",
+      },
+      {
+        field: formData.specificRequirementsDimensions,
+        message: "Por favor, ingresa las dimensiones del prototipo.",
+      },
+    ];
+
+    // Validar cada campo
+    for (const { field, message } of validationFields) {
+      if (!validateField(field, message)) {
+        return;
+      }
     }
 
-    // Validaciones adicionales
-    if (!projectType) {
-      Alert.alert("Error", "Por favor, selecciona el tipo de proyecto.");
-      return;
-    }
-    if (!application) {
-      Alert.alert("Error", "Por favor, ingresa la aplicación de tu proyecto.");
-      return;
-    }
-    if (!descriptionProject) {
-      Alert.alert("Error", "Por favor, ingresa una descripción del proyecto.");
-      return;
-    }
-
-    // Validaciones del prototipo
-    if (!prototypeType) {
-      Alert.alert("Error", "Por favor, selecciona el tipo de prototipo.");
-      return;
-    }
-    if (!descriptionPrototype) {
-      Alert.alert("Error", "Por favor, ingresa una descripción del prototipo.");
-      return;
-    }
-    if (!specificRequirementsDimensions) {
-      Alert.alert("Error", "Por favor, ingresa las dimensiones del prototipo.");
-      return;
-    }
-
-    // Si todas las validaciones pasan, limpiar errores y enviar el formulario
-    //Alert.alert("Éxito", "Formulario enviado exitosamente");
-
-    // Llama a la funcion para actualizar el formulario
-    handleUpdate();
+    // Si pasa todas las validaciones, procede con la actualización
+    console.log(formData);
+    handleUpdate(true);
   };
-
-  if (isLoading) {
-    return (
-      <View style={styles.loaderContainer}>
-        <Text>Cargando datos...</Text>
-      </View>
-    );
-  }
 
   /* Función para los checkbox */
   const Checkbox = ({ label, checked, onChange }) => {
@@ -270,60 +261,32 @@ export default function PrototypingFormEdit() {
 
   /* Función para elegir el tipo de usuario que solicita el prototipo */
   const handleRoleChange = (role) => {
-    setRoles((prev) => ({ ...prev, [role]: !prev[role] }));
+    setFormData((prev) => ({
+      ...prev,
+      roles: { ...prev.roles, [role]: !prev.roles[role] },
+    }));
   };
 
   const handleSelectApproved = (value) => {
-    // Mensajes de error
-    const errorMessages = {
-      pcbFaces: "Por favor, selecciona una opción (1 o 2).",
-      pcbProvided: "Por favor, selecciona una opción (SI o NO).",
-      requiredInputs:
-        "Por favor, ingresa los insumos requeridos o escribe (Ninguno).",
-      comments: "Por favor, ingresa algún comentario o escribe (Ninguno).",
-    };
-
-    // Función auxiliar para validaciones
-    const validate = (condition, errorMessage) => {
-      if (!condition) {
-        Alert.alert("Error", errorMessage);
-        return false;
-      }
-      return true;
-    };
-
-    // Validaciones
     if (
-      !validate(internal_use_pcb_faces !== null, errorMessages.pcbFaces) ||
-      !validate(
-        internal_use_pcb_provided_by_user !== null,
-        errorMessages.pcbProvided
-      ) ||
-      !validate(internal_use_required_inputs, errorMessages.requiredInputs) ||
-      !validate(internal_use_comments, errorMessages.comments)
+      internalData.pcbFaces === null ||
+      internalData.pcbProvidedByUser === null ||
+      !internalData.requiredInputs ||
+      !internalData.comments
     ) {
+      Alert.alert("Error", "Por favor, completa todos los campos internos.");
       return;
     }
 
-    console.log("Valor de state antes de handleUpdate:", state);
-
-    // Acciones finales
-    handleUpdate();
-    UpdateCheck(value);
-  };
-
-  const UpdateCheck = async (check) => {
-    await updateProjectCheck(idReport, check, dataUser);
+    handleUpdate(value);
+    updateProjectCheck(idReport, value, dataUser);
   };
 
   useEffect(() => {
-    console.log("El estado ha cambiado:", state);
-  }, [state]); // Este efecto se ejecutará cuando el estado cambie
-
-  const update = (value) => {
-    value ? setState("approved") : setState("rejected");
-    handleSelectApproved(value);
-  };
+    if (state !== null) {
+      handleSelectApproved(state);
+    }
+  }, [state]);
 
   return (
     <ScrollView contentContainerStyle={styles.formContainer}>
@@ -342,19 +305,23 @@ export default function PrototypingFormEdit() {
       <View style={styles.formSection}>
         <Text style={styles.titleSection}>Datos de contacto</Text>
         <Text style={styles.label}>Nombre completo:</Text>
-        <TextInput style={styles.input} value={name} onChangeText={setName} />
+        <TextInput
+          style={styles.input}
+          value={formData.name}
+          onChangeText={(text) => setFormData({ ...formData, name: text })}
+        />
         <Text style={styles.label}>Correo electrónico:</Text>
         <TextInput
           style={styles.input}
-          value={email}
-          onChangeText={setEmail}
+          value={formData.email}
+          onChangeText={(text) => setFormData({ ...formData, email: text })}
           placeholder="tuemail@ejemplo.com"
         />
         <Text style={styles.label}>Número de Teléfono:</Text>
         <TextInput
           style={styles.input}
-          value={phone}
-          onChangeText={setPhone}
+          value={formData.phone}
+          onChangeText={(text) => setFormData({ ...formData, phone: text })}
           placeholder="Número de teléfono"
           keyboardType="phone-pad"
           maxLength={10}
@@ -365,37 +332,41 @@ export default function PrototypingFormEdit() {
         <View style={styles.checkboxGroup}>
           <Checkbox
             label="Alumno"
-            checked={roles.alumno}
+            checked={formData.roles.alumno}
             onChange={() => handleRoleChange("alumno")}
           />
           <Checkbox
             label="Profesor"
-            checked={roles.profesor}
+            checked={formData.roles.profesor}
             onChange={() => handleRoleChange("profesor")}
           />
         </View>
 
         {/* Función para desplegar los inputs del checkbox seleccionado para el tipo de usuario */}
-        {roles.alumno ? (
+        {formData.roles.alumno ? (
           <View style={styles.formGroup}>
             <Text style={styles.label}>Código de Alumno</Text>
             <TextInput
               style={styles.input}
-              value={studentCode}
-              onChangeText={setStudentCode}
+              value={formData.studentCode}
+              onChangeText={(text) =>
+                setFormData({ ...formData, studentCode: text })
+              }
               placeholder="Código de Alumno"
               keyboardType="numeric"
               maxLength={9}
             />
           </View>
         ) : null}
-        {roles.profesor ? (
+        {formData.roles.profesor ? (
           <View style={styles.formGroup}>
             <Text style={styles.label}>Código de Profesor</Text>
             <TextInput
               style={styles.input}
-              value={teacherCode}
-              onChangeText={setTeacherCode}
+              value={formData.teacherCode}
+              onChangeText={(text) =>
+                setFormData({ ...formData, teacherCode: text })
+              }
               placeholder="Código de Profesor"
               keyboardType="numeric"
               maxLength={9}
@@ -407,34 +378,44 @@ export default function PrototypingFormEdit() {
           <RadioButton
             label="Licenciatura"
             value="Licenciatura"
-            selected={projectType === "Licenciatura"}
-            onSelect={setProjectType}
+            selected={formData.projectType === "Licenciatura"}
+            onSelect={(value) =>
+              setFormData({ ...formData, projectType: value })
+            }
           />
           <RadioButton
             label="Posgrado"
             value="Posgrado"
-            selected={projectType === "Posgrado"}
-            onSelect={setProjectType}
+            selected={formData.projectType === "Posgrado"}
+            onSelect={(value) =>
+              setFormData({ ...formData, projectType: value })
+            }
           />
           <RadioButton
             label="Cuerpo Academico"
             value="Cuerpo Academico"
-            selected={projectType === "Cuerpo Academico"}
-            onSelect={setProjectType}
+            selected={formData.projectType === "Cuerpo Academico"}
+            onSelect={(value) =>
+              setFormData({ ...formData, projectType: value })
+            }
           />
         </View>
         <Text style={styles.label}>Aplicación:</Text>
         <TextInput
           style={styles.input}
-          value={application}
-          onChangeText={setApplication}
+          value={formData.application}
+          onChangeText={(text) =>
+            setFormData({ ...formData, application: text })
+          }
           placeholder="¿En qué aplicarás tu proyecto?"
         />
         <Text style={styles.label}>Descripción:</Text>
         <TextInput
           style={styles.input}
-          value={descriptionProject}
-          onChangeText={setDescriptionProject}
+          value={formData.descriptionProject}
+          onChangeText={(text) =>
+            setFormData({ ...formData, descriptionProject: text })
+          }
           placeholder="Describe tu proyecto"
         />
         {error && <Text style={styles.errorMessage}>{error}</Text>}
@@ -442,107 +423,138 @@ export default function PrototypingFormEdit() {
       {/* Sección 2: Datos del Prototipo */}
       <View style={styles.formSection}>
         <Text style={styles.titleSection}>Datos del Prototipo</Text>
-        <Text style={[styles.label, { fontSize: 18 }]}>
-          Selecciona el tipo de prototipo:
-        </Text>
+
+        <Text style={styles.label}>Tipo de prototipo:</Text>
         <View style={styles.radioGroup}>
           <RadioButton
             label="Diseño de circuito impreso"
             value="impreso"
-            selected={prototypeType === "impreso"}
-            onSelect={setPrototypeType}
+            selected={formData.prototypeType === "impreso"}
+            onSelect={(value) =>
+              setFormData({ ...formData, prototypeType: value })
+            }
           />
           <RadioButton
             label="Diseño de prototipo en 3D"
             value="tresD"
-            selected={prototypeType === "tresD"}
-            onSelect={setPrototypeType}
+            selected={formData.prototypeType === "tresD"}
+            onSelect={(value) =>
+              setFormData({ ...formData, prototypeType: value })
+            }
           />
         </View>
+
         <Text style={styles.label}>Descripción del prototipo:</Text>
         <TextInput
           style={styles.input}
-          value={descriptionPrototype}
-          onChangeText={setDescriptionPrototype}
+          value={formData.descriptionPrototype}
+          onChangeText={(text) =>
+            setFormData({ ...formData, descriptionPrototype: text })
+          }
           placeholder="Describe tu prototipo"
         />
-        <Text style={styles.sectionSubTitle}>
-          Requerimientos específicos del Prototipo:
-        </Text>
-        <Text style={styles.label}>Dimensiones:</Text>
+
+        <Text style={styles.label}>Requerimientos específicos:</Text>
+
+        <Text style={styles.label}>Dimensiones (en mm):</Text>
         <TextInput
           style={styles.input}
-          value={specificRequirementsDimensions}
-          onChangeText={setspecificRequirementsDimensions}
-          placeholder="Dime tus dimensiones"
+          value={formData.specificRequirementsDimensions}
+          onChangeText={(text) =>
+            setFormData({ ...formData, specificRequirementsDimensions: text })
+          }
+          placeholder="Ejemplo: 200x100x50"
         />
+
         <Text style={styles.label}>Corte especial:</Text>
         <TextInput
           style={styles.input}
-          value={specialCut}
-          onChangeText={setSpecialCut}
-          placeholder="Dime tu corte especial"
+          value={formData.specialCut}
+          onChangeText={(text) =>
+            setFormData({ ...formData, specialCut: text })
+          }
+          placeholder="¿Se necesita algún corte especial?"
         />
-        <Text style={styles.label}>Otros:</Text>
+
+        <Text style={styles.label}>Otros requisitos:</Text>
         <TextInput
           style={styles.input}
-          value={others}
-          onChangeText={setOthers}
-          placeholder="Menciona algún otro requerimiento que tengas"
+          value={formData.others}
+          onChangeText={(text) => setFormData({ ...formData, others: text })}
+          placeholder="Describe otros requisitos específicos"
         />
-        <Text style={styles.label}>Observaciones:</Text>
+
+        <Text style={styles.label}>Comentarios adicionales:</Text>
         <TextInput
           style={styles.input}
-          value={remarks}
-          onChangeText={setRemarks}
-          placeholder="Menciona alguna observación que tengas"
+          value={formData.remarks}
+          onChangeText={(text) => setFormData({ ...formData, remarks: text })}
+          placeholder="Comentarios adicionales sobre el prototipo"
         />
       </View>
       {/* Seccion para llenado de datos del staff */}
       {dataUser === 2 && (
         <View style={styles.formSection}>
           <Text style={styles.titleSection}>Información interna</Text>
+
           <Text style={styles.label}>Número de caras PCB:</Text>
           <View style={styles.radioGroup}>
             <RadioButton
-              label="1"
+              label="1 cara"
               value={1}
-              selected={internal_use_pcb_faces === 1}
-              onSelect={setPcbFaces}
+              selected={internalData.pcbFaces === 1}
+              onSelect={(value) =>
+                setInternalData({ ...internalData, pcbFaces: value })
+              }
             />
             <RadioButton
-              label="2"
+              label="2 caras"
               value={2}
-              selected={internal_use_pcb_faces === 2}
-              onSelect={setPcbFaces}
+              selected={internalData.pcbFaces === 2}
+              onSelect={(value) =>
+                setInternalData({ ...internalData, pcbFaces: value })
+              }
             />
           </View>
+
           <Text style={styles.label}>¿PCB proporcionado por el usuario?</Text>
           <View style={styles.radioGroup}>
             <RadioButton
-              label="SI"
+              label="Sí"
               value={true}
-              selected={internal_use_pcb_provided_by_user === true}
-              onSelect={setProved}
+              selected={internalData.pcbProvidedByUser === true}
+              onSelect={(value) =>
+                setInternalData({ ...internalData, pcbProvidedByUser: value })
+              }
             />
             <RadioButton
-              label="NO"
+              label="No"
               value={false}
-              selected={internal_use_pcb_provided_by_user === false}
-              onSelect={setProved}
+              selected={internalData.pcbProvidedByUser === false}
+              onSelect={(value) =>
+                setInternalData({ ...internalData, pcbProvidedByUser: value })
+              }
             />
           </View>
+
           <Text style={styles.label}>Insumos requeridos:</Text>
           <TextInput
             style={styles.input}
-            value={internal_use_required_inputs}
-            onChangeText={setUseRequired}
+            value={internalData.requiredInputs}
+            onChangeText={(text) =>
+              setInternalData({ ...internalData, requiredInputs: text })
+            }
+            placeholder="Especifica los insumos necesarios"
           />
+
           <Text style={styles.label}>Observaciones:</Text>
           <TextInput
             style={styles.input}
-            value={internal_use_comments}
-            onChangeText={setInternalComments}
+            value={internalData.comments}
+            onChangeText={(text) =>
+              setInternalData({ ...internalData, comments: text })
+            }
+            placeholder="Observaciones adicionales"
           />
         </View>
       )}
@@ -551,13 +563,17 @@ export default function PrototypingFormEdit() {
         <View style={styles.approval}>
           <TouchableOpacity
             style={styles.submitButton}
-            onPress={() => update(true)}
+            onPress={() => {
+              setState(true); // Acción 1
+            }}
           >
             <Text style={styles.submitButtonText}>Aprobar</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.submitButton}
-            onPress={() => update(false)}
+            onPress={() => {
+              setState(false); // Acción 1
+            }}
           >
             <Text style={styles.submitButtonText}>Rechazar</Text>
           </TouchableOpacity>
