@@ -99,13 +99,6 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
       <View style={styles.btnShowStats}>
         <TouchableOpacity
           style={styles.btnShow}
-          onPress={() => toggleList("Ordenes")}
-        >
-          <Ionicons name="add-circle" style={styles.iconShowStats} />
-          <Text style={styles.textShowStats}>Ordenes</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.btnShow}
           onPress={() => toggleList("Reportes")}
         >
           <Ionicons name="clipboard" style={styles.iconShowStats} />
@@ -113,38 +106,24 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.tables}>
-        {showListOrders ? (
-          <FlatList
-            data={dataOrders}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <View style={styles.itemContainer}>
-                <Text>{item.id}</Text>
-              </View>
-            )}
-            ListEmptyComponent={
-              <Text style={styles.emptyText}>No hay ordenes disponibles</Text>
-            }
-          />
-        ) : (
-          <FlatList
-            data={dataReports}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <View style={styles.itemContainer}>
-                <Pressable onPress={() => toggleDetailsReports(item.id)}>
-                  <Text style={styles.TextHeader}>{item.application}</Text>
-                </Pressable>
-                <View style={styles.statusMargin}>
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      fontWeight: "bold",
-                      color: "black",
-                    }}
-                  >
-                    {item.status}
-                  </Text>
+        <FlatList
+          data={dataReports}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View style={styles.itemContainer}>
+              <Pressable onPress={() => toggleDetailsReports(item.id)}>
+                <Text style={styles.TextHeader}>{item.application}</Text>
+              </Pressable>
+              <View style={styles.statusMargin}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    fontWeight: "bold",
+                    color: "black",
+                  }}
+                >
+                  {item.status}
+                </Text>
                 {item.department_head &&
                   item.laboratory_head &&
                   item.service_staff && (
@@ -160,28 +139,27 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
                       </Pressable>
                     </View>
                   )}
-                  </View>
-                {item.Details && (
-                  <View>
-                    <Text
-                      style={{
-                        color: "white",
-                        fontSize: 20,
-                        marginLeft: 15,
-                        marginTop: 5,
-                      }}
-                    >
-                      {item.submission_date}
-                    </Text>
-                  </View>
-                )}
               </View>
-            )}
-            ListEmptyComponent={
-              <Text style={styles.emptyText}>No hay reportes disponibles</Text>
-            }
-          />
-        )}
+              {item.Details && (
+                <View>
+                  <Text
+                    style={{
+                      color: "white",
+                      fontSize: 20,
+                      marginLeft: 15,
+                      marginTop: 5,
+                    }}
+                  >
+                    {item.submission_date}
+                  </Text>
+                </View>
+              )}
+            </View>
+          )}
+          ListEmptyComponent={
+            <Text style={styles.emptyText}>No hay reportes disponibles</Text>
+          }
+        />
       </View>
     </CustomViewReverse>
   );

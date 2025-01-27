@@ -44,29 +44,30 @@ const StaffTap = createBottomTabNavigator();
 const SocialServiceStack = createNativeStackNavigator();
 const RepairClientDevicesStack = createNativeStackNavigator();
 const ReportCheckStack = createNativeStackNavigator();
+const ReportListAG = createNativeStackNavigator();
 const AcademicGroupStack = createNativeStackNavigator();
 const StaffStack = createNativeStackNavigator();
 
 //Stack que abarca todas las ventanas relacionadas con los reportes del grupo academico
 function PrototypingReportsAG() {
   return (
-    <AcademicGroupStack.Navigator
+    <ReportListAG.Navigator
       screenOptions={{ headerShown: false }}
       initialRouteName="ReportsList"
     >
-      <AcademicGroupStack.Screen
+      <ReportListAG.Screen
         name="ReportsList"
         component={PrototypingReportsPage}
       />
-      <AcademicGroupStack.Screen
+      <ReportListAG.Screen
         name="GeneratePDF"
         component={GeneratePrototypePDF}
       />
-      <AcademicGroupStack.Screen
+      <ReportListAG.Screen
         name="EditSubmission"
         component={PrototypingFormEdit}
       />
-    </AcademicGroupStack.Navigator>
+    </ReportListAG.Navigator>
   );
 }
 
