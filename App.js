@@ -146,8 +146,6 @@ const AcademicGroupApp = () => {
           let iconName;
           if (route.name === "Principal") {
             iconName = focused ? "home" : "home-outline";
-          } else if (route.name === "RegistrosOSB") {
-            iconName = focused ? "reader" : "reader-outline";
           } else if (route.name === "Prototipo") {
             iconName = focused
               ? "hardware-chip-sharp"
@@ -166,7 +164,6 @@ const AcademicGroupApp = () => {
       })}
     >
       <StudentsTap.Screen name="Principal" component={AcademicGroupHome} />
-      <StudentsTap.Screen name="RegistrosOSB" component={PrototypesOnStandby} />
       <StudentsTap.Screen name="Prototipo" component={PrototypingForm} />
       <StudentsTap.Screen name="Configuración" component={SettingsPage} />
     </StudentsTap.Navigator>
@@ -227,7 +224,7 @@ const SocialServiceApp = () => {
             iconName = focused
               ? "hardware-chip-sharp"
               : "hardware-chip-outline";
-          } else if (route.name === "RepProjects") {
+          } else if (route.name === "Registros") {
             iconName = focused ? "reader" : "reader-outline";
           } else if (route.name === "Configuración") {
             iconName = focused ? "settings" : "settings-outline";
@@ -240,10 +237,7 @@ const SocialServiceApp = () => {
     >
       <SocialServiceTap.Screen name="Principal" component={SocialServiceHome} />
       <SocialServiceTap.Screen name="Reparaciones" component={Fixes} />
-      <SocialServiceTap.Screen
-        name="RepProjects"
-        component={PrototypesOnStandby}
-      />
+      <StaffTap.Screen name="Registros" component={StRepCheck} />
       <SocialServiceTap.Screen name="Configuración" component={SettingsPage} />
     </SocialServiceTap.Navigator>
   );
