@@ -47,6 +47,17 @@ const ReportCheckStack = createNativeStackNavigator();
 const AcademicGroupStack = createNativeStackNavigator();
 const StaffStack = createNativeStackNavigator();
 
+//Stack que abarca todas las ventanas relacionadas con los reportes del grupo academico
+function PrototypingReportsAG () {
+  return (
+    <AcademicGroupStack.Navigator screenOptions={{ headerShown: false }} initialRouteName="ReportsList">
+      <AcademicGroupStack.Screen name="ReportsList" component={PrototypingReportsPage} />
+      <AcademicGroupStack.Screen name="GeneratePDF" component={GeneratePrototypePDF} />
+      <AcademicGroupStack.Screen name="EditSubmission" component={PrototypingFormEdit} />
+    </AcademicGroupStack.Navigator>
+  );
+}
+
 //Stack que abarca todas las ventanas relacionadas con los estudiantes y maestros
 function AcademicGroupHome() {
   return (
@@ -56,6 +67,8 @@ function AcademicGroupHome() {
         name="ReportForm"
         component={PrototypingForm}
       />
+      <AcademicGroupStack.Screen name="OrderRead" component={OrderPageReadOnly} />
+      <AcademicGroupStack.Screen name="GeneratePDF" component={GeneratePrototypePDF} />
     </AcademicGroupStack.Navigator>
   );
 }
@@ -92,7 +105,6 @@ function StRepCheck() {
         component={PrototypesOnStandby}
       />
       <ReportCheckStack.Screen name="Check" component={PrototypingCheck} />
-
       <ReportCheckStack.Screen
         name="ReportCheck"
         component={PrototypingFormReadOnly}
@@ -146,14 +158,10 @@ const AcademicGroupApp = () => {
           let iconName;
           if (route.name === "Principal") {
             iconName = focused ? "home" : "home-outline";
-          } else if (route.name === "Prototipo") {
+          } else if (route.name === "Reportes Protoripado") {
             iconName = focused
-              ? "hardware-chip-sharp"
-              : "hardware-chip-outline";
-          } else if (route.name === "Prototipo") {
-            iconName = focused
-              ? "hardware-chip-sharp"
-              : "hardware-chip-outline";
+              ? "reader"
+              : "reader-outline";
           } else if (route.name === "Configuración") {
             iconName = focused ? "settings" : "settings-outline";
           }
@@ -164,7 +172,7 @@ const AcademicGroupApp = () => {
       })}
     >
       <StudentsTap.Screen name="Principal" component={AcademicGroupHome} />
-      <StudentsTap.Screen name="Prototipo" component={PrototypingForm} />
+      <StudentsTap.Screen name="Reportes Protoripado" component={PrototypingReportsAG} />
       <StudentsTap.Screen name="Configuración" component={SettingsPage} />
     </StudentsTap.Navigator>
   );

@@ -37,6 +37,10 @@ const TeacherStudentPage = ({ navigation }) => {
     navigation.navigate("GeneratePDF", { idReport: id });
   };
 
+  const navigateToOrder = (id) => {
+    navigation.navigate("OrderRead", { idOrder: id });
+  };
+
   const fetchData = async () => {
     try {
       const UData = await GetUserData();
@@ -108,11 +112,17 @@ const TeacherStudentPage = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.btnShowStats}>
-        <TouchableOpacity style={styles.btnShow} onPress={() => toggleList("Ordenes")}>
+        <TouchableOpacity
+          style={styles.btnShow}
+          onPress={() => toggleList("Ordenes")}
+        >
           <Ionicons name="add-circle" style={styles.iconShowStats} />
           <Text style={styles.textShowStats}>Ordenes</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnShow} onPress={() => toggleList("Reportes")}>
+        <TouchableOpacity
+          style={styles.btnShow}
+          onPress={() => toggleList("Reportes")}
+        >
           <Ionicons name="clipboard" style={styles.iconShowStats} />
           <Text style={styles.textShowStats}>Reportes</Text>
         </TouchableOpacity>
@@ -125,6 +135,9 @@ const TeacherStudentPage = ({ navigation }) => {
             renderItem={({ item }) => (
               <View style={styles.itemContainer}>
                 <Text>{item.id}</Text>
+                <Pressable onPress={() => navigateToOrder(item.id)}>
+                  <Ionicons name="reader" style={styles.iconShowStats} />
+                </Pressable>
               </View>
             )}
             ListEmptyComponent={
@@ -140,29 +153,42 @@ const TeacherStudentPage = ({ navigation }) => {
                 <Pressable onPress={() => toggleDetailsReports(item.id)}>
                   <Text style={styles.TextHeader}>{item.application}</Text>
                 </Pressable>
-                {item.department_head &&
-                  item.laboratory_head &&
-                  item.service_staff && (
-                    <View>
-                      <View style={styles.statusMargin}>
-                        <Text style={{ fontSize: 15, fontWeight: "bold", marginTop: 5 }}>
-                          {item.status}
-                        </Text>
+                <View style={styles.statusMargin}>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontWeight: "bold",
+                      color: "black",
+                    }}
+                  >
+                    {item.status}
+                  </Text>
+                  {item.department_head &&
+                    item.laboratory_head &&
+                    item.service_staff && (
+                      <View>
+                        <Pressable
+                          onPress={() => navigateToPDF(item.id)}
+                          style={styles.btnPrint}
+                        >
+                          <Image
+                            source={require("../../Resources/imagenes/pdf.png")}
+                            style={styles.buttonImage}
+                          />
+                        </Pressable>
                       </View>
-                      <Pressable
-                        onPress={() => navigateToPDF(item.id)}
-                        style={styles.btnPrint}
-                      >
-                        <Image
-                          source={require("../../Resources/imagenes/pdf.png")}
-                          style={styles.buttonImage}
-                        />
-                      </Pressable>
-                    </View>
-                  )}
+                    )}
+                </View>
                 {item.Details && (
                   <View>
-                    <Text style={{ color: "white", fontSize: 20, marginLeft: 15, marginTop: 5 }}>
+                    <Text
+                      style={{
+                        color: "white",
+                        fontSize: 20,
+                        marginLeft: 15,
+                        marginTop: 5,
+                      }}
+                    >
                       {item.submission_date}
                     </Text>
                   </View>
@@ -211,8 +237,14 @@ const styles = StyleSheet.create({
     width: 35,
     height: 35,
     borderRadius: 80,
-    marginLeft: 250,
+    marginLeft: 180,
     marginTop: -35,
+  },
+  buttonImage: {
+    width: 24,
+    height: 24,
+    marginLeft: 4,
+    marginTop: 5,
   },
   btnAction: {
     width: WIDTH * 0.85,
@@ -260,7 +292,7 @@ const styles = StyleSheet.create({
   },
   TextHeader: {
     color: "white",
-    fontSize: 35,
+    fontSize: 20,
     fontWeight: "bold",
   },
   statusMargin: {
@@ -268,10 +300,10 @@ const styles = StyleSheet.create({
     borderRadius: 80,
     alignItems: "center",
     height: 30,
-    width: 130,
-    marginLeft: 110,
-    marginTop: -35
-  }
+    width: 120,
+    marginLeft: 120,
+    marginTop: 0,
+  },
 });
 
 export default TeacherStudentPage;

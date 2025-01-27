@@ -12,7 +12,8 @@ import {
 } from "react-native";
 import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
-import { getAllProjectSubmissions } from "../../Modules/Operations DB Prototyping";
+import { getAllProjectSubmissionsByUserId } from "../../Modules/Operations DB Prototyping";
+import { GetUserData } from "../../Modules/DataInfo";
 import { CustomViewReverse } from "../components/CustomViewReverse";
 import Icon from "react-native-vector-icons/Ionicons"; // Asegúrate de tener esta librería instalada
 
@@ -37,7 +38,8 @@ const PrototypingReportsPage = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const Data = await getAllProjectSubmissions();
+      const User = await GetUserData();
+      const Data = await getAllProjectSubmissionsByUserId(User.Code);
       const BData = Data.map((registro) => ({
         ...registro,
         Details: false,
@@ -97,7 +99,7 @@ const PrototypingReportsPage = ({ navigation }) => {
   }
 
   const navigateToEditSubmission = (id) => {
-    navigation.navigate("EditSubmission", { idSubmission: id });
+    navigation.navigate("EditSubmission", { idReport: id });
   };
 
   const navigateToPDF = (id) => {
