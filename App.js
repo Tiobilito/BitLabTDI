@@ -30,7 +30,11 @@ import PrototypingAlreadyChecked from "./Scenes/Prototyping Laboratory/Prototypi
 import PrototypingReportStDone from "./Scenes/Prototyping Laboratory/PrototypingReportStDone";
 import OrderPageReadOnly from "./Scenes/Social Service/OrderReports";
 import HeadDivisionLaboratoryPage from "./Scenes/Academic Group Users/Head of Division and Laboratory";
+//Settings
+import UpdateAccount from "./Scenes/settings/account_config";
 import SettingsPage from "./Scenes/Settings";
+import UpdatePassword from "./Scenes/settings/new_password";
+import ViewAccount from "./Scenes/settings/view_account";
 
 const Stack = createNativeStackNavigator();
 const SocialServiceTap = createBottomTabNavigator();
@@ -261,6 +265,9 @@ export default function App() {
         <Stack.Screen name="Test" component={OrderPageReadOnly} />
         <Stack.Screen name="GeneratePDF" component={GeneratePrototypePDF} />
         <Stack.Screen name="EditSubmission" component={PrototypingFormEdit} />
+        <Stack.Screen name="Editaccount" component={UpdateAccount} />
+        <Stack.Screen name="EditPassword" component={UpdatePassword} />
+        <Stack.Screen name="AccountOnlyRead" component={ViewAccount} />
       </Stack.Navigator>
     </NavigationContainer>
   );
