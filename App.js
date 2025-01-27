@@ -21,9 +21,9 @@ import OrderPage from "./Scenes/Social Service/Order"; // Orden de reparación
 import OrderPageReadOnly from "./Scenes/Social Service/OrderReports"; // Orden de reparación en modo lectura
 
 // Scenes Laboratorio de Prototipado
-import PrototypingForm from "./Scenes/Prototyping Laboratory/PrototypingForm";          // Formulario de prototipos
-import PrototypingCheck from "./Scenes/Prototyping Laboratory/PrototypingReportCheck";  // Revisión de prototipos
-import PrototypesOnStandby from "./Scenes/Prototyping Laboratory/PrototypesOnStandby";  // Prototipos en espera (Proxima a desaparecer)
+import PrototypingForm from "./Scenes/Prototyping Laboratory/PrototypingForm"; // Formulario de prototipos
+import PrototypingCheck from "./Scenes/Prototyping Laboratory/PrototypingReportCheck"; // Revisión de prototipos
+import PrototypesOnStandby from "./Scenes/Prototyping Laboratory/PrototypesOnStandby"; // Prototipos en espera (Proxima a desaparecer)
 import PrototypingFormReadOnly from "./Scenes/Prototyping Laboratory/PrototypingFormReadOnly"; // Formulario de prototipos en modo lectura
 import GeneratePrototypePDF from "./Scenes/Prototyping Laboratory/GeneratePrototypePDF"; // Generar PDF de prototipos
 import PrototypingFormEdit from "./Scenes/Prototyping Laboratory/PrototypingFormEditable"; // Formulario de prototipos editable
@@ -48,12 +48,24 @@ const AcademicGroupStack = createNativeStackNavigator();
 const StaffStack = createNativeStackNavigator();
 
 //Stack que abarca todas las ventanas relacionadas con los reportes del grupo academico
-function PrototypingReportsAG () {
+function PrototypingReportsAG() {
   return (
-    <AcademicGroupStack.Navigator screenOptions={{ headerShown: false }} initialRouteName="ReportsList">
-      <AcademicGroupStack.Screen name="ReportsList" component={PrototypingReportsPage} />
-      <AcademicGroupStack.Screen name="GeneratePDF" component={GeneratePrototypePDF} />
-      <AcademicGroupStack.Screen name="EditSubmission" component={PrototypingFormEdit} />
+    <AcademicGroupStack.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="ReportsList"
+    >
+      <AcademicGroupStack.Screen
+        name="ReportsList"
+        component={PrototypingReportsPage}
+      />
+      <AcademicGroupStack.Screen
+        name="GeneratePDF"
+        component={GeneratePrototypePDF}
+      />
+      <AcademicGroupStack.Screen
+        name="EditSubmission"
+        component={PrototypingFormEdit}
+      />
     </AcademicGroupStack.Navigator>
   );
 }
@@ -67,13 +79,19 @@ function AcademicGroupHome() {
         name="ReportForm"
         component={PrototypingForm}
       />
-      <AcademicGroupStack.Screen name="OrderRead" component={OrderPageReadOnly} />
-      <AcademicGroupStack.Screen name="GeneratePDF" component={GeneratePrototypePDF} />
+      <AcademicGroupStack.Screen
+        name="OrderRead"
+        component={OrderPageReadOnly}
+      />
+      <AcademicGroupStack.Screen
+        name="GeneratePDF"
+        component={GeneratePrototypePDF}
+      />
     </AcademicGroupStack.Navigator>
   );
 }
 
-//Stack que abarca todas las ventanas relacionadas con el jefe de division y de laboratorio
+//Stack que abarca todas las ventanas relacionadas con el jefe de division y de laboratorio (home)
 function StaffHome() {
   return (
     <StaffStack.Navigator screenOptions={{ headerShown: false }}>
@@ -83,7 +101,7 @@ function StaffHome() {
   );
 }
 
-//Stack que abarca todas las ventanas relacionadas con el prestador de servicio
+//Stack que abarca todas las ventanas relacionadas con el prestador de servicio (home)
 function SocialServiceHome() {
   return (
     <SocialServiceStack.Navigator screenOptions={{ headerShown: false }}>
@@ -99,7 +117,10 @@ function SocialServiceHome() {
 //Stack que abarca todas las ventanas relacionadas con la verificacion en cascada de los reportes de prototipos
 function StRepCheck() {
   return (
-    <ReportCheckStack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Check">
+    <ReportCheckStack.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="Check"
+    >
       <ReportCheckStack.Screen
         name="RepProjects"
         component={PrototypesOnStandby}
@@ -159,9 +180,7 @@ const AcademicGroupApp = () => {
           if (route.name === "Principal") {
             iconName = focused ? "home" : "home-outline";
           } else if (route.name === "Reportes Protoripado") {
-            iconName = focused
-              ? "reader"
-              : "reader-outline";
+            iconName = focused ? "reader" : "reader-outline";
           } else if (route.name === "Configuración") {
             iconName = focused ? "settings" : "settings-outline";
           }
@@ -172,7 +191,10 @@ const AcademicGroupApp = () => {
       })}
     >
       <StudentsTap.Screen name="Principal" component={AcademicGroupHome} />
-      <StudentsTap.Screen name="Reportes Protoripado" component={PrototypingReportsAG} />
+      <StudentsTap.Screen
+        name="Reportes Protoripado"
+        component={PrototypingReportsAG}
+      />
       <StudentsTap.Screen name="Configuración" component={SettingsPage} />
     </StudentsTap.Navigator>
   );

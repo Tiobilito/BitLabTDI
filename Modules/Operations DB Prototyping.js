@@ -215,7 +215,7 @@ export async function getAllProjectSubmissionsFinished() {
   const { data, error } = await supabase
     .from("project_submissions")
     .select("*") // Selecciona todas las columnas
-    .in("status", ["Aprobado", "Desaprobado"]); // Filtra por 'aproved' o 'disapproved'
+    .in("status", ["approved", "rejected"]); // Filtra por 'aproved' o 'disapproved'
   if (error) {
     console.error("Error al obtener registros:", error);
     return null;
