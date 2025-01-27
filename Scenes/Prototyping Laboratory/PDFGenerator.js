@@ -42,7 +42,11 @@ export const generatePDF = async (data) => {
       corteEspecial: { x: 128, y: 353 },
       otros: { x: 78, y: 336 },
       observaciones: { x: 130, y: 280 },
-      carasPCB: { x: 78, y: 300 },
+      carasPCB: { x: 78, y: 174 },
+      material_proporcionado: { x: 78, y: 149.5 },
+      material_requerido: { x: 173, y: 174 },
+      comentarios_internos: { x: 313, y: 174 },
+      fecha_aprovacion: { x: 80, y: 125 },
     };
 
     // Cambiar las coordenadas de tipoProyecto dinámicamente
@@ -85,7 +89,17 @@ export const generatePDF = async (data) => {
       default:
         coordenadas.carasPCB; // Valor por defecto
     }
-    console.log("PCB: ", data.internal_use_pcb_faces);
+    // Cambiar las coordenadas de PCB proporcionado por el usuario dinámicamente
+    switch (data.internal_use_pcb_provided_by_user) {
+      case true:
+        coordenadas.material_proporcionado = { x: 78, y: 149.5 };
+        break;
+      case false:
+        coordenadas.material_proporcionado = { x: 145, y: 149.5 };
+        break;
+      default:
+        coordenadas.material_proporcionado; // Valor por defecto
+    }
 
     // Insertar datos
     page.drawText(String(data.applicant_name || ""), {
@@ -194,6 +208,33 @@ export const generatePDF = async (data) => {
       x: coordenadas.carasPCB.x,
       y: coordenadas.carasPCB.y,
       size: 12,
+      color: rgb(0, 0, 0),
+    });
+    page.drawText(String("X" || ""), {
+      x: coordenadas.material_proporcionado.x,
+      y: coordenadas.material_proporcionado.y,
+      size: 12,
+      color: rgb(0, 0, 0),
+    });
+    page.drawText(
+      String(data.internal_use_required_inputs || "No especificado"),
+      {
+        x: coordenadas.material_requerido.x,
+        y: coordenadas.material_requerido.y,
+        size: 10,
+        color: rgb(0, 0, 0),
+      }
+    );
+    page.drawText(String(data.internal_use_comments || "No especificado"), {
+      x: coordenadas.comentarios_internos.x,
+      y: coordenadas.comentarios_internos.y,
+      size: 10,
+      color: rgb(0, 0, 0),
+    });
+    page.drawText(String(data.prototype_approved_date || "No especificado"), {
+      x: coordenadas.fecha_aprovacion.x,
+      y: coordenadas.fecha_aprovacion.y,
+      size: 10,
       color: rgb(0, 0, 0),
     });
 
