@@ -23,7 +23,6 @@ import OrderPageReadOnly from "./Scenes/Social Service/OrderReports"; // Orden d
 // Scenes Laboratorio de Prototipado
 import PrototypingForm from "./Scenes/Prototyping Laboratory/PrototypingForm"; // Formulario de prototipos
 import PrototypingCheck from "./Scenes/Prototyping Laboratory/PrototypingReportCheck"; // Revisión de prototipos
-import PrototypesOnStandby from "./Scenes/Prototyping Laboratory/PrototypesOnStandby"; // Prototipos en espera (Proxima a desaparecer)
 import PrototypingFormReadOnly from "./Scenes/Prototyping Laboratory/PrototypingFormReadOnly"; // Formulario de prototipos en modo lectura
 import GeneratePrototypePDF from "./Scenes/Prototyping Laboratory/GeneratePrototypePDF"; // Generar PDF de prototipos
 import PrototypingFormEdit from "./Scenes/Prototyping Laboratory/PrototypingFormEditable"; // Formulario de prototipos editable
@@ -122,10 +121,6 @@ function StRepCheck() {
       screenOptions={{ headerShown: false }}
       initialRouteName="Check"
     >
-      <ReportCheckStack.Screen
-        name="RepProjects"
-        component={PrototypesOnStandby}
-      />
       <ReportCheckStack.Screen name="Check" component={PrototypingCheck} />
       <ReportCheckStack.Screen
         name="ReportCheck"
