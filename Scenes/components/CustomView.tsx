@@ -1,11 +1,11 @@
-import React, { ReactNode } from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import React, { ReactNode } from "react"
+import { View, StyleSheet, Dimensions } from "react-native"
 
 interface Props {
-  children: ReactNode;
+  children: ReactNode
 }
 
-const Scale = Dimensions.get("window").width;
+const Scale = Dimensions.get("window").width
 
 export const CustomView = ({ children }: Props) => {
   return (
@@ -16,8 +16,9 @@ export const CustomView = ({ children }: Props) => {
         {children}
       </View>
     </View>
-  );
-};
+  )
+}
+
 const styles = StyleSheet.create({
   background: {
     flex: 1,
@@ -27,9 +28,12 @@ const styles = StyleSheet.create({
     height: 0,
     backgroundColor: "transparent",
     borderStyle: "solid",
-    borderLeftWidth: 450,
-    borderRightWidth: 280,
-    borderBottomWidth: 300,
+    borderLeftWidth: Scale * 1.2,
+    borderRightWidth: Scale * 0.6,
+    borderBottomWidth: Scale * 0.7,
+    // borderLeftWidth: 450,
+    // borderRightWidth: 280,
+    // borderBottomWidth: 300,
     borderLeftColor: "transparent",
     borderRightColor: "transparent",
     borderBottomColor: "#328EC5",
@@ -43,9 +47,12 @@ const styles = StyleSheet.create({
     height: 0,
     backgroundColor: "transparent",
     borderStyle: "solid",
-    borderLeftWidth: 350,
-    borderRightWidth: 200,
-    borderBottomWidth: 250,
+    borderLeftWidth: Scale * 0.75,
+    borderRightWidth: Scale * 0.75,
+    borderBottomWidth: Scale * 0.9,
+    // borderLeftWidth: 350,
+    // borderRightWidth: 200,
+    // borderBottomWidth: 250,
     borderLeftColor: "transparent",
     borderRightColor: "transparent",
     borderBottomColor: "#57A9D9",
@@ -54,16 +61,16 @@ const styles = StyleSheet.create({
     marginLeft: "-70%",
     position: "absolute",
   },
-  triangle: {
-    width: 0,
-    height: 0,
-    backgroundColor: "transparent",
-    borderStyle: "solid",
-    borderLeftWidth: 60,
-    borderRightWidth: 60,
-    borderBottomWidth: 120,
-    borderLeftColor: "transparent",
-    borderRightColor: "transparent",
-    borderBottomColor: "#328EC5",
-  },
-});
+  // triangle: {
+  //   width: 0,
+  //   height: 0,
+  //   backgroundColor: "transparent",
+  //   borderStyle: "solid",
+  //   borderLeftWidth: 60,
+  //   borderRightWidth: 60,
+  //   borderBottomWidth: 120,
+  //   borderLeftColor: "transparent",
+  //   borderRightColor: "transparent",
+  //   borderBottomColor: "#328EC5",
+  // },
+})

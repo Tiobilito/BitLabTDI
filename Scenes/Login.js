@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect } from "react"
 import {
   StyleSheet,
   TextInput,
@@ -8,16 +8,16 @@ import {
   Text,
   View,
   ScrollView,
-} from "react-native";
-import { GetUserData, StoreUserData } from "../Modules/DataInfo";
-import { CheckUser } from "../Modules/Operations DB Users";
-import { CustomView } from "./components/CustomView";
+} from "react-native"
+import { GetUserData, StoreUserData } from "../Modules/DataInfo"
+import { CheckUser } from "../Modules/Operations DB Users"
+import { CustomView } from "./components/CustomView"
 
-const Scale = Dimensions.get("window").width;
+const Scale = Dimensions.get("window").width
 
 const LoginPage = ({ navigation }) => {
-  const [code, setCode] = useState("");
-  const [password, setPassword] = useState("");
+  const [code, setCode] = useState("")
+  const [password, setPassword] = useState("")
   /*
   useEffect(() => {
     const loadUserData = async () => {
@@ -32,28 +32,28 @@ const LoginPage = ({ navigation }) => {
   */
 
   const Verify = async () => {
-    const Verify = await CheckUser(code, password);
+    const Verify = await CheckUser(code, password)
     if (Verify) {
-      await StoreUserData(Verify.code, Verify.password, Verify.user_type); // Esperar a que termine de guardar los datos
+      await StoreUserData(Verify.code, Verify.password, Verify.user_type) // Esperar a que termine de guardar los datos
       switch (Verify.user_type) {
         case 0:
-          navigation.navigate("StaffApp");
-          break;
+          navigation.navigate("StaffApp")
+          break
         case 1:
-          navigation.navigate("StaffApp");
-          break;
+          navigation.navigate("StaffApp")
+          break
         case 2:
-          navigation.navigate("SocialServiceApp");
-          break;
+          navigation.navigate("SocialServiceApp")
+          break
         case 3:
-          navigation.navigate("AcademicApp");
-          break;
+          navigation.navigate("AcademicApp")
+          break
         case 4:
-          navigation.navigate("AcademicApp");
-          break;
+          navigation.navigate("AcademicApp")
+          break
       }
     }
-  };
+  }
 
   return (
     <CustomView>
@@ -63,31 +63,28 @@ const LoginPage = ({ navigation }) => {
             source={require("../Resources/imagenes/BITLABTDI.png")}
             style={styles.Logo}
           />
-          <Text style={{ fontSize: Scale > 400 ? 50 : 20 }}>
+          <Text style={{ fontSize: Scale > 400 ? 40 : 20, fontWeight: "bold" }}>
             Ingresa a tu cuenta
           </Text>
           <View style={styles.formCont}>
             <Text style={styles.textForm}>Código de usuario</Text>
             <TextInput
               style={styles.input}
-              onChangeText={(text) => {
-                setCode(text);
-              }}
+              onChangeText={(text) => setCode(text)}
               value={code.toString()}
               keyboardType="numeric"
             />
             <Text style={styles.textForm}>Contraseña</Text>
             <TextInput
               style={styles.input}
-              onChangeText={(text) => {
-                setPassword(text);
-              }}
+              onChangeText={(text) => setPassword(text)}
               value={password}
-              placeholder="Password"
+              placeholder=""
               secureTextEntry={true}
             />
           </View>
 
+          {/* Iniciar */}
           <TouchableOpacity
             style={styles.loginButton}
             onPress={() => Verify(code, password)}
@@ -126,15 +123,9 @@ const LoginPage = ({ navigation }) => {
             <Text style={{ marginBottom: Scale * 0.04 }}>
               Si no estás registrado
             </Text>
+            {/* Registrar */}
             <TouchableOpacity
-              style={{
-                borderWidth: 1,
-                borderColor: "#2272A7",
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 10,
-                height: Scale * 0.1,
-              }}
+              style={styles.registerButton}
               onPress={() => navigation.navigate("Register")}
             >
               <Text style={{ color: "#2272A7", fontWeight: "bold" }}>
@@ -145,8 +136,8 @@ const LoginPage = ({ navigation }) => {
         </View>
       </ScrollView>
     </CustomView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   input: {
@@ -159,7 +150,7 @@ const styles = StyleSheet.create({
     fontSize: Scale > 400 ? 30 : 15,
   },
   textForm: {
-    fontSize: Scale > 400 ? 50 : 15,
+    fontSize: Scale > 400 ? 35 : 15,
     fontWeight: "regular",
     marginLeft: "5%",
     color: "#000000",
@@ -170,51 +161,28 @@ const styles = StyleSheet.create({
     marginTop: Scale * 0.08,
   },
   Logo: {
-    width: Scale > 400 ? 400 : 250, // Ancho de la imagen
-    height: Scale > 400 ? 400 : 250, // Alto de la imagen
+    width: Scale * 0.6, // Ancho de la imagen
+    height: Scale * 0.6, // Alto de la imagen
     marginTop: "10%",
   },
   loginButton: {
-    width: Scale * 0.25,
-    height: Scale * 0.1,
+    width: Scale * 0.35,
+    // height: "auto",
+    height: Scale * 0.11,
     backgroundColor: "#2272A7",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
     marginBottom: Scale * 0.08,
   },
-  mainTriangle: {
-    width: 0,
-    height: 0,
-    backgroundColor: "transparent",
-    borderStyle: "solid",
-    borderLeftWidth: 450,
-    borderRightWidth: 280,
-    borderBottomWidth: 280,
-    borderLeftColor: "transparent",
-    borderRightColor: "transparent",
-    borderBottomColor: "#328EC5",
-    transform: [{ rotate: "30deg" }],
-    marginTop: "-70%",
-    marginBottom: "30%",
-    marginRight: "-30%",
+  registerButton: {
+    height: Scale * 0.1,
+    borderWidth: 1,
+    borderColor: "#2272A7",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
   },
-  backTriangle: {
-    width: 0,
-    height: 0,
-    backgroundColor: "transparent",
-    borderStyle: "solid",
-    borderLeftWidth: 350,
-    borderRightWidth: 200,
-    borderBottomWidth: 250,
-    borderLeftColor: "transparent",
-    borderRightColor: "transparent",
-    borderBottomColor: "#57A9D9",
-    transform: [{ rotate: "95deg" }],
-    marginTop: "-40%",
-    marginBottom: "10%",
-    marginLeft: "-70%",
-  },
-});
+})
 
-export default LoginPage;
+export default LoginPage
