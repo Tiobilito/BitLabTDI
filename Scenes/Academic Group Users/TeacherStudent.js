@@ -116,7 +116,7 @@ const TeacherStudentPage = ({ navigation }) => {
           style={styles.btnShow}
           onPress={() => toggleList("Ordenes")}
         >
-          <Ionicons name="add-circle" style={styles.iconShowStats} />
+          <Ionicons name="clipboard" style={styles.iconShowStats} />
           <Text style={styles.textShowStats}>Ordenes</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -135,8 +135,8 @@ const TeacherStudentPage = ({ navigation }) => {
             renderItem={({ item }) => (
               <View style={styles.itemContainer}>
                 <Text>{item.id}</Text>
-                <Pressable onPress={() => navigateToOrder(item.id)}>
-                  <Ionicons name="reader" style={styles.iconShowStats} />
+                <Pressable onPress={() => navigateToOrder(item.id)} style={styles.btnReadOnlyO}>
+                  <Ionicons name={"reader"} style={styles.iconOrders} />
                 </Pressable>
               </View>
             )}
@@ -228,6 +228,12 @@ const styles = StyleSheet.create({
     fontSize: WIDTH > 400 ? 24 : 16,
     color: "#2272A7",
   },
+  iconOrders: {
+    fontSize: WIDTH > 400 ? 40 : 30,
+    color: "gray",
+    marginLeft: 7,
+    marginTop: 6,
+  },
   iconPrint: {
     fontSize: WIDTH > 400 ? 60 : 55,
     color: "red",
@@ -239,6 +245,14 @@ const styles = StyleSheet.create({
     borderRadius: 80,
     marginLeft: 180,
     marginTop: -35,
+  },
+  btnReadOnlyO: {
+    backgroundColor: "white",
+    width: 55,
+    height: 55,
+    borderRadius: 80,
+    marginLeft: 250,
+    marginTop: -20,
   },
   buttonImage: {
     width: 24,

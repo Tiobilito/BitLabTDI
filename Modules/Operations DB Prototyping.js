@@ -154,16 +154,16 @@ export async function getAllProjectSubmissionsCheck(userType) {
   // Configura la consulta según el userType
   if (userType === 0) {
     console.log("department_head");
-    query = query.or("department_head.is.null"); // Solo registros con null
+    query = query.or("department_head.is.null"); // Solo registros con null (falta que el jefe de departamento lo verifique)
   } else if (userType === 2) {
     console.log("laboratory_head");
-    query = query.eq("department_head", true).or("laboratory_head.is.null"); // Solo registros con null
+    query = query.eq("department_head", true).or("laboratory_head.is.null"); // Solo registros con null (falta que el jefe de laboratorio lo verifique)
   } else if (userType === 3) {
     console.log("service_staff");
     query = query
       .eq("department_head", true)
       .eq("laboratory_head", true)
-      .or("service_staff.is.null"); // Solo registros con null
+      .or("service_staff.is.null"); // Solo registros con null (falta que el personal del servicio lo verifique)
   } else {
     console.error("Tipo de usuario no válido");
     return null;
