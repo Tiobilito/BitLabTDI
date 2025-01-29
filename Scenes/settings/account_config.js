@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from "react-native";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import { useNavigation } from "@react-navigation/native";
@@ -28,7 +29,7 @@ export default function UpdateAccount() {
     salary: "",
     departmentID: "",
   });
-
+  const [originalCodeU, setOriginalCodeU] = useState("");
   const [departments, setDepartments] = useState([]);
   const [userType, setUserType] = useState(null);
 
@@ -38,16 +39,16 @@ export default function UpdateAccount() {
       const userData = await GetUserData();
       const user = await getUserById(userData.Code);
       const departmentData = await getAllDepartamentos();
-      console.log(userData.Code);
-      console.log(user.code);
       if (user) {
         setUserType(user.user_type);
+        setOriginalCodeU(user.code.toString());
+        console.log("Codigo de usuario: ", originalCodeU);
         setForm({
           name: user.name,
           email: user.email,
           phone: user.number,
           address: user.address,
-          codeU: user.code,
+          codeU: user.code.toString(),
           nss: user.nss,
           rfc: user.rfc,
           salary: user.salary,
@@ -63,28 +64,50 @@ export default function UpdateAccount() {
     loadData();
   }, []);
 
-  // Manejar actualización de datos
   const handleUpdate = () => {
     try {
+      const userCode = parseInt(originalCodeU, 10);
+
+      // Lista de campos requeridos
+      const requiredFields = [
+        { key: "name", label: "Nombre" },
+        { key: "email", label: "Email" },
+        { key: "phone", label: "Teléfono" },
+        { key: "codeU", label: "Código" },
+      ];
+
+      // Si el usuario es de tipo 2, agregar más campos requeridos
+      if (userType === 2) {
+        requiredFields.push(
+          { key: "nss", label: "NSS" },
+          { key: "rfc", label: "RFC" },
+          { key: "salary", label: "Salario" }
+        );
+      }
+
+      // Validar que todos los campos requeridos tengan un valor
+      for (const field of requiredFields) {
+        if (!form[field.key]?.trim()) {
+          Alert.alert("Error", `El campo ${field.label} no puede estar vacío.`);
+          return;
+        }
+      }
+
+      // Crear el objeto actualizado
       const updatedAccount = {
         name: form.name,
         address: form.address,
         zip_code: form.zip_code,
         email: form.email,
-        //nss: updatedUser.nss,
-        //rfc: updatedUser.rfc,
         number: form.phone,
-        //second_number: updatedUser.second_number,
-        //salary: parseInt(updatedUser.salary, 10),
-        //password: updatedUser.password,
-        //department_id: updatedUser.department_id,
+        user_type: userType,
       };
 
-      updateUser(form.codeU, updatedAccount);
-      Alert.alert("Éxito", "Prototipo actualizado exitosamente.");
+      updateUser(userCode, updatedAccount);
+      Alert.alert("Éxito", "informacion actualizada exitosamente.");
       navigation.goBack();
     } catch (error) {
-      Alert.alert("Error", "Hubo un problema al actualizar el prototipo.");
+      Alert.alert("Error", "Hubo un problema al actualizar la información.");
     }
   };
 
@@ -129,8 +152,14 @@ export default function UpdateAccount() {
               {
                 label: "Teléfono",
                 value: form.phone,
-                onChange: (phone) => setForm({ ...form, phone }),
+                onChange: (phone) => {
+                  // Limitar la entrada a 10 dígitos
+                  if (phone.length <= 10) {
+                    setForm({ ...form, phone });
+                  }
+                },
                 keyboardType: "phone-pad",
+                maxLength: 10,
               },
               {
                 label: "Código",
@@ -274,7 +303,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 8,
     fontSize: 16,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#C5E0F2",
   },
   button: {
     backgroundColor: "#007BFF",

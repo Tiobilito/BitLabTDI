@@ -201,7 +201,7 @@ const SettingsPage = ({ navigation }) => {
             >
               <TouchableOpacity
                 onPress={() => {
-                  // handle onPress
+                  navigation.navigate("Login");
                 }}
                 style={styles.row}
               >

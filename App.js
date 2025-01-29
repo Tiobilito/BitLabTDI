@@ -46,6 +46,19 @@ const ReportCheckStack = createNativeStackNavigator();
 const AcademicGroupStack = createNativeStackNavigator();
 const StaffStack = createNativeStackNavigator();
 
+const SettingsStack = createNativeStackNavigator();
+
+function SettingsScreen() {
+  return (
+    <SettingsStack.Navigator screenOptions={{ headerShown: false }}>
+      <SettingsStack.Screen name="Settings" component={SettingsPage} />
+      <SettingsStack.Screen name="AccountOnlyRead" component={ViewAccount} />
+      <SettingsStack.Screen name="Editaccount" component={UpdateAccount} />
+      <SettingsStack.Screen name="EditPassword" component={UpdatePassword} />
+    </SettingsStack.Navigator>
+  );
+}
+
 function AcademicGroupHome() {
   return (
     <AcademicGroupStack.Navigator screenOptions={{ headerShown: false }}>
@@ -163,7 +176,7 @@ const AcademicGroupApp = () => {
       <StudentsTap.Screen name="Principal" component={AcademicGroupHome} />
       <StudentsTap.Screen name="RegistrosOSB" component={PrototypesOnStandby} />
       <StudentsTap.Screen name="Prototipo" component={PrototypingForm} />
-      <StudentsTap.Screen name="Configuración" component={SettingsPage} />
+      <StudentsTap.Screen name="Configuración" component={SettingsScreen} />
     </StudentsTap.Navigator>
   );
 };
@@ -196,7 +209,7 @@ const StaffApp = () => {
     >
       <StaffTap.Screen name="Principal" component={StaffHome} />
       <StaffTap.Screen name="Registros" component={StRepCheck} />
-      <StaffTap.Screen name="Configuración" component={SettingsPage} />
+      <StaffTap.Screen name="Configuración" component={SettingsScreen} />
     </StaffTap.Navigator>
   );
 };
@@ -239,7 +252,10 @@ const SocialServiceApp = () => {
         name="RepProjects"
         component={PrototypesOnStandby}
       />
-      <SocialServiceTap.Screen name="Configuración" component={SettingsPage} />
+      <SocialServiceTap.Screen
+        name="Configuración"
+        component={SettingsScreen}
+      />
     </SocialServiceTap.Navigator>
   );
 };
@@ -265,9 +281,6 @@ export default function App() {
         <Stack.Screen name="Test" component={OrderPageReadOnly} />
         <Stack.Screen name="GeneratePDF" component={GeneratePrototypePDF} />
         <Stack.Screen name="EditSubmission" component={PrototypingFormEdit} />
-        <Stack.Screen name="Editaccount" component={UpdateAccount} />
-        <Stack.Screen name="EditPassword" component={UpdatePassword} />
-        <Stack.Screen name="AccountOnlyRead" component={ViewAccount} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -7,25 +7,56 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from "react-native";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import { useNavigation } from "@react-navigation/native";
+import { GetUserData } from "../../Modules/DataInfo";
+import { getUserById, updatePassword } from "../../Modules/Operations DB Users";
 
 export default function UpdatePassword() {
   const navigation = useNavigation();
+
   const [form, setForm] = useState({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
+  const [originalPassword, setOriginal] = useState("");
+  const [userID, setUserID] = useState("");
+
+  useEffect(() => {
+    const loadData = async () => {
+      const userData = await GetUserData();
+      const user = await getUserById(userData.Code);
+      if (user) {
+        setOriginal(user.password);
+        setUserID(user.code.toString());
+      }
+    };
+
+    loadData();
+  }, []);
 
   const handleUpdatePassword = () => {
-    if (form.newPassword !== form.confirmPassword) {
-      console.log("Passwords do not match");
-      return;
+    try {
+      const userCode = parseInt(userID, 10);
+      if (form.currentPassword !== originalPassword) {
+        Alert.alert("Error", "La contraseña actual no es correcta");
+        return;
+      }
+      if (form.newPassword !== form.confirmPassword) {
+        Alert.alert("Error", "Las nuevas contraseñas no coinciden");
+        return;
+      }
+      // Aquí puedes agregar la lógica para actualizar la contraseña en el servidor
+
+      updatePassword(userCode, form.newPassword);
+      Alert.alert("Éxito", "informacion actualizada exitosamente.");
+      navigation.goBack();
+    } catch {
+      Alert.alert("Error", "Hubo un problema al actualizar");
     }
-    // Aquí puedes agregar la lógica para actualizar la contraseña en el servidor
-    console.log("Contraseña actualizada:", form);
   };
 
   return (
@@ -65,7 +96,7 @@ export default function UpdatePassword() {
               <Text style={styles.inputLabel}>Contraseña actual</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Enter your current password"
+                placeholder="Ingresa tu contraseña actual"
                 value={form.currentPassword}
                 onChangeText={(currentPassword) =>
                   setForm({ ...form, currentPassword })
@@ -78,7 +109,7 @@ export default function UpdatePassword() {
               <Text style={styles.inputLabel}>Nueva contraseña</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Enter your new password"
+                placeholder="Ingresa tu nueva contraseña"
                 value={form.newPassword}
                 onChangeText={(newPassword) =>
                   setForm({ ...form, newPassword })
@@ -93,7 +124,7 @@ export default function UpdatePassword() {
               </Text>
               <TextInput
                 style={styles.input}
-                placeholder="Repeat your new password"
+                placeholder="Repite tu nueva contraseña"
                 value={form.confirmPassword}
                 onChangeText={(confirmPassword) =>
                   setForm({ ...form, confirmPassword })
@@ -107,7 +138,7 @@ export default function UpdatePassword() {
             style={styles.button}
             onPress={handleUpdatePassword}
           >
-            <Text style={styles.buttonText}>Update Password</Text>
+            <Text style={styles.buttonText}>Actualizar</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -182,7 +213,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 8,
     fontSize: 16,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#C5E0F2",
   },
   button: {
     backgroundColor: "#007BFF",
