@@ -14,7 +14,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { CustomViewReverse } from "../components/CustomViewReverse";
 import { getAllOrdersByUserId } from "../../Modules/Operations DB Fixes";
-import { getAllProjectSubmissionsByUserId } from "../../Modules/Operations DB Prototyping";
+import { getAllProjectSubmissions, getAllProjectSubmissionsByUserId } from "../../Modules/Operations DB Prototyping";
 import { GetUserData } from "../../Modules/DataInfo";
 
 const WIDTH = Dimensions.get("screen").width;
@@ -41,7 +41,7 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
     try {
       const UData = await GetUserData();
       let Data = await getAllOrdersByUserId(UData.Code);
-      let ReportsData = await getAllProjectSubmissionsByUserId(UData.Code);
+      let ReportsData = await getAllProjectSubmissions(UData.Code);
       let BData = Data.map((registro) => ({
         ...registro,
         Details: false,
@@ -59,8 +59,17 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
     }
   };
 
-  const toggleList = () => {
-    setShowListOrders(!showListOrders);
+  const toggleList = (Option) => {
+    switch (Option) {
+      case "Ordenes":
+        setShowListOrders(true);
+        break;
+      case "Reportes":
+        setShowListOrders(false);
+        break;
+      default:
+        break;
+    }
   };
 
   const toggleDetailsReports = (itemId) => {
@@ -85,11 +94,17 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
     <CustomViewReverse>
       <View style={{ marginTop: HEIGHT * 0.05, gap: HEIGHT * 0.02 }}></View>
       <View style={styles.btnShowStats}>
-        <TouchableOpacity style={styles.btnShow} onPress={() => toggleList()}>
+        <TouchableOpacity
+          style={styles.btnShow}
+          onPress={() => toggleList("Ordenes")}
+        >
           <Ionicons name="add-circle" style={styles.iconShowStats} />
           <Text style={styles.textShowStats}>Ordenes</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnShow} onPress={() => toggleList()}>
+        <TouchableOpacity
+          style={styles.btnShow}
+          onPress={() => toggleList("Reportes")}
+        >
           <Ionicons name="clipboard" style={styles.iconShowStats} />
           <Text style={styles.textShowStats}>Reportes</Text>
         </TouchableOpacity>
@@ -122,7 +137,13 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
                   item.service_staff && (
                     <View>
                       <View style={styles.statusMargin}>
-                        <Text style={{ fontSize: 15, fontWeight: "bold", marginTop: 5 }}>
+                        <Text
+                          style={{
+                            fontSize: 15,
+                            fontWeight: "bold",
+                            marginTop: 5,
+                          }}
+                        >
                           {item.status}
                         </Text>
                       </View>
@@ -139,7 +160,14 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
                   )}
                 {item.Details && (
                   <View>
-                    <Text style={{ color: "white", fontSize: 20, marginLeft: 15, marginTop: 5 }}>
+                    <Text
+                      style={{
+                        color: "white",
+                        fontSize: 20,
+                        marginLeft: 15,
+                        marginTop: 5,
+                      }}
+                    >
                       {item.submission_date}
                     </Text>
                   </View>
@@ -253,8 +281,8 @@ const styles = StyleSheet.create({
     height: 30,
     width: 130,
     marginLeft: 110,
-    marginTop: -35
-  }
+    marginTop: -35,
+  },
 });
 
 export default HeadDivisionLaboratoryPage;

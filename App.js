@@ -4,18 +4,22 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-// Scenes principal
+// Scenes proposito general
 import LoginPage from "./Scenes/Login";
 import Register from "./Scenes/Register";
+import SettingsPage from "./Scenes/Settings";
+
 // Scenes Prestador de servicio
-import SocialServicePage from "./Scenes/Social Service/Prestador de Servicio";
-import AddClientPage from "./Scenes/Social Service/AddClient";
-import AddDevicePage from "./Scenes/Social Service/AddDevice";
-import SearchClientPage from "./Scenes/Social Service/SearchClient";
-import DevicesPage from "./Scenes/Social Service/Devices";
-import EditClientPage from "./Scenes/Social Service/EditClient";
-import EditDevicePage from "./Scenes/Social Service/EditDevice";
-import OrderPage from "./Scenes/Social Service/Order";
+import SocialServicePage from "./Scenes/Social Service/Prestador de Servicio"; // Pantalla principal prestador de servicio
+import AddClientPage from "./Scenes/Social Service/AddClient"; // Agregar cliente
+import AddDevicePage from "./Scenes/Social Service/AddDevice"; // Agregar dispositivo
+import SearchClientPage from "./Scenes/Social Service/SearchClient"; // Buscar cliente
+import DevicesPage from "./Scenes/Social Service/Devices"; // Dispositivos del cliente
+import EditClientPage from "./Scenes/Social Service/EditClient"; // Editar cliente
+import EditDevicePage from "./Scenes/Social Service/EditDevice"; // Editar dispositivo
+import OrderPage from "./Scenes/Social Service/Order"; // Orden de reparación
+import OrderPageReadOnly from "./Scenes/Social Service/OrderReports"; // Orden de reparación en modo lectura
+
 // Scenes Laboratorio de Prototipado
 import PrototypingForm from "./Scenes/Prototyping Laboratory/PrototypingForm";
 import PrototypingCheck from "./Scenes/Prototyping Laboratory/PrototypingReportCheck";
@@ -71,6 +75,7 @@ function AcademicGroupHome() {
   );
 }
 
+//Stack que abarca todas las ventanas relacionadas con el jefe de division y de laboratorio
 function StaffHome() {
   return (
     <StaffStack.Navigator screenOptions={{ headerShown: false }}>
@@ -80,6 +85,7 @@ function StaffHome() {
   );
 }
 
+//Stack que abarca todas las ventanas relacionadas con el prestador de servicio
 function SocialServiceHome() {
   return (
     <SocialServiceStack.Navigator screenOptions={{ headerShown: false }}>
@@ -92,9 +98,13 @@ function SocialServiceHome() {
   );
 }
 
+//Stack que abarca todas las ventanas relacionadas con la verificacion en cascada de los reportes de prototipos
 function StRepCheck() {
   return (
-    <ReportCheckStack.Navigator screenOptions={{ headerShown: false }}>
+    <ReportCheckStack.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="Check"
+    >
       <ReportCheckStack.Screen
         name="RepProjects"
         component={PrototypesOnStandby}
@@ -260,6 +270,7 @@ const SocialServiceApp = () => {
   );
 };
 
+//Función principal que contiene todas las rutas de la aplicación
 export default function App() {
   return (
     <NavigationContainer>
@@ -267,20 +278,12 @@ export default function App() {
         screenOptions={{
           headerShown: false,
         }}
-        //initialRouteName="Test"
       >
         <Stack.Screen name="Login" component={LoginPage} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="AcademicApp" component={AcademicGroupApp} />
         <Stack.Screen name="SocialServiceApp" component={SocialServiceApp} />
-        <Stack.Screen
-          name="PrototypesOnStandby"
-          component={PrototypesOnStandby}
-        />
         <Stack.Screen name="StaffApp" component={StaffApp} />
-        <Stack.Screen name="Test" component={OrderPageReadOnly} />
-        <Stack.Screen name="GeneratePDF" component={GeneratePrototypePDF} />
-        <Stack.Screen name="EditSubmission" component={PrototypingFormEdit} />
       </Stack.Navigator>
     </NavigationContainer>
   );
