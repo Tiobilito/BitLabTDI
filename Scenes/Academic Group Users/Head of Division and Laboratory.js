@@ -17,8 +17,7 @@ import { getAllOrdersByUserId } from "../../Modules/Operations DB Fixes"
 import { getAllProjectSubmissions } from "../../Modules/Operations DB Prototyping"
 import { GetUserData } from "../../Modules/DataInfo"
 
-const WIDTH = Dimensions.get("screen").width
-const HEIGHT = Dimensions.get("screen").height
+const { width, height } = Dimensions.get("screen")
 
 const HeadDivisionLaboratoryPage = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -92,7 +91,6 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
 
   return (
     <CustomViewReverse>
-      <View style={{ marginTop: HEIGHT * 0.03, gap: HEIGHT * 0.02 }}></View>
       <View style={styles.btnShowStats}>
         <TouchableOpacity
           style={styles.btnShow}
@@ -108,26 +106,50 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <View style={styles.itemContainer}>
-              <Pressable onPress={() => toggleDetailsReports(item.id)}>
-                <Text style={styles.TextHeader}>{item.application}</Text>
-              </Pressable>
+              <View style={styles.info}>
+                <Pressable onPress={() => toggleDetailsReports(item.id)}>
+                  <Text style={styles.TextHeader}>{item.application}</Text>
+                </Pressable>
+                {/* Status */}
+                <View
+                  style={[
+                    styles.statusMargin,
+                    {
+                      backgroundColor:
+                        item.status === "approved"
+                          ? "#5ED52C"
+                          : item.status === "rejected"
+                          ? "#EF3131"
+                          : item.status === "awaiting_revision"
+                          ? "#57C9E1"
+                          : "white",
+                    },
+                  ]}
+                >
+                  <Text style={styles.statusText}>{item.status}</Text>
+                </View>
 
-              <View
-                style={[
-                  styles.statusMargin,
-                  {
-                    backgroundColor:
-                      item.status === "approved"
-                        ? "#5ED52C"
-                        : item.status === "rejected"
-                        ? "#EF3131"
-                        : item.status === "awaiting_revision"
-                        ? "#57C9E1"
-                        : "white",
-                  },
-                ]}
-              >
-                <Text style={styles.statusText}>{item.status}</Text>
+                {/* Details */}
+                <View>
+                  {item.Details && (
+                    <View>
+                      <Text
+                        style={{
+                          color: "white",
+                          fontSize: 20,
+                          marginLeft: 15,
+                          marginTop: 5,
+                        }}
+                      >
+                        {item.submission_date}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              </View>
+
+              {/* PDF Button */}
+              <View style={styles.pdfButtonContainer}>
                 {item.department_head &&
                   item.laboratory_head &&
                   item.service_staff && (
@@ -144,20 +166,6 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
                     </View>
                   )}
               </View>
-              {item.Details && (
-                <View>
-                  <Text
-                    style={{
-                      color: "white",
-                      fontSize: 20,
-                      marginLeft: 15,
-                      marginTop: 5,
-                    }}
-                  >
-                    {item.submission_date}
-                  </Text>
-                </View>
-              )}
             </View>
           )}
           ListEmptyComponent={
@@ -179,21 +187,26 @@ const styles = StyleSheet.create({
     color: "red",
   },
   text: {
-    fontSize: WIDTH > 400 ? 32 : 24,
+    fontSize: width > 400 ? 32 : 24,
     fontWeight: "bold",
     color: "#2272A7",
   },
   textShowStats: {
-    fontSize: WIDTH > 400 ? 24 : 16,
+    fontSize: width > 400 ? 24 : 16,
     fontWeight: "bold",
     color: "#2272A7",
   },
   iconShowStats: {
-    fontSize: WIDTH > 400 ? 24 : 16,
+    fontSize: width > 400 ? 24 : 16,
     color: "#2272A7",
   },
+  pdfButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
   iconPrint: {
-    fontSize: WIDTH > 400 ? 60 : 55,
+    fontSize: width > 400 ? 60 : 55,
     color: "red",
   },
   btnPrint: {
@@ -201,75 +214,70 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
     borderRadius: 80,
-    marginLeft: WIDTH * 1.2,
-    marginTop: -45,
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
   },
   buttonImage: {
     width: 28,
     height: 28,
-    marginLeft: 7,
-    marginTop: 8,
   },
   btnAction: {
-    width: WIDTH * 0.85,
-    height: HEIGHT * 0.08,
+    width: width * 0.85,
+    height: height * 0.08,
     flexDirection: "row",
     backgroundColor: "#FFFFFF",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 40,
-    gap: WIDTH * 0.04,
+    gap: width * 0.04,
   },
   btnShowStats: {
     flexDirection: "row",
-    gap: WIDTH * 0.04,
-    marginTop: HEIGHT * 0.02,
   },
   btnShow: {
-    width: WIDTH * 0.45,
-    height: HEIGHT * 0.07,
     flexDirection: "row",
     backgroundColor: "#FFFFFF",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    gap: WIDTH * 0.04,
   },
   tables: {
-    width: WIDTH * 0.9,
-    height: HEIGHT * 0.55,
+    width: "95%",
+    height: "75%",
     backgroundColor: "#FFFFFF",
     borderRadius: 10,
     margin: 10,
   },
   itemContainer: {
     backgroundColor: "#2272A7",
-    margin: HEIGHT * 0.008,
-    padding: WIDTH * 0.02,
+    margin: height * 0.008,
+    padding: width * 0.02,
     borderRadius: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   emptyText: {
     textAlign: "center",
     color: "#2272A7",
     fontSize: 16,
-    marginTop: HEIGHT * 0.02,
+    marginTop: height * 0.02,
   },
   TextHeader: {
     color: "white",
-    fontSize: 20,
+    fontSize: width > 500 ? 20 : 16,
+    // fontSize: 20,
     fontWeight: "bold",
     textDecorationLine: "underline",
+    marginBottom: 5,
   },
   statusMargin: {
     backgroundColor: "white",
     borderRadius: 80,
-    alignItems: "center",
     height: 30,
-    width: "45%",
-    // marginLeft: 120,
     marginTop: 4,
-    // alignContent: "center",
     justifyContent: "center",
+    width: width > 400 ? 150 : 100,
   },
   statusText: {
     fontSize: 14,

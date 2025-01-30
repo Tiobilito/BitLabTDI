@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect } from "react"
 import {
   StyleSheet,
   TextInput,
@@ -9,83 +9,83 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-} from "react-native";
-import { getAllDepartamentos } from "../Modules/Operations DB Generals";
-import { getUserById, updateUser } from "../Modules/Operations DB Users";
-import { Picker } from "@react-native-picker/picker";
-import { CustomView } from "./components/CustomView";
-import { GetUserData } from "../Modules/DataInfo";
+} from "react-native"
+import { getAllDepartamentos } from "../Modules/Operations DB Generals"
+import { getUserById, updateUser } from "../Modules/Operations DB Users"
+import { Picker } from "@react-native-picker/picker"
+import { CustomView } from "./components/CustomView"
+import { GetUserData } from "../Modules/DataInfo"
 
-const Scale = Dimensions.get("window").width;
+const { width } = Dimensions.get("window")
 
 const SettingsPage = ({ navigation }) => {
-  const [code, setCode] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [userType, setUserType] = useState("");
-  const [address, setAddress] = useState("");
-  const [zipCode, setZipCode] = useState("");
-  const [phoneNum, setPhoneNum] = useState("");
-  const [nss, setNss] = useState("");
-  const [rfc, setRfc] = useState("");
-  const [salary, setSalary] = useState("");
-  const [departmentID, setDepartmentID] = useState("");
-  const [departments, setDepartments] = useState([]);
-  const [userData, setUserData] = useState([]);
+  const [code, setCode] = useState("")
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [userType, setUserType] = useState("")
+  const [address, setAddress] = useState("")
+  const [zipCode, setZipCode] = useState("")
+  const [phoneNum, setPhoneNum] = useState("")
+  const [nss, setNss] = useState("")
+  const [rfc, setRfc] = useState("")
+  const [salary, setSalary] = useState("")
+  const [departmentID, setDepartmentID] = useState("")
+  const [departments, setDepartments] = useState([])
+  const [userData, setUserData] = useState([])
 
   useEffect(() => {
     const loadDepartments = async () => {
-      const data = await getAllDepartamentos();
+      const data = await getAllDepartamentos()
       if (data) {
-        setDepartments(data);
+        setDepartments(data)
       }
-    };
+    }
 
     const loadUserData = async () => {
-      const dataI = await GetUserData();
-      const data = await getUserById(dataI.Code);
-      await setUserData(data);
+      const dataI = await GetUserData()
+      const data = await getUserById(dataI.Code)
+      await setUserData(data)
       if (data) {
-        await setUserData(data);
-        await setCode(data.code);
-        await setUsername(data.name);
-        await setEmail(data.email);
-        await setPassword(data.password);
-        await setUserType(data.user_type);
-        await setAddress(data.address);
-        await setZipCode(data.zip_code);
-        await setPhoneNum(data.number);
-        await setNss(data.nss);
-        await setRfc(data.rfc);
-        await setSalary(data.salary);
-        await setDepartmentID(data.department_id);
+        await setUserData(data)
+        await setCode(data.code)
+        await setUsername(data.name)
+        await setEmail(data.email)
+        await setPassword(data.password)
+        await setUserType(data.user_type)
+        await setAddress(data.address)
+        await setZipCode(data.zip_code)
+        await setPhoneNum(data.number)
+        await setNss(data.nss)
+        await setRfc(data.rfc)
+        await setSalary(data.salary)
+        await setDepartmentID(data.department_id)
       }
-    };
+    }
 
-    loadUserData();
-    loadDepartments();
-  }, []);
+    loadUserData()
+    loadDepartments()
+  }, [])
 
   const isFormValid = () => {
     if (!code) {
-      Alert.alert("Error", "El código es obligatorio.");
-      return false;
+      Alert.alert("Error", "El código es obligatorio.")
+      return false
     }
     if (!username) {
-      Alert.alert("Error", "El nombre es obligatorio.");
-      return false;
+      Alert.alert("Error", "El nombre es obligatorio.")
+      return false
     }
     if (!userType || userType != "null") {
-      Alert.alert("Error", "El tipo de usuario es obligatorio.");
-      return false;
+      Alert.alert("Error", "El tipo de usuario es obligatorio.")
+      return false
     }
     if (!password) {
-      Alert.alert("Error", "La contraseña es obligatoria.");
-      return false;
+      Alert.alert("Error", "La contraseña es obligatoria.")
+      return false
     }
-    return true;
-  };
+    return true
+  }
 
   const Verify = async () => {
     if (isFormValid()) {
@@ -102,20 +102,16 @@ const SettingsPage = ({ navigation }) => {
         number: phoneNum,
         department_id: departmentID ? parseInt(departmentID) : null, // Convertir a entero si existe
         password: password,
-      };
-      await updateUser(UserData);
-      Alert.alert("Éxito", "Usuario modificado exitosamente.");
+      }
+      await updateUser(UserData)
+      Alert.alert("Éxito", "Usuario modificado exitosamente.")
     }
-  };
+  }
 
   return (
     <CustomView>
-      <Text
-        style={{ fontSize: Scale > 400 ? 50 : 20, marginBottom: Scale * 0.05, marginTop: Scale * 0.50 }}
-      >
-        Datos
-      </Text>
-      <ScrollView style={{ height: Scale * 1.1 }}>
+      <Text style={styles.title}>Datos</Text>
+      <ScrollView style={{ height: width * 1.1 }}>
         <View style={styles.formCont}>
           <Text style={styles.textForm}>Nombre</Text>
           <TextInput
@@ -204,6 +200,7 @@ const SettingsPage = ({ navigation }) => {
           <Picker
             selectedValue={departmentID}
             onValueChange={(itemValue) => setDepartmentID(itemValue)}
+            style={styles.picker}
           >
             <Picker.Item label="Selecciona un departamento" value="" />
             {departments.map((dept) => (
@@ -214,7 +211,7 @@ const SettingsPage = ({ navigation }) => {
 
         <View
           style={{
-            width: Scale * 0.8,
+            width: width * 0.8,
             justifyContent: "center",
             alignItems: "center",
           }}
@@ -226,46 +223,60 @@ const SettingsPage = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <View style={{ marginBottom: Scale * 0.1 }}></View>
+        <View style={{ marginBottom: width * 0.1 }}></View>
       </ScrollView>
     </CustomView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
+  title: {
+    fontSize: width > 400 ? 50 : 20,
+    marginBottom: width * 0.05,
+    marginTop: width * 0.5,
+    fontWeight: "bold",
+    color: "#2272A7",
+  },
   input: {
-    height: Scale > 400 ? 60 : 40,
-    width: "93%",
+    // height: width > 400 ? 60 : 40,
+    // width: "93%",
     backgroundColor: "#C5E0F2",
-    borderRadius: Scale > 400 ? 20 : 15,
+    borderRadius: width > 400 ? 25 : 15,
     padding: 10,
     margin: 10,
-    fontSize: Scale > 400 ? 30 : 15,
+    // fontSize: width > 400 ? 30 : 15,
+    fontSize: width * 0.05,
   },
   textForm: {
-    fontSize: Scale > 400 ? 50 : 15,
+    fontSize: width > 400 ? 40 : 15,
     fontWeight: "regular",
     marginLeft: "5%",
     color: "#000000",
   },
   formCont: {
-    width: Scale * 0.8,
-    marginBottom: Scale * 0.08,
+    width: width * 0.8,
+    marginBottom: width * 0.08,
   },
   loginButton: {
-    width: Scale * 0.5,
-    height: Scale * 0.1,
+    width: width * 0.5,
+    height: width * 0.1,
     backgroundColor: "#2272A7",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    marginBottom: Scale * 0.08,
+    marginBottom: width * 0.08,
   },
   Logo: {
-    width: Scale > 400 ? 400 : 250,
-    height: Scale > 400 ? 400 : 250,
+    width: width > 400 ? 400 : 250,
+    height: width > 400 ? 400 : 250,
     marginTop: "10%",
   },
-});
+  picker: {
+    height: width * 0.12,
+    backgroundColor: "#C5E0F2",
+    borderRadius: width * 0.05,
+    margin: 10,
+  },
+})
 
-export default SettingsPage;
+export default SettingsPage
