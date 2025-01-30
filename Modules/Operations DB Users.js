@@ -91,6 +91,21 @@ export async function updateUser(id_cliente, updatedUser) {
   return data;
 }
 
+// Actualiza la contraseña del usuario
+export async function updatePassword(id_Usuario, newPassword) {
+  const { data, error } = await supabase
+    .from("users")
+    .update({ password: newPassword })
+    .eq("code", id_Usuario);
+
+  if (error) {
+    console.error("Error al actualizar la contraseña:", error);
+    return null;
+  }
+
+  return data;
+}
+
 // Función para añadir un usuario
 export async function addUser(user) {
   const VerifyCode = await CheckUserCode(user.code);
@@ -137,4 +152,3 @@ export async function getAllTeachers() {
   console.log("Registros de profesores:", data);
   return data;
 }
-

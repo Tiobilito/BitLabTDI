@@ -21,20 +21,24 @@ import OrderPage from "./Scenes/Social Service/Order"; // Orden de reparación
 import OrderPageReadOnly from "./Scenes/Social Service/OrderReports"; // Orden de reparación en modo lectura
 
 // Scenes Laboratorio de Prototipado
-import PrototypingForm from "./Scenes/Prototyping Laboratory/PrototypingForm"; // Formulario de prototipos
-import PrototypingCheck from "./Scenes/Prototyping Laboratory/PrototypingReportCheck"; // Revisión de prototipos
-import PrototypingFormReadOnly from "./Scenes/Prototyping Laboratory/PrototypingFormReadOnly"; // Formulario de prototipos en modo lectura
-import GeneratePrototypePDF from "./Scenes/Prototyping Laboratory/GeneratePrototypePDF"; // Generar PDF de prototipos
-import PrototypingFormEdit from "./Scenes/Prototyping Laboratory/PrototypingFormEditable"; // Formulario de prototipos editable
-import PrototypingReportsPage from "./Scenes/Prototyping Laboratory/PrototypingReports"; // Reportes de prototipos (Revisar)
-import PrototypingAlreadyChecked from "./Scenes/Prototyping Laboratory/PrototypingReportAlreadyChecked"; // Reportes de prototipos ya revisados
-import PrototypingReportStDone from "./Scenes/Prototyping Laboratory/PrototypingReportStDone"; // Reportes de prototipos ya revisados con estatus Definitivo
+import PrototypingForm from "./Scenes/Prototyping Laboratory/PrototypingForm";
+import PrototypingCheck from "./Scenes/Prototyping Laboratory/PrototypingReportCheck";
+import PrototypesOnStandby from "./Scenes/Prototyping Laboratory/PrototypesOnStandby";
+import PrototypingFormReadOnly from "./Scenes/Prototyping Laboratory/PrototypingFormReadOnly";
+import GeneratePrototypePDF from "./Scenes/Prototyping Laboratory/GeneratePrototypePDF";
+import PrototypingFormEdit from "./Scenes/Prototyping Laboratory/PrototypingFormEditable";
 
-// Scenes Jefe de División y Laboratorio
-import HeadDivisionLaboratoryPage from "./Scenes/Academic Group Users/Head of Division and Laboratory"; // Pantalla principal jefe de división y laboratorio
-
-// Scenes Grupo Académico
-import TeacherStudentPage from "./Scenes/Academic Group Users/TeacherStudent"; // Pantalla principal grupo académico
+import TeacherStudentPage from "./Scenes/Academic Group Users/TeacherStudent";
+import PrototypingReportsPage from "./Scenes/Prototyping Laboratory/PrototypingReports";
+import PrototypingAlreadyChecked from "./Scenes/Prototyping Laboratory/PrototypingReportAlreadyChecked";
+import PrototypingReportStDone from "./Scenes/Prototyping Laboratory/PrototypingReportStDone";
+import OrderPageReadOnly from "./Scenes/Social Service/OrderReports";
+import HeadDivisionLaboratoryPage from "./Scenes/Academic Group Users/Head of Division and Laboratory";
+//Settings
+import UpdateAccount from "./Scenes/settings/account_config";
+import SettingsPage from "./Scenes/Settings";
+import UpdatePassword from "./Scenes/settings/new_password";
+import ViewAccount from "./Scenes/settings/view_account";
 
 const Stack = createNativeStackNavigator();
 const SocialServiceTap = createBottomTabNavigator();
@@ -118,8 +122,11 @@ function SocialServiceHome() {
 function StRepCheck() {
   return (
     <ReportCheckStack.Navigator
+     
       screenOptions={{ headerShown: false }}
+     
       initialRouteName="Check"
+    
     >
       <ReportCheckStack.Screen name="Check" component={PrototypingCheck} />
       <ReportCheckStack.Screen
@@ -191,7 +198,7 @@ const AcademicGroupApp = () => {
         name="Reportes Protoripado"
         component={PrototypingReportsAG}
       />
-      <StudentsTap.Screen name="Configuración" component={SettingsPage} />
+      <StudentsTap.Screen name="Configuración" component={SettingsScreen} />
     </StudentsTap.Navigator>
   );
 };
@@ -224,7 +231,7 @@ const StaffApp = () => {
     >
       <StaffTap.Screen name="Principal" component={StaffHome} />
       <StaffTap.Screen name="Registros" component={StRepCheck} />
-      <StaffTap.Screen name="Configuración" component={SettingsPage} />
+      <StaffTap.Screen name="Configuración" component={SettingsScreen} />
     </StaffTap.Navigator>
   );
 };
@@ -263,8 +270,14 @@ const SocialServiceApp = () => {
     >
       <SocialServiceTap.Screen name="Principal" component={SocialServiceHome} />
       <SocialServiceTap.Screen name="Reparaciones" component={Fixes} />
-      <StaffTap.Screen name="Registros" component={StRepCheck} />
-      <SocialServiceTap.Screen name="Configuración" component={SettingsPage} />
+      <SocialServiceTap.Screen
+        name="RepProjects"
+        component={PrototypesOnStandby}
+      />
+      <SocialServiceTap.Screen
+        name="Configuración"
+        component={SettingsScreen}
+      />
     </SocialServiceTap.Navigator>
   );
 };
