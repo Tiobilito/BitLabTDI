@@ -5,7 +5,7 @@ interface Props {
   children: ReactNode
 }
 
-const Scale = Dimensions.get("window").width
+const { width, height } = Dimensions.get("window")
 
 export const CustomView = ({ children }: Props) => {
   return (
@@ -22,55 +22,38 @@ export const CustomView = ({ children }: Props) => {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
+    backgroundColor: "#f5f5f5"
   },
   mainTriangle: {
     width: 0,
     height: 0,
+    position: "absolute",
     backgroundColor: "transparent",
     borderStyle: "solid",
-    borderLeftWidth: Scale * 1.2,
-    borderRightWidth: Scale * 0.6,
-    borderBottomWidth: Scale * 0.7,
-    // borderLeftWidth: 450,
-    // borderRightWidth: 280,
-    // borderBottomWidth: 300,
+    borderLeftWidth: width * 1,
+    borderRightWidth: width * 0.6,
+    borderBottomWidth: height * 0.7,
     borderLeftColor: "transparent",
     borderRightColor: "transparent",
     borderBottomColor: "#328EC5",
     transform: [{ rotate: "30deg" }],
-    marginTop: "-35%",
-    marginLeft: "-30%",
-    position: "absolute",
+    top: -height * 0.45,
+    right: -width * 0.7,
   },
   backTriangle: {
     width: 0,
     height: 0,
+    position: "absolute",
     backgroundColor: "transparent",
     borderStyle: "solid",
-    borderLeftWidth: Scale * 0.75,
-    borderRightWidth: Scale * 0.75,
-    borderBottomWidth: Scale * 0.9,
-    // borderLeftWidth: 350,
-    // borderRightWidth: 200,
-    // borderBottomWidth: 250,
+    borderLeftWidth: width * 0.75,
+    borderRightWidth: width * 0.75,
+    borderBottomWidth: height * 0.9,
     borderLeftColor: "transparent",
     borderRightColor: "transparent",
     borderBottomColor: "#57A9D9",
-    transform: [{ rotate: "95deg" }],
-    marginTop: "-25%",
-    marginLeft: "-70%",
-    position: "absolute",
+    transform: [{ rotate: "80deg" }],
+    top: -height * 0.6,
+    right: -width * 0.5,
   },
-  // triangle: {
-  //   width: 0,
-  //   height: 0,
-  //   backgroundColor: "transparent",
-  //   borderStyle: "solid",
-  //   borderLeftWidth: 60,
-  //   borderRightWidth: 60,
-  //   borderBottomWidth: 120,
-  //   borderLeftColor: "transparent",
-  //   borderRightColor: "transparent",
-  //   borderBottomColor: "#328EC5",
-  // },
 })

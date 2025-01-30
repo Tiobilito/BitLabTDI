@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback } from "react"
 import {
   Text,
   StyleSheet,
@@ -11,86 +11,85 @@ import {
   Dimensions,
   Pressable,
   ScrollView,
-} from "react-native";
-import filter from "lodash.filter";
-import { useFocusEffect } from "@react-navigation/native";
-import { getAllProjectSubmissionsCheck } from "../../Modules/Operations DB Prototyping";
-import { CustomViewReverse } from "../components/CustomViewReverse";
-import Icon from "react-native-vector-icons/Ionicons";
-import { GetUserData } from "../../Modules/DataInfo";
+} from "react-native"
+import filter from "lodash.filter"
+import { useFocusEffect } from "@react-navigation/native"
+import { getAllProjectSubmissionsCheck } from "../../Modules/Operations DB Prototyping"
+import { CustomViewReverse } from "../components/CustomViewReverse"
+import Icon from "react-native-vector-icons/Ionicons"
+import { GetUserData } from "../../Modules/DataInfo"
 
-const WIDTH = Dimensions.get("window").width;
-const HEIGHT = Dimensions.get("window").height;
+const { width, height } = Dimensions.get("window")
 
 const PrototypingCheck = ({ navigation }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
-  const [fullData, setFullData] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [nameQuery, setNameQuery] = useState("");
-  const [showNameFilter, setShowNameFilter] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
+  const [data, setData] = useState([])
+  const [error, setError] = useState(null)
+  const [fullData, setFullData] = useState([])
+  const [searchQuery, setSearchQuery] = useState("")
+  const [nameQuery, setNameQuery] = useState("")
+  const [showNameFilter, setShowNameFilter] = useState(false)
 
   useFocusEffect(
     useCallback(() => {
-      setIsLoading(true);
-      fetchData();
+      setIsLoading(true)
+      fetchData()
     }, [])
-  );
+  )
 
   const fetchData = async () => {
-    let Data;
+    let Data
     try {
-      const UData = await GetUserData();
-      Data = await getAllProjectSubmissionsCheck(UData.User_type);
+      const UData = await GetUserData()
+      Data = await getAllProjectSubmissionsCheck(UData.User_type)
       const BData = Data.map((registro) => ({
         ...registro,
         Details: false,
-      }));
-      setData(BData);
-      setFullData(BData);
-      setIsLoading(false);
+      }))
+      setData(BData)
+      setFullData(BData)
+      setIsLoading(false)
     } catch (error) {
-      setError(error);
-      console.log(error);
-      setIsLoading(false);
+      setError(error)
+      console.log(error)
+      setIsLoading(false)
     }
-  };
+  }
 
   const toggleDetails = (itemId) => {
     const updatedData = data.map((registro) => {
       if (registro.id === itemId) {
-        return { ...registro, Details: !registro.Details };
+        return { ...registro, Details: !registro.Details }
       }
-      return registro;
-    });
-    setData(updatedData);
-  };
+      return registro
+    })
+    setData(updatedData)
+  }
 
   const applyFilters = () => {
     const filteredData = filter(fullData, (item) => {
       return (
         containsApplication(item, searchQuery) &&
         containsApplicantName(item, nameQuery)
-      );
-    });
-    setData(filteredData);
-  };
+      )
+    })
+    setData(filteredData)
+  }
 
   const containsApplication = ({ application }, query) => {
-    return application.toLowerCase().includes(query.toLowerCase());
-  };
+    return application.toLowerCase().includes(query.toLowerCase())
+  }
 
   const containsApplicantName = ({ applicant_name }, query) => {
-    return applicant_name.toLowerCase().includes(query.toLowerCase());
-  };
+    return applicant_name.toLowerCase().includes(query.toLowerCase())
+  }
 
   if (isLoading) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#ffffff" />
       </View>
-    );
+    )
   }
 
   if (error) {
@@ -98,73 +97,51 @@ const PrototypingCheck = ({ navigation }) => {
       <View style={styles.centered}>
         <Text style={styles.errorText}>Error en la obtención de datos</Text>
       </View>
-    );
+    )
   }
 
   const navigateToCheck = (id) => {
-    navigation.navigate("ReportCheck", { idReport: id });
-  };
+    navigation.navigate("ReportCheck", { idReport: id })
+  }
 
   const navigateToPDF = (id) => {
-    navigation.navigate("GeneratePDF", { idReport: id });
-  };
+    navigation.navigate("GeneratePDF", { idReport: id })
+  }
 
   const navigateToEditForm = (id) => {
-    
-    navigation.navigate("EditSubmission", { idReport: id });
-    
-  };
+    navigation.navigate("EditSubmission", { idReport: id })
+  }
 
   const navigateToAlreadyChecked = () => {
-    navigation.navigate("AlreadyCheckedReports");
-  };
+    navigation.navigate("AlreadyCheckedReports")
+  }
 
   const navigateToDone = () => {
-    navigation.navigate("DoneReports");
-  };
+    navigation.navigate("DoneReports")
+  }
 
   return (
     <CustomViewReverse>
-      <View
-        style={{
-          height: HEIGHT * 0.88,
-          width: WIDTH * 0.9,
-          marginTop: HEIGHT * 0.04,
-        }}
-      >
-        <ScrollView horizontal={true} style={{ marginTop: 6, marginLeft: 160 }}>
-          <Pressable
-            style={{
-              backgroundColor: "#2272A7",
-              height: 42,
-              width: 70,
-              borderRadius: 12,
-            }}
-            onPress={navigateToDone}
-          >
-            <Text style={{ marginLeft: 6, marginTop: 2, color: "white", fontWeight: "bold" }}>Reportes Cerrados</Text>
+      <View style={styles.mainContainer}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Pressable style={styles.headerButton} onPress={navigateToDone}>
+            <Text style={styles.headerButtonText}>Reportes Cerrados</Text>
           </Pressable>
           <Pressable
-            style={{
-              backgroundColor: "#2272A7",
-              height: 42,
-              width: 70,
-              borderRadius: 12,
-              marginLeft: 10,
-            }}
+            style={[styles.headerButton]}
             onPress={navigateToAlreadyChecked}
           >
-            <Text style={{ marginLeft: 4, marginTop: 2, color: "white", fontWeight: "bold" }}>
-              Reportes Revisados
-            </Text>
+            <Text style={styles.headerButtonText}>Reportes Revisados</Text>
           </Pressable>
-        </ScrollView>
+        </View>
+
         {/* Input para filtrar por application */}
         <TextInput
           style={styles.searchBox}
           onChangeText={(query) => {
-            setSearchQuery(query);
-            applyFilters();
+            setSearchQuery(query)
+            applyFilters()
           }}
           value={searchQuery}
           placeholder="Buscar por aplicación"
@@ -187,8 +164,8 @@ const PrototypingCheck = ({ navigation }) => {
           <TextInput
             style={styles.searchBox}
             onChangeText={(query) => {
-              setNameQuery(query);
-              applyFilters();
+              setNameQuery(query)
+              applyFilters()
             }}
             value={nameQuery}
             placeholder="Buscar por nombre del solicitante"
@@ -197,8 +174,8 @@ const PrototypingCheck = ({ navigation }) => {
 
         <View
           style={{
-            width: WIDTH * 0.9,
-            height: HEIGHT * 0.65,
+            width: width * 0.9,
+            height: height * 0.6,
             backgroundColor: "#FFFFFF",
             borderRadius: 12,
             padding: 8,
@@ -286,10 +263,43 @@ const PrototypingCheck = ({ navigation }) => {
         </View>
       </View>
     </CustomViewReverse>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    // marginTop: -80,
+    // flex: 1,
+    // justifyContent: "center",
+    // alignContent: "center",
+  },
+
+  // #region Header style
+  header: {
+    flexDirection: "row",
+    alignContent: "center",
+    justifyContent: "center",
+    // marginVertical: 1,
+    // marginLeft: 160,
+  },
+  headerButton: {
+    backgroundColor: "#2272A7",
+    borderRadius: 12,
+    height: 42,
+    width: "30%",
+    alignContent: "stretch",
+    alignItems: "center",
+    marginHorizontal: 10,
+    marginBottom: 10,
+  },
+  headerButtonText: {
+    color: "white",
+    fontWeight: "bold",
+    marginHorizontal: 4,
+    fontSize: 15,
+  },
+
+  //#region ScrollView style
   centered: {
     flex: 1,
     justifyContent: "center",
@@ -366,6 +376,6 @@ const styles = StyleSheet.create({
   warningIcon: {
     marginLeft: 10,
   },
-});
+})
 
-export default PrototypingCheck;
+export default PrototypingCheck

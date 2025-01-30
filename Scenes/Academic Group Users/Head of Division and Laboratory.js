@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback } from "react"
 import {
   StyleSheet,
   Text,
@@ -9,92 +9,90 @@ import {
   Image,
   ActivityIndicator,
   Pressable,
-} from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { CustomViewReverse } from "../components/CustomViewReverse";
-import { getAllOrdersByUserId } from "../../Modules/Operations DB Fixes";
-import {
-  getAllProjectSubmissions,
-} from "../../Modules/Operations DB Prototyping";
-import { GetUserData } from "../../Modules/DataInfo";
+} from "react-native"
+import { useFocusEffect } from "@react-navigation/native"
+import Ionicons from "@expo/vector-icons/Ionicons"
+import { CustomViewReverse } from "../components/CustomViewReverse"
+import { getAllOrdersByUserId } from "../../Modules/Operations DB Fixes"
+import { getAllProjectSubmissions } from "../../Modules/Operations DB Prototyping"
+import { GetUserData } from "../../Modules/DataInfo"
 
-const WIDTH = Dimensions.get("screen").width;
-const HEIGHT = Dimensions.get("screen").height;
+const WIDTH = Dimensions.get("screen").width
+const HEIGHT = Dimensions.get("screen").height
 
 const HeadDivisionLaboratoryPage = ({ navigation }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [dataOrders, setDataOrders] = useState([]);
-  const [dataReports, setDataReports] = useState([]); // Nueva lista de reportes
-  const [showListOrders, setShowListOrders] = useState(true); // Estado para alternar entre listas
+  const [isLoading, setIsLoading] = useState(false)
+  const [dataOrders, setDataOrders] = useState([])
+  const [dataReports, setDataReports] = useState([]) // Nueva lista de reportes
+  const [showListOrders, setShowListOrders] = useState(true) // Estado para alternar entre listas
 
   useFocusEffect(
     useCallback(() => {
-      setIsLoading(true);
-      fetchData();
+      setIsLoading(true)
+      fetchData()
     }, [])
-  );
+  )
 
   const navigateToPDF = (id) => {
-    navigation.navigate("GeneratePDF", { idReport: id });
-  };
+    navigation.navigate("GeneratePDF", { idReport: id })
+  }
 
   const fetchData = async () => {
     try {
-      const UData = await GetUserData();
-      let Data = await getAllOrdersByUserId(UData.Code);
-      let ReportsData = await getAllProjectSubmissions(UData.Code);
+      const UData = await GetUserData()
+      let Data = await getAllOrdersByUserId(UData.Code)
+      let ReportsData = await getAllProjectSubmissions(UData.Code)
       let BData = Data.map((registro) => ({
         ...registro,
         Details: false,
-      }));
+      }))
       let BRData = ReportsData.map((registro) => ({
         ...registro,
         Details: false,
-      }));
-      setDataOrders(BData);
-      setDataReports(BRData);
-      setIsLoading(false);
+      }))
+      setDataOrders(BData)
+      setDataReports(BRData)
+      setIsLoading(false)
     } catch (error) {
-      console.log(error);
-      setIsLoading(false);
+      console.log(error)
+      setIsLoading(false)
     }
-  };
+  }
 
   const toggleList = (Option) => {
     switch (Option) {
       case "Ordenes":
-        setShowListOrders(true);
-        break;
+        setShowListOrders(true)
+        break
       case "Reportes":
-        setShowListOrders(false);
-        break;
+        setShowListOrders(false)
+        break
       default:
-        break;
+        break
     }
-  };
+  }
 
   const toggleDetailsReports = (itemId) => {
     const updatedData = dataReports.map((registro) => {
       if (registro.id === itemId) {
-        return { ...registro, Details: !registro.Details };
+        return { ...registro, Details: !registro.Details }
       }
-      return registro;
-    });
-    setDataReports(updatedData);
-  };
+      return registro
+    })
+    setDataReports(updatedData)
+  }
 
   if (isLoading) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#ffffff" />
       </View>
-    );
+    )
   }
 
   return (
     <CustomViewReverse>
-      <View style={{ marginTop: HEIGHT * 0.05, gap: HEIGHT * 0.02 }}></View>
+      <View style={{ marginTop: HEIGHT * 0.03, gap: HEIGHT * 0.02 }}></View>
       <View style={styles.btnShowStats}>
         <TouchableOpacity
           style={styles.btnShow}
@@ -113,16 +111,23 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
               <Pressable onPress={() => toggleDetailsReports(item.id)}>
                 <Text style={styles.TextHeader}>{item.application}</Text>
               </Pressable>
-              <View style={styles.statusMargin}>
-                <Text
-                  style={{
-                    fontSize: 15,
-                    fontWeight: "bold",
-                    color: "black",
-                  }}
-                >
-                  {item.status}
-                </Text>
+
+              <View
+                style={[
+                  styles.statusMargin,
+                  {
+                    backgroundColor:
+                      item.status === "approved"
+                        ? "#5ED52C"
+                        : item.status === "rejected"
+                        ? "#EF3131"
+                        : item.status === "awaiting_revision"
+                        ? "#57C9E1"
+                        : "white",
+                  },
+                ]}
+              >
+                <Text style={styles.statusText}>{item.status}</Text>
                 {item.department_head &&
                   item.laboratory_head &&
                   item.service_staff && (
@@ -161,8 +166,8 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
         />
       </View>
     </CustomViewReverse>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   centered: {
@@ -193,17 +198,17 @@ const styles = StyleSheet.create({
   },
   btnPrint: {
     backgroundColor: "white",
-    width: 35,
-    height: 35,
+    width: 45,
+    height: 45,
     borderRadius: 80,
-    marginLeft: 180,
-    marginTop: -35,
+    marginLeft: WIDTH * 1.2,
+    marginTop: -45,
   },
   buttonImage: {
-    width: 24,
-    height: 24,
-    marginLeft: 4,
-    marginTop: 5,
+    width: 28,
+    height: 28,
+    marginLeft: 7,
+    marginTop: 8,
   },
   btnAction: {
     width: WIDTH * 0.85,
@@ -253,16 +258,26 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 20,
     fontWeight: "bold",
+    textDecorationLine: "underline",
   },
   statusMargin: {
     backgroundColor: "white",
     borderRadius: 80,
     alignItems: "center",
     height: 30,
-    width: 120,
-    marginLeft: 120,
-    marginTop: 0,
+    width: "40%",
+    // marginLeft: 120,
+    marginTop: 4,
+    // alignContent: "center",
+    justifyContent: "center",
   },
-});
+  statusText: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "black",
+    alignSelf: "center",
+    alignItems: "center",
+  },
+})
 
-export default HeadDivisionLaboratoryPage;
+export default HeadDivisionLaboratoryPage
