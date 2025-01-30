@@ -7,7 +7,10 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // Scenes proposito general
 import LoginPage from "./Scenes/Login";
 import Register from "./Scenes/Register";
+import UpdateAccount from "./Scenes/settings/account_config";
 import SettingsPage from "./Scenes/Settings";
+import UpdatePassword from "./Scenes/settings/new_password";
+import ViewAccount from "./Scenes/settings/view_account";
 
 // Scenes Prestador de servicio
 import SocialServicePage from "./Scenes/Social Service/Prestador de Servicio"; // Pantalla principal prestador de servicio
@@ -23,22 +26,15 @@ import OrderPageReadOnly from "./Scenes/Social Service/OrderReports"; // Orden d
 // Scenes Laboratorio de Prototipado
 import PrototypingForm from "./Scenes/Prototyping Laboratory/PrototypingForm";
 import PrototypingCheck from "./Scenes/Prototyping Laboratory/PrototypingReportCheck";
-import PrototypesOnStandby from "./Scenes/Prototyping Laboratory/PrototypesOnStandby";
 import PrototypingFormReadOnly from "./Scenes/Prototyping Laboratory/PrototypingFormReadOnly";
 import GeneratePrototypePDF from "./Scenes/Prototyping Laboratory/GeneratePrototypePDF";
 import PrototypingFormEdit from "./Scenes/Prototyping Laboratory/PrototypingFormEditable";
-
-import TeacherStudentPage from "./Scenes/Academic Group Users/TeacherStudent";
 import PrototypingReportsPage from "./Scenes/Prototyping Laboratory/PrototypingReports";
 import PrototypingAlreadyChecked from "./Scenes/Prototyping Laboratory/PrototypingReportAlreadyChecked";
 import PrototypingReportStDone from "./Scenes/Prototyping Laboratory/PrototypingReportStDone";
-import OrderPageReadOnly from "./Scenes/Social Service/OrderReports";
 import HeadDivisionLaboratoryPage from "./Scenes/Academic Group Users/Head of Division and Laboratory";
-//Settings
-import UpdateAccount from "./Scenes/settings/account_config";
-import SettingsPage from "./Scenes/Settings";
-import UpdatePassword from "./Scenes/settings/new_password";
-import ViewAccount from "./Scenes/settings/view_account";
+
+import TeacherStudentPage from "./Scenes/Academic Group Users/TeacherStudent";
 
 const Stack = createNativeStackNavigator();
 const SocialServiceTap = createBottomTabNavigator();
@@ -50,6 +46,19 @@ const ReportCheckStack = createNativeStackNavigator();
 const ReportListAG = createNativeStackNavigator();
 const AcademicGroupStack = createNativeStackNavigator();
 const StaffStack = createNativeStackNavigator();
+const SettingsStack = createNativeStackNavigator();
+
+//Stack que abarca todas las ventanas relacionadas con la configuración de la cuenta
+function SettingsScreen() {
+  return (
+    <SettingsStack.Navigator screenOptions={{ headerShown: false }}>
+      <SettingsStack.Screen name="Settings" component={SettingsPage} />
+      <SettingsStack.Screen name="AccountOnlyRead" component={ViewAccount} />
+      <SettingsStack.Screen name="Editaccount" component={UpdateAccount} />
+      <SettingsStack.Screen name="EditPassword" component={UpdatePassword} />
+    </SettingsStack.Navigator>
+  );
+}
 
 //Stack que abarca todas las ventanas relacionadas con los reportes del grupo academico
 function PrototypingReportsAG() {
@@ -101,6 +110,7 @@ function StaffHome() {
     <StaffStack.Navigator screenOptions={{ headerShown: false }}>
       <StaffStack.Screen name="Home" component={HeadDivisionLaboratoryPage} />
       <StaffStack.Screen name="ReportForm" component={PrototypingForm} />
+      <StaffStack.Screen name="GeneratePDF" component={GeneratePrototypePDF} />
     </StaffStack.Navigator>
   );
 }
@@ -114,6 +124,10 @@ function SocialServiceHome() {
         component={SocialServicePage}
       />
       <SocialServiceStack.Screen name="AddClient" component={AddClientPage} />
+      <SocialServiceStack.Screen
+        name="GeneratePDF"
+        component={GeneratePrototypePDF}
+      />
     </SocialServiceStack.Navigator>
   );
 }
@@ -122,11 +136,8 @@ function SocialServiceHome() {
 function StRepCheck() {
   return (
     <ReportCheckStack.Navigator
-     
       screenOptions={{ headerShown: false }}
-     
       initialRouteName="Check"
-    
     >
       <ReportCheckStack.Screen name="Check" component={PrototypingCheck} />
       <ReportCheckStack.Screen
@@ -270,10 +281,6 @@ const SocialServiceApp = () => {
     >
       <SocialServiceTap.Screen name="Principal" component={SocialServiceHome} />
       <SocialServiceTap.Screen name="Reparaciones" component={Fixes} />
-      <SocialServiceTap.Screen
-        name="RepProjects"
-        component={PrototypesOnStandby}
-      />
       <SocialServiceTap.Screen
         name="Configuración"
         component={SettingsScreen}

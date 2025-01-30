@@ -24,7 +24,6 @@ const HEIGHT = Dimensions.get("screen").height;
 
 const HeadDivisionLaboratoryPage = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [dataOrders, setDataOrders] = useState([]);
   const [dataReports, setDataReports] = useState([]); // Nueva lista de reportes
   const [showListOrders, setShowListOrders] = useState(true); // Estado para alternar entre listas
 
@@ -42,17 +41,11 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
   const fetchData = async () => {
     try {
       const UData = await GetUserData();
-      let Data = await getAllOrdersByUserId(UData.Code);
       let ReportsData = await getAllProjectSubmissions(UData.Code);
-      let BData = Data.map((registro) => ({
-        ...registro,
-        Details: false,
-      }));
       let BRData = ReportsData.map((registro) => ({
         ...registro,
         Details: false,
       }));
-      setDataOrders(BData);
       setDataReports(BRData);
       setIsLoading(false);
     } catch (error) {
