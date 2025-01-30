@@ -122,7 +122,7 @@ function StRepCheck() {
       initialRouteName="Check"
     >
       <ReportCheckStack.Screen name="Check" component={PrototypingCheck} />
-      <ReportCheckStack.Screen
+      <ReportCheckStack.ScreenPrototypingFormReadOnly
         name="ReportCheck"
         component={PrototypingFormReadOnly}
       />
@@ -175,6 +175,7 @@ const AcademicGroupApp = () => {
           let iconName;
           if (route.name === "Principal") {
             iconName = focused ? "home" : "home-outline";
+            // protoripado?
           } else if (route.name === "Reportes Protoripado") {
             iconName = focused ? "reader" : "reader-outline";
           } else if (route.name === "Configuración") {

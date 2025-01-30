@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback } from "react"
 import {
   Text,
   StyleSheet,
@@ -9,86 +9,86 @@ import {
   FlatList,
   ActivityIndicator,
   Dimensions,
-  Pressable
-} from "react-native";
-import filter from "lodash.filter";
-import { useFocusEffect } from "@react-navigation/native";
-import { getAllProjectSubmissionsByUserId } from "../../Modules/Operations DB Prototyping";
-import { GetUserData } from "../../Modules/DataInfo";
-import { CustomViewReverse } from "../components/CustomViewReverse";
-import Icon from "react-native-vector-icons/Ionicons"; // Asegúrate de tener esta librería instalada
+  Pressable,
+} from "react-native"
+import filter from "lodash.filter"
+import { useFocusEffect } from "@react-navigation/native"
+import { getAllProjectSubmissionsByUserId } from "../../Modules/Operations DB Prototyping"
+import { GetUserData } from "../../Modules/DataInfo"
+import { CustomViewReverse } from "../components/CustomViewReverse"
+import Icon from "react-native-vector-icons/Ionicons" // Asegúrate de tener esta librería instalada
 
-const WIDTH = Dimensions.get("window").width;
-const HEIGHT = Dimensions.get("window").height;
+const WIDTH = Dimensions.get("window").width
+const HEIGHT = Dimensions.get("window").height
 
 const PrototypingReportsPage = ({ navigation }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
-  const [fullData, setFullData] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [nameQuery, setNameQuery] = useState("");
-  const [showNameFilter, setShowNameFilter] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
+  const [data, setData] = useState([])
+  const [error, setError] = useState(null)
+  const [fullData, setFullData] = useState([])
+  const [searchQuery, setSearchQuery] = useState("")
+  const [nameQuery, setNameQuery] = useState("")
+  const [showNameFilter, setShowNameFilter] = useState(false)
 
   useFocusEffect(
     useCallback(() => {
-      setIsLoading(true);
-      fetchData();
+      setIsLoading(true)
+      fetchData()
     }, [])
-  );
+  )
 
   const fetchData = async () => {
     try {
-      const User = await GetUserData();
-      const Data = await getAllProjectSubmissionsByUserId(User.Code);
+      const User = await GetUserData()
+      const Data = await getAllProjectSubmissionsByUserId(User.Code)
       const BData = Data.map((registro) => ({
         ...registro,
         Details: false,
-      }));
-      setData(BData);
-      setFullData(BData);
-      setIsLoading(false);
+      }))
+      setData(BData)
+      setFullData(BData)
+      setIsLoading(false)
     } catch (error) {
-      setError(error);
-      console.log(error);
-      setIsLoading(false);
+      setError(error)
+      console.log(error)
+      setIsLoading(false)
     }
-  };
+  }
 
   const toggleDetails = (itemId) => {
     const updatedData = data.map((registro) => {
       if (registro.id === itemId) {
-        return { ...registro, Details: !registro.Details };
+        return { ...registro, Details: !registro.Details }
       }
-      return registro;
-    });
-    setData(updatedData);
-  };
+      return registro
+    })
+    setData(updatedData)
+  }
 
   const applyFilters = () => {
     const filteredData = filter(fullData, (item) => {
       return (
         containsApplication(item, searchQuery) &&
         containsApplicantName(item, nameQuery)
-      );
-    });
-    setData(filteredData);
-  };
+      )
+    })
+    setData(filteredData)
+  }
 
   const containsApplication = ({ application }, query) => {
-    return application.toLowerCase().includes(query.toLowerCase());
-  };
+    return application.toLowerCase().includes(query.toLowerCase())
+  }
 
   const containsApplicantName = ({ applicant_name }, query) => {
-    return applicant_name.toLowerCase().includes(query.toLowerCase());
-  };
+    return applicant_name.toLowerCase().includes(query.toLowerCase())
+  }
 
   if (isLoading) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#ffffff" />
       </View>
-    );
+    )
   }
 
   if (error) {
@@ -96,16 +96,16 @@ const PrototypingReportsPage = ({ navigation }) => {
       <View style={styles.centered}>
         <Text style={styles.errorText}>Error en la obtención de datos</Text>
       </View>
-    );
+    )
   }
 
   const navigateToEditSubmission = (id) => {
-    navigation.navigate("EditSubmission", { idReport: id });
-  };
+    navigation.navigate("EditSubmission", { idReport: id })
+  }
 
   const navigateToPDF = (id) => {
-    navigation.navigate("GeneratePDF", { idReport: id });
-  };
+    navigation.navigate("GeneratePDF", { idReport: id })
+  }
 
   return (
     <CustomViewReverse>
@@ -120,8 +120,8 @@ const PrototypingReportsPage = ({ navigation }) => {
         <TextInput
           style={styles.searchBox}
           onChangeText={(query) => {
-            setSearchQuery(query);
-            applyFilters();
+            setSearchQuery(query)
+            applyFilters()
           }}
           value={searchQuery}
           placeholder="Buscar por aplicación"
@@ -144,8 +144,8 @@ const PrototypingReportsPage = ({ navigation }) => {
           <TextInput
             style={styles.searchBox}
             onChangeText={(query) => {
-              setNameQuery(query);
-              applyFilters();
+              setNameQuery(query)
+              applyFilters()
             }}
             value={nameQuery}
             placeholder="Buscar por nombre del solicitante"
@@ -178,16 +178,22 @@ const PrototypingReportsPage = ({ navigation }) => {
                 </TouchableOpacity>
 
                 {/* Mostrar el status del reporte */}
-                <View style={styles.statusMargin}>
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      fontWeight: "bold",
-                      color: "black",
-                    }}
-                  >
-                    {item.status}
-                  </Text>
+                <View
+                  style={[
+                    styles.statusMargin,
+                    {
+                      backgroundColor:
+                        item.status === "approved"
+                          ? "#5ED52C"
+                          : item.status === "rejected"
+                          ? "#EF3131"
+                          : item.status === "awaiting_revision"
+                          ? "#57C9E1"
+                          : "white",
+                    },
+                  ]}
+                >
+                  <Text style={styles.statusText}>{item.status}</Text>
                   {item.department_head &&
                     item.laboratory_head &&
                     item.service_staff && (
@@ -236,8 +242,8 @@ const PrototypingReportsPage = ({ navigation }) => {
         </View>
       </View>
     </CustomViewReverse>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   centered: {
@@ -321,9 +327,18 @@ const styles = StyleSheet.create({
     borderRadius: 80,
     alignItems: "center",
     height: 30,
-    width: 120,
+    width: "45%",
+    marginTop: 4,
+    justifyContent: "center",
     marginLeft: 10,
-    marginBottom: 10
+    marginBottom: 10,
+  },
+  statusText: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "black",
+    alignSelf: "center",
+    alignItems: "center",
   },
   btnPrint: {
     backgroundColor: "white",
@@ -339,6 +354,6 @@ const styles = StyleSheet.create({
     marginLeft: 4,
     marginTop: 5,
   },
-});
+})
 
-export default PrototypingReportsPage;
+export default PrototypingReportsPage

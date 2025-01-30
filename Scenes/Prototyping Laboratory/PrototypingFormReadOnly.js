@@ -196,24 +196,17 @@ export default function PrototypingFormReadOnly({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // marginTop: 200,
   },
   scrollContainer: {
     paddingVertical: 20,
     paddingHorizontal: 16,
-    marginTop: 80,
-    // overflow: "hidden",
-    // flexGrow: 1,
-    // backgroundColor: "#F00",
+    marginTop: 200,
   },
   formContainer: {
     flexGrow: 1,
     paddingHorizontal: 5,
-    backgroundColor: "#f5f5f5",
     paddingVertical: 20,
     borderRadius: 10,
-    // overflow: "hidden",
-    // paddingTop: 200,
   },
   title: {
     fontSize: 24,
@@ -221,6 +214,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 20,
     color: "#394f66",
+    padding: width * 0.08,
   },
   formSection: {
     marginBottom: 20,

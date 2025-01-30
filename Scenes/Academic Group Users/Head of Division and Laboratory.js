@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
     borderRadius: 80,
     alignItems: "center",
     height: 30,
-    width: "40%",
+    width: "45%",
     // marginLeft: 120,
     marginTop: 4,
     // alignContent: "center",
