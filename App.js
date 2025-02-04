@@ -7,7 +7,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // Scenes proposito general
 import LoginPage from "./Scenes/Login";
 import Register from "./Scenes/Register";
-import SettingsPage from "./Scenes/Settings";
 
 // Scenes Prestador de servicio
 import SocialServicePage from "./Scenes/Social Service/Prestador de Servicio"; // Pantalla principal prestador de servicio
@@ -32,13 +31,13 @@ import TeacherStudentPage from "./Scenes/Academic Group Users/TeacherStudent";
 import PrototypingReportsPage from "./Scenes/Prototyping Laboratory/PrototypingReports";
 import PrototypingAlreadyChecked from "./Scenes/Prototyping Laboratory/PrototypingReportAlreadyChecked";
 import PrototypingReportStDone from "./Scenes/Prototyping Laboratory/PrototypingReportStDone";
-import OrderPageReadOnly from "./Scenes/Social Service/OrderReports";
 import HeadDivisionLaboratoryPage from "./Scenes/Academic Group Users/Head of Division and Laboratory";
 //Settings
 import UpdateAccount from "./Scenes/settings/account_config";
 import SettingsPage from "./Scenes/Settings";
 import UpdatePassword from "./Scenes/settings/new_password";
 import ViewAccount from "./Scenes/settings/view_account";
+import { generatePDF } from "./Scenes/Prototyping Laboratory/PDFGenerator";
 
 const Stack = createNativeStackNavigator();
 const SocialServiceTap = createBottomTabNavigator();
@@ -111,6 +110,11 @@ function StRepCheck() {
       />
       <ReportCheckStack.Screen name="Check" component={PrototypingCheck} />
 
+      <ReportCheckStack.Screen
+        name="EditSubmission"
+        component={PrototypingFormEdit}
+      />
+      <ReportCheckStack.Screen name="GeneratePDF" component={generatePDF} />
       <ReportCheckStack.Screen
         name="ReportCheck"
         component={PrototypingFormReadOnly}
@@ -245,7 +249,7 @@ const SocialServiceApp = () => {
             iconName = focused
               ? "hardware-chip-sharp"
               : "hardware-chip-outline";
-          } else if (route.name === "RepProjects") {
+          } else if (route.name === "Registros") {
             iconName = focused ? "reader" : "reader-outline";
           } else if (route.name === "Configuración") {
             iconName = focused ? "settings" : "settings-outline";
@@ -258,10 +262,7 @@ const SocialServiceApp = () => {
     >
       <SocialServiceTap.Screen name="Principal" component={SocialServiceHome} />
       <SocialServiceTap.Screen name="Reparaciones" component={Fixes} />
-      <SocialServiceTap.Screen
-        name="RepProjects"
-        component={PrototypesOnStandby}
-      />
+      <SocialServiceTap.Screen name="Registros" component={StRepCheck} />
       <SocialServiceTap.Screen
         name="Configuración"
         component={SettingsScreen}

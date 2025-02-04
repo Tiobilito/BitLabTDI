@@ -23,6 +23,7 @@ export default function UpdateAccount() {
     email: "",
     phone: "",
     address: "",
+    zip_code: "",
     codeU: "",
     nss: "",
     rfc: "",
@@ -48,10 +49,11 @@ export default function UpdateAccount() {
           email: user.email,
           phone: user.number,
           address: user.address,
+          zip_code: user.zip_code,
           codeU: user.code.toString(),
           nss: user.nss,
           rfc: user.rfc,
-          salary: user.salary,
+          salary: user.salary.toString(),
           departmentID: user.department_id,
         });
       }
@@ -67,6 +69,7 @@ export default function UpdateAccount() {
   const handleUpdate = () => {
     try {
       const userCode = parseInt(originalCodeU, 10);
+      const salaryInt = parseInt(form.salary, 10);
 
       // Lista de campos requeridos
       const requiredFields = [
@@ -101,6 +104,11 @@ export default function UpdateAccount() {
         email: form.email,
         number: form.phone,
         user_type: userType,
+
+        //Solo si el userType es igual a 2
+        nss: userType === 2 ? form.nss : null,
+        rfc: userType === 2 ? form.rfc : null,
+        salary: userType === 2 ? salaryInt : null,
       };
 
       updateUser(userCode, updatedAccount);
@@ -172,6 +180,12 @@ export default function UpdateAccount() {
                 value: form.address,
                 onChange: (address) => setForm({ ...form, address }),
               },
+              {
+                label: "Codigo Postal",
+                value: form.zip_code,
+                onChange: (zip_code) => setForm({ ...form, zip_code }),
+                keyboardType: "numeric",
+              },
             ].map(({ label, value, onChange, keyboardType }) => (
               <View style={styles.inputWrapper} key={label}>
                 <Text style={styles.inputLabel}>{label}</Text>
@@ -193,6 +207,7 @@ export default function UpdateAccount() {
                     label: "NSS",
                     value: form.nss,
                     onChange: (nss) => setForm({ ...form, nss }),
+                    keyboardType: "numeric",
                   },
                   {
                     label: "RFC",

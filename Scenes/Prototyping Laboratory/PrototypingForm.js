@@ -30,6 +30,43 @@ const RadioButton = ({ label, value, selected, onSelect }) => {
 };
 
 export default function PrototypingForm() {
+  /* Estados del formulario */
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [projectType, setProjectType] = useState("");
+  const [roles, setRoles] = useState({ alumno: false, profesor: false });
+  const [studentCode, setStudentCode] = useState("");
+  const [teacherCode, setTeacherCode] = useState("");
+  const [application, setApplication] = useState("");
+  const [descriptionProject, setDescriptionProject] = useState("");
+  const [prototypeType, setPrototypeType] = useState("");
+  const [descriptionPrototype, setDescriptionPrototype] = useState("");
+  const [specificRequirementsDimensions, setspecificRequirementsDimensions] =
+    useState("");
+  const [specialCut, setSpecialCut] = useState("");
+  const [others, setOthers] = useState("");
+  const [remarks, setRemarks] = useState("");
+
+  // Función para limpiar todos los inputs
+  const resetForm = () => {
+    setName("");
+    setEmail("");
+    setPhone("");
+    setProjectType("");
+    setRoles({ alumno: false, profesor: false });
+    setStudentCode("");
+    setTeacherCode("");
+    setApplication("");
+    setDescriptionProject("");
+    setPrototypeType("");
+    setDescriptionPrototype("");
+    setspecificRequirementsDimensions("");
+    setSpecialCut("");
+    setOthers("");
+    setRemarks("");
+  };
+
   const SentProject = async () => {
     try {
       // Asignar null al rol no seleccionado
@@ -62,6 +99,9 @@ export default function PrototypingForm() {
 
       // Mostrar mensaje de éxito si todo va bien
       Alert.alert("Éxito", "Solicitud enviada exitosamente.");
+
+      // Limpiar el formulario después de enviar
+      resetForm();
     } catch (error) {
       // Mostrar mensaje de error si ocurre algún problema
       Alert.alert(
@@ -72,92 +112,66 @@ export default function PrototypingForm() {
     }
   };
 
-  /* Datos del contacto */
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [date, setDate] = useState("");
-  const [phone, setPhone] = useState("");
-  const [projectType, setProjectType] = useState("");
-  const [error, setError] = useState("");
-  const [roles, setRoles] = useState({ alumno: false, profesor: false });
-  const [studentCode, setStudentCode] = useState("");
-  const [teacherCode, setTeacherCode] = useState("");
-  const [application, setApplication] = useState("");
-  const [descriptionProject, setDescriptionProject] = useState("");
-
-  /* Datos del prototipo */
-  const [prototypeType, setPrototypeType] = useState("");
-  const [descriptionPrototype, setDescriptionPrototype] = useState({
-    impreso: false,
-    tresD: false,
-  });
-  const [specificRequirementsDimensions, setspecificRequirementsDimensions] =
-    useState("");
-  const [specialCut, setSpecialCut] = useState("");
-  const [others, setOthers] = useState("");
-  const [remarks, setRemarks] = useState("");
-
   const handleSubmit = () => {
-    // Validaciones de los campos de contacto
-    if (!name) {
-      Alert.alert("Error", "Por favor, ingresa tu nombre.");
-      return;
-    }
-    if (!email) {
-      Alert.alert("Error", "Por favor, ingresa tu correo electrónico.");
-      return;
-    }
-    if (!phone) {
-      Alert.alert("Error", "Por favor, ingresa tu número de teléfono.");
-      return;
+    // Definir un arreglo de validaciones
+    const validations = [
+      { condition: !name, message: "Por favor, ingresa tu nombre." },
+      {
+        condition: !email,
+        message: "Por favor, ingresa tu correo electrónico.",
+      },
+      {
+        condition: !phone,
+        message: "Por favor, ingresa tu número de teléfono.",
+      },
+      {
+        condition: !roles.alumno && !roles.profesor,
+        message: "Por favor, selecciona un rol (Alumno o Profesor).",
+      },
+      {
+        condition: roles.alumno && !studentCode,
+        message: "Por favor, ingresa el código de alumno.",
+      },
+      {
+        condition: roles.profesor && !teacherCode,
+        message: "Por favor, ingresa el código de profesor.",
+      },
+      {
+        condition: !projectType,
+        message: "Por favor, selecciona el tipo de proyecto.",
+      },
+      {
+        condition: !application,
+        message: "Por favor, ingresa la aplicación de tu proyecto.",
+      },
+      {
+        condition: !descriptionProject,
+        message: "Por favor, ingresa una descripción del proyecto.",
+      },
+      {
+        condition: !prototypeType,
+        message: "Por favor, selecciona el tipo de prototipo.",
+      },
+      {
+        condition: !descriptionPrototype,
+        message: "Por favor, ingresa una descripción del prototipo.",
+      },
+      {
+        condition: !specificRequirementsDimensions,
+        message: "Por favor, ingresa las dimensiones del prototipo.",
+      },
+    ];
+
+    // Recorrer el arreglo de validaciones
+    for (const validation of validations) {
+      if (validation.condition) {
+        Alert.alert("Error", validation.message);
+        return; // Detener la ejecución si hay un error
+      }
     }
 
-    // Validaciones de roles y códigos correspondientes
-    if (!roles.alumno && !roles.profesor) {
-      Alert.alert("Error", "Por favor, selecciona un rol (Alumno o Profesor).");
-      return;
-    }
-    if (roles.alumno && !studentCode) {
-      Alert.alert("Error", "Por favor, ingresa el código de alumno.");
-      return;
-    }
-    if (roles.profesor && !teacherCode) {
-      Alert.alert("Error", "Por favor, ingresa el código de profesor.");
-      return;
-    }
-
-    // Validaciones adicionales
-    if (!projectType) {
-      Alert.alert("Error", "Por favor, selecciona el tipo de proyecto.");
-      return;
-    }
-    if (!application) {
-      Alert.alert("Error", "Por favor, ingresa la aplicación de tu proyecto.");
-      return;
-    }
-    if (!descriptionProject) {
-      Alert.alert("Error", "Por favor, ingresa una descripción del proyecto.");
-      return;
-    }
-
-    // Validaciones del prototipo
-    if (!prototypeType) {
-      Alert.alert("Error", "Por favor, selecciona el tipo de prototipo.");
-      return;
-    }
-    if (!descriptionPrototype) {
-      Alert.alert("Error", "Por favor, ingresa una descripción del prototipo.");
-      return;
-    }
-    if (!specificRequirementsDimensions) {
-      Alert.alert("Error", "Por favor, ingresa las dimensiones del prototipo.");
-      return;
-    }
-
-    // Si todas las validaciones pasan, limpiar errores y enviar el formulario
-    //Alert.alert("Éxito", "Formulario enviado exitosamente");
+    // Si todas las validaciones pasan, enviar el formulario
     SentProject();
-    // Aquí va la lógica para enviar el formulario
   };
 
   /* Función para los checkbox */
@@ -293,7 +307,6 @@ export default function PrototypingForm() {
           onChangeText={setDescriptionProject}
           placeholder="Describe tu proyecto"
         />
-        {error && <Text style={styles.errorMessage}>{error}</Text>}
       </View>
 
       {/* Sección 2: Datos del Prototipo */}

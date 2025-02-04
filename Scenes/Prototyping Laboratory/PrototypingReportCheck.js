@@ -30,6 +30,7 @@ const PrototypingCheck = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [nameQuery, setNameQuery] = useState("");
   const [showNameFilter, setShowNameFilter] = useState(false);
+  const [user, setUser] = useState(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -43,6 +44,7 @@ const PrototypingCheck = ({ navigation }) => {
     try {
       const UData = await GetUserData();
       Data = await getAllProjectSubmissionsCheck(UData.User_type);
+      console.log("Tipo de usuario obtenido:", UData.User_type);
       const BData = Data.map((registro) => ({
         ...registro,
         Details: false,
@@ -50,6 +52,8 @@ const PrototypingCheck = ({ navigation }) => {
       setData(BData);
       setFullData(BData);
       setIsLoading(false);
+      setUser(UData.User_type);
+      console.log("Estado 'user' actualizado:", UData.User_type);
     } catch (error) {
       setError(error);
       console.log(error);
@@ -102,17 +106,24 @@ const PrototypingCheck = ({ navigation }) => {
   }
 
   const navigateToCheck = (id) => {
-    navigation.navigate("ReportCheck", { idReport: id });
+    console.log("Tipo de usuario: ", user);
+    switch (user) {
+      case 0:
+      case 1:
+        navigation.navigate("ReportCheck", { idReport: id });
+        break;
+      case 2:
+      case 3:
+      case 4:
+        navigation.navigate("EditSubmission", { idReport: id });
+        break;
+      default:
+        alert("Hola");
+    }
   };
 
   const navigateToPDF = (id) => {
     navigation.navigate("GeneratePDF", { idReport: id });
-  };
-
-  const navigateToEditForm = (id) => {
-    
-    navigation.navigate("EditSubmission", { idReport: id });
-    
   };
 
   const navigateToAlreadyChecked = () => {
@@ -125,6 +136,7 @@ const PrototypingCheck = ({ navigation }) => {
 
   return (
     <CustomViewReverse>
+      {console.log("Valor de 'user' en el renderizado:", user)}
       <View
         style={{
           height: HEIGHT * 0.88,
@@ -142,7 +154,16 @@ const PrototypingCheck = ({ navigation }) => {
             }}
             onPress={navigateToDone}
           >
-            <Text style={{ marginLeft: 6, marginTop: 2, color: "white", fontWeight: "bold" }}>Reportes Cerrados</Text>
+            <Text
+              style={{
+                marginLeft: 6,
+                marginTop: 2,
+                color: "white",
+                fontWeight: "bold",
+              }}
+            >
+              Reportes Cerrados
+            </Text>
           </Pressable>
           <Pressable
             style={{
@@ -154,7 +175,14 @@ const PrototypingCheck = ({ navigation }) => {
             }}
             onPress={navigateToAlreadyChecked}
           >
-            <Text style={{ marginLeft: 4, marginTop: 2, color: "white", fontWeight: "bold" }}>
+            <Text
+              style={{
+                marginLeft: 4,
+                marginTop: 2,
+                color: "white",
+                fontWeight: "bold",
+              }}
+            >
               Reportes Revisados
             </Text>
           </Pressable>

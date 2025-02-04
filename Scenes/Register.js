@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { getAllDepartamentos } from "../Modules/Operations DB Generals";
 import { addUser } from "../Modules/Operations DB Users";
-import { Picker } from "@react-native-picker/picker";
+import RNPickerSelect from "react-native-picker-select"; // Importar RNPickerSelect
 import { CustomView } from "./components/CustomView";
 
 const Scale = Dimensions.get("window").width;
@@ -22,7 +22,7 @@ const Register = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userType, setUserType] = useState("");
+  const [userType, setUserType] = useState(""); // Cambiado a cadena vacía
   const [address, setAddress] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [phoneNum, setPhoneNum] = useState("");
@@ -51,7 +51,7 @@ const Register = ({ navigation }) => {
       Alert.alert("Error", "El nombre es obligatorio.");
       return false;
     }
-    if (!userType || userType != "null") {
+    if (!userType) {
       Alert.alert("Error", "El tipo de usuario es obligatorio.");
       return false;
     }
@@ -78,7 +78,7 @@ const Register = ({ navigation }) => {
   const Verify = async () => {
     if (isFormValid()) {
       const UserData = {
-        code: parseInt(code), // Convertir a entero
+        code: parseInt(code),
         name: username,
         user_type: parseInt(userType, 10),
         address: address,
@@ -86,9 +86,9 @@ const Register = ({ navigation }) => {
         email: email,
         nss: userType === "2" ? nss : "",
         rfc: userType === "2" ? rfc : "",
-        salary: userType === "2" ? parseFloat(salary) : null, // Convertir a número con decimales
+        salary: userType === "2" ? parseFloat(salary) : null,
         number: phoneNum,
-        department_id: departmentID ? parseInt(departmentID) : null, // Convertir a entero si existe
+        department_id: departmentID ? parseInt(departmentID) : null,
         password: password,
       };
       await addUser(UserData);
@@ -96,6 +96,18 @@ const Register = ({ navigation }) => {
       navigation.goBack();
     }
   };
+
+  // Opciones para el selector de roles
+  const roleOptions = [
+    { label: "Profesor", value: "3" },
+    { label: "Alumno", value: "4" },
+  ];
+
+  // Opciones para el selector de departamentos
+  const departmentOptions = departments.map((dept) => ({
+    label: dept.name,
+    value: dept.id.toString(),
+  }));
 
   return (
     <CustomView>
@@ -138,11 +150,13 @@ const Register = ({ navigation }) => {
           />
 
           <Text style={styles.textForm}>Rol:</Text>
-          <Picker selectedValue={userType} onValueChange={handleUserTypeChange}>
-            <Picker.Item label="Selecciona un rol" value="null" />
-            <Picker.Item label="Profesor" value="3" />
-            <Picker.Item label="Alumno" value="4" />
-          </Picker>
+          <RNPickerSelect
+            onValueChange={handleUserTypeChange}
+            items={roleOptions}
+            placeholder={{ label: "Selecciona un rol", value: "" }} // Cambiado a cadena vacía
+            value={userType}
+            style={pickerSelectStyles}
+          />
 
           <Text style={styles.textForm}>Dirección (opcional)</Text>
           <TextInput
@@ -210,15 +224,13 @@ const Register = ({ navigation }) => {
           )}
 
           <Text style={styles.textForm}>ID departamento (opcional)</Text>
-          <Picker
-            selectedValue={departmentID}
-            onValueChange={(itemValue) => setDepartmentID(itemValue)}
-          >
-            <Picker.Item label="Selecciona un departamento" value="" />
-            {departments.map((dept) => (
-              <Picker.Item key={dept.id} label={dept.name} value={dept.id} />
-            ))}
-          </Picker>
+          <RNPickerSelect
+            onValueChange={(value) => setDepartmentID(value)}
+            items={departmentOptions}
+            placeholder={{ label: "Selecciona un departamento", value: "" }}
+            value={departmentID}
+            style={pickerSelectStyles}
+          />
         </View>
 
         <View
@@ -240,6 +252,30 @@ const Register = ({ navigation }) => {
     </CustomView>
   );
 };
+
+// Estilos para RNPickerSelect
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 4,
+    color: "black",
+    paddingRight: 30, // Para evitar que el texto se solape con el ícono
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    color: "black",
+    paddingRight: 30, // Para evitar que el texto se solape con el ícono
+  },
+});
 
 const styles = StyleSheet.create({
   input: {

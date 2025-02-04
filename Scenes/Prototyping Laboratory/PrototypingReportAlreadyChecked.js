@@ -29,6 +29,7 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [nameQuery, setNameQuery] = useState("");
   const [showNameFilter, setShowNameFilter] = useState(false);
+  const [user, setUser] = useState(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -42,6 +43,7 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
     try {
       const UData = await GetUserData();
       Data = await getAllProjectSubmissionsChecked(UData.User_type);
+      console.log("Tipo de usuario obtenido:", UData.User_type);
       let BData = Data.map((registro) => ({
         ...registro,
         Details: false,
@@ -67,6 +69,8 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
       setData(BData);
       setFullData(BData);
       setIsLoading(false);
+      setUser(UData.User_type);
+      console.log("Estado 'user' actualizado:", UData.User_type);
     } catch (error) {
       setError(error);
       console.log(error);
@@ -119,7 +123,20 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
   }
 
   const navigateToCheck = (id) => {
-    navigation.navigate("ReportCheck", { idReport: id });
+    console.log("Tipo de usuario: ", user);
+    switch (user) {
+      case 0:
+      case 1:
+        navigation.navigate("ReportCheck", { idReport: id });
+        break;
+      case 2:
+      case 3:
+      case 4:
+        navigation.navigate("EditSubmission", { idReport: id });
+        break;
+      default:
+        alert("Hola");
+    }
   };
 
   const navigateToPDF = (id) => {
@@ -132,6 +149,7 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
 
   return (
     <CustomViewReverse>
+      {console.log("Valor de 'user' en el renderizado:", user)}
       <View
         style={{
           height: HEIGHT * 0.88,
