@@ -42,7 +42,7 @@ const OrderPageReadOnly = ({ navigation }) => {
             <Text style={styles.text}>Diagnóstico General: </Text>
           </View>
         }
-        data={cost.length > 0 ? cost : []}
+        data={costData.length > 0 ? costData : []}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={<Text>No hay costos registrados</Text>}

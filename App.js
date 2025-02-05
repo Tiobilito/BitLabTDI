@@ -7,6 +7,10 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // Scenes proposito general
 import LoginPage from "./Scenes/Login";
 import Register from "./Scenes/Register";
+import UpdateAccount from "./Scenes/settings/account_config";
+import SettingsPage from "./Scenes/Settings";
+import UpdatePassword from "./Scenes/settings/new_password";
+import ViewAccount from "./Scenes/settings/view_account";
 
 // Scenes Prestador de servicio
 import SocialServicePage from "./Scenes/Social Service/Prestador de Servicio"; // Pantalla principal prestador de servicio
@@ -22,22 +26,15 @@ import OrderPageReadOnly from "./Scenes/Social Service/OrderReports"; // Orden d
 // Scenes Laboratorio de Prototipado
 import PrototypingForm from "./Scenes/Prototyping Laboratory/PrototypingForm";
 import PrototypingCheck from "./Scenes/Prototyping Laboratory/PrototypingReportCheck";
-import PrototypesOnStandby from "./Scenes/Prototyping Laboratory/PrototypesOnStandby";
 import PrototypingFormReadOnly from "./Scenes/Prototyping Laboratory/PrototypingFormReadOnly";
 import GeneratePrototypePDF from "./Scenes/Prototyping Laboratory/GeneratePrototypePDF";
 import PrototypingFormEdit from "./Scenes/Prototyping Laboratory/PrototypingFormEditable";
-
-import TeacherStudentPage from "./Scenes/Academic Group Users/TeacherStudent";
 import PrototypingReportsPage from "./Scenes/Prototyping Laboratory/PrototypingReports";
 import PrototypingAlreadyChecked from "./Scenes/Prototyping Laboratory/PrototypingReportAlreadyChecked";
 import PrototypingReportStDone from "./Scenes/Prototyping Laboratory/PrototypingReportStDone";
 import HeadDivisionLaboratoryPage from "./Scenes/Academic Group Users/Head of Division and Laboratory";
-//Settings
-import UpdateAccount from "./Scenes/settings/account_config";
-import SettingsPage from "./Scenes/Settings";
-import UpdatePassword from "./Scenes/settings/new_password";
-import ViewAccount from "./Scenes/settings/view_account";
-import { generatePDF } from "./Scenes/Prototyping Laboratory/PDFGenerator";
+
+import TeacherStudentPage from "./Scenes/Academic Group Users/TeacherStudent";
 
 const Stack = createNativeStackNavigator();
 const SocialServiceTap = createBottomTabNavigator();
@@ -46,11 +43,12 @@ const StaffTap = createBottomTabNavigator();
 const SocialServiceStack = createNativeStackNavigator();
 const RepairClientDevicesStack = createNativeStackNavigator();
 const ReportCheckStack = createNativeStackNavigator();
+const ReportListAG = createNativeStackNavigator();
 const AcademicGroupStack = createNativeStackNavigator();
 const StaffStack = createNativeStackNavigator();
-
 const SettingsStack = createNativeStackNavigator();
 
+//Stack que abarca todas las ventanas relacionadas con la configuración de la cuenta
 function SettingsScreen() {
   return (
     <SettingsStack.Navigator screenOptions={{ headerShown: false }}>
@@ -62,6 +60,30 @@ function SettingsScreen() {
   );
 }
 
+//Stack que abarca todas las ventanas relacionadas con los reportes del grupo academico
+function PrototypingReportsAG() {
+  return (
+    <ReportListAG.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="ReportsList"
+    >
+      <ReportListAG.Screen
+        name="ReportsList"
+        component={PrototypingReportsPage}
+      />
+      <ReportListAG.Screen
+        name="GeneratePDF"
+        component={GeneratePrototypePDF}
+      />
+      <ReportListAG.Screen
+        name="EditSubmission"
+        component={PrototypingFormEdit}
+      />
+    </ReportListAG.Navigator>
+  );
+}
+
+//Stack que abarca todas las ventanas relacionadas con los estudiantes y maestros
 function AcademicGroupHome() {
   return (
     <AcademicGroupStack.Navigator screenOptions={{ headerShown: false }}>
@@ -70,21 +92,30 @@ function AcademicGroupHome() {
         name="ReportForm"
         component={PrototypingForm}
       />
+      <AcademicGroupStack.Screen
+        name="OrderRead"
+        component={OrderPageReadOnly}
+      />
+      <AcademicGroupStack.Screen
+        name="GeneratePDF"
+        component={GeneratePrototypePDF}
+      />
     </AcademicGroupStack.Navigator>
   );
 }
 
-//Stack que abarca todas las ventanas relacionadas con el jefe de division y de laboratorio
+//Stack que abarca todas las ventanas relacionadas con el jefe de division y de laboratorio (home)
 function StaffHome() {
   return (
     <StaffStack.Navigator screenOptions={{ headerShown: false }}>
       <StaffStack.Screen name="Home" component={HeadDivisionLaboratoryPage} />
       <StaffStack.Screen name="ReportForm" component={PrototypingForm} />
+      <StaffStack.Screen name="GeneratePDF" component={GeneratePrototypePDF} />
     </StaffStack.Navigator>
   );
 }
 
-//Stack que abarca todas las ventanas relacionadas con el prestador de servicio
+//Stack que abarca todas las ventanas relacionadas con el prestador de servicio (home)
 function SocialServiceHome() {
   return (
     <SocialServiceStack.Navigator screenOptions={{ headerShown: false }}>
@@ -93,6 +124,10 @@ function SocialServiceHome() {
         component={SocialServicePage}
       />
       <SocialServiceStack.Screen name="AddClient" component={AddClientPage} />
+      <SocialServiceStack.Screen
+        name="GeneratePDF"
+        component={GeneratePrototypePDF}
+      />
     </SocialServiceStack.Navigator>
   );
 }
@@ -104,17 +139,7 @@ function StRepCheck() {
       screenOptions={{ headerShown: false }}
       initialRouteName="Check"
     >
-      <ReportCheckStack.Screen
-        name="RepProjects"
-        component={PrototypesOnStandby}
-      />
       <ReportCheckStack.Screen name="Check" component={PrototypingCheck} />
-
-      <ReportCheckStack.Screen
-        name="EditSubmission"
-        component={PrototypingFormEdit}
-      />
-      <ReportCheckStack.Screen name="GeneratePDF" component={generatePDF} />
       <ReportCheckStack.Screen
         name="ReportCheck"
         component={PrototypingFormReadOnly}
@@ -168,16 +193,8 @@ const AcademicGroupApp = () => {
           let iconName;
           if (route.name === "Principal") {
             iconName = focused ? "home" : "home-outline";
-          } else if (route.name === "RegistrosOSB") {
+          } else if (route.name === "Reportes Protoripado") {
             iconName = focused ? "reader" : "reader-outline";
-          } else if (route.name === "Prototipo") {
-            iconName = focused
-              ? "hardware-chip-sharp"
-              : "hardware-chip-outline";
-          } else if (route.name === "Prototipo") {
-            iconName = focused
-              ? "hardware-chip-sharp"
-              : "hardware-chip-outline";
           } else if (route.name === "Configuración") {
             iconName = focused ? "settings" : "settings-outline";
           }
@@ -188,8 +205,10 @@ const AcademicGroupApp = () => {
       })}
     >
       <StudentsTap.Screen name="Principal" component={AcademicGroupHome} />
-      <StudentsTap.Screen name="RegistrosOSB" component={PrototypesOnStandby} />
-      <StudentsTap.Screen name="Prototipo" component={PrototypingForm} />
+      <StudentsTap.Screen
+        name="Reportes Protoripado"
+        component={PrototypingReportsAG}
+      />
       <StudentsTap.Screen name="Configuración" component={SettingsScreen} />
     </StudentsTap.Navigator>
   );
@@ -262,7 +281,6 @@ const SocialServiceApp = () => {
     >
       <SocialServiceTap.Screen name="Principal" component={SocialServiceHome} />
       <SocialServiceTap.Screen name="Reparaciones" component={Fixes} />
-      <SocialServiceTap.Screen name="Registros" component={StRepCheck} />
       <SocialServiceTap.Screen
         name="Configuración"
         component={SettingsScreen}

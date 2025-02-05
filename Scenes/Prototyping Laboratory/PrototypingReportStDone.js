@@ -189,12 +189,7 @@ const PrototypingReportStDone = ({ navigation }) => {
                   !item.laboratory_head ||
                   !item.service_staff ? (
                     <View style={styles.iconCheck}>
-                      <Icon
-                        name="timer-outline"
-                        size={24}
-                        color="#ffcc00"
-                        style={styles.warningIcon}
-                      />
+                      <Icon name="close-circle-outline" size={24} color="red" />
                     </View>
                   ) : (
                     <View style={styles.iconCheck}>

@@ -9,10 +9,12 @@ import {
   FlatList,
   ActivityIndicator,
   Dimensions,
+  Pressable
 } from "react-native";
 import filter from "lodash.filter";
 import { useFocusEffect } from "@react-navigation/native";
-import { getAllProjectSubmissions } from "../../Modules/Operations DB Prototyping";
+import { getAllProjectSubmissionsByUserId } from "../../Modules/Operations DB Prototyping";
+import { GetUserData } from "../../Modules/DataInfo";
 import { CustomViewReverse } from "../components/CustomViewReverse";
 import Icon from "react-native-vector-icons/Ionicons"; // Asegúrate de tener esta librería instalada
 
@@ -37,7 +39,8 @@ const PrototypingReportsPage = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const Data = await getAllProjectSubmissions();
+      const User = await GetUserData();
+      const Data = await getAllProjectSubmissionsByUserId(User.Code);
       const BData = Data.map((registro) => ({
         ...registro,
         Details: false,
@@ -97,7 +100,7 @@ const PrototypingReportsPage = ({ navigation }) => {
   }
 
   const navigateToEditSubmission = (id) => {
-    navigation.navigate("EditSubmission", { idSubmission: id });
+    navigation.navigate("EditSubmission", { idReport: id });
   };
 
   const navigateToPDF = (id) => {
@@ -172,36 +175,35 @@ const PrototypingReportsPage = ({ navigation }) => {
                     <Text style={styles.name}>{item.applicant_name}</Text>
                     <Text style={styles.email}>{item.application}</Text>
                   </View>
+                </TouchableOpacity>
 
-                  {/* Mostrar icono si los campos department_head, laboratory_head o service_staff son false */}
-
-                  {/* Mostrar el icono de advertencia o el icono de aprobado */}
-                  {!item.department_head ||
-                  !item.laboratory_head ||
-                  !item.service_staff ? (
-                    <Icon
-                      name="timer-outline"
-                      size={24}
-                      color="#ffcc00"
-                      style={styles.warningIcon}
-                    />
-                  ) : (
-                    <Icon
-                      name="checkmark-circle-outline"
-                      size={24}
-                      color="green"
-                    />
-                  )}
+                {/* Mostrar el status del reporte */}
+                <View style={styles.statusMargin}>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontWeight: "bold",
+                      color: "black",
+                    }}
+                  >
+                    {item.status}
+                  </Text>
                   {item.department_head &&
                     item.laboratory_head &&
                     item.service_staff && (
-                      <Icon
-                        name="checkmark-circle-outline"
-                        size={24}
-                        color="green"
-                      />
+                      <View>
+                        <Pressable
+                          onPress={() => navigateToPDF(item.id)}
+                          style={styles.btnPrint}
+                        >
+                          <Image
+                            source={require("../../Resources/imagenes/pdf.png")}
+                            style={styles.buttonImagePrint}
+                          />
+                        </Pressable>
+                      </View>
                     )}
-                </TouchableOpacity>
+                </View>
 
                 {item.Details && (
                   <View style={styles.details}>
@@ -222,12 +224,6 @@ const PrototypingReportsPage = ({ navigation }) => {
                       >
                         <Image
                           source={require("../../Resources/imagenes/editar.png")}
-                          style={styles.buttonImage}
-                        />
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={() => navigateToPDF(item.id)}>
-                        <Image
-                          source={require("../../Resources/imagenes/pdf.png")}
                           style={styles.buttonImage}
                         />
                       </TouchableOpacity>
@@ -319,6 +315,29 @@ const styles = StyleSheet.create({
   },
   warningIcon: {
     marginLeft: 10,
+  },
+  statusMargin: {
+    backgroundColor: "white",
+    borderRadius: 80,
+    alignItems: "center",
+    height: 30,
+    width: 120,
+    marginLeft: 10,
+    marginBottom: 10
+  },
+  btnPrint: {
+    backgroundColor: "white",
+    width: 35,
+    height: 35,
+    borderRadius: 80,
+    marginLeft: 200,
+    marginTop: -25,
+  },
+  buttonImagePrint: {
+    width: 24,
+    height: 24,
+    marginLeft: 4,
+    marginTop: 5,
   },
 });
 

@@ -83,8 +83,8 @@ export default function PrototypingFormEdit() {
           getPrototypeById(idReport),
           GetUserData(),
         ]);
-        console.log(fetchedData.student_user_code);
-        console.log(fetchedData.professor_user_code);
+        //console.log(fetchedData.student_user_code);
+        //console.log(fetchedData.professor_user_code);
         setFormData({
           name: fetchedData.applicant_name,
           email: fetchedData.contact_email,

@@ -14,7 +14,9 @@ import { useFocusEffect } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { CustomViewReverse } from "../components/CustomViewReverse";
 import { getAllOrdersByUserId } from "../../Modules/Operations DB Fixes";
-import { getAllProjectSubmissions, getAllProjectSubmissionsByUserId } from "../../Modules/Operations DB Prototyping";
+import {
+  getAllProjectSubmissions,
+} from "../../Modules/Operations DB Prototyping";
 import { GetUserData } from "../../Modules/DataInfo";
 
 const WIDTH = Dimensions.get("screen").width;
@@ -22,7 +24,6 @@ const HEIGHT = Dimensions.get("screen").height;
 
 const HeadDivisionLaboratoryPage = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [dataOrders, setDataOrders] = useState([]);
   const [dataReports, setDataReports] = useState([]); // Nueva lista de reportes
   const [showListOrders, setShowListOrders] = useState(true); // Estado para alternar entre listas
 
@@ -40,17 +41,11 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
   const fetchData = async () => {
     try {
       const UData = await GetUserData();
-      let Data = await getAllOrdersByUserId(UData.Code);
       let ReportsData = await getAllProjectSubmissions(UData.Code);
-      let BData = Data.map((registro) => ({
-        ...registro,
-        Details: false,
-      }));
       let BRData = ReportsData.map((registro) => ({
         ...registro,
         Details: false,
       }));
-      setDataOrders(BData);
       setDataReports(BRData);
       setIsLoading(false);
     } catch (error) {
@@ -96,13 +91,6 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
       <View style={styles.btnShowStats}>
         <TouchableOpacity
           style={styles.btnShow}
-          onPress={() => toggleList("Ordenes")}
-        >
-          <Ionicons name="add-circle" style={styles.iconShowStats} />
-          <Text style={styles.textShowStats}>Ordenes</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.btnShow}
           onPress={() => toggleList("Reportes")}
         >
           <Ionicons name="clipboard" style={styles.iconShowStats} />
@@ -110,43 +98,28 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.tables}>
-        {showListOrders ? (
-          <FlatList
-            data={dataOrders}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <View style={styles.itemContainer}>
-                <Text>{item.id}</Text>
-              </View>
-            )}
-            ListEmptyComponent={
-              <Text style={styles.emptyText}>No hay ordenes disponibles</Text>
-            }
-          />
-        ) : (
-          <FlatList
-            data={dataReports}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <View style={styles.itemContainer}>
-                <Pressable onPress={() => toggleDetailsReports(item.id)}>
-                  <Text style={styles.TextHeader}>{item.application}</Text>
-                </Pressable>
+        <FlatList
+          data={dataReports}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View style={styles.itemContainer}>
+              <Pressable onPress={() => toggleDetailsReports(item.id)}>
+                <Text style={styles.TextHeader}>{item.application}</Text>
+              </Pressable>
+              <View style={styles.statusMargin}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    fontWeight: "bold",
+                    color: "black",
+                  }}
+                >
+                  {item.status}
+                </Text>
                 {item.department_head &&
                   item.laboratory_head &&
                   item.service_staff && (
                     <View>
-                      <View style={styles.statusMargin}>
-                        <Text
-                          style={{
-                            fontSize: 15,
-                            fontWeight: "bold",
-                            marginTop: 5,
-                          }}
-                        >
-                          {item.status}
-                        </Text>
-                      </View>
                       <Pressable
                         onPress={() => navigateToPDF(item.id)}
                         style={styles.btnPrint}
@@ -158,27 +131,27 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
                       </Pressable>
                     </View>
                   )}
-                {item.Details && (
-                  <View>
-                    <Text
-                      style={{
-                        color: "white",
-                        fontSize: 20,
-                        marginLeft: 15,
-                        marginTop: 5,
-                      }}
-                    >
-                      {item.submission_date}
-                    </Text>
-                  </View>
-                )}
               </View>
-            )}
-            ListEmptyComponent={
-              <Text style={styles.emptyText}>No hay reportes disponibles</Text>
-            }
-          />
-        )}
+              {item.Details && (
+                <View>
+                  <Text
+                    style={{
+                      color: "white",
+                      fontSize: 20,
+                      marginLeft: 15,
+                      marginTop: 5,
+                    }}
+                  >
+                    {item.submission_date}
+                  </Text>
+                </View>
+              )}
+            </View>
+          )}
+          ListEmptyComponent={
+            <Text style={styles.emptyText}>No hay reportes disponibles</Text>
+          }
+        />
       </View>
     </CustomViewReverse>
   );
@@ -216,13 +189,13 @@ const styles = StyleSheet.create({
     width: 35,
     height: 35,
     borderRadius: 80,
-    marginLeft: 250,
+    marginLeft: 180,
     marginTop: -35,
   },
   buttonImage: {
     width: 24,
     height: 24,
-    marginLeft: 5,
+    marginLeft: 4,
     marginTop: 5,
   },
   btnAction: {
@@ -271,7 +244,7 @@ const styles = StyleSheet.create({
   },
   TextHeader: {
     color: "white",
-    fontSize: 35,
+    fontSize: 20,
     fontWeight: "bold",
   },
   statusMargin: {
@@ -279,9 +252,9 @@ const styles = StyleSheet.create({
     borderRadius: 80,
     alignItems: "center",
     height: 30,
-    width: 130,
-    marginLeft: 110,
-    marginTop: -35,
+    width: 120,
+    marginLeft: 120,
+    marginTop: 0,
   },
 });
 
