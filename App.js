@@ -281,6 +281,7 @@ const SocialServiceApp = () => {
     >
       <SocialServiceTap.Screen name="Principal" component={SocialServiceHome} />
       <SocialServiceTap.Screen name="Reparaciones" component={Fixes} />
+      <SocialServiceTap.Screen name="Registros" component={StRepCheck} />
       <SocialServiceTap.Screen
         name="Configuración"
         component={SettingsScreen}
