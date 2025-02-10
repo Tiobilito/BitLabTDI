@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect } from "react"
 import {
   StyleSheet,
   TextInput,
@@ -9,71 +9,83 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-} from "react-native";
-import { getAllDepartamentos } from "../Modules/Operations DB Generals";
-import { addUser } from "../Modules/Operations DB Users";
-import { Picker } from "@react-native-picker/picker";
-import { CustomView } from "./components/CustomView";
+} from "react-native"
+import { getAllDepartamentos } from "../Modules/Operations DB Generals"
+import { addUser } from "../Modules/Operations DB Users"
+import { Picker } from "@react-native-picker/picker"
+import { CustomView } from "./components/CustomView"
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from "react-native-reanimated"
 
-const Scale = Dimensions.get("window").width;
+const Scale = Dimensions.get("window").width
 
 const Register = ({ navigation }) => {
-  const [code, setCode] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [userType, setUserType] = useState("");
-  const [address, setAddress] = useState("");
-  const [zipCode, setZipCode] = useState("");
-  const [phoneNum, setPhoneNum] = useState("");
-  const [nss, setNss] = useState("");
-  const [rfc, setRfc] = useState("");
-  const [salary, setSalary] = useState("");
-  const [departmentID, setDepartmentID] = useState("");
-  const [departments, setDepartments] = useState([]);
+  const [code, setCode] = useState("")
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [userType, setUserType] = useState("")
+  const [address, setAddress] = useState("")
+  const [zipCode, setZipCode] = useState("")
+  const [phoneNum, setPhoneNum] = useState("")
+  const [nss, setNss] = useState("")
+  const [rfc, setRfc] = useState("")
+  const [salary, setSalary] = useState("")
+  const [departmentID, setDepartmentID] = useState("")
+  const [departments, setDepartments] = useState([])
+
+  const translateY = useSharedValue(-1000)
 
   useEffect(() => {
     const loadDepartments = async () => {
-      const data = await getAllDepartamentos();
+      const data = await getAllDepartamentos()
       if (data) {
-        setDepartments(data);
+        setDepartments(data)
       }
-    };
-    loadDepartments();
-  }, []);
+    }
+    loadDepartments()
+
+    // Animación
+    setTimeout(() => {
+      handleTranslateY()
+    }, 800)
+  }, [])
 
   const isFormValid = () => {
     if (!code) {
-      Alert.alert("Error", "El código es obligatorio.");
-      return false;
+      Alert.alert("Error", "El código es obligatorio.")
+      return false
     }
     if (!username) {
-      Alert.alert("Error", "El nombre es obligatorio.");
-      return false;
+      Alert.alert("Error", "El nombre es obligatorio.")
+      return false
     }
     if (!userType || userType != "null") {
-      Alert.alert("Error", "El tipo de usuario es obligatorio.");
-      return false;
+      Alert.alert("Error", "El tipo de usuario es obligatorio.")
+      return false
     }
     if (!password) {
-      Alert.alert("Error", "La contraseña es obligatoria.");
-      return false;
+      Alert.alert("Error", "La contraseña es obligatoria.")
+      return false
     }
-    return true;
-  };
+    return true
+  }
 
   const resetFields = () => {
-    setNss("");
-    setRfc("");
-    setSalary("");
-  };
+    setNss("")
+    setRfc("")
+    setSalary("")
+  }
 
   const handleUserTypeChange = (value) => {
-    setUserType(value);
+    setUserType(value)
     if (value !== "2") {
-      resetFields();
+      resetFields()
     }
-  };
+  }
 
   const Verify = async () => {
     if (isFormValid()) {
@@ -90,19 +102,33 @@ const Register = ({ navigation }) => {
         number: phoneNum,
         department_id: departmentID ? parseInt(departmentID) : null, // Convertir a entero si existe
         password: password,
-      };
-      await addUser(UserData);
-      Alert.alert("Éxito", "Usuario registrado exitosamente.");
-      navigation.goBack();
+      }
+      await addUser(UserData)
+      Alert.alert("Éxito", "Usuario registrado exitosamente.")
+      navigation.goBack()
     }
-  };
+  }
 
+  const handleTranslateY = () => {
+    translateY.value = withSpring(0, {
+      damping: 18,
+      stiffness: 180,
+      mass: 1,
+    })
+  }
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: translateY.value }],
+  }))
+  
   return (
     <CustomView>
-      <Image
-        source={require("../Resources/imagenes/BITLABTDI.png")}
-        style={styles.Logo}
-      />
+      <Animated.View style={animatedStyle}>
+        <Image
+          source={require("../Resources/imagenes/BITLABTDI.png")}
+          style={styles.Logo}
+        />
+      </Animated.View>
       <Text
         style={{ fontSize: Scale > 400 ? 50 : 20, marginBottom: Scale * 0.05 }}
       >
@@ -238,8 +264,8 @@ const Register = ({ navigation }) => {
         <View style={{ marginBottom: Scale * 0.1 }}></View>
       </ScrollView>
     </CustomView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   input: {
@@ -275,6 +301,6 @@ const styles = StyleSheet.create({
     height: Scale > 400 ? 400 : 250,
     marginTop: "10%",
   },
-});
+})
 
-export default Register;
+export default Register

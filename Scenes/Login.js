@@ -12,12 +12,19 @@ import {
 import { GetUserData, StoreUserData } from "../Modules/DataInfo"
 import { CheckUser } from "../Modules/Operations DB Users"
 import { CustomView } from "./components/CustomView"
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from "react-native-reanimated"
 
 const Scale = Dimensions.get("window").width
 
 const LoginPage = ({ navigation }) => {
   const [code, setCode] = useState("")
   const [password, setPassword] = useState("")
+
+  const translateY = useSharedValue(-1000)
   /*
   useEffect(() => {
     const loadUserData = async () => {
@@ -30,6 +37,13 @@ const LoginPage = ({ navigation }) => {
     loadUserData();
   }, []);
   */
+
+  useEffect(() => {
+    // Add 1500ms of delay
+    setTimeout(() => {
+      handleTranslateY()
+    }, 800)
+  }, [])
 
   const Verify = async () => {
     const Verify = await CheckUser(code, password)
@@ -55,14 +69,28 @@ const LoginPage = ({ navigation }) => {
     }
   }
 
+  const handleTranslateY = () => {
+    translateY.value = withSpring(0, {
+      damping: 18,
+      stiffness: 180,
+      mass: 1,
+    })
+  }
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: translateY.value }],
+  }))
+
   return (
     <CustomView>
       <ScrollView>
         <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <Image
-            source={require("../Resources/imagenes/BITLABTDI.png")}
-            style={styles.Logo}
-          />
+          <Animated.View style={animatedStyle}>
+            <Image
+              source={require("../Resources/imagenes/BITLABTDI.png")}
+              style={styles.Logo}
+            />
+          </Animated.View>
           <Text style={{ fontSize: Scale > 400 ? 40 : 20, fontWeight: "bold" }}>
             Ingresa a tu cuenta
           </Text>

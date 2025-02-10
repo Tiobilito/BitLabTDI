@@ -1,6 +1,10 @@
-import React, { ReactNode } from "react"
+import React, { ReactNode, useEffect } from "react"
 import { View, StyleSheet, Dimensions } from "react-native"
-
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated"
 interface Props {
   children: ReactNode
 }
@@ -8,10 +12,46 @@ interface Props {
 const { width, height } = Dimensions.get("window")
 
 export const CustomViewReverse = ({ children }: Props) => {
+  const translateX = useSharedValue(-1000)
+  const translateY = useSharedValue(1000)
+  const rotateMain = useSharedValue(0)
+  const rotateBack = useSharedValue(140)
+
+  useEffect(() => handleTranslate(), [])
+
+  const handleTranslate = () => {
+    translateX.value = withTiming(-width * 0.3, { duration: 1000 })
+    translateY.value = withTiming(height * 0.48, { duration: 900 })
+    rotateBack.value = withTiming(70, { duration: 1000 })
+    rotateMain.value = withTiming(5, { duration: 900 })
+  }
+
+  const animatedTranslateXStyle = useAnimatedStyle(() => ({
+    transform: [
+      {
+        translateX: translateX.value as number,
+      },
+      {
+        rotate: `${rotateBack.value}deg` as string,
+      },
+    ] as const,
+  }))
+
+  const animatedTranslateYStyle = useAnimatedStyle(() => ({
+    transform: [
+      {
+        translateY: translateY.value as number,
+      },
+      {
+        rotate: `${rotateMain.value}deg` as string,
+      },
+    ] as const,
+  }))
+
   return (
-    <View style={[styles.background]}>
-      <View style={styles.backTriangle} />
-      <View style={styles.mainTriangle} />
+    <View style={styles.background}>
+      <Animated.View style={[styles.backTriangle, animatedTranslateXStyle]} />
+      <Animated.View style={[styles.mainTriangle, animatedTranslateYStyle]} />
       <View style={{ justifyContent: "center", alignItems: "center" }}>
         {children}
       </View>
@@ -24,13 +64,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     alignItems: "center",
     justifyContent: "center",
-    // zIndex: -2,
-    // width: "100%",
-    // height: "100%",
   },
   mainTriangle: {
-    width: 0,
-    height: 0,
     position: "absolute",
     backgroundColor: "transparent",
     borderStyle: "solid",
@@ -41,9 +76,8 @@ const styles = StyleSheet.create({
     borderRightColor: "transparent",
     borderBottomColor: "#328EC5",
     transform: [{ rotate: "5deg" }],
-    bottom: -height * 0.15,
+    // bottom: -height * 0.15,
     left: -width * 0.01,
-    // zIndex: 0
   },
   backTriangle: {
     width: 0,
@@ -59,9 +93,5 @@ const styles = StyleSheet.create({
     transform: [{ rotate: "70deg" }],
     position: "absolute",
     bottom: -height * 0.2,
-    left: -width * 0.3,
-    // marginTop: "150%",
-    // marginLeft: "-60%",
-    // zIndex: -1,
   },
 })
