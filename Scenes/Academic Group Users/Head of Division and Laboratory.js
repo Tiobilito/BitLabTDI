@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback } from "react"
 import {
   StyleSheet,
   Text,
@@ -9,18 +9,15 @@ import {
   Image,
   ActivityIndicator,
   Pressable,
-} from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { CustomViewReverse } from "../components/CustomViewReverse";
-import { getAllOrdersByUserId } from "../../Modules/Operations DB Fixes";
-import {
-  getAllProjectSubmissions,
-} from "../../Modules/Operations DB Prototyping";
-import { GetUserData } from "../../Modules/DataInfo";
+} from "react-native"
+import { useFocusEffect } from "@react-navigation/native"
+import Ionicons from "@expo/vector-icons/Ionicons"
+import { CustomViewReverse } from "../components/CustomViewReverse"
+import { getAllOrdersByUserId } from "../../Modules/Operations DB Fixes"
+import { getAllProjectSubmissions } from "../../Modules/Operations DB Prototyping"
+import { GetUserData } from "../../Modules/DataInfo"
 
-const WIDTH = Dimensions.get("screen").width;
-const HEIGHT = Dimensions.get("screen").height;
+const { width, height } = Dimensions.get("screen")
 
 const HeadDivisionLaboratoryPage = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -29,14 +26,14 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-      setIsLoading(true);
-      fetchData();
+      setIsLoading(true)
+      fetchData()
     }, [])
-  );
+  )
 
   const navigateToPDF = (id) => {
-    navigation.navigate("GeneratePDF", { idReport: id });
-  };
+    navigation.navigate("GeneratePDF", { idReport: id })
+  }
 
   const fetchData = async () => {
     try {
@@ -49,45 +46,44 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
       setDataReports(BRData);
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
-      setIsLoading(false);
+      console.log(error)
+      setIsLoading(false)
     }
-  };
+  }
 
   const toggleList = (Option) => {
     switch (Option) {
       case "Ordenes":
-        setShowListOrders(true);
-        break;
+        setShowListOrders(true)
+        break
       case "Reportes":
-        setShowListOrders(false);
-        break;
+        setShowListOrders(false)
+        break
       default:
-        break;
+        break
     }
-  };
+  }
 
   const toggleDetailsReports = (itemId) => {
     const updatedData = dataReports.map((registro) => {
       if (registro.id === itemId) {
-        return { ...registro, Details: !registro.Details };
+        return { ...registro, Details: !registro.Details }
       }
-      return registro;
-    });
-    setDataReports(updatedData);
-  };
+      return registro
+    })
+    setDataReports(updatedData)
+  }
 
   if (isLoading) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#ffffff" />
       </View>
-    );
+    )
   }
 
   return (
     <CustomViewReverse>
-      <View style={{ marginTop: HEIGHT * 0.05, gap: HEIGHT * 0.02 }}></View>
       <View style={styles.btnShowStats}>
         <TouchableOpacity
           style={styles.btnShow}
@@ -103,19 +99,50 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <View style={styles.itemContainer}>
-              <Pressable onPress={() => toggleDetailsReports(item.id)}>
-                <Text style={styles.TextHeader}>{item.application}</Text>
-              </Pressable>
-              <View style={styles.statusMargin}>
-                <Text
-                  style={{
-                    fontSize: 15,
-                    fontWeight: "bold",
-                    color: "black",
-                  }}
+              <View style={styles.info}>
+                <Pressable onPress={() => toggleDetailsReports(item.id)}>
+                  <Text style={styles.TextHeader}>{item.application}</Text>
+                </Pressable>
+                {/* Status */}
+                <View
+                  style={[
+                    styles.statusMargin,
+                    {
+                      backgroundColor:
+                        item.status === "approved"
+                          ? "#5ED52C"
+                          : item.status === "rejected"
+                          ? "#EF3131"
+                          : item.status === "awaiting_revision"
+                          ? "#57C9E1"
+                          : "white",
+                    },
+                  ]}
                 >
-                  {item.status}
-                </Text>
+                  <Text style={styles.statusText}>{item.status}</Text>
+                </View>
+
+                {/* Details */}
+                <View>
+                  {item.Details && (
+                    <View>
+                      <Text
+                        style={{
+                          color: "white",
+                          fontSize: 20,
+                          marginLeft: 15,
+                          marginTop: 5,
+                        }}
+                      >
+                        {item.submission_date}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              </View>
+
+              {/* PDF Button */}
+              <View style={styles.pdfButtonContainer}>
                 {item.department_head &&
                   item.laboratory_head &&
                   item.service_staff && (
@@ -132,20 +159,6 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
                     </View>
                   )}
               </View>
-              {item.Details && (
-                <View>
-                  <Text
-                    style={{
-                      color: "white",
-                      fontSize: 20,
-                      marginLeft: 15,
-                      marginTop: 5,
-                    }}
-                  >
-                    {item.submission_date}
-                  </Text>
-                </View>
-              )}
             </View>
           )}
           ListEmptyComponent={
@@ -154,8 +167,8 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
         />
       </View>
     </CustomViewReverse>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   centered: {
@@ -167,95 +180,105 @@ const styles = StyleSheet.create({
     color: "red",
   },
   text: {
-    fontSize: WIDTH > 400 ? 32 : 24,
+    fontSize: width > 400 ? 32 : 24,
     fontWeight: "bold",
     color: "#2272A7",
   },
   textShowStats: {
-    fontSize: WIDTH > 400 ? 24 : 16,
+    fontSize: width > 400 ? 24 : 16,
     fontWeight: "bold",
     color: "#2272A7",
   },
   iconShowStats: {
-    fontSize: WIDTH > 400 ? 24 : 16,
+    fontSize: width > 400 ? 24 : 16,
     color: "#2272A7",
   },
+  pdfButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
   iconPrint: {
-    fontSize: WIDTH > 400 ? 60 : 55,
+    fontSize: width > 400 ? 60 : 55,
     color: "red",
   },
   btnPrint: {
     backgroundColor: "white",
-    width: 35,
-    height: 35,
+    width: 45,
+    height: 45,
     borderRadius: 80,
-    marginLeft: 180,
-    marginTop: -35,
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
   },
   buttonImage: {
-    width: 24,
-    height: 24,
-    marginLeft: 4,
-    marginTop: 5,
+    width: 28,
+    height: 28,
   },
   btnAction: {
-    width: WIDTH * 0.85,
-    height: HEIGHT * 0.08,
+    width: width * 0.85,
+    height: height * 0.08,
     flexDirection: "row",
     backgroundColor: "#FFFFFF",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 40,
-    gap: WIDTH * 0.04,
+    gap: width * 0.04,
   },
   btnShowStats: {
     flexDirection: "row",
-    gap: WIDTH * 0.04,
-    marginTop: HEIGHT * 0.02,
   },
   btnShow: {
-    width: WIDTH * 0.45,
-    height: HEIGHT * 0.07,
     flexDirection: "row",
     backgroundColor: "#FFFFFF",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    gap: WIDTH * 0.04,
   },
   tables: {
-    width: WIDTH * 0.9,
-    height: HEIGHT * 0.55,
+    width: "95%",
+    height: "75%",
     backgroundColor: "#FFFFFF",
     borderRadius: 10,
     margin: 10,
   },
   itemContainer: {
     backgroundColor: "#2272A7",
-    margin: HEIGHT * 0.008,
-    padding: WIDTH * 0.02,
+    margin: height * 0.008,
+    padding: width * 0.02,
     borderRadius: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   emptyText: {
     textAlign: "center",
     color: "#2272A7",
     fontSize: 16,
-    marginTop: HEIGHT * 0.02,
+    marginTop: height * 0.02,
   },
   TextHeader: {
     color: "white",
-    fontSize: 20,
+    fontSize: width > 500 ? 20 : 16,
+    // fontSize: 20,
     fontWeight: "bold",
+    textDecorationLine: "underline",
+    marginBottom: 5,
   },
   statusMargin: {
     backgroundColor: "white",
     borderRadius: 80,
-    alignItems: "center",
     height: 30,
-    width: 120,
-    marginLeft: 120,
-    marginTop: 0,
+    marginTop: 4,
+    justifyContent: "center",
+    width: width > 400 ? 150 : 100,
   },
-});
+  statusText: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "black",
+    alignSelf: "center",
+    alignItems: "center",
+  },
+})
 
-export default HeadDivisionLaboratoryPage;
+export default HeadDivisionLaboratoryPage

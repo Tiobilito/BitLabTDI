@@ -1,69 +1,93 @@
-import React, { ReactNode } from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import React, { ReactNode, useEffect } from "react"
+import { View, StyleSheet, Dimensions } from "react-native"
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated"
 
 interface Props {
-  children: ReactNode;
+  children: ReactNode
 }
 
-const Scale = Dimensions.get("window").width;
+const { width, height } = Dimensions.get("window")
 
 export const CustomView = ({ children }: Props) => {
+  const translateX = useSharedValue(-1000)
+  const translateY = useSharedValue(-1000)
+  const rotateMain = useSharedValue(0)
+  const rotateBack = useSharedValue(0)
+
+  useEffect(() => handleTranslate(), [])
+
+  const handleTranslate = () => {
+    translateX.value = withTiming(-width * 0.01, { duration: 1200 })
+    translateY.value = withTiming(-height * 0.45, { duration: 1000 })
+    rotateBack.value = withTiming(80, { duration: 1200 })
+    rotateMain.value = withTiming(30, { duration: 1000 })
+  }
+
+  const animatedTranslateXStyle = useAnimatedStyle(() => ({
+    transform: [
+      {
+        translateX: translateX.value as number,
+      },
+      {
+        rotate: `${rotateBack.value}deg` as string,
+      },
+    ] as const,
+  }))
+
+  const animatedTranslateYStyle = useAnimatedStyle(() => ({
+    transform: [
+      {
+        translateY: translateY.value as number,
+      },
+      {
+        rotate: `${rotateMain.value}deg` as string,
+      },
+    ] as const,
+  }))
+
   return (
-    <View style={[styles.background]}>
-      <View style={styles.backTriangle} />
-      <View style={styles.mainTriangle} />
+    <View style={styles.background}>
+      <Animated.View style={[styles.backTriangle, animatedTranslateXStyle]} />
+      <Animated.View style={[styles.mainTriangle, animatedTranslateYStyle]} />
       <View style={{ justifyContent: "center", alignItems: "center" }}>
         {children}
       </View>
     </View>
-  );
-};
+  )
+}
+
 const styles = StyleSheet.create({
   background: {
     flex: 1,
+    backgroundColor: "#f5f5f5",
   },
   mainTriangle: {
-    width: 0,
-    height: 0,
+    position: "absolute",
     backgroundColor: "transparent",
     borderStyle: "solid",
-    borderLeftWidth: 450,
-    borderRightWidth: 280,
-    borderBottomWidth: 300,
+    borderLeftWidth: width * 1,
+    borderRightWidth: width * 0.6,
+    borderBottomWidth: height * 0.7,
     borderLeftColor: "transparent",
     borderRightColor: "transparent",
     borderBottomColor: "#328EC5",
     transform: [{ rotate: "30deg" }],
-    marginTop: "-35%",
-    marginLeft: "-30%",
-    position: "absolute",
+    right: -width * 0.7,
   },
   backTriangle: {
-    width: 0,
-    height: 0,
+    position: "absolute",
     backgroundColor: "transparent",
     borderStyle: "solid",
-    borderLeftWidth: 350,
-    borderRightWidth: 200,
-    borderBottomWidth: 250,
+    borderLeftWidth: width * 0.75,
+    borderRightWidth: width * 0.75,
+    borderBottomWidth: height * 0.9,
     borderLeftColor: "transparent",
     borderRightColor: "transparent",
     borderBottomColor: "#57A9D9",
-    transform: [{ rotate: "95deg" }],
-    marginTop: "-25%",
-    marginLeft: "-70%",
-    position: "absolute",
+    top: -height * 0.6,
   },
-  triangle: {
-    width: 0,
-    height: 0,
-    backgroundColor: "transparent",
-    borderStyle: "solid",
-    borderLeftWidth: 60,
-    borderRightWidth: 60,
-    borderBottomWidth: 120,
-    borderLeftColor: "transparent",
-    borderRightColor: "transparent",
-    borderBottomColor: "#328EC5",
-  },
-});
+})
