@@ -14,7 +14,6 @@ import ViewAccount from "./Scenes/settings/view_account";
 
 // Scenes Prestador de servicio
 import SocialServicePage from "./Scenes/Social Service/Prestador de Servicio"; // Pantalla principal prestador de servicio
-import AddClientPage from "./Scenes/Social Service/AddClient"; // Agregar cliente
 import AddDevicePage from "./Scenes/Social Service/AddDevice"; // Agregar dispositivo
 import SearchClientPage from "./Scenes/Social Service/SearchClient"; // Buscar cliente
 import DevicesPage from "./Scenes/Social Service/Devices"; // Dispositivos del cliente
@@ -123,7 +122,7 @@ function SocialServiceHome() {
         name="SocialService"
         component={SocialServicePage}
       />
-      <SocialServiceStack.Screen name="AddClient" component={AddClientPage} />
+      <SocialServiceStack.Screen name="AddClient" component={Register} />
       <SocialServiceStack.Screen
         name="GeneratePDF"
         component={GeneratePrototypePDF}

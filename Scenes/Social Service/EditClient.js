@@ -7,9 +7,13 @@ import {
   View,
   ScrollView,
   Alert,
+  Dimensions,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { getUserById, updateUser } from "../../Modules/Operations DB Users";
+import { CustomView } from "../components/CustomView";
+
+const Scale = Dimensions.get("window").width;
 
 const EditClientPage = ({ navigation }) => {
   const route = useRoute();
@@ -47,18 +51,12 @@ const EditClientPage = ({ navigation }) => {
   };
 
   const verifyAndSendData = () => {
-    const { name, address, zipCode, email, phone, phone2 } = formData;
-
-    if (
-      name.trim() !== "" &&
-      address.trim() !== "" &&
-      zipCode.trim() !== "" &&
-      email.trim() !== "" &&
-      phone.trim() !== ""
-    ) {
+    const { name } = formData;
+  
+    if (name.trim() !== "") {
       sendData();
     } else {
-      Alert.alert("Por favor rellene todos los datos correctamente");
+      Alert.alert("Por favor rellene el nombre correctamente");
     }
   };
 
@@ -77,11 +75,12 @@ const EditClientPage = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.background}>
-      <ScrollView>
-        <View style={{ margin: 20 }}>
+    <CustomView>
+      <ScrollView style={styles.Scroll}>
+        <View style={styles.formCont}>
           <Text style={styles.title}>Editar Usuario</Text>
 
+          <View style={styles.container}>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Nombre *</Text>
             <TextInput
@@ -93,7 +92,7 @@ const EditClientPage = ({ navigation }) => {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Dirección *</Text>
+            <Text style={styles.label}>Dirección </Text>
             <TextInput
               style={styles.input}
               value={formData.address}
@@ -103,7 +102,7 @@ const EditClientPage = ({ navigation }) => {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Código Postal *</Text>
+            <Text style={styles.label}>Código Postal </Text>
             <TextInput
               style={styles.input}
               value={formData.zipCode}
@@ -114,7 +113,7 @@ const EditClientPage = ({ navigation }) => {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Correo electrónico *</Text>
+            <Text style={styles.label}>Correo electrónico </Text>
             <TextInput
               style={styles.input}
               value={formData.email}
@@ -125,7 +124,7 @@ const EditClientPage = ({ navigation }) => {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Teléfono *</Text>
+            <Text style={styles.label}>Teléfono </Text>
             <TextInput
               style={styles.input}
               value={formData.phone}
@@ -145,6 +144,7 @@ const EditClientPage = ({ navigation }) => {
               keyboardType="phone-pad"
             />
           </View>
+          </View>
 
           <TouchableOpacity style={styles.button} onPress={verifyAndSendData}>
             <Text style={styles.buttonText}>Actualizar</Text>
@@ -158,57 +158,75 @@ const EditClientPage = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </View>
+    </CustomView>
   );
 };
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    backgroundColor: "#095ea7",
-    marginTop: 30,
+  Scroll: {
+    marginTop: 35,
+  },
+  container: {
+    width: "95%",
+    height: "72%",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    margin: 10,
+    padding: 10, // Añadido padding
   },
   title: {
-    fontSize: 24,
+    fontSize: Scale > 400 ? 50 : 20,
     fontWeight: "bold",
-    color: "white",
+    color: "#333",
     textAlign: "center",
     marginBottom: 20,
   },
   inputContainer: {
-    marginBottom: 15,
+    marginBottom: 20,
   },
   label: {
-    fontSize: 18,
-    color: "white",
-    marginBottom: 5,
+    fontSize: Scale > 400 ? 50 : 15,
+    fontWeight: "regular",
+    marginLeft: "5%",
+    color: "#000000",
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
+    height: Scale > 400 ? 60 : 40,
+    width: "93%",
+    backgroundColor: "#C5E0F2",
+    borderRadius: Scale > 400 ? 20 : 15,
     padding: 10,
-    fontSize: 16,
-    backgroundColor: "white",
+    margin: 10,
+    fontSize: Scale > 400 ? 30 : 15,
   },
   button: {
-    backgroundColor: "#007bff",
-    padding: 15,
-    borderRadius: 5,
+    width: Scale * 0.5,
+    height: Scale * 0.1,
+    backgroundColor: "#2272A7",
+    justifyContent: "center",
     alignItems: "center",
+    borderRadius: 10,
+    marginBottom: Scale * 0.08,
     marginTop: 20,
   },
   buttonCancel: {
-    backgroundColor: "#ff0000",
-    padding: 15,
-    borderRadius: 5,
+    width: Scale * 0.5,
+    height: Scale * 0.1,
+    backgroundColor: "#dc3545",
+    justifyContent: "center",
     alignItems: "center",
+    borderRadius: 10,
+    marginBottom: Scale * 0.08,
     marginTop: 10,
   },
   buttonText: {
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  formCont: {
+    width: Scale * 0.8,
+    marginBottom: Scale * 0.08,
   },
 });
 
