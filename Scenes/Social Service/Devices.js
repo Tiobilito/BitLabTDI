@@ -8,10 +8,15 @@ import {
   FlatList,
   ActivityIndicator,
   TextInput,
+  Dimensions,
 } from "react-native";
 import filter from "lodash.filter";
 import { useRoute, useFocusEffect } from "@react-navigation/native";
 import { getAllDevices } from "../../Modules/Operations DB Fixes";
+import { CustomViewReverse } from "../components/CustomViewReverse";
+
+const WIDTH = Dimensions.get("window").width;
+const HEIGHT = Dimensions.get("window").height;
 
 const DevicesPage = ({ navigation }) => {
   const route = useRoute();
@@ -90,67 +95,83 @@ const DevicesPage = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.background}>
-      <TextInput
-        style={styles.searchBox}
-        onChangeText={(query) => {
-          setSearchQuery(query);
-          const filteredData = filter(fullData, (item) => contains(item, query));
-          setData(filteredData);
+    <CustomViewReverse>
+      <View
+        style={{
+          height: HEIGHT * 0.88,
+          width: WIDTH * 0.9,
+          marginTop: HEIGHT * 0.04,
         }}
-        value={searchQuery}
-        placeholder="Search devices"
-      />
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => navigateToAddDevice(idClient)}
       >
-        <Image
-          source={require("../../Resources/imagenes/agregar.png")}
-          style={styles.addImage}
+        <TextInput
+          style={styles.searchBox}
+          onChangeText={(query) => {
+            setSearchQuery(query);
+            const filteredData = filter(fullData, (item) => contains(item, query));
+            setData(filteredData);
+          }}
+          value={searchQuery}
+          placeholder="Buscar dispositivos"
         />
-      </TouchableOpacity>
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.itemContainer}>
-            <TouchableOpacity onPress={() => toggleDetails(item.id)} style={styles.item}>
-              <View style={styles.info}>
-                <Text style={styles.modelText}>Modelo: {item.model}</Text>
-                <Text style={styles.idText}>        Id: {item.id}</Text>
-              </View>
-            </TouchableOpacity>
-            {item.Details && (
-              <View style={styles.details}>
-                <Text style={styles.detailText}>Id Cliente: {item.customer_id}</Text>
-                <Text style={styles.detailText}>S/N: {item.serial_number}</Text>
-                <Text style={styles.detailText}>Descripción reparacion: {item.rework_description}</Text>
-                <Text style={styles.detailText}>Tipo: {item.device_type}</Text>
-                <Text style={styles.detailText}>Estado recibido: {item.received_status}</Text>
-                <Text style={styles.detailText}>Marca: {item.brand}</Text>
-                <Text style={styles.detailText}>Color: {item.color}</Text>
-                <Text style={styles.detailText}>Inventario: {item.inventory_items}</Text>
-                <View style={styles.buttons}>
-                  <TouchableOpacity onPress={() => navigateToEditDevice(item.id)}>
-                    <Image
-                      source={require("../../Resources/imagenes/editar.png")}
-                      style={styles.buttonImage}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => navigateToOrder(item.id)}>
-                    <Image
-                      source={require("../../Resources/imagenes/orden.png")}
-                      style={styles.buttonImage}
-                    />
-                  </TouchableOpacity>
-                </View>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => navigateToAddDevice(idClient)}
+        >
+          <Text style={styles.addButtonText}>Añadir Dispositivo</Text>
+        </TouchableOpacity>
+        <View
+          style={{
+            width: WIDTH * 0.9,
+            height: HEIGHT * 0.7,
+            backgroundColor: "#FFFFFF",
+            borderRadius: 12,
+            padding: 8,
+            marginTop: 8,
+          }}
+        >
+          <FlatList
+            data={data}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.itemContainer}>
+                <TouchableOpacity onPress={() => toggleDetails(item.id)} style={styles.item}>
+                  <View style={styles.info}>
+                    <Text style={styles.modelText}>Modelo: {item.model}</Text>
+                    <Text style={styles.idText}>        Id: {item.id}</Text>
+                  </View>
+                </TouchableOpacity>
+                {item.Details && (
+                  <View style={styles.details}>
+                    <Text style={styles.detailText}>Id Cliente: {item.customer_id}</Text>
+                    <Text style={styles.detailText}>S/N: {item.serial_number}</Text>
+                    <Text style={styles.detailText}>Descripción reparacion: {item.rework_description}</Text>
+                    <Text style={styles.detailText}>Tipo: {item.device_type}</Text>
+                    <Text style={styles.detailText}>Estado recibido: {item.received_status}</Text>
+                    <Text style={styles.detailText}>Marca: {item.brand}</Text>
+                    <Text style={styles.detailText}>Color: {item.color}</Text>
+                    <Text style={styles.detailText}>Inventario: {item.inventory_items}</Text>
+                    <View style={styles.buttons}>
+                      <TouchableOpacity onPress={() => navigateToEditDevice(item.id)}>
+                        <Image
+                          source={require("../../Resources/imagenes/editar.png")}
+                          style={styles.buttonImage}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => navigateToOrder(item.id)}>
+                        <Image
+                          source={require("../../Resources/imagenes/orden.png")}
+                          style={styles.buttonImage}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                )}
               </View>
             )}
-          </View>
-        )}
-      />
-    </View>
+          />
+        </View>
+      </View>
+    </CustomViewReverse>
   );
 };
 
@@ -179,20 +200,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     borderColor: "#ddd",
   },
-  addButton: {
-    alignItems: "center",
-    marginVertical: 10,
-  },
-  addImage: {
-    width: 50,
-    height: 50,
-  },
   itemContainer: {
     marginVertical: 8,
     marginHorizontal: 16,
-    backgroundColor: "#0a75d1",
+    backgroundColor: "#2272A7",
     borderRadius: 8,
-    overflow: "hidden",
   },
   item: {
     padding: 10,
@@ -212,7 +224,9 @@ const styles = StyleSheet.create({
   },
   details: {
     padding: 10,
-    backgroundColor: "#0a75d1",
+    backgroundColor: "#2272A7",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
   detailText: {
     fontSize: 14,
@@ -227,6 +241,17 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     marginHorizontal: 10,
+  },
+  addButton: {
+    backgroundColor: "#2272A7",
+    padding: 10,
+    borderRadius: 25,
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  addButtonText: {
+    color: "#ffffff",
+    fontSize: 18,
   },
 });
 
