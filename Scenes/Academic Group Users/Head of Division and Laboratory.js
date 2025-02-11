@@ -234,6 +234,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
+    width: width * 0.45,
+    height: height * 0.07,
   },
   tables: {
     width: "95%",

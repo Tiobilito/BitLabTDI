@@ -61,7 +61,7 @@ export const CustomViewReverse = ({ children }: Props) => {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#f5f5f5",
     alignItems: "center",
     justifyContent: "center",
   },

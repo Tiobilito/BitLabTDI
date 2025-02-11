@@ -114,7 +114,7 @@ const SearchPage = ({ navigation }) => {
         <View
           style={{
             width: WIDTH * 0.9,
-            height: HEIGHT * 0.8,
+            height: HEIGHT * 0.7,
             backgroundColor: "#FFFFFF",
             borderRadius: 12,
             padding: 8,
