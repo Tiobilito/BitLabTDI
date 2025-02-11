@@ -13,6 +13,7 @@ import FeatherIcon from "react-native-vector-icons/Feather";
 import { useNavigation } from "@react-navigation/native";
 import { GetUserData } from "../../Modules/DataInfo";
 import { getUserById, updatePassword } from "../../Modules/Operations DB Users";
+import { CustomViewReverse } from "../components/CustomViewReverse";
 
 export default function UpdatePassword() {
   const navigation = useNavigation();
@@ -60,7 +61,7 @@ export default function UpdatePassword() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#f8f8f8" }}>
+    <CustomViewReverse>
       <View style={styles.header}>
         <View style={styles.headerAction}>
           <TouchableOpacity
@@ -142,7 +143,7 @@ export default function UpdatePassword() {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </CustomViewReverse>
   );
 }
 
@@ -153,6 +154,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     paddingHorizontal: 16,
+    marginTop: 35,
   },
   headerAction: {
     width: 40,

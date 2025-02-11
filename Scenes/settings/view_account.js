@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import { GetUserData } from "../../Modules/DataInfo";
 import { getAllDepartamentos } from "../../Modules/Operations DB Generals";
 import { getUserById } from "../../Modules/Operations DB Users";
+import { CustomViewReverse } from "../components/CustomViewReverse";
 
 export default function ViewAccount() {
   const navigation = useNavigation();
@@ -61,7 +62,7 @@ export default function ViewAccount() {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#f8f8f8" }}>
+    <CustomViewReverse>
       <View style={styles.header}>
         <View style={styles.headerAction}>
           <TouchableOpacity
@@ -152,7 +153,7 @@ export default function ViewAccount() {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </CustomViewReverse>
   );
 }
 
@@ -160,15 +161,13 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
     width: "100%",
     paddingHorizontal: 16,
+    marginTop: 35,
   },
   headerAction: {
     width: 40,
     height: 40,
-    alignItems: "flex-start",
-    justifyContent: "center",
   },
   headerTitle: {
     fontSize: 19,
@@ -177,7 +176,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
     flexBasis: 0,
-    textAlign: "center",
   },
   content: {
     paddingHorizontal: 16,

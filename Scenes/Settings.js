@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react"
+import { React, useState, useEffect } from "react";
 import {
   StyleSheet,
   TextInput,
@@ -9,80 +9,79 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-} from "react-native"
+} from "react-native";
 import FeatherIcon from "react-native-vector-icons/Feather";
-import { getAllDepartamentos } from "../Modules/Operations DB Generals"
-import { getUserById, updateUser } from "../Modules/Operations DB Users"
-import { Picker } from "@react-native-picker/picker"
-import { CustomView } from "./components/CustomView"
-import { GetUserData } from "../Modules/DataInfo"
+import { getAllDepartamentos } from "../Modules/Operations DB Generals";
+import { getUserById, updateUser } from "../Modules/Operations DB Users";
+import { CustomView } from "./components/CustomView";
+import { GetUserData } from "../Modules/DataInfo";
 
-const { width } = Dimensions.get("window")
+const Scale = Dimensions.get("window").width;
 
 const SettingsPage = ({ navigation }) => {
-  const [code, setCode] = useState("")
-  const [username, setUsername] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [userType, setUserType] = useState("")
-  const [address, setAddress] = useState("")
-  const [zipCode, setZipCode] = useState("")
-  const [phoneNum, setPhoneNum] = useState("")
-  const [nss, setNss] = useState("")
-  const [rfc, setRfc] = useState("")
-  const [salary, setSalary] = useState("")
-  const [departmentID, setDepartmentID] = useState("")
-  const [departments, setDepartments] = useState([])
-  const [userData, setUserData] = useState([])
+  const [code, setCode] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [userType, setUserType] = useState("");
+  const [address, setAddress] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [phoneNum, setPhoneNum] = useState("");
+  const [nss, setNss] = useState("");
+  const [rfc, setRfc] = useState("");
+  const [salary, setSalary] = useState("");
+  const [departmentID, setDepartmentID] = useState("");
+  const [departments, setDepartments] = useState([]);
+  const [userData, setUserData] = useState([]);
 
   useEffect(() => {
     const loadDepartments = async () => {
-      const data = await getAllDepartamentos()
+      const data = await getAllDepartamentos();
       if (data) {
-        setDepartments(data)
+        setDepartments(data);
       }
-    }
+    };
 
     const loadUserData = async () => {
-      const dataI = await GetUserData()
-      const data = await getUserById(dataI.Code)
-      await setUserData(data)
+      const dataI = await GetUserData();
+      const data = await getUserById(dataI.Code);
+      setUserData(data);
       if (data) {
-        await setUserData(data)
-        await setCode(data.code)
-        await setUsername(data.name)
-        await setEmail(data.email)
-        await setPassword(data.password)
-        await setUserType(data.user_type)
-        await setAddress(data.address)
-        await setZipCode(data.zip_code)
-        await setPhoneNum(data.number)
-        await setNss(data.nss)
-        await setRfc(data.rfc)
-        await setSalary(data.salary)
-        await setDepartmentID(data.department_id)
+        setUserData(data);
+        setCode(data.code);
+        setUsername(data.name);
+        setEmail(data.email);
+        setPassword(data.password);
+        setUserType(data.user_type);
+        setAddress(data.address);
+        setZipCode(data.zip_code);
+        setPhoneNum(data.number);
+        setNss(data.nss);
+        setRfc(data.rfc);
+        setSalary(data.salary);
+        setDepartmentID(data.department_id);
       }
-    }
+    };
 
-    loadUserData()
-    loadDepartments()
-  }, [])
+    loadUserData();
+    loadDepartments();
+  }, []);
 
   const isFormValid = () => {
     if (!code) {
-      Alert.alert("Error", "El código es obligatorio.")
-      return false
+      Alert.alert("Error", "El código es obligatorio.");
+      return false;
     }
     if (!username) {
-      Alert.alert("Error", "El nombre es obligatorio.")
-      return false
+      Alert.alert("Error", "El nombre es obligatorio.");
+      return false;
     }
     if (!password) {
-      Alert.alert("Error", "La contraseña es obligatoria.")
-      return false
+      Alert.alert("Error", "La contraseña es obligatoria.");
+      return false;
     }
-    return true
-  }
+    return true;
+  };
 
   const Verify = async () => {
     if (isFormValid()) {
@@ -99,181 +98,258 @@ const SettingsPage = ({ navigation }) => {
         number: phoneNum,
         department_id: departmentID ? parseInt(departmentID) : null, // Convertir a entero si existe
         password: password,
-      }
-      await updateUser(UserData)
-      Alert.alert("Éxito", "Usuario modificado exitosamente.")
+      };
+      await updateUser(UserData);
+      Alert.alert("Éxito", "Usuario modificado exitosamente.");
     }
-  }
+  };
 
   return (
     <CustomView>
-      <Text style={styles.title}>Datos</Text>
-      <ScrollView style={{ height: width * 1.1 }}>
-        <View style={styles.formCont}>
-          <Text style={styles.textForm}>Nombre</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setUsername}
-            value={username}
-            placeholder="Username"
-          />
+      <Text
+        style={{
+          fontSize: Scale > 400 ? 50 : 20,
+          marginBottom: Scale * 0.05,
+          marginTop: Scale * 0.5,
+          fontWeight: "600",
+          color: "#000",
+          textAlign: "center",
+        }}
+      >
+        Configuraciones
+      </Text>
 
-          <Text style={styles.textForm}>Contraseña</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setPassword}
-            value={password}
-            placeholder="Password"
-            secureTextEntry={true}
-            keyboardType="visible-password"
-          />
+      <ScrollView style={{ height: Scale * 1.4 }}>
+        <View style={[styles.section, { paddingTop: 4 }]}>
+          <Text style={styles.sectionTitle}>Cuenta</Text>
 
-          <Text style={styles.textForm}>Dirección (opcional)</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setAddress}
-            value={address}
-            placeholder="Ejemplo 1234"
-          />
-
-          <Text style={styles.textForm}>Código Postal (opcional)</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setZipCode}
-            value={zipCode}
-            placeholder="Ejemplo 1234"
-            keyboardType="numeric"
-          />
-
-          <Text style={styles.textForm}>Número de teléfono (opcional)</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setPhoneNum}
-            value={phoneNum}
-            placeholder="xx-xxxx-xxxx"
-            keyboardType="numeric"
-          />
-
-          <Text style={styles.textForm}>Correo Electrónico (opcional)</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setEmail}
-            value={email}
-            keyboardType="email-address"
-            placeholder="something@email.com"
-          />
-
-          {userType === "2" && (
-            <>
-              <Text style={styles.textForm}>Número de Seguro Social</Text>
-              <TextInput
-                style={styles.input}
-                onChangeText={setNss}
-                value={nss}
-                placeholder="12345678"
-                keyboardType="numeric"
+          <View style={styles.sectionBody}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("AccountOnlyRead");
+              }}
+              style={styles.profile}
+            >
+              <FeatherIcon
+                name="user"
+                size={60}
+                color="#858585"
+                style={styles.profileAvatar}
               />
 
-              <Text style={styles.textForm}>RFC</Text>
-              <TextInput
-                style={styles.input}
-                onChangeText={setRfc}
-                value={rfc}
-                placeholder="12345678"
-              />
+              <View style={styles.profileBody}>
+                <Text style={styles.profileName}>{username}</Text>
 
-              <Text style={styles.textForm}>Salario</Text>
-              <TextInput
-                style={styles.input}
-                onChangeText={setSalary}
-                value={salary}
-                placeholder="12345.67"
-                keyboardType="numeric"
-              />
-            </>
-          )}
+                <Text style={styles.profileHandle}>{email}</Text>
+              </View>
 
-          <Text style={styles.textForm}>ID departamento (opcional)</Text>
-          <Picker
-            selectedValue={departmentID}
-            onValueChange={(itemValue) => setDepartmentID(itemValue)}
-            style={styles.picker}
-          >
-            <Picker.Item label="Selecciona un departamento" value="" />
-            {departments.map((dept) => (
-              <Picker.Item key={dept.id} label={dept.name} value={dept.id} />
-            ))}
-          </Picker>
+              <FeatherIcon color="#bcbcbc" name="chevron-right" size={22} />
+            </TouchableOpacity>
+          </View>
         </View>
 
-        <View
-          style={{
-            width: width * 0.8,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <TouchableOpacity style={styles.loginButton} onPress={Verify}>
-            <Text style={{ color: "white", fontWeight: "bold" }}>
-              Actualizar Datos
-            </Text>
-          </TouchableOpacity>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Preferencias</Text>
+
+          <View style={styles.sectionBody}>
+            <View style={[styles.rowWrapper, styles.rowFirst]}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("Editaccount");
+                }}
+                style={styles.row}
+              >
+                <Text style={styles.rowLabel}>Actualizar datos de usuario</Text>
+
+                <View style={styles.rowSpacer} />
+
+                <Text style={styles.rowValue}>{username}</Text>
+
+                <FeatherIcon color="#bcbcbc" name="chevron-right" size={19} />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.rowWrapper}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("EditPassword");
+                }}
+                style={styles.row}
+              >
+                <Text style={styles.rowLabel}>Actualizar contraseña</Text>
+
+                <View style={styles.rowSpacer} />
+
+                <Text style={styles.rowValue}>********</Text>
+
+                <FeatherIcon color="#bcbcbc" name="chevron-right" size={19} />
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
 
-        <View style={{ marginBottom: width * 0.1 }}></View>
+        <View style={styles.section}>
+          <View style={styles.sectionBody}>
+            <View
+              style={[
+                styles.rowWrapper,
+                styles.rowFirst,
+                styles.rowLast,
+                { alignItems: "center" },
+              ]}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("Login");
+                }}
+                style={styles.row}
+              >
+                <Text style={[styles.rowLabel, styles.rowLabelLogout]}>
+                  Log Out
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+        <View style={{ marginBottom: Scale * 0.1 }}></View>
       </ScrollView>
     </CustomView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: width > 400 ? 50 : 20,
-    marginBottom: width * 0.05,
-    marginTop: width * 0.5,
-    fontWeight: "bold",
-    color: "#2272A7",
-  },
   input: {
-    // height: width > 400 ? 60 : 40,
-    // width: "93%",
+    height: Scale > 400 ? 60 : 40,
+    width: "93%",
     backgroundColor: "#C5E0F2",
-    borderRadius: width > 400 ? 25 : 15,
+    borderRadius: Scale > 400 ? 20 : 15,
     padding: 10,
     margin: 10,
-    // fontSize: width > 400 ? 30 : 15,
-    fontSize: width * 0.05,
+    fontSize: Scale > 400 ? 30 : 15,
   },
   textForm: {
-    fontSize: width > 400 ? 40 : 15,
+    fontSize: Scale > 400 ? 50 : 15,
     fontWeight: "regular",
     marginLeft: "5%",
     color: "#000000",
   },
   formCont: {
-    width: width * 0.8,
-    marginBottom: width * 0.08,
+    width: Scale * 0.8,
+    marginBottom: Scale * 0.08,
   },
   loginButton: {
-    width: width * 0.5,
-    height: width * 0.1,
+    width: Scale * 0.5,
+    height: Scale * 0.1,
     backgroundColor: "#2272A7",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    marginBottom: width * 0.08,
+    marginBottom: Scale * 0.08,
   },
   Logo: {
-    width: width > 400 ? 400 : 250,
-    height: width > 400 ? 400 : 250,
+    width: Scale > 400 ? 400 : 250,
+    height: Scale > 400 ? 400 : 250,
     marginTop: "10%",
   },
-  picker: {
-    height: width * 0.12,
-    backgroundColor: "#C5E0F2",
-    borderRadius: width * 0.05,
-    margin: 10,
+  /** Section */
+  section: {
+    paddingVertical: 12,
   },
-})
+  sectionTitle: {
+    margin: 8,
+    marginLeft: 12,
+    fontSize: 13,
+    letterSpacing: 0.33,
+    fontWeight: "500",
+    color: "#a69f9f",
+    textTransform: "uppercase",
+  },
+  sectionBody: {
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
+  },
+  /** Profile */
+  profile: {
+    padding: 12,
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+  },
+  profileAvatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 9999,
+    marginRight: 12,
+  },
+  profileBody: {
+    marginRight: "auto",
+  },
+  profileName: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#292929",
+  },
+  profileHandle: {
+    marginTop: 2,
+    fontSize: 16,
+    fontWeight: "400",
+    color: "#858585",
+  },
+  /** Row */
+  row: {
+    height: 44,
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    paddingRight: 12,
+  },
+  rowWrapper: {
+    paddingLeft: 16,
+    backgroundColor: "#fff",
+    borderTopWidth: 1,
+    borderColor: "#f0f0f0",
+  },
+  rowFirst: {
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+  },
+  rowLabel: {
+    fontSize: 16,
+    letterSpacing: 0.24,
+    color: "#000",
+  },
+  rowSpacer: {
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: 0,
+  },
+  rowValue: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: "#ababab",
+    marginRight: 4,
+  },
+  rowLast: {
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+  },
+  rowLabelLogout: {
+    width: "100%",
+    textAlign: "center",
+    fontWeight: "600",
+    color: "#dc2626",
+  },
+});
 
-export default SettingsPage
+export default SettingsPage;
