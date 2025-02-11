@@ -134,7 +134,7 @@ const TeacherStudentPage = ({ navigation }) => {
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <View style={styles.itemContainer}>
-                <Text>{item.id}</Text>
+                <Text style={styles.itemText}>{item.id}</Text>
                 <Pressable
                   onPress={() => navigateToOrder(item.id)}
                   style={styles.btnReadOnlyO}
@@ -300,12 +300,20 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderRadius: 10,
     margin: 10,
+    padding: 10, // Añadido padding
   },
   itemContainer: {
     backgroundColor: "#2272A7",
     margin: HEIGHT * 0.008,
-    padding: WIDTH * 0.02,
+    padding: WIDTH * 0.04, // Aumentado padding
     borderRadius: 10,
+    flexDirection: "row", // Añadido para alinear elementos en fila
+    justifyContent: "space-between", // Añadido para espaciar elementos
+    alignItems: "center", // Añadido para centrar elementos verticalmente
+  },
+  itemText: {
+    color: "white", // Añadido color de texto
+    fontSize: 18, // Añadido tamaño de texto
   },
   emptyText: {
     textAlign: "center",

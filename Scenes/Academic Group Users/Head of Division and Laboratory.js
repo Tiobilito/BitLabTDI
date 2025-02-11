@@ -20,9 +20,9 @@ import { GetUserData } from "../../Modules/DataInfo"
 const { width, height } = Dimensions.get("screen")
 
 const HeadDivisionLaboratoryPage = ({ navigation }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [dataReports, setDataReports] = useState([]); // Nueva lista de reportes
-  const [showListOrders, setShowListOrders] = useState(true); // Estado para alternar entre listas
+  const [isLoading, setIsLoading] = useState(false)
+  const [dataReports, setDataReports] = useState([]) // Nueva lista de reportes
+  const [showListOrders, setShowListOrders] = useState(true) // Estado para alternar entre listas
 
   useFocusEffect(
     useCallback(() => {
@@ -37,14 +37,14 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const UData = await GetUserData();
-      let ReportsData = await getAllProjectSubmissions(UData.Code);
+      const UData = await GetUserData()
+      let ReportsData = await getAllProjectSubmissions(UData.Code)
       let BRData = ReportsData.map((registro) => ({
         ...registro,
         Details: false,
-      }));
-      setDataReports(BRData);
-      setIsLoading(false);
+      }))
+      setDataReports(BRData)
+      setIsLoading(false)
     } catch (error) {
       console.log(error)
       setIsLoading(false)
@@ -241,14 +241,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderRadius: 10,
     margin: 10,
+    padding: 10, // Añadido padding
   },
   itemContainer: {
     backgroundColor: "#2272A7",
     margin: height * 0.008,
-    padding: width * 0.02,
+    padding: width * 0.04, // Aumentado padding
     borderRadius: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: "row", // Añadido para alinear elementos en fila
+    justifyContent: "space-between", // Añadido para espaciar elementos
+    alignItems: "center", // Añadido para centrar elementos verticalmente
   },
   emptyText: {
     textAlign: "center",
@@ -259,7 +261,6 @@ const styles = StyleSheet.create({
   TextHeader: {
     color: "white",
     fontSize: width > 500 ? 20 : 16,
-    // fontSize: 20,
     fontWeight: "bold",
     textDecorationLine: "underline",
     marginBottom: 5,
