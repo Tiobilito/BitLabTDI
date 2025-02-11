@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
   },
   tables: {
     width: WIDTH * 0.9,
-    height: HEIGHT * 0.55,
+    height: HEIGHT * 0.45,
     backgroundColor: "#FFFFFF",
     borderRadius: 10,
     margin: 10,
