@@ -7,10 +7,15 @@ import {
   View,
   ScrollView,
   Alert,
+  Dimensions,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { addDispo } from "../../Modules/Operations DB Fixes";
+import { CustomView } from "../components/CustomView";
+import { CustomViewReverse } from "../components/CustomViewReverse";
+
+const Scale = Dimensions.get("window").width;
 
 const AddDevicePage = ({ navigation }) => {
   const route = useRoute();
@@ -75,111 +80,113 @@ const AddDevicePage = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.background}>
-      <ScrollView>
-        <View style={{ margin: 20 }}>
+    <CustomViewReverse>
+      <ScrollView style={styles.Scroll}>
+        <View style={styles.formCont}>
           <Text style={styles.title}>Añadir Dispositivo</Text>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Numero de serie:</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.sn}
-              onChangeText={(value) => handleChange("sn", value)}
-              placeholder="S/N"
-              keyboardType="numeric"
-            />
-          </View>
+          <View style={styles.container}>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Numero de serie:</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.sn}
+                onChangeText={(value) => handleChange("sn", value)}
+                placeholder="S/N"
+                keyboardType="numeric"
+              />
+            </View>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Tipo *:</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.device_type}
-              onChangeText={(value) => handleChange("device_type", value)}
-              placeholder="Tipo de dispositivo"
-            />
-          </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Tipo *:</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.device_type}
+                onChangeText={(value) => handleChange("device_type", value)}
+                placeholder="Tipo de dispositivo"
+              />
+            </View>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Modelo:</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.model}
-              onChangeText={(value) => handleChange("model", value)}
-              placeholder="Modelo"
-            />
-          </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Modelo:</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.model}
+                onChangeText={(value) => handleChange("model", value)}
+                placeholder="Modelo"
+              />
+            </View>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Marca *:</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.brand}
-              onChangeText={(value) => handleChange("brand", value)}
-              placeholder="Marca"
-            />
-          </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Marca *:</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.brand}
+                onChangeText={(value) => handleChange("brand", value)}
+                placeholder="Marca"
+              />
+            </View>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Descripción de la reparacion:</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.rework_description}
-              onChangeText={(value) => handleChange("rework_description", value)}
-              placeholder="Descripción"
-            />
-          </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Descripción de la reparacion:</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.rework_description}
+                onChangeText={(value) => handleChange("rework_description", value)}
+                placeholder="Descripción"
+              />
+            </View>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Estado recibido *:</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.received_status}
-              onChangeText={(value) => handleChange("received_status", value)}
-              placeholder="Estado recibido"
-            />
-          </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Estado recibido *:</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.received_status}
+                onChangeText={(value) => handleChange("received_status", value)}
+                placeholder="Estado recibido"
+              />
+            </View>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Inventario:</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.inventory_items}
-              onChangeText={(value) =>
-                /^\d+$/.test(value) || value === ""
-                  ? handleChange("inventory_items", value)
-                  : null
-              }
-              placeholder="Inventario"
-              keyboardType="numeric"
-            />
-          </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Inventario:</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.inventory_items}
+                onChangeText={(value) =>
+                  /^\d+$/.test(value) || value === ""
+                    ? handleChange("inventory_items", value)
+                    : null
+                }
+                placeholder="Inventario"
+                keyboardType="numeric"
+              />
+            </View>
 
-          <View style={styles.inputContainer}>
-            <TouchableOpacity onPress={showDatePicker}>
-              <Text style={styles.label}>Fecha (click para seleccionar):</Text>
-              {showDt && (
-                <DateTimePicker
-                  value={formData.received_date}
-                  mode="date"
-                  onChange={onDateChange}
-                />
-              )}
-              <Text style={styles.label}>
-                {formData.received_date.toLocaleDateString()}
-              </Text>
-            </TouchableOpacity>
-          </View>
+            <View style={styles.inputContainer}>
+              <TouchableOpacity onPress={showDatePicker}>
+                <Text style={styles.label}>Fecha (click para seleccionar):</Text>
+                {showDt && (
+                  <DateTimePicker
+                    value={formData.received_date}
+                    mode="date"
+                    onChange={onDateChange}
+                  />
+                )}
+                <Text style={styles.label}>
+                  {formData.received_date.toLocaleDateString()}
+                </Text>
+              </TouchableOpacity>
+            </View>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Color *:</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.color}
-              onChangeText={(value) => handleChange("color", value)}
-              placeholder="Color"
-            />
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Color *:</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.color}
+                onChangeText={(value) => handleChange("color", value)}
+                placeholder="Color"
+              />
+            </View>
           </View>
 
           <TouchableOpacity
@@ -197,57 +204,75 @@ const AddDevicePage = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </View>
+    </CustomViewReverse>
   );
 };
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    backgroundColor: "#095ea7",
-    marginTop: 30
+  Scroll: {
+    marginTop: 35,
+  },
+  container: {
+    width: "95%",
+    height: "79%",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    margin: 10,
+    padding: 10,
   },
   title: {
-    fontSize: 24,
+    fontSize: Scale > 400 ? 50 : 20,
     fontWeight: "bold",
-    color: "white",
+    color: "#333",
     textAlign: "center",
     marginBottom: 20,
   },
   inputContainer: {
-    marginBottom: 15,
+    marginBottom: 20,
   },
   label: {
-    fontSize: 18,
-    color: "white",
-    marginBottom: 5,
+    fontSize: Scale > 400 ? 50 : 15,
+    fontWeight: "regular",
+    marginLeft: "5%",
+    color: "#000000",
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
+    height: Scale > 400 ? 60 : 40,
+    width: "93%",
+    backgroundColor: "#C5E0F2",
+    borderRadius: Scale > 400 ? 20 : 15,
     padding: 10,
-    fontSize: 16,
-    backgroundColor: "white",
+    margin: 10,
+    fontSize: Scale > 400 ? 30 : 15,
   },
   button: {
-    backgroundColor: "#007bff",
-    padding: 15,
-    borderRadius: 5,
+    width: Scale * 0.5,
+    height: Scale * 0.1,
+    backgroundColor: "#2272A7",
+    justifyContent: "center",
     alignItems: "center",
+    borderRadius: 10,
+    marginBottom: Scale * 0.08,
     marginTop: 20,
   },
   buttonCancel: {
-    backgroundColor: "#ff0000",
-    padding: 15,
-    borderRadius: 5,
+    width: Scale * 0.5,
+    height: Scale * 0.1,
+    backgroundColor: "#dc3545",
+    justifyContent: "center",
     alignItems: "center",
+    borderRadius: 10,
+    marginBottom: Scale * 0.08,
     marginTop: 10,
   },
   buttonText: {
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  formCont: {
+    width: Scale * 0.8,
+    marginBottom: Scale * 0.08,
   },
 });
 
