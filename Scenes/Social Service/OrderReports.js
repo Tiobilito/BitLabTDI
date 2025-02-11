@@ -1,54 +1,57 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, FlatList, Image } from "react-native";
+import { StyleSheet, Text, View, FlatList, Dimensions } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { getCostsByOrderId, getOrderById } from "../../Modules/Operations DB Fixes";
+import { CustomView } from "../components/CustomView";
+
+const Scale = Dimensions.get("window").width;
 
 const OrderPageReadOnly = ({ navigation }) => {
   const route = useRoute();
   const { idOrder } = route.params;
-  const [ orderData, SetOrderData ] = useState(null);
-  const [ costData, SetCostData ] = useState(null);
+  const [orderData, setOrderData] = useState(null);
+  const [costData, setCostData] = useState([]);
 
   useEffect(() => {
-    const getData = async() => {
-      SetOrderData(await getOrderById(idOrder));
-      SetCostData(await getCostsByOrderId(idOrder));
-      console.log(orderData);
-      console.log(costData);
-    }
+    const getData = async () => {
+      const order = await getOrderById(idOrder);
+      const costs = await getCostsByOrderId(idOrder);
+      setOrderData(order);
+      setCostData(costs);
+      console.log("Orden: ", orderData);
+      console.log("Costos: ", costData);
+    };
     getData();
-  }, []);
+  }, [idOrder]);
 
   const renderItem = ({ item }) => (
     <View style={styles.costItem}>
-      <Text style={styles.costText}>{item.description}</Text>
-      <Text style={styles.costText}>${item.price}</Text>
-      <Text style={styles.costText}>{item.iva ? "IVA incluido" : "Sin IVA"}</Text>
+      <Text style={styles.costText}>Nombre del costo: {item.cost_name}</Text>
+      <Text style={styles.costText}>Precio: ${item.price}</Text>
+      <Text style={styles.costText}>IVA: {item.iva ? "IVA incluido" : "Sin IVA"}</Text>
+      <Text style={styles.costText}>ID de la orden: {item.order_id}</Text>
     </View>
   );
 
   return (
-    <View style={styles.background}>
+    <CustomView>
+      {orderData && (
+        <View style={styles.container}>
+          <Text style={styles.text}>ID Dispositivo: {orderData.device_id}</Text>
+          <Text style={styles.text}>Cliente: {orderData.customer_id}</Text>
+          <Text style={styles.text}>Estado: {orderData.status}</Text>
+          <Text style={styles.text}>Fecha de Recepción: {orderData.date_received}</Text>
+          <Text style={styles.text}>Diagnóstico General: {orderData.diagnosis}</Text>
+        </View>
+      )}
       <FlatList
-        ListHeaderComponent={
-          <View style={styles.container}>
-            <Text style={styles.text}>ID Dispositivo: </Text>
-            <Text style={styles.text}>Cliente: </Text>
-            <Text style={styles.text}>Email: </Text>
-            <Text style={styles.text}>Teléfono: </Text>
-            <Text style={styles.text}>Departamento: </Text>
-            <Text style={styles.text}>Estado: </Text>
-            <Text style={styles.text}>Fecha de Recepción: </Text>
-            <Text style={styles.text}>Diagnóstico General: </Text>
-          </View>
-        }
-        data={costData.length > 0 ? costData : []}
+        data={costData}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         ListEmptyComponent={<Text>No hay costos registrados</Text>}
         contentContainerStyle={styles.flatlist}
       />
-    </View>
+    </CustomView>
   );
 };
 
@@ -59,17 +62,23 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   container: {
-    padding: 20,
+    width: "95%",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    margin: 10,
+    padding: 10,
+    marginTop: 36,
   },
   text: {
-    fontSize: 18,
+    fontSize: Scale > 400 ? 50 : 20,
     marginBottom: 5,
+    color: "#000000",
   },
   flatlist: {
     paddingBottom: 20,
   },
   costItem: {
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "space-between",
     padding: 10,
     backgroundColor: "#fff",
