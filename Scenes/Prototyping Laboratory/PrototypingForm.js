@@ -39,7 +39,6 @@ export default function PrototypingForm() {
   const [studentCode, setStudentCode] = useState("");
   const [teacherCode, setTeacherCode] = useState("");
   const [application, setApplication] = useState("");
-  const [descriptionProject, setDescriptionProject] = useState("");
   const [prototypeType, setPrototypeType] = useState("");
   const [descriptionPrototype, setDescriptionPrototype] = useState("");
   const [specificRequirementsDimensions, setspecificRequirementsDimensions] =
@@ -58,7 +57,6 @@ export default function PrototypingForm() {
     setStudentCode("");
     setTeacherCode("");
     setApplication("");
-    setDescriptionProject("");
     setPrototypeType("");
     setDescriptionPrototype("");
     setspecificRequirementsDimensions("");
@@ -145,10 +143,6 @@ export default function PrototypingForm() {
         message: "Por favor, ingresa la aplicación de tu proyecto.",
       },
       {
-        condition: !descriptionProject,
-        message: "Por favor, ingresa una descripción del proyecto.",
-      },
-      {
         condition: !prototypeType,
         message: "Por favor, selecciona el tipo de prototipo.",
       },
@@ -212,6 +206,7 @@ export default function PrototypingForm() {
           value={name}
           onChangeText={setName}
           placeholder=""
+          maxLength={40}
         />
         <Text style={styles.label}>Correo electrónico:</Text>
         <TextInput
@@ -219,6 +214,7 @@ export default function PrototypingForm() {
           value={email}
           onChangeText={setEmail}
           placeholder="tuemail@ejemplo.com"
+          maxLength={35}
         />
         <Text style={styles.label}>Número de Teléfono:</Text>
         <TextInput
@@ -299,13 +295,7 @@ export default function PrototypingForm() {
           value={application}
           onChangeText={setApplication}
           placeholder="¿En qué aplicarás tu proyecto?"
-        />
-        <Text style={styles.label}>Descripción:</Text>
-        <TextInput
-          style={styles.input}
-          value={descriptionProject}
-          onChangeText={setDescriptionProject}
-          placeholder="Describe tu proyecto"
+          maxLength={110}
         />
       </View>
 
@@ -335,6 +325,7 @@ export default function PrototypingForm() {
           value={descriptionPrototype}
           onChangeText={setDescriptionPrototype}
           placeholder="Describe tu prototipo"
+          maxLength={191}
         />
         <Text style={styles.sectionSubTitle}>
           Requerimientos específicos del Prototipo:
@@ -345,6 +336,7 @@ export default function PrototypingForm() {
           value={specificRequirementsDimensions}
           onChangeText={setspecificRequirementsDimensions}
           placeholder="Dime tus dimensiones"
+          maxLength={40}
         />
         <Text style={styles.label}>Corte especial:</Text>
         <TextInput
@@ -352,6 +344,7 @@ export default function PrototypingForm() {
           value={specialCut}
           onChangeText={setSpecialCut}
           placeholder="Dime tu corte especial"
+          maxLength={82}
         />
         <Text style={styles.label}>Otros:</Text>
         <TextInput
@@ -359,6 +352,7 @@ export default function PrototypingForm() {
           value={others}
           onChangeText={setOthers}
           placeholder="Menciona algún otro requerimiento que tengas"
+          maxLength={91}
         />
         <Text style={styles.label}>Observaciones:</Text>
         <TextInput
@@ -366,6 +360,7 @@ export default function PrototypingForm() {
           value={remarks}
           onChangeText={setRemarks}
           placeholder="Menciona alguna observación que tengas"
+          maxLength={79}
         />
       </View>
 

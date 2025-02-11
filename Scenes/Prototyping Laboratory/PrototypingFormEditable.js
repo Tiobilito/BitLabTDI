@@ -309,6 +309,7 @@ export default function PrototypingFormEdit() {
           style={styles.input}
           value={formData.name}
           onChangeText={(text) => setFormData({ ...formData, name: text })}
+          maxLength={40}
         />
         <Text style={styles.label}>Correo electrónico:</Text>
         <TextInput
@@ -316,6 +317,7 @@ export default function PrototypingFormEdit() {
           value={formData.email}
           onChangeText={(text) => setFormData({ ...formData, email: text })}
           placeholder="tuemail@ejemplo.com"
+          maxLength={35}
         />
         <Text style={styles.label}>Número de Teléfono:</Text>
         <TextInput
@@ -408,15 +410,7 @@ export default function PrototypingFormEdit() {
             setFormData({ ...formData, application: text })
           }
           placeholder="¿En qué aplicarás tu proyecto?"
-        />
-        <Text style={styles.label}>Descripción:</Text>
-        <TextInput
-          style={styles.input}
-          value={formData.descriptionProject}
-          onChangeText={(text) =>
-            setFormData({ ...formData, descriptionProject: text })
-          }
-          placeholder="Describe tu proyecto"
+          maxLength={112}
         />
         {error && <Text style={styles.errorMessage}>{error}</Text>}
       </View>
@@ -452,6 +446,7 @@ export default function PrototypingFormEdit() {
             setFormData({ ...formData, descriptionPrototype: text })
           }
           placeholder="Describe tu prototipo"
+          maxLength={191}
         />
 
         <Text style={styles.label}>Requerimientos específicos:</Text>
@@ -464,6 +459,7 @@ export default function PrototypingFormEdit() {
             setFormData({ ...formData, specificRequirementsDimensions: text })
           }
           placeholder="Ejemplo: 200x100x50"
+          maxLength={40}
         />
 
         <Text style={styles.label}>Corte especial:</Text>
@@ -474,6 +470,7 @@ export default function PrototypingFormEdit() {
             setFormData({ ...formData, specialCut: text })
           }
           placeholder="¿Se necesita algún corte especial?"
+          maxLength={82}
         />
 
         <Text style={styles.label}>Otros requisitos:</Text>
@@ -482,6 +479,7 @@ export default function PrototypingFormEdit() {
           value={formData.others}
           onChangeText={(text) => setFormData({ ...formData, others: text })}
           placeholder="Describe otros requisitos específicos"
+          maxLength={91}
         />
 
         <Text style={styles.label}>Comentarios adicionales:</Text>
@@ -490,6 +488,7 @@ export default function PrototypingFormEdit() {
           value={formData.remarks}
           onChangeText={(text) => setFormData({ ...formData, remarks: text })}
           placeholder="Comentarios adicionales sobre el prototipo"
+          maxLength={79}
         />
       </View>
       {/* Seccion para llenado de datos del staff */}
@@ -545,6 +544,7 @@ export default function PrototypingFormEdit() {
               setInternalData({ ...internalData, requiredInputs: text })
             }
             placeholder="Especifica los insumos necesarios"
+            maxLength={50}
           />
 
           <Text style={styles.label}>Observaciones:</Text>
@@ -555,6 +555,7 @@ export default function PrototypingFormEdit() {
               setInternalData({ ...internalData, comments: text })
             }
             placeholder="Observaciones adicionales"
+            maxLength={98}
           />
         </View>
       )}

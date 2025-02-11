@@ -195,8 +195,6 @@ const AcademicGroupApp = () => {
             iconName = focused ? "home" : "home-outline";
           } else if (route.name === "Reportes Protoripado") {
             iconName = focused ? "reader" : "reader-outline";
-          } else if (route.name === "Form") {
-            iconName = focused ? "hardware-chip" : "hardware-chip-outline";
           } else if (route.name === "Configuración") {
             iconName = focused ? "settings" : "settings-outline";
           }
@@ -211,7 +209,6 @@ const AcademicGroupApp = () => {
         name="Reportes Protoripado"
         component={PrototypingReportsAG}
       />
-      <StudentsTap.Screen name="Form" component={PrototypingForm} />
       <StudentsTap.Screen name="Configuración" component={SettingsScreen} />
     </StudentsTap.Navigator>
   );
