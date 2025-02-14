@@ -15,7 +15,8 @@ export default ({ title, children }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // NO PONER FLEX: 1
+    // flex: 1,
     paddingBottom: height * 0.08,
     marginTop: 10,
     // height: height * 1,
@@ -49,6 +50,7 @@ const styles = StyleSheet.create({
     shadowRadius: 1.41,
     elevation: 2,
     minWidth: width * 0.8,
+    // minHeight: height * 0.5,
     // height: height * 0.8,
   },
 })

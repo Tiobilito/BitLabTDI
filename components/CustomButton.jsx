@@ -11,10 +11,7 @@ const { width } = Dimensions.get("window")
 export default ({ title, onPress, buttonStyles = {}, textStyles = {} }) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={[styles.button, buttonStyles]}
-        onPress={onPress}
-      >
+      <TouchableOpacity style={[styles.button, buttonStyles]} onPress={onPress}>
         <Text style={[styles.buttonText, textStyles]}>{title}</Text>
       </TouchableOpacity>
     </View>
@@ -22,9 +19,13 @@ export default ({ title, onPress, buttonStyles = {}, textStyles = {} }) => {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
   button: {
-    width: width * 0.35,
-    height: width * 0.12,
+    width: "100%",
+    height: width * 0.11,
     backgroundColor: "#2272A7",
     justifyContent: "center",
     alignItems: "center",
@@ -33,6 +34,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   buttonText: {
+    textAlign: "center",
     color: "white",
     fontSize: 18,
   },
