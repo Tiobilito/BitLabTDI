@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"
 import {
   StyleSheet,
   Text,
@@ -8,16 +8,17 @@ import {
   ScrollView,
   Alert,
   Dimensions,
-} from "react-native";
-import { useRoute } from "@react-navigation/native";
-import { getUserById, updateUser } from "../../Modules/Operations DB Users";
-import { CustomView } from "../components/CustomView";
+} from "react-native"
+import { useRoute } from "@react-navigation/native"
+import { getUserById, updateUser } from "../../Modules/Operations DB Users"
+import { CustomView } from "../components/CustomView"
+import { Form, FloatingInput, CustomButton } from "../../components"
 
-const Scale = Dimensions.get("window").width;
+const { width, height } = Dimensions.get("window")
 
 const EditClientPage = ({ navigation }) => {
-  const route = useRoute();
-  const { idClient } = route.params;
+  const route = useRoute()
+  const { idClient } = route.params
 
   const [formData, setFormData] = useState({
     name: "",
@@ -26,14 +27,14 @@ const EditClientPage = ({ navigation }) => {
     email: "",
     phone: "",
     phone2: "",
-  });
+  })
 
   useEffect(() => {
-    getClientData();
-  }, []);
+    getClientData()
+  }, [])
 
   const getClientData = async () => {
-    const item = await getUserById(idClient);
+    const item = await getUserById(idClient)
     if (item) {
       setFormData({
         name: item.name,
@@ -42,23 +43,23 @@ const EditClientPage = ({ navigation }) => {
         email: item.email,
         phone: item.number,
         phone2: item.second_number,
-      });
+      })
     }
-  };
+  }
 
   const handleChange = (name, value) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
 
   const verifyAndSendData = () => {
-    const { name } = formData;
-  
+    const { name } = formData
+
     if (name.trim() !== "") {
-      sendData();
+      sendData()
     } else {
-      Alert.alert("Por favor rellene el nombre correctamente");
+      Alert.alert("Por favor rellene el nombre correctamente")
     }
-  };
+  }
 
   const sendData = async () => {
     const updatedData = {
@@ -68,166 +69,92 @@ const EditClientPage = ({ navigation }) => {
       email: formData.email,
       number: formData.phone,
       second_number: formData.phone2,
-    };
+    }
 
-    await updateUser(idClient, updatedData);
-    navigation.goBack();
-  };
+    await updateUser(idClient, updatedData)
+    navigation.goBack()
+  }
 
   return (
-    <CustomView>
-      <ScrollView style={styles.Scroll}>
-        <View style={styles.formCont}>
-          <Text style={styles.title}>Editar Usuario</Text>
-
-          <View style={styles.container}>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Nombre *</Text>
-            <TextInput
-              style={styles.input}
+    <View style={{ flex: 1 }}>
+      <CustomView>
+        <View style={styles.body}>
+          <Form title={"Editar Usuario"}>
+            <FloatingInput
+              label={"Nombre"}
               value={formData.name}
               onChangeText={(value) => handleChange("name", value)}
-              placeholder="Nombre"
             />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Dirección </Text>
-            <TextInput
-              style={styles.input}
+            <FloatingInput
+              label={"Dirección"}
               value={formData.address}
               onChangeText={(value) => handleChange("address", value)}
-              placeholder="Dirección"
             />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Código Postal </Text>
-            <TextInput
-              style={styles.input}
+            <FloatingInput
+              label={"Código Postal"}
               value={formData.zipCode}
               onChangeText={(value) => handleChange("zipCode", value)}
-              placeholder="Código Postal"
               keyboardType="numeric"
+              placeholder={"xxxxx"}
             />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Correo electrónico </Text>
-            <TextInput
-              style={styles.input}
+            <FloatingInput
+              label={"Correo electrónico"}
               value={formData.email}
               onChangeText={(value) => handleChange("email", value)}
-              placeholder="Correo"
               keyboardType="email-address"
+              placeholder={"xxx@dominio"}
             />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Teléfono </Text>
-            <TextInput
-              style={styles.input}
+            <FloatingInput
+              label={"Teléfono"}
               value={formData.phone}
               onChangeText={(value) => handleChange("phone", value)}
-              placeholder="Teléfono"
               keyboardType="phone-pad"
+              placeholder={"xx-xxxx-xxxx"}
             />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Otro Teléfono</Text>
-            <TextInput
-              style={styles.input}
+            <FloatingInput
+              label={"Segundo Teléfono"}
               value={formData.phone2}
               onChangeText={(value) => handleChange("phone2", value)}
-              placeholder="Otro Teléfono"
               keyboardType="phone-pad"
+              placeholder={"xx-xxxx-xxxx"}
             />
-          </View>
-          </View>
-
-          <TouchableOpacity style={styles.button} onPress={verifyAndSendData}>
-            <Text style={styles.buttonText}>Actualizar</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.buttonCancel}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={styles.buttonText}>Cancelar</Text>
-          </TouchableOpacity>
+            <View style={styles.buttonContainer}>
+              <CustomButton
+                title={"Cancelar"}
+                onPress={() => navigation.goBack()}
+                buttonStyles={{
+                  backgroundColor: "#DC3545",
+                  width: width * 0.32,
+                }}
+              />
+              <CustomButton
+                title={"Actualizar"}
+                onPress={verifyAndSendData}
+                buttonStyles={{
+                  width: width * 0.32,
+                  backgroundColor: "#007BFF",
+                }}
+              />
+            </View>
+          </Form>
         </View>
-      </ScrollView>
-    </CustomView>
-  );
-};
+      </CustomView>
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
-  Scroll: {
-    marginTop: 35,
+  body: {
+    marginTop: height * 0.27,
+    height: "75%",
   },
-  container: {
-    width: "95%",
-    height: "72%",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 10,
-    margin: 10,
-    padding: 10, // Añadido padding
-  },
-  title: {
-    fontSize: Scale > 400 ? 50 : 20,
-    fontWeight: "bold",
-    color: "#333",
-    textAlign: "center",
-    marginBottom: 20,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: Scale > 400 ? 50 : 15,
-    fontWeight: "regular",
-    marginLeft: "5%",
-    color: "#000000",
-  },
-  input: {
-    height: Scale > 400 ? 60 : 40,
-    width: "93%",
-    backgroundColor: "#C5E0F2",
-    borderRadius: Scale > 400 ? 20 : 15,
-    padding: 10,
-    margin: 10,
-    fontSize: Scale > 400 ? 30 : 15,
-  },
-  button: {
-    width: Scale * 0.5,
-    height: Scale * 0.1,
-    backgroundColor: "#2272A7",
-    justifyContent: "center",
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    borderRadius: 10,
-    marginBottom: Scale * 0.08,
-    marginTop: 20,
+    marginTop: width * 0.05,
+    marginLeft: 10,
   },
-  buttonCancel: {
-    width: Scale * 0.5,
-    height: Scale * 0.1,
-    backgroundColor: "#dc3545",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-    marginBottom: Scale * 0.08,
-    marginTop: 10,
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  formCont: {
-    width: Scale * 0.8,
-    marginBottom: Scale * 0.08,
-  },
-});
+})
 
-export default EditClientPage;
+export default EditClientPage

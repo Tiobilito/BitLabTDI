@@ -19,8 +19,9 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated"
+import { CustomButton, Form, FloatingInput } from "../components"
 
-const Scale = Dimensions.get("window").width
+const { width, height } = Dimensions.get("window")
 
 const Register = ({ navigation }) => {
   const [code, setCode] = useState("")
@@ -120,186 +121,234 @@ const Register = ({ navigation }) => {
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }],
   }))
-  
+
   return (
-    <CustomView>
-      <Animated.View style={animatedStyle}>
-        <Image
-          source={require("../Resources/imagenes/BITLABTDI.png")}
-          style={styles.Logo}
-        />
-      </Animated.View>
-      <Text
-        style={{ fontSize: Scale > 400 ? 50 : 20, marginBottom: Scale * 0.05 }}
-      >
-        Registra tu nueva cuenta
-      </Text>
-      <ScrollView style={{ height: Scale * 1.1 }}>
-        <View style={styles.formCont}>
-          <Text style={styles.textForm}>Código</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setCode}
-            value={code}
-            placeholder="Code"
-            keyboardType="numeric"
+    <View style={styles.container}>
+      <CustomView>
+        <Animated.View style={animatedStyle}>
+          <Image
+            source={require("../Resources/imagenes/BITLABTDI.png")}
+            style={styles.Logo}
           />
+        </Animated.View>
 
-          <Text style={styles.textForm}>Nombre</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setUsername}
-            value={username}
-            placeholder="Username"
-          />
-
-          <Text style={styles.textForm}>Contraseña</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setPassword}
-            value={password}
-            placeholder="Password"
-            secureTextEntry={true}
-            keyboardType="visible-password"
-          />
-
-          <Text style={styles.textForm}>Rol:</Text>
-          <Picker selectedValue={userType} onValueChange={handleUserTypeChange}>
-            <Picker.Item label="Selecciona un rol" value="null" />
-            <Picker.Item label="Profesor" value="3" />
-            <Picker.Item label="Alumno" value="4" />
-          </Picker>
-
-          <Text style={styles.textForm}>Dirección (opcional)</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setAddress}
-            value={address}
-            placeholder="Ejemplo 1234"
-          />
-
-          <Text style={styles.textForm}>Código Postal (opcional)</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setZipCode}
-            value={zipCode}
-            placeholder="Ejemplo 1234"
-            keyboardType="numeric"
-          />
-
-          <Text style={styles.textForm}>Número de teléfono (opcional)</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setPhoneNum}
-            value={phoneNum}
-            placeholder="xx-xxxx-xxxx"
-            keyboardType="numeric"
-          />
-
-          <Text style={styles.textForm}>Correo Electrónico (opcional)</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setEmail}
-            value={email}
-            keyboardType="email-address"
-            placeholder="something@email.com"
-          />
-
-          {userType === "2" && (
+        <View style={styles.body}>
+          <Form title={"Registra tu nueva cuenta"}>
             <>
-              <Text style={styles.textForm}>Número de Seguro Social</Text>
-              <TextInput
-                style={styles.input}
-                onChangeText={setNss}
-                value={nss}
-                placeholder="12345678"
+              <FloatingInput
+                label="Código"
+                value={code}
+                onChangeText={setCode}
                 keyboardType="numeric"
               />
 
-              <Text style={styles.textForm}>RFC</Text>
-              <TextInput
-                style={styles.input}
-                onChangeText={setRfc}
-                value={rfc}
-                placeholder="12345678"
+              {/* <View style={styles.inputWrapper}>
+                <Text style={styles.inputLabel}>Código</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Code"
+                  value={code}
+                  onChangeText={setCode}
+                  keyboardType="numeric"
+                />
+              </View> */}
+
+              <FloatingInput
+                label="Nombre"
+                value={username}
+                onChangeText={setUsername}
+              />
+              <FloatingInput
+                label={"Contraseña"}
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={true}
+                keyboardType={"visible-password"}
+              />
+              <View style={styles.inputWrapper}>
+                <Text style={styles.inputLabel}>Rol:</Text>
+                <View style={[styles.input, { height: "auto" }]}>
+                  <Picker
+                    selectedValue={userType}
+                    onValueChange={handleUserTypeChange}
+                  >
+                    <Picker.Item label="Selecciona un rol" value="null" />
+                    <Picker.Item label="Profesor" value="3" />
+                    <Picker.Item label="Alumno" value="4" />
+                  </Picker>
+                </View>
+              </View>
+              <FloatingInput
+                label="Dirección"
+                value={address}
+                onChangeText={setAddress}
+                placeholder={"Ejemplo 1234"}
+              />
+              <FloatingInput
+                label={"Código Postal"}
+                value={zipCode}
+                onChangeText={setZipCode}
+                keyboardType={"numeric"}
+                placeholder={"xxxxx"}
+              />
+              <FloatingInput
+                label={"Número de teléfono"}
+                value={phoneNum}
+                onChangeText={setPhoneNum}
+                keyboardType={"numeric"}
+                placeholder={"xx-xxxx-xxxx"}
+              />
+              <FloatingInput
+                label={"Correo Electrónico (opcional)"}
+                value={email}
+                onChangeText={setEmail}
+                keyboardType={"email-address"}
+                placeholder={"xxx@dominio"}
               />
 
-              <Text style={styles.textForm}>Salario</Text>
-              <TextInput
-                style={styles.input}
-                onChangeText={setSalary}
-                value={salary}
-                placeholder="12345.67"
-                keyboardType="numeric"
-              />
+              {userType === "2" && (
+                <>
+                  <FloatingInput
+                    label={"Número de Seguro Social"}
+                    value={nss}
+                    onChangeText={setNss}
+                    keyboardType={"numeric"}
+                    placeholder={"xxxxxxxx"}
+                  />
+                  <FloatingInput
+                    label={"RFC"}
+                    value={rfc}
+                    onChangeText={setRfc}
+                    placeholder={"12345678"}
+                  />
+                  <FloatingInput
+                    label={"Salario"}
+                    value={salary}
+                    onChangeText={setSalary}
+                    keyboardType={"numeric"}
+                    placeholder={"xxxxx.xx"}
+                  />
+                </>
+              )}
+
+              <View style={styles.inputWrapper}>
+                <Text style={styles.inputLabel}>
+                  ID departamento (opcional)
+                </Text>
+                <View style={[styles.input, { height: "auto" }]}>
+                  <Picker
+                    selectedValue={departmentID}
+                    onValueChange={(itemValue) => setDepartmentID(itemValue)}
+                  >
+                    <Picker.Item label="Selecciona un departamento" value="" />
+                    {departments.map((dept) => (
+                      <Picker.Item
+                        key={dept.id}
+                        label={dept.name}
+                        value={dept.id}
+                      />
+                    ))}
+                  </Picker>
+                </View>
+              </View>
+
+              <View style={styles.buttonContainer}>
+                <CustomButton
+                  title="Cancelar"
+                  onPress={() => navigation.goBack()}
+                  buttonStyles={{
+                    backgroundColor: "#DC3545",
+                    width: width * 0.32,
+                    // marginTop: 20,
+                    // marginLeft: 10,
+                  }}
+                />
+                <CustomButton
+                  title="Registrar"
+                  onPress={Verify}
+                  buttonStyles={{
+                    backgroundColor: "#007BFF",
+                    width: width * 0.32,
+                    // marginTop: 20,
+                    // marginLeft: 10,
+                  }}
+                />
+              </View>
             </>
-          )}
-
-          <Text style={styles.textForm}>ID departamento (opcional)</Text>
-          <Picker
-            selectedValue={departmentID}
-            onValueChange={(itemValue) => setDepartmentID(itemValue)}
-          >
-            <Picker.Item label="Selecciona un departamento" value="" />
-            {departments.map((dept) => (
-              <Picker.Item key={dept.id} label={dept.name} value={dept.id} />
-            ))}
-          </Picker>
+          </Form>
         </View>
-
-        <View
-          style={{
-            width: Scale * 0.8,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <TouchableOpacity style={styles.loginButton} onPress={Verify}>
-            <Text style={{ color: "white", fontWeight: "bold" }}>
-              Registrar
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={{ marginBottom: Scale * 0.1 }}></View>
-      </ScrollView>
-    </CustomView>
+      </CustomView>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  body: {
+    marginTop: -50,
+    height: "70%",
+    // flex: 1,
+    // flexDirection: "row",
+    // alignItems: "center",
+    // justifyContent: "center",
+    // width: "100%",
+    // paddingHorizontal: 16,
+    // marginTop: 35,
+  },
+  inputWrapper: {
+    marginBottom: 16,
+  },
+  inputLabel: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: "#555",
+    marginBottom: 4,
+  },
   input: {
-    height: Scale > 400 ? 60 : 40,
-    width: "93%",
+    fontSize: 18,
+    color: "#555",
     backgroundColor: "#C5E0F2",
-    borderRadius: Scale > 400 ? 20 : 15,
-    padding: 10,
-    margin: 10,
-    fontSize: Scale > 400 ? 30 : 15,
+    borderRadius: width > 400 ? 20 : 15,
+    // minHeight: height * 0.02,
+    textAlignVertical: "center",
+    // padding: width * 0.02,
   },
-  textForm: {
-    fontSize: Scale > 400 ? 50 : 15,
-    fontWeight: "regular",
-    marginLeft: "5%",
-    color: "#000000",
-  },
+  // input: {
+  //   height: 40,
+  //   borderColor: "#ddd",
+  //   borderWidth: 1,
+  //   borderRadius: 8,
+  //   paddingHorizontal: 8,
+  //   fontSize: 16,
+  //   backgroundColor: "#C5E0F2",
+  // },
   formCont: {
-    width: Scale * 0.8,
-    marginBottom: Scale * 0.08,
+    width: width * 0.8,
+    marginBottom: width * 0.08,
   },
   loginButton: {
-    width: Scale * 0.5,
-    height: Scale * 0.1,
+    width: width * 0.5,
+    height: width * 0.1,
     backgroundColor: "#2272A7",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    marginBottom: Scale * 0.08,
+    marginTop: 20,
+    // marginBottom: width * 0.08,
   },
   Logo: {
-    width: Scale > 400 ? 400 : 250,
-    height: Scale > 400 ? 400 : 250,
-    marginTop: "10%",
+    width: width * 0.7,
+    height: width * 0.7,
+    marginTop: "7%",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: width * 0.05,
+    marginLeft: 10,
   },
 })
 

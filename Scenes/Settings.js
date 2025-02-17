@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect } from "react"
 import {
   StyleSheet,
   TextInput,
@@ -9,79 +9,79 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-} from "react-native";
-import FeatherIcon from "react-native-vector-icons/Feather";
-import { getAllDepartamentos } from "../Modules/Operations DB Generals";
-import { getUserById, updateUser } from "../Modules/Operations DB Users";
-import { CustomView } from "./components/CustomView";
-import { GetUserData } from "../Modules/DataInfo";
+} from "react-native"
+import FeatherIcon from "react-native-vector-icons/Feather"
+import { getAllDepartamentos } from "../Modules/Operations DB Generals"
+import { getUserById, updateUser } from "../Modules/Operations DB Users"
+import { CustomView } from "./components/CustomView"
+import { GetUserData } from "../Modules/DataInfo"
 
-const Scale = Dimensions.get("window").width;
+const { width, height } = Dimensions.get("window")
 
 const SettingsPage = ({ navigation }) => {
-  const [code, setCode] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [userType, setUserType] = useState("");
-  const [address, setAddress] = useState("");
-  const [zipCode, setZipCode] = useState("");
-  const [phoneNum, setPhoneNum] = useState("");
-  const [nss, setNss] = useState("");
-  const [rfc, setRfc] = useState("");
-  const [salary, setSalary] = useState("");
-  const [departmentID, setDepartmentID] = useState("");
-  const [departments, setDepartments] = useState([]);
-  const [userData, setUserData] = useState([]);
+  const [code, setCode] = useState("")
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [userType, setUserType] = useState("")
+  const [address, setAddress] = useState("")
+  const [zipCode, setZipCode] = useState("")
+  const [phoneNum, setPhoneNum] = useState("")
+  const [nss, setNss] = useState("")
+  const [rfc, setRfc] = useState("")
+  const [salary, setSalary] = useState("")
+  const [departmentID, setDepartmentID] = useState("")
+  const [departments, setDepartments] = useState([])
+  const [userData, setUserData] = useState([])
 
   useEffect(() => {
     const loadDepartments = async () => {
-      const data = await getAllDepartamentos();
+      const data = await getAllDepartamentos()
       if (data) {
-        setDepartments(data);
+        setDepartments(data)
       }
-    };
+    }
 
     const loadUserData = async () => {
-      const dataI = await GetUserData();
-      const data = await getUserById(dataI.Code);
-      setUserData(data);
+      const dataI = await GetUserData()
+      const data = await getUserById(dataI.Code)
+      setUserData(data)
       if (data) {
-        setUserData(data);
-        setCode(data.code);
-        setUsername(data.name);
-        setEmail(data.email);
-        setPassword(data.password);
-        setUserType(data.user_type);
-        setAddress(data.address);
-        setZipCode(data.zip_code);
-        setPhoneNum(data.number);
-        setNss(data.nss);
-        setRfc(data.rfc);
-        setSalary(data.salary);
-        setDepartmentID(data.department_id);
+        setUserData(data)
+        setCode(data.code)
+        setUsername(data.name)
+        setEmail(data.email)
+        setPassword(data.password)
+        setUserType(data.user_type)
+        setAddress(data.address)
+        setZipCode(data.zip_code)
+        setPhoneNum(data.number)
+        setNss(data.nss)
+        setRfc(data.rfc)
+        setSalary(data.salary)
+        setDepartmentID(data.department_id)
       }
-    };
+    }
 
-    loadUserData();
-    loadDepartments();
-  }, []);
+    loadUserData()
+    loadDepartments()
+  }, [])
 
   const isFormValid = () => {
     if (!code) {
-      Alert.alert("Error", "El código es obligatorio.");
-      return false;
+      Alert.alert("Error", "El código es obligatorio.")
+      return false
     }
     if (!username) {
-      Alert.alert("Error", "El nombre es obligatorio.");
-      return false;
+      Alert.alert("Error", "El nombre es obligatorio.")
+      return false
     }
     if (!password) {
-      Alert.alert("Error", "La contraseña es obligatoria.");
-      return false;
+      Alert.alert("Error", "La contraseña es obligatoria.")
+      return false
     }
-    return true;
-  };
+    return true
+  }
 
   const Verify = async () => {
     if (isFormValid()) {
@@ -98,35 +98,24 @@ const SettingsPage = ({ navigation }) => {
         number: phoneNum,
         department_id: departmentID ? parseInt(departmentID) : null, // Convertir a entero si existe
         password: password,
-      };
-      await updateUser(UserData);
-      Alert.alert("Éxito", "Usuario modificado exitosamente.");
+      }
+      await updateUser(UserData)
+      Alert.alert("Éxito", "Usuario modificado exitosamente.")
     }
-  };
+  }
 
   return (
     <CustomView>
-      <Text
-        style={{
-          fontSize: Scale > 400 ? 50 : 20,
-          marginBottom: Scale * 0.05,
-          marginTop: Scale * 0.5,
-          fontWeight: "600",
-          color: "#000",
-          textAlign: "center",
-        }}
-      >
-        Configuraciones
-      </Text>
+      <Text style={styles.title}>Configuraciones</Text>
 
-      <ScrollView style={{ height: Scale * 1.4 }}>
+      <ScrollView style={styles.scrollContainer}>
         <View style={[styles.section, { paddingTop: 4 }]}>
           <Text style={styles.sectionTitle}>Cuenta</Text>
 
           <View style={styles.sectionBody}>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("AccountOnlyRead");
+                navigation.navigate("AccountOnlyRead")
               }}
               style={styles.profile}
             >
@@ -155,7 +144,7 @@ const SettingsPage = ({ navigation }) => {
             <View style={[styles.rowWrapper, styles.rowFirst]}>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate("Editaccount");
+                  navigation.navigate("Editaccount")
                 }}
                 style={styles.row}
               >
@@ -172,7 +161,7 @@ const SettingsPage = ({ navigation }) => {
             <View style={styles.rowWrapper}>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate("EditPassword");
+                  navigation.navigate("EditPassword")
                 }}
                 style={styles.row}
               >
@@ -200,7 +189,7 @@ const SettingsPage = ({ navigation }) => {
             >
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate("Login");
+                  navigation.navigate("Login")
                 }}
                 style={styles.row}
               >
@@ -212,44 +201,64 @@ const SettingsPage = ({ navigation }) => {
           </View>
         </View>
 
-        <View style={{ marginBottom: Scale * 0.1 }}></View>
+        <View style={{ marginBottom: width * 0.1 }}></View>
       </ScrollView>
     </CustomView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
+  // title: {
+  //   fontSize: width > 400 ? 50 : 20,
+  //   marginBottom: width * 0.05,
+  //   marginTop: width * 0.5,
+  //   fontWeight: "600",
+  //   color: "#000",
+  //   textAlign: "center",
+  // },
+  title: {
+    fontSize: 40,
+    fontWeight: "bold",
+    textAlign: "center",
+    // marginVertical: 20,
+    color: "#394F66",
+    padding: width * 0.08,
+    marginTop: 230,
+  },
+  scrollContainer: {
+    width: "93%",
+  },
   input: {
-    height: Scale > 400 ? 60 : 40,
+    height: width > 400 ? 60 : 40,
     width: "93%",
     backgroundColor: "#C5E0F2",
-    borderRadius: Scale > 400 ? 20 : 15,
+    borderRadius: width > 400 ? 20 : 15,
     padding: 10,
     margin: 10,
-    fontSize: Scale > 400 ? 30 : 15,
+    fontSize: width > 400 ? 30 : 15,
   },
   textForm: {
-    fontSize: Scale > 400 ? 50 : 15,
+    fontSize: width > 400 ? 50 : 15,
     fontWeight: "regular",
     marginLeft: "5%",
     color: "#000000",
   },
   formCont: {
-    width: Scale * 0.8,
-    marginBottom: Scale * 0.08,
+    width: width * 0.8,
+    marginBottom: width * 0.08,
   },
   loginButton: {
-    width: Scale * 0.5,
-    height: Scale * 0.1,
+    width: width * 0.5,
+    height: width * 0.1,
     backgroundColor: "#2272A7",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    marginBottom: Scale * 0.08,
+    marginBottom: width * 0.08,
   },
   Logo: {
-    width: Scale > 400 ? 400 : 250,
-    height: Scale > 400 ? 400 : 250,
+    width: width > 400 ? 400 : 250,
+    height: width > 400 ? 400 : 250,
     marginTop: "10%",
   },
   /** Section */
@@ -350,6 +359,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#dc2626",
   },
-});
+})
 
-export default SettingsPage;
+export default SettingsPage

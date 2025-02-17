@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback } from "react"
 import {
   Text,
   StyleSheet,
@@ -9,62 +9,63 @@ import {
   FlatList,
   ActivityIndicator,
   Dimensions,
-} from "react-native";
-import filter from "lodash.filter";
-import { useFocusEffect } from "@react-navigation/native";
-import { getAllClientUsers } from "../../Modules/Operations DB Users";
-import { CustomViewReverse } from "../components/CustomViewReverse";
+} from "react-native"
+import filter from "lodash.filter"
+import { useFocusEffect } from "@react-navigation/native"
+import { getAllClientUsers } from "../../Modules/Operations DB Users"
+import { CustomViewReverse } from "../components/CustomViewReverse"
+import { Info } from "../../components"
 
-const WIDTH = Dimensions.get("window").width;
-const HEIGHT = Dimensions.get("window").height;
+const WIDTH = Dimensions.get("window").width
+const HEIGHT = Dimensions.get("window").height
 
 const SearchPage = ({ navigation }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
-  const [fullData, setFullData] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false)
+  const [data, setData] = useState([])
+  const [error, setError] = useState(null)
+  const [fullData, setFullData] = useState([])
+  const [searchQuery, setSearchQuery] = useState("")
 
   useFocusEffect(
     useCallback(() => {
-      setIsLoading(true);
-      fetchData();
+      setIsLoading(true)
+      fetchData()
     }, [])
-  );
+  )
 
   const fetchData = async () => {
     try {
-      const Data = await getAllClientUsers();
+      const Data = await getAllClientUsers()
       const BData = Data.map((registro) => ({
         ...registro,
         Details: false,
-      }));
-      setData(BData);
-      setFullData(BData);
-      setIsLoading(false);
+      }))
+      setData(BData)
+      setFullData(BData)
+      setIsLoading(false)
     } catch (error) {
-      setError(error);
-      console.log(error);
-      setIsLoading(false);
+      setError(error)
+      console.log(error)
+      setIsLoading(false)
     }
-  };
+  }
 
   const toggleDetails = (itemId) => {
     const updatedData = data.map((registro) => {
       if (registro.code === itemId) {
-        return { ...registro, Details: !registro.Details };
+        return { ...registro, Details: !registro.Details }
       }
-      return registro;
-    });
-    setData(updatedData);
-  };
+      return registro
+    })
+    setData(updatedData)
+  }
 
   if (isLoading) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#ffffff" />
       </View>
-    );
+    )
   }
 
   if (error) {
@@ -72,29 +73,32 @@ const SearchPage = ({ navigation }) => {
       <View style={styles.centered}>
         <Text style={styles.errorText}>Error en la obtención de datos</Text>
       </View>
-    );
+    )
   }
 
   const contains = ({ name, email }, query) => {
+    const lowerCaseName = (name ?? "").toLowerCase()
+    const lowerCaseEmail = (email ?? "").toLowerCase()
+
     return (
-      name.toLowerCase().includes(query.toLowerCase()) ||
-      email.toLowerCase().includes(query.toLowerCase())
-    );
-  };
+      lowerCaseName.includes(query.toLowerCase()) ||
+      lowerCaseEmail.includes(query.toLowerCase())
+    )
+  }
 
   const navigateToEditClient = (code) => {
-    navigation.navigate("EditClient", { idClient: code });
-  };
+    navigation.navigate("EditClient", { idClient: code })
+  }
 
   const navigateToDevices = (code) => {
-    navigation.navigate("Devices", { idClient: code });
-  };
+    navigation.navigate("Devices", { idClient: code })
+  }
 
   return (
-    <CustomViewReverse>
+    <CustomViewReverse style={{ flex: 1 }}>
       <View
         style={{
-          height: HEIGHT * 0.88,
+          height: "90%",
           width: WIDTH * 0.9,
           marginTop: HEIGHT * 0.04,
         }}
@@ -102,17 +106,18 @@ const SearchPage = ({ navigation }) => {
         <TextInput
           style={styles.searchBox}
           onChangeText={(query) => {
-            setSearchQuery(query);
+            setSearchQuery(query)
             const filteredData = filter(fullData, (item) =>
               contains(item, query)
-            );
-            setData(filteredData);
+            )
+            setData(filteredData)
           }}
           value={searchQuery}
           placeholder="Buscar contactos"
         />
         <View
           style={{
+            flex: 1,
             width: WIDTH * 0.9,
             height: HEIGHT * 0.7,
             backgroundColor: "#FFFFFF",
@@ -147,22 +152,16 @@ const SearchPage = ({ navigation }) => {
                 </TouchableOpacity>
                 {item.Details && (
                   <View style={styles.details}>
-                    <Text style={styles.detailText}>Código: {item.code}</Text>
-                    <Text style={styles.detailText}>
-                      Dirección: {item.address}
-                    </Text>
-                    <Text style={styles.detailText}>
-                      Código Postal: {item.zip_code}
-                    </Text>
-                    <Text style={styles.detailText}>
-                      Teléfono: {item.number}
-                    </Text>
-                    <Text style={styles.detailText}>
-                      Otro Teléfono: {item.second_number}
-                    </Text>
+                    <Info title="Código: " text={item.code} />
+                    <Info title="Dirección: " text={item.address} />
+                    <Info title="Código Postal: " text={item.zip_code} />
+                    <Info title="Teléfono: " text={item.number} />
+                    <Info title="Otro Teléfono: " text={item.second_number} />
+
                     <View style={styles.buttons}>
                       <TouchableOpacity
                         onPress={() => navigateToEditClient(item.code)}
+                        style={styles.buttonContainer}
                       >
                         <Image
                           source={require("../../Resources/imagenes/editar.png")}
@@ -171,6 +170,7 @@ const SearchPage = ({ navigation }) => {
                       </TouchableOpacity>
                       <TouchableOpacity
                         onPress={() => navigateToDevices(item.code)}
+                        style={styles.buttonContainer}
                       >
                         <Image
                           source={require("../../Resources/imagenes/device.png")}
@@ -186,8 +186,8 @@ const SearchPage = ({ navigation }) => {
         </View>
       </View>
     </CustomViewReverse>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   background: {
@@ -256,20 +256,26 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
   },
-  detailText: {
-    fontSize: 14,
-    color: "#ffffff",
-  },
   buttons: {
     flexDirection: "row",
     justifyContent: "space-around",
     paddingVertical: 10,
   },
+  buttonContainer: {
+    flexDirection: "row",
+    backgroundColor: "#FFF",
+    borderRadius: 100,
+    width: 36,
+    height: 36,
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+  },
   buttonImage: {
     width: 24,
     height: 24,
-    marginHorizontal: 10,
+    // marginHorizontal: 10,
   },
-});
+})
 
-export default SearchPage;
+export default SearchPage

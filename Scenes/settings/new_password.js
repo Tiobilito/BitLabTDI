@@ -1,150 +1,141 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"
 import {
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   View,
   Text,
   TouchableOpacity,
   TextInput,
   Alert,
-} from "react-native";
-import FeatherIcon from "react-native-vector-icons/Feather";
-import { useNavigation } from "@react-navigation/native";
-import { GetUserData } from "../../Modules/DataInfo";
-import { getUserById, updatePassword } from "../../Modules/Operations DB Users";
-import { CustomViewReverse } from "../components/CustomViewReverse";
+  Dimensions,
+} from "react-native"
+import FeatherIcon from "react-native-vector-icons/Feather"
+import { useNavigation } from "@react-navigation/native"
+import { GetUserData } from "../../Modules/DataInfo"
+import { getUserById, updatePassword } from "../../Modules/Operations DB Users"
+import { CustomViewReverse } from "../components/CustomViewReverse"
+import { CustomButton, Form, FloatingInput } from "../../components"
+
+const { width, height } = Dimensions.get("window")
 
 export default function UpdatePassword() {
-  const navigation = useNavigation();
+  const navigation = useNavigation()
 
   const [form, setForm] = useState({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
-  });
-  const [originalPassword, setOriginal] = useState("");
-  const [userID, setUserID] = useState("");
+  })
+  const [originalPassword, setOriginal] = useState("")
+  const [userID, setUserID] = useState("")
 
   useEffect(() => {
     const loadData = async () => {
-      const userData = await GetUserData();
-      const user = await getUserById(userData.Code);
+      const userData = await GetUserData()
+      const user = await getUserById(userData.Code)
       if (user) {
-        setOriginal(user.password);
-        setUserID(user.code.toString());
+        setOriginal(user.password)
+        setUserID(user.code.toString())
       }
-    };
+    }
 
-    loadData();
-  }, []);
+    loadData()
+  }, [])
 
   const handleUpdatePassword = () => {
     try {
-      const userCode = parseInt(userID, 10);
+      const userCode = parseInt(userID, 10)
       if (form.currentPassword !== originalPassword) {
-        Alert.alert("Error", "La contraseña actual no es correcta");
-        return;
+        Alert.alert("Error", "La contraseña actual no es correcta")
+        return
       }
       if (form.newPassword !== form.confirmPassword) {
-        Alert.alert("Error", "Las nuevas contraseñas no coinciden");
-        return;
+        Alert.alert("Error", "Las nuevas contraseñas no coinciden")
+        return
       }
       // Aquí puedes agregar la lógica para actualizar la contraseña en el servidor
 
-      updatePassword(userCode, form.newPassword);
-      Alert.alert("Éxito", "informacion actualizada exitosamente.");
-      navigation.goBack();
+      updatePassword(userCode, form.newPassword)
+      Alert.alert("Éxito", "informacion actualizada exitosamente.")
+      navigation.goBack()
     } catch {
-      Alert.alert("Error", "Hubo un problema al actualizar");
+      Alert.alert("Error", "Hubo un problema al actualizar")
     }
-  };
+  }
 
   return (
     <CustomViewReverse>
       <View style={styles.header}>
-        <View style={styles.headerAction}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.goBack();
-            }}
-          >
-            <FeatherIcon color="#000" name="arrow-left" size={24} />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack()
+          }}
+          style={styles.headerAction}
+        >
+          <FeatherIcon color="#000" name="arrow-left" size={24} />
+        </TouchableOpacity>
 
         <Text numberOfLines={1} style={styles.headerTitle}>
           Actualizar Contraseña
         </Text>
 
-        <View style={[styles.headerAction, { alignItems: "flex-end" }]}>
-          <TouchableOpacity
-            onPress={() => {
-              // handle additional options
-            }}
-          >
-            <FeatherIcon color="#000" name="more-vertical" size={24} />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          onPress={() => {
+            // handle additional options
+          }}
+          style={[styles.headerAction, { alignItems: "flex-end" }]}
+        >
+          <FeatherIcon color="#000" name="more-vertical" size={24} />
+        </TouchableOpacity>
       </View>
 
-      <ScrollView contentContainerStyle={styles.content}>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Cambiar contraseña</Text>
+      <View style={styles.body}>
+        <Form title={"Cambiar Contraseña"}>
+          <FloatingInput
+            label={"Contraseña actual"}
+            value={form.currentPassword}
+            onChangeText={(currentPassword) =>
+              setForm({ ...form, currentPassword })
+            }
+            secureTextEntry={true}
+          />
 
-          <View style={styles.sectionBody}>
-            <View style={styles.inputWrapper}>
-              <Text style={styles.inputLabel}>Contraseña actual</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Ingresa tu contraseña actual"
-                value={form.currentPassword}
-                onChangeText={(currentPassword) =>
-                  setForm({ ...form, currentPassword })
-                }
-                secureTextEntry
-              />
-            </View>
+          <FloatingInput
+            label={"Nueva contraseña"}
+            value={form.newPassword}
+            onChangeText={(newPassword) => setForm({ ...form, newPassword })}
+            secureTextEntry={true}
+          />
 
-            <View style={styles.inputWrapper}>
-              <Text style={styles.inputLabel}>Nueva contraseña</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Ingresa tu nueva contraseña"
-                value={form.newPassword}
-                onChangeText={(newPassword) =>
-                  setForm({ ...form, newPassword })
-                }
-                secureTextEntry
-              />
-            </View>
+          <FloatingInput
+            label={"Confirma tu nueva contraseña"}
+            value={form.confirmPassword}
+            onChangeText={(confirmPassword) =>
+              setForm({ ...form, confirmPassword })
+            }
+            secureTextEntry={true}
+            placeholder={"Repite tu nueva contraseña"}
+          />
 
-            <View style={styles.inputWrapper}>
-              <Text style={styles.inputLabel}>
-                Confirma tu nueva contraseña
-              </Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Repite tu nueva contraseña"
-                value={form.confirmPassword}
-                onChangeText={(confirmPassword) =>
-                  setForm({ ...form, confirmPassword })
-                }
-                secureTextEntry
-              />
-            </View>
+          <View style={styles.buttonContainer}>
+            <CustomButton
+              title={"Cancelar"}
+              onPress={() => navigation.goBack()}
+              buttonStyles={{
+                backgroundColor: "#DC3545",
+                width: width * 0.32,
+              }}
+            />
+            <CustomButton
+              buttonStyles={{ backgroundColor: "#007BFF", width: width * 0.32 }}
+              onPress={handleUpdatePassword}
+              title="Actualizar"
+            />
           </View>
-
-          <TouchableOpacity
-            style={styles.button}
-            onPress={handleUpdatePassword}
-          >
-            <Text style={styles.buttonText}>Actualizar</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+        </Form>
+      </View>
     </CustomViewReverse>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -171,33 +162,10 @@ const styles = StyleSheet.create({
     flexBasis: 0,
     textAlign: "center",
   },
-  content: {
-    paddingHorizontal: 16,
-  },
-  section: {
-    paddingVertical: 12,
-  },
-  sectionTitle: {
-    margin: 8,
-    marginLeft: 12,
-    fontSize: 13,
-    letterSpacing: 0.33,
-    fontWeight: "500",
-    color: "#a69f9f",
-    textTransform: "uppercase",
-  },
-  sectionBody: {
-    borderRadius: 12,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
-    backgroundColor: "#fff",
-    padding: 16,
+  body: {
+    flex: 1,
+    alignItems: "center",
+    paddingBottom: 16,
   },
   inputWrapper: {
     marginBottom: 16,
@@ -217,6 +185,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: "#C5E0F2",
   },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: width * 0.05,
+    marginLeft: 10,
+  },
   button: {
     backgroundColor: "#007BFF",
     paddingVertical: 12,
@@ -229,4 +204,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
-});
+})

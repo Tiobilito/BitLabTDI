@@ -4,24 +4,30 @@ import { mainStyles } from "./styles"
 export default ({
   label,
   value,
-  onChangue,
+  onChangeText,
   keyboardType,
   editable = true,
   secureTextEntry = false,
   placeholder,
   determinante = "tu",
+  multiline = false,
+  containerStyle = {},
+  inputStyle = {},
 }) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, containerStyle]}>
       <Text style={mainStyles.title}>{label}</Text>
       <TextInput
-        style={mainStyles.input}
-        placeholder={placeholder ?? `Ingresa ${determinante} ${label.toLowerCase()}`}
+        style={[mainStyles.input, inputStyle, multiline && { height: "auto" }]}
+        placeholder={
+          placeholder ?? `Ingresa ${determinante} ${label.toLowerCase()}`
+        }
         value={value}
-        onChangeText={onChangue}
+        onChangeText={onChangeText}
         keyboardType={keyboardType}
         editable={editable}
         secureTextEntry={secureTextEntry}
+        multiline={multiline}
       />
     </View>
   )
@@ -29,6 +35,6 @@ export default ({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
+    marginBottom: 20,
   },
 })

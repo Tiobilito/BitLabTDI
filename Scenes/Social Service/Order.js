@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"
 import {
   StyleSheet,
   Text,
@@ -8,45 +8,56 @@ import {
   FlatList,
   Image,
   Dimensions,
-} from "react-native";
-import { useRoute } from "@react-navigation/native";
-import { Picker } from "@react-native-picker/picker";
-import { printToFileAsync } from "expo-print";
-import { shareAsync } from "expo-sharing";
+} from "react-native"
+import { useRoute } from "@react-navigation/native"
+import { Picker } from "@react-native-picker/picker"
+import { printToFileAsync } from "expo-print"
+import { shareAsync } from "expo-sharing"
 
-import { getUserById } from "../../Modules/Operations DB Users";
-import { getDispoById, addOrder, addCostSupa } from "../../Modules/Operations DB Fixes";
-import { getAllDepartamentos } from "../../Modules/Operations DB Generals";
-import { CustomViewReverse } from "../components/CustomViewReverse";
+import { getUserById } from "../../Modules/Operations DB Users"
+import {
+  getDispoById,
+  addOrder,
+  addCostSupa,
+} from "../../Modules/Operations DB Fixes"
+import { getAllDepartamentos } from "../../Modules/Operations DB Generals"
+import { CustomViewReverse } from "../components/CustomViewReverse"
+import {
+  CustomButton,
+  Form,
+  FloatingInput,
+  FloatingText,
+} from "../../components"
+import { mainStyles } from "../../components/styles"
 
-const Scale = Dimensions.get("window").width;
+const { width, height } = Dimensions.get("window")
 
 const OrderPage = ({ navigation }) => {
-  const route = useRoute();
-  const { idDevice } = route.params;
+  const route = useRoute()
+  const { idDevice } = route.params
 
-  const [ShowCost, setShowCost] = useState(false);
-  const [deviceData, setDeviceData] = useState(null);
-  const [clientData, setClientData] = useState(null);
-  const [partsUsed, setPartsUsed] = useState("");
-  const [geneDiag, setGeneDiag] = useState("");
-  const [status, setStatus] = useState("");
-  const [department, setDepartment] = useState(0);
-  const [depData, setDepData] = useState([]);
-  const [cost, setCost] = useState([]);
-  const [descripCost, setDescripCost] = useState("");
-  const [iva, setIva] = useState(false);
-  const [ivaBtext, setIvaBText] = useState("off");
-  const [buttonColor, setButtomColor] = useState("red");
-  const [price, setPrice] = useState("");
+  const [ShowCost, setShowCost] = useState(false)
+  const [deviceData, setDeviceData] = useState(null)
+  const [clientData, setClientData] = useState(null)
+  const [partsUsed, setPartsUsed] = useState("")
+  const [geneDiag, setGeneDiag] = useState("")
+  const [status, setStatus] = useState("")
+  const [department, setDepartment] = useState(0)
+  const [depData, setDepData] = useState([])
+  const [cost, setCost] = useState([])
+  const [descripCost, setDescripCost] = useState("")
+  const [iva, setIva] = useState(false)
+  const [ivaBtext, setIvaBText] = useState("off")
+  const [buttonColor, setButtomColor] = useState("red")
+  const [price, setPrice] = useState("")
 
   useEffect(() => {
-    GetDepData();
-    GetClientDeviceData();
-  }, []);
+    GetDepData()
+    GetClientDeviceData()
+  }, [])
 
   const sendData = async () => {
-    const totalCost = calculateTotalCost();
+    const totalCost = calculateTotalCost()
     const orderData = {
       customer_id: clientData.code,
       department_id: department,
@@ -57,40 +68,40 @@ const OrderPage = ({ navigation }) => {
       total: totalCost,
       diagnosis: geneDiag,
       payment_type: null,
-    };
-    const idOrder = await addOrder(orderData);
+    }
+    const idOrder = await addOrder(orderData)
 
     for (let i = 0; i < cost.length; i++) {
-      await addCostSupa(cost[i], idOrder);
+      await addCostSupa(cost[i], idOrder)
     }
-    navigation.goBack();
-  };
+    navigation.goBack()
+  }
 
   const GetClientDeviceData = async () => {
-    const deviceD = await getDispoById(idDevice);
-    const clientD = await getUserById(deviceD.customer_id);
-    setDeviceData(deviceD);
-    setClientData(clientD);
-  };
+    const deviceD = await getDispoById(idDevice)
+    const clientD = await getUserById(deviceD.customer_id)
+    setDeviceData(deviceD)
+    setClientData(clientD)
+  }
 
   const GetDepData = async () => {
     try {
-      const Data = await getAllDepartamentos();
-      setDepData(Data || []);
+      const Data = await getAllDepartamentos()
+      setDepData(Data || [])
     } catch (error) {
-      console.error("Error fetching departments:", error);
+      console.error("Error fetching departments:", error)
     }
-  };
+  }
 
   const handleIva = () => {
-    setButtomColor(buttonColor === "red" ? "blue" : "red");
-    setIvaBText(buttonColor === "red" ? "On" : "Off");
-    setIva(!iva);
-  };
+    setButtomColor(buttonColor === "red" ? "blue" : "red")
+    setIvaBText(buttonColor === "red" ? "On" : "Off")
+    setIva(!iva)
+  }
 
   const toggleCost = () => {
-    setShowCost(!ShowCost);
-  };
+    setShowCost(!ShowCost)
+  }
 
   const addCost = () => {
     if (descripCost && price) {
@@ -99,33 +110,35 @@ const OrderPage = ({ navigation }) => {
         description: descripCost,
         price: price,
         iva: iva,
-      };
-      setCost([...cost, newCost]);
-      setDescripCost("");
-      setPrice("");
-      setIva(false);
-      setShowCost(false);
+      }
+      setCost([...cost, newCost])
+      setDescripCost("")
+      setPrice("")
+      setIva(false)
+      setShowCost(false)
     }
-  };
+  }
 
   const calculateTotalCost = () => {
     const total = cost.reduce((sum, item) => {
-      const itemPrice = parseFloat(item.price) || 0;
-      return sum + itemPrice;
-    }, 0);
-    return total.toFixed(2);
-  };
+      const itemPrice = parseFloat(item.price) || 0
+      return sum + itemPrice
+    }, 0)
+    return total.toFixed(2)
+  }
 
   const renderCostItem = ({ item }) => (
     <View style={styles.costItem}>
       <Text style={styles.costText}>{item.description}</Text>
       <Text style={styles.costText}>{item.price}</Text>
-      <Text style={styles.costText}>{item.iva ? "IVA incluido" : "Sin IVA"}</Text>
+      <Text style={styles.costText}>
+        {item.iva ? "IVA incluido" : "Sin IVA"}
+      </Text>
     </View>
-  );
+  )
 
   const createPDF = async () => {
-    const totalCost = calculateTotalCost();
+    const totalCost = calculateTotalCost()
     const htmlContent = `
       <!DOCTYPE html>
       <html>
@@ -149,25 +162,39 @@ const OrderPage = ({ navigation }) => {
           </p>
           <p><strong>ID Orden:</strong> ${"ID"} </p>
           <p>
-            <strong>Nombre Cliente:</strong> ${clientData ? clientData.name : ""} &nbsp;
+            <strong>Nombre Cliente:</strong> ${
+              clientData ? clientData.name : ""
+            } &nbsp;
             <strong>Mail:</strong> ${clientData ? clientData.email : ""} &nbsp;
             <strong>Tel:</strong> ${clientData ? clientData.number : ""}
           </p>
           <p>
-            <strong>Dirección:</strong> ${clientData ? clientData.address : ""} &nbsp;
+            <strong>Dirección:</strong> ${
+              clientData ? clientData.address : ""
+            } &nbsp;
             <strong>C.P:</strong> ${clientData ? clientData.zip_code : ""}
           </p>
           <p>
-            <strong>Dispositivo:</strong> ${deviceData ? deviceData.id : ""} &nbsp;
-            <strong>Tipo:</strong> ${deviceData ? deviceData.device_type : ""} &nbsp;
-            <strong>Modelo:</strong> ${deviceData ? deviceData.model : ""} &nbsp;
+            <strong>Dispositivo:</strong> ${
+              deviceData ? deviceData.id : ""
+            } &nbsp;
+            <strong>Tipo:</strong> ${
+              deviceData ? deviceData.device_type : ""
+            } &nbsp;
+            <strong>Modelo:</strong> ${
+              deviceData ? deviceData.model : ""
+            } &nbsp;
             <strong>S/N:</strong> ${deviceData ? deviceData.serial_number : ""}
           </p>
           <p>
-            <strong>Estado Físico:</strong> ${deviceData ? deviceData.received_status : ""} &nbsp;
+            <strong>Estado Físico:</strong> ${
+              deviceData ? deviceData.received_status : ""
+            } &nbsp;
             <strong>Estatus:</strong> ${status} &nbsp;
             <strong>Departamento:</strong> ${department} &nbsp;
-            <strong>Fecha:</strong> ${deviceData ? deviceData.received_date : ""}
+            <strong>Fecha:</strong> ${
+              deviceData ? deviceData.received_date : ""
+            }
           </p>
           <p><strong>Partes utilizadas:</strong> ${partsUsed}</p>
           <p><strong>Solución:</strong> ${geneDiag}</p>
@@ -200,191 +227,245 @@ const OrderPage = ({ navigation }) => {
           <p><strong>Fecha:</strong> ${new Date()}</p>
       </body>
       </html>
-    `;
+    `
 
     const file = await printToFileAsync({
       html: htmlContent,
       base64: false,
       fileName: "OrderDetails.pdf",
-    });
-    await shareAsync(file.uri);
-  };
+    })
+    await shareAsync(file.uri)
+  }
 
   return (
     <CustomViewReverse>
-      <FlatList
-        style={styles.Scroll}
-        data={[{ key: "dummy" }]}
-        renderItem={() => null}
-        ListHeaderComponent={
-          <View style={styles.formCont}>
-            <Text style={styles.title}>Orden de Servicio</Text>
-            <View style={styles.container}>
-              <Text style={styles.label}>ID Dispositivo: {idDevice}</Text>
-              <TextInput
-                multiline
-                style={styles.input}
-                onChangeText={setPartsUsed}
-                value={partsUsed}
-                placeholder="Partes utilizadas"
-              />
-              <TextInput
-                multiline
-                style={styles.input}
-                onChangeText={setGeneDiag}
-                value={geneDiag}
-                placeholder="Diagnóstico general"
-              />
-              <Text style={styles.label}>Estado</Text>
-              <View style={styles.pickerContainer}>
-                <Picker
-                  selectedValue={status}
-                  style={styles.picker}
-                  itemStyle={styles.pickerItem}
-                  onValueChange={(itemValue) => setStatus(itemValue)}
-                >
-                  <Picker.Item label="Recibido" value="Recibido" />
-                  <Picker.Item label="Pendiente" value="Pendiente" />
-                  <Picker.Item label="Reparado" value="Reparado" />
-                  <Picker.Item label="No Reparado" value="No Reparado" />
-                </Picker>
-              </View>
-              <Text style={styles.label}>Departamento</Text>
-              <View style={styles.pickerContainer}>
-                <Picker
-                  selectedValue={department}
-                  style={styles.picker}
-                  itemStyle={styles.pickerItem}
-                  onValueChange={(itemValue) => setDepartment(itemValue)}
-                >
-                  {depData.map((dep) => (
-                    <Picker.Item key={dep.id} label={dep.name} value={dep.id} />
-                  ))}
-                </Picker>
-              </View>
-              <TouchableOpacity onPress={toggleCost} style={styles.addCostButton}>
-                <Image
-                  source={require("../../Resources/imagenes/agregar3.png")}
-                  style={styles.image}
+      <View style={styles.body}>
+        <FlatList
+          style={styles.Scroll}
+          data={[{ key: "dummy" }]}
+          renderItem={() => null}
+          ListHeaderComponent={
+            <Form title="Orden de Servicio">
+              <View style={styles.formCont}>
+                <FloatingText
+                  title="ID Dispositivo"
+                  text={idDevice}
+                  containerStyle={{ marginBottom: 0 }}
                 />
-              </TouchableOpacity>
-              {ShowCost && (
-                <View style={styles.subWin}>
-                  <TextInput
-                    multiline
-                    style={styles.input}
-                    onChangeText={setDescripCost}
-                    value={descripCost}
-                    placeholder="Descripción del costo"
-                  />
-                  <TextInput
-                    style={styles.input}
-                    onChangeText={setPrice}
-                    value={price}
-                    placeholder="Precio"
-                    keyboardType="numeric"
-                  />
-                  <Text style={styles.label}>IVA</Text>
+                <FloatingInput
+                  label={""}
+                  multiline={true}
+                  value={partsUsed}
+                  onChangeText={setPartsUsed}
+                  placeholder={"Partes utilizadas"}
+                  containerStyle={{ marginBottom: -10 }}
+                />
+                <FloatingInput
+                  label={""}
+                  multiline={true}
+                  value={geneDiag}
+                  onChangeText={setGeneDiag}
+                  placeholder={"Diagnóstico general"}
+                />
+
+                <View style={{ marginTop: 10 }}>
+                  <Text style={mainStyles.title}>Estado</Text>
+                  <View style={[mainStyles.input, styles.pickerContainer]}>
+                    <Picker
+                      selectedValue={status}
+                      onValueChange={(itemValue) => setStatus(itemValue)}
+                    >
+                      <Picker.Item label="Recibido" value="Recibido" />
+                      <Picker.Item label="Pendiente" value="Pendiente" />
+                      <Picker.Item label="Reparado" value="Reparado" />
+                      <Picker.Item label="No Reparado" value="No Reparado" />
+                    </Picker>
+                  </View>
+                </View>
+
+                <View style={{ marginTop: 20 }}>
+                  <Text style={mainStyles.title}>Departamento</Text>
+                  <View style={[mainStyles.input, styles.pickerContainer]}>
+                    <Picker
+                      selectedValue={department}
+                      onValueChange={(itemValue) => setDepartment(itemValue)}
+                    >
+                      {depData.map((dep) => (
+                        <Picker.Item
+                          key={dep.id}
+                          label={dep.name}
+                          value={dep.id}
+                        />
+                      ))}
+                    </Picker>
+                  </View>
+                </View>
+                <View>
                   <TouchableOpacity
-                    style={[styles.button, { backgroundColor: buttonColor, width: Scale * 0.3 }]}
-                    onPress={handleIva}
+                    onPress={toggleCost}
+                    style={styles.addCostButton}
                   >
-                    <Text style={styles.buttonText}>{ivaBtext}</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.button} onPress={addCost}>
-                    <Text style={styles.buttonText}>Agregar Costo</Text>
+                    <Image
+                      source={require("../../Resources/imagenes/agregar3.png")}
+                      style={styles.image}
+                    />
                   </TouchableOpacity>
                 </View>
-              )}
-              {cost.length > 0 && (
-                <View style={styles.totalContainer}>
-                  <Text style={styles.totalText}>Total: ${calculateTotalCost()}</Text>
+                {ShowCost && (
+                  <View style={styles.subWin}>
+                    <FloatingInput
+                      label={"Descripción del costo"}
+                      value={descripCost}
+                      onChangeText={setDescripCost}
+                      placeholder={"...."}
+                      inputStyle={{ backgroundColor: "#FFF" }}
+                      multiline={true}
+                    />
+                    <FloatingInput
+                      label={"Precio"}
+                      value={price}
+                      onChangeText={setPrice}
+                      placeholder={"xxxx.xx"}
+                      keyboardType={"numeric"}
+                      inputStyle={{ backgroundColor: "#FFF" }}
+                    />
+
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        marginLeft: 10,
+                        marginVertical: 5,
+                      }}
+                    >
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          marginBottom: 20,
+                        }}
+                      >
+                        <Text
+                          style={[mainStyles.title, { fontSize: width * 0.08 }]}
+                        >
+                          IVA
+                        </Text>
+                        <CustomButton
+                          title={ivaBtext}
+                          onPress={handleIva}
+                          buttonStyles={{
+                            backgroundColor: buttonColor,
+                            width: width * 0.3,
+                          }}
+                        />
+                      </View>
+                      <CustomButton title="Agregar Costo" onPress={addCost} />
+                    </View>
+                  </View>
+                )}
+                {cost.length > 0 && (
+                  <View style={styles.totalContainer}>
+                    <Text style={styles.totalText}>
+                      Total: ${calculateTotalCost()}
+                    </Text>
+                  </View>
+                )}
+                <FlatList
+                  data={cost}
+                  renderItem={renderCostItem}
+                  keyExtractor={(item) => item.id}
+                  ListEmptyComponent={
+                    <Text
+                      style={[
+                        mainStyles.title,
+                        { fontSize: width * 0.08, alignSelf: "center" },
+                      ]}
+                    >
+                      No hay costos aún
+                    </Text>
+                  }
+                  contentContainerStyle={styles.flatlist}
+                  nestedScrollEnabled={true}
+                />
+
+                <View style={styles.approval}>
+                  <CustomButton
+                    title="Generar PDF"
+                    onPress={createPDF}
+                    buttonStyles={{
+                      width: width * 0.32,
+                      backgroundColor: "#DC3545",
+                    }}
+                  />
+                  <CustomButton
+                    title="Añadir registro"
+                    onPress={sendData}
+                    buttonStyles={{
+                      width: width * 0.32,
+                      backgroundColor: "#007BFF",
+                    }}
+                  />
                 </View>
-              )}
-              <FlatList
-                data={cost}
-                renderItem={renderCostItem}
-                keyExtractor={(item) => item.id}
-                ListEmptyComponent={<Text style={styles.label}>No hay costos aún</Text>}
-                contentContainerStyle={styles.flatlist}
-                nestedScrollEnabled={true}
-              />
-            </View>
-            <TouchableOpacity style={styles.button} onPress={createPDF}>
-              <Text style={styles.buttonText}>Generar PDF</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonCancel} onPress={sendData}>
-              <Text style={styles.buttonText}>Añadir registro</Text>
-            </TouchableOpacity>
-          </View>
-        }
-      />
+              </View>
+            </Form>
+          }
+        />
+      </View>
     </CustomViewReverse>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
-  Scroll: {
-    marginTop: 35,
+  body: {
+    alignItems: "center",
+    height: height * 0.85,
+
+    paddingHorizontal: 20,
   },
   formCont: {
-    width: Scale * 0.8,
+    width: width * 0.7,
     alignSelf: "center",
-    marginBottom: Scale * 0.08,
-  },
-  container: {
-    width: "95%",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 10,
-    margin: 10,
-    padding: 10,
+    marginBottom: width * 0.08,
   },
   title: {
-    fontSize: Scale > 400 ? 50 : 20,
+    fontSize: width > 400 ? 50 : 20,
     fontWeight: "bold",
     color: "#333",
     textAlign: "center",
     marginBottom: 20,
   },
-  label: {
-    fontSize: Scale > 400 ? 50 : 15,
-    marginLeft: "5%",
-    color: "#000000",
-    marginTop: 10,
-  },
   input: {
-    height: Scale > 400 ? 60 : 40,
+    height: width > 400 ? 60 : 40,
     width: "93%",
     backgroundColor: "#C5E0F2",
-    borderRadius: Scale > 400 ? 20 : 15,
+    borderRadius: width > 400 ? 20 : 15,
     padding: 10,
     margin: 10,
-    fontSize: Scale > 400 ? 30 : 15,
+    fontSize: width > 400 ? 30 : 15,
   },
   pickerContainer: {
-    backgroundColor: "#C5E0F2",
-    borderRadius: Scale > 400 ? 20 : 15,
-    margin: 10,
+    height: height * 0.05,
+    justifyContent: "center",
   },
-  picker: {
-    height: 50,
-    width: "100%",
-    color: "#000",
+  addCostButton: {
+    backgroundColor: "#C5E0F2",
+    borderRadius: 100,
+    width: 90,
+    height: 90,
+    marginVertical: 10,
+    marginTop: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+    alignSelf: "center",
   },
   image: {
     width: 70,
     height: 70,
-    alignSelf: "center",
-    marginVertical: 10,
-  },
-  addCostButton: {
-    alignSelf: "center",
-    marginVertical: 10,
   },
   subWin: {
     backgroundColor: "#C5E0F2",
     padding: 10,
-    borderRadius: Scale > 400 ? 20 : 15,
+    borderRadius: width > 400 ? 20 : 15,
     margin: 10,
   },
   flatlist: {
@@ -413,34 +494,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "right",
   },
-  button: {
-    width: Scale * 0.5,
-    height: Scale * 0.1,
-    backgroundColor: "#2272A7",
-    justifyContent: "center",
+  approval: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    borderRadius: 10,
-    marginVertical: 10,
-    alignSelf: "center",
+    marginTop: width * 0.05,
+    marginLeft: 10,
+    marginBottom: -width * 0.05,
   },
-  buttonCancel: {
-    width: Scale * 0.5,
-    height: Scale * 0.1,
-    backgroundColor: "#dc3545",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-    marginVertical: 10,
-    alignSelf: "center",
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  pickerItem: {
-    fontSize: 1,
-  },
-});
+})
 
-export default OrderPage;
+export default OrderPage

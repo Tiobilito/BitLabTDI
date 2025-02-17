@@ -266,6 +266,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textDecorationLine: "underline",
     marginBottom: 5,
+    width: width * 0.7,
   },
   statusMargin: {
     backgroundColor: "white",

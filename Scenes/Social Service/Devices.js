@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback } from "react"
 import {
   Text,
   StyleSheet,
@@ -9,65 +9,66 @@ import {
   ActivityIndicator,
   TextInput,
   Dimensions,
-} from "react-native";
-import filter from "lodash.filter";
-import { useRoute, useFocusEffect } from "@react-navigation/native";
-import { getAllDevices } from "../../Modules/Operations DB Fixes";
-import { CustomViewReverse } from "../components/CustomViewReverse";
+} from "react-native"
+import filter from "lodash.filter"
+import { useRoute, useFocusEffect } from "@react-navigation/native"
+import { getAllDevices } from "../../Modules/Operations DB Fixes"
+import { CustomViewReverse } from "../components/CustomViewReverse"
+import { Info } from "../../components"
 
-const WIDTH = Dimensions.get("window").width;
-const HEIGHT = Dimensions.get("window").height;
+const WIDTH = Dimensions.get("window").width
+const HEIGHT = Dimensions.get("window").height
 
 const DevicesPage = ({ navigation }) => {
-  const route = useRoute();
-  const { idClient } = route.params;
-  const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
-  const [fullData, setFullData] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const route = useRoute()
+  const { idClient } = route.params
+  const [isLoading, setIsLoading] = useState(false)
+  const [data, setData] = useState([])
+  const [error, setError] = useState(null)
+  const [fullData, setFullData] = useState([])
+  const [searchQuery, setSearchQuery] = useState("")
 
   useFocusEffect(
     useCallback(() => {
-      setIsLoading(true);
-      fetchData();
+      setIsLoading(true)
+      fetchData()
     }, [])
-  );
+  )
 
   const fetchData = async () => {
     try {
-      const Data = await getAllDevices();
+      const Data = await getAllDevices()
       const BData = Data.map((registro) => ({
         ...registro,
         Details: false,
-      }));
-      const filteredData = filter(BData, { customer_id: idClient });
-      setData(filteredData);
-      setFullData(filteredData);
-      setIsLoading(false);
+      }))
+      const filteredData = filter(BData, { customer_id: idClient })
+      setData(filteredData)
+      setFullData(filteredData)
+      setIsLoading(false)
     } catch (error) {
-      setError(error);
-      console.log(error);
-      setIsLoading(false);
+      setError(error)
+      console.log(error)
+      setIsLoading(false)
     }
-  };
+  }
 
   const toggleDetails = (itemId) => {
     const updatedData = data.map((registro) => {
       if (registro.id === itemId) {
-        return { ...registro, Details: !registro.Details };
+        return { ...registro, Details: !registro.Details }
       }
-      return registro;
-    });
-    setData(updatedData);
-  };
+      return registro
+    })
+    setData(updatedData)
+  }
 
   if (isLoading) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#ffffff" />
       </View>
-    );
+    )
   }
 
   if (error) {
@@ -75,24 +76,24 @@ const DevicesPage = ({ navigation }) => {
       <View style={styles.centered}>
         <Text style={styles.errorText}>Error in fetch data</Text>
       </View>
-    );
+    )
   }
 
   const contains = ({ model }, query) => {
-    return model && model.includes(query);
-  };
+    return model && model.includes(query)
+  }
 
   const navigateToEditDevice = (id) => {
-    navigation.navigate("EditDevice", { idDevice: id });
-  };
+    navigation.navigate("EditDevice", { idDevice: id })
+  }
 
   const navigateToOrder = (id) => {
-    navigation.navigate("Order", { idDevice: id });
-  };
+    navigation.navigate("Order", { idDevice: id })
+  }
 
   const navigateToAddDevice = (id) => {
-    navigation.navigate("AddDevice", { idCli: id });
-  };
+    navigation.navigate("AddDevice", { idCli: id })
+  }
 
   return (
     <CustomViewReverse>
@@ -106,9 +107,11 @@ const DevicesPage = ({ navigation }) => {
         <TextInput
           style={styles.searchBox}
           onChangeText={(query) => {
-            setSearchQuery(query);
-            const filteredData = filter(fullData, (item) => contains(item, query));
-            setData(filteredData);
+            setSearchQuery(query)
+            const filteredData = filter(fullData, (item) =>
+              contains(item, query)
+            )
+            setData(filteredData)
           }}
           value={searchQuery}
           placeholder="Buscar dispositivos"
@@ -134,30 +137,45 @@ const DevicesPage = ({ navigation }) => {
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <View style={styles.itemContainer}>
-                <TouchableOpacity onPress={() => toggleDetails(item.id)} style={styles.item}>
+                <TouchableOpacity
+                  onPress={() => toggleDetails(item.id)}
+                  style={styles.item}
+                >
                   <View style={styles.info}>
                     <Text style={styles.modelText}>Modelo: {item.model}</Text>
-                    <Text style={styles.idText}>        Id: {item.id}</Text>
+                    <Text style={styles.idText}> Id: {item.id}</Text>
                   </View>
                 </TouchableOpacity>
                 {item.Details && (
                   <View style={styles.details}>
-                    <Text style={styles.detailText}>Id Cliente: {item.customer_id}</Text>
-                    <Text style={styles.detailText}>S/N: {item.serial_number}</Text>
-                    <Text style={styles.detailText}>Descripción reparacion: {item.rework_description}</Text>
-                    <Text style={styles.detailText}>Tipo: {item.device_type}</Text>
-                    <Text style={styles.detailText}>Estado recibido: {item.received_status}</Text>
-                    <Text style={styles.detailText}>Marca: {item.brand}</Text>
-                    <Text style={styles.detailText}>Color: {item.color}</Text>
-                    <Text style={styles.detailText}>Inventario: {item.inventory_items}</Text>
+                    <Info title="ID Cliente: " text={item.customer_id} />
+                    <Info title="S/N: " text={item.serial_number} />
+                    <Info
+                      title="Descripción reparación: "
+                      text={item.rework_description}
+                    />
+                    <Info title="Tipo: " text={item.device_type} />
+                    <Info
+                      title="Estado recibido: "
+                      text={item.received_status}
+                    />
+                    <Info title="Marca: " text={item.brand} />
+                    <Info title="Color: " text={item.color} />
+                    <Info title="Inventario: " text={item.inventory_items} />
                     <View style={styles.buttons}>
-                      <TouchableOpacity onPress={() => navigateToEditDevice(item.id)}>
+                      <TouchableOpacity
+                        onPress={() => navigateToEditDevice(item.id)}
+                        style={styles.buttonContainer}
+                      >
                         <Image
                           source={require("../../Resources/imagenes/editar.png")}
                           style={styles.buttonImage}
                         />
                       </TouchableOpacity>
-                      <TouchableOpacity onPress={() => navigateToOrder(item.id)}>
+                      <TouchableOpacity
+                        onPress={() => navigateToOrder(item.id)}
+                        style={styles.buttonContainer}
+                      >
                         <Image
                           source={require("../../Resources/imagenes/orden.png")}
                           style={styles.buttonImage}
@@ -172,8 +190,8 @@ const DevicesPage = ({ navigation }) => {
         </View>
       </View>
     </CustomViewReverse>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   background: {
@@ -237,10 +255,20 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     paddingVertical: 10,
   },
+  buttonContainer: {
+    flexDirection: "row",
+    backgroundColor: "#FFF",
+    borderRadius: 100,
+    width: 36,
+    height: 36,
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+  },
   buttonImage: {
     width: 24,
     height: 24,
-    marginHorizontal: 10,
+    // marginHorizontal: 10,
   },
   addButton: {
     backgroundColor: "#2272A7",
@@ -253,6 +281,6 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontSize: 18,
   },
-});
+})
 
-export default DevicesPage;
+export default DevicesPage

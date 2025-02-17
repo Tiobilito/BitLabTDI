@@ -17,9 +17,9 @@ import { getAllProjectSubmissionsByUserId } from "../../Modules/Operations DB Pr
 import { GetUserData } from "../../Modules/DataInfo"
 import { CustomViewReverse } from "../components/CustomViewReverse"
 import Icon from "react-native-vector-icons/Ionicons" // Asegúrate de tener esta librería instalada
+import { Info } from "../../components"
 
-const WIDTH = Dimensions.get("window").width
-const HEIGHT = Dimensions.get("window").height
+const { width, height } = Dimensions.get("window")
 
 const PrototypingReportsPage = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -111,9 +111,9 @@ const PrototypingReportsPage = ({ navigation }) => {
     <CustomViewReverse>
       <View
         style={{
-          height: HEIGHT * 0.88,
-          width: WIDTH * 0.9,
-          marginTop: HEIGHT * 0.04,
+          height: height * 0.88,
+          width: width * 0.9,
+          marginTop: height * 0.04,
         }}
       >
         {/* Input para filtrar por application */}
@@ -154,8 +154,8 @@ const PrototypingReportsPage = ({ navigation }) => {
 
         <View
           style={{
-            width: WIDTH * 0.9,
-            height: HEIGHT * 0.65,
+            width: width * 0.9,
+            height: height * 0.65,
             backgroundColor: "#FFFFFF",
             borderRadius: 12,
             padding: 8,
@@ -213,20 +213,21 @@ const PrototypingReportsPage = ({ navigation }) => {
 
                 {item.Details && (
                   <View style={styles.details}>
-                    <Text style={styles.detailText}>ID: {item.id}</Text>
-                    <Text style={styles.detailText}>
-                      Fecha de Solicitud: {item.submission_date}
-                    </Text>
-                    <Text style={styles.detailText}>
-                      Teléfono de Contacto: {item.contact_phone}
-                    </Text>
-                    <Text style={styles.detailText}>
-                      Proyecto: {item.application}
-                    </Text>
+                    <Info title="ID: " text={item.id} />
+                    <Info
+                      title="Fecha de Solicitud: "
+                      text={item.submission_date}
+                    />
+                    <Info
+                      title="Teléfono de Contacto: "
+                      text={item.contact_phone}
+                    />
+                    <Info title="Proyecto: " text={item.application} />
                     {/* Agrega más campos según sea necesario */}
                     <View style={styles.buttons}>
                       <TouchableOpacity
                         onPress={() => navigateToEditSubmission(item.id)}
+                        style={styles.buttonContainer}
                       >
                         <Image
                           source={require("../../Resources/imagenes/editar.png")}
@@ -309,15 +310,25 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#ffffff",
   },
+
   buttons: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "flex-end",
     paddingVertical: 10,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    backgroundColor: "#FFF",
+    borderRadius: 100,
+    width: 36,
+    height: 36,
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
   },
   buttonImage: {
     width: 24,
     height: 24,
-    justifyContent: "center",
   },
   warningIcon: {
     marginLeft: 10,

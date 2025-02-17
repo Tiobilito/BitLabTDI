@@ -1,23 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"
 import {
   StyleSheet,
-  SafeAreaView,
-  ScrollView,
   View,
   Text,
   TouchableOpacity,
   TextInput,
   Alert,
-} from "react-native";
-import FeatherIcon from "react-native-vector-icons/Feather";
-import { useNavigation } from "@react-navigation/native";
-import { GetUserData } from "../../Modules/DataInfo";
-import { getAllDepartamentos } from "../../Modules/Operations DB Generals";
-import { getUserById, updateUser } from "../../Modules/Operations DB Users";
-import { CustomViewReverse } from "../components/CustomViewReverse";
+  Dimensions,
+} from "react-native"
+import FeatherIcon from "react-native-vector-icons/Feather"
+import { useNavigation } from "@react-navigation/native"
+import { GetUserData } from "../../Modules/DataInfo"
+import { getAllDepartamentos } from "../../Modules/Operations DB Generals"
+import { getUserById, updateUser } from "../../Modules/Operations DB Users"
+import { CustomViewReverse } from "../components/CustomViewReverse"
+import { CustomButton, Form, FloatingInput } from "../../components"
+
+const { height, width } = Dimensions.get("window")
 
 export default function UpdateAccount() {
-  const navigation = useNavigation();
+  const navigation = useNavigation()
 
   const [form, setForm] = useState({
     name: "",
@@ -29,21 +31,21 @@ export default function UpdateAccount() {
     rfc: "",
     salary: "",
     departmentID: "",
-  });
-  const [originalCodeU, setOriginalCodeU] = useState("");
-  const [departments, setDepartments] = useState([]);
-  const [userType, setUserType] = useState(null);
+  })
+  const [originalCodeU, setOriginalCodeU] = useState("")
+  const [departments, setDepartments] = useState([])
+  const [userType, setUserType] = useState(null)
 
   // Cargar los datos de usuario y departamentos
   useEffect(() => {
     const loadData = async () => {
-      const userData = await GetUserData();
-      const user = await getUserById(userData.Code);
-      const departmentData = await getAllDepartamentos();
+      const userData = await GetUserData()
+      const user = await getUserById(userData.Code)
+      const departmentData = await getAllDepartamentos()
       if (user) {
-        setUserType(user.user_type);
-        setOriginalCodeU(user.code.toString());
-        console.log("Codigo de usuario: ", originalCodeU);
+        setUserType(user.user_type)
+        setOriginalCodeU(user.code.toString())
+        console.log("Codigo de usuario: ", originalCodeU)
         setForm({
           name: user.name,
           email: user.email,
@@ -54,20 +56,20 @@ export default function UpdateAccount() {
           rfc: user.rfc,
           salary: user.salary,
           departmentID: user.department_id,
-        });
+        })
       }
 
       if (departmentData) {
-        setDepartments(departmentData);
+        setDepartments(departmentData)
       }
-    };
+    }
 
-    loadData();
-  }, []);
+    loadData()
+  }, [])
 
   const handleUpdate = () => {
     try {
-      const userCode = parseInt(originalCodeU, 10);
+      const userCode = parseInt(originalCodeU, 10)
 
       // Lista de campos requeridos
       const requiredFields = [
@@ -75,7 +77,7 @@ export default function UpdateAccount() {
         { key: "email", label: "Email" },
         { key: "phone", label: "Teléfono" },
         { key: "codeU", label: "Código" },
-      ];
+      ]
 
       // Si el usuario es de tipo 2, agregar más campos requeridos
       if (userType === 2) {
@@ -83,14 +85,14 @@ export default function UpdateAccount() {
           { key: "nss", label: "NSS" },
           { key: "rfc", label: "RFC" },
           { key: "salary", label: "Salario" }
-        );
+        )
       }
 
       // Validar que todos los campos requeridos tengan un valor
       for (const field of requiredFields) {
         if (!form[field.key]?.trim()) {
-          Alert.alert("Error", `El campo ${field.label} no puede estar vacío.`);
-          return;
+          Alert.alert("Error", `El campo ${field.label} no puede estar vacío.`)
+          return
         }
       }
 
@@ -102,15 +104,15 @@ export default function UpdateAccount() {
         email: form.email,
         number: form.phone,
         user_type: userType,
-      };
+      }
 
-      updateUser(userCode, updatedAccount);
-      Alert.alert("Éxito", "informacion actualizada exitosamente.");
-      navigation.goBack();
+      updateUser(userCode, updatedAccount)
+      Alert.alert("Éxito", "informacion actualizada exitosamente.")
+      navigation.goBack()
     } catch (error) {
-      Alert.alert("Error", "Hubo un problema al actualizar la información.");
+      Alert.alert("Error", "Hubo un problema al actualizar la información.")
     }
-  };
+  }
 
   return (
     <CustomViewReverse>
@@ -133,114 +135,110 @@ export default function UpdateAccount() {
         </TouchableOpacity>
       </View>
 
-      <ScrollView contentContainerStyle={styles.content}>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Información Personal</Text>
+      <View style={styles.body}>
+        <Form title={"Información Personal"}>
+          {[
+            {
+              label: "Nombre",
+              value: form.name,
+              onChange: (name) => setForm({ ...form, name }),
+            },
+            {
+              label: "Email",
+              value: form.email,
+              onChange: (email) => setForm({ ...form, email }),
+              keyboardType: "email-address",
+            },
+            {
+              label: "Teléfono",
+              value: form.phone,
+              onChange: (phone) => {
+                // Limitar la entrada a 10 dígitos
+                if (phone.length <= 10) {
+                  setForm({ ...form, phone })
+                }
+              },
+              keyboardType: "phone-pad",
+              maxLength: 10,
+            },
+            {
+              label: "Código",
+              value: form.codeU,
+              onChange: (codeU) => setForm({ ...form, codeU }),
+              keyboardType: "numeric",
+            },
+            {
+              label: "Dirección (Opcional)",
+              value: form.address,
+              onChange: (address) => setForm({ ...form, address }),
+            },
+          ].map(({ label, value, onChange, keyboardType }) => (
+            <FloatingInput
+              key={label}
+              label={label}
+              value={value}
+              onChangeText={onChange}
+              keyboardType={keyboardType}
+            />
+          ))}
 
-          <View style={styles.sectionBody}>
-            {[
-              {
-                label: "Nombre",
-                value: form.name,
-                onChange: (name) => setForm({ ...form, name }),
-              },
-              {
-                label: "Email",
-                value: form.email,
-                onChange: (email) => setForm({ ...form, email }),
-                keyboardType: "email-address",
-              },
-              {
-                label: "Teléfono",
-                value: form.phone,
-                onChange: (phone) => {
-                  // Limitar la entrada a 10 dígitos
-                  if (phone.length <= 10) {
-                    setForm({ ...form, phone });
-                  }
+          {/* Condicional para NSS, RFC, y Salario */}
+          {userType === 2 && (
+            <>
+              {[
+                {
+                  label: "NSS",
+                  value: form.nss,
+                  onChange: (nss) => setForm({ ...form, nss }),
                 },
-                keyboardType: "phone-pad",
-                maxLength: 10,
-              },
-              {
-                label: "Código",
-                value: form.codeU,
-                onChange: (codeU) => setForm({ ...form, codeU }),
-                keyboardType: "numeric",
-              },
-              {
-                label: "Dirección (Opcional)",
-                value: form.address,
-                onChange: (address) => setForm({ ...form, address }),
-              },
-            ].map(({ label, value, onChange, keyboardType }) => (
-              <View style={styles.inputWrapper} key={label}>
-                <Text style={styles.inputLabel}>{label}</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder={`Ingresa tu ${label.toLowerCase()}`}
+                {
+                  label: "RFC",
+                  value: form.rfc,
+                  onChange: (rfc) => setForm({ ...form, rfc }),
+                },
+                {
+                  label: "Salario",
+                  value: form.salary,
+                  onChange: (salary) => setForm({ ...form, salary }),
+                  keyboardType: "numeric",
+                },
+              ].map(({ label, value, onChange, keyboardType }) => (
+                <FloatingInput
+                  key={label}
+                  label={label}
                   value={value}
                   onChangeText={onChange}
                   keyboardType={keyboardType}
                 />
-              </View>
-            ))}
+              ))}
+            </>
+          )}
 
-            {/* Condicional para NSS, RFC, y Salario */}
-            {userType === 2 && (
-              <>
-                {[
-                  {
-                    label: "NSS",
-                    value: form.nss,
-                    onChange: (nss) => setForm({ ...form, nss }),
-                  },
-                  {
-                    label: "RFC",
-                    value: form.rfc,
-                    onChange: (rfc) => setForm({ ...form, rfc }),
-                  },
-                  {
-                    label: "Salario",
-                    value: form.salary,
-                    onChange: (salary) => setForm({ ...form, salary }),
-                    keyboardType: "numeric",
-                  },
-                ].map(({ label, value, onChange }) => (
-                  <View style={styles.inputWrapper} key={label}>
-                    <Text style={styles.inputLabel}>{label}</Text>
-                    <TextInput
-                      style={styles.input}
-                      placeholder={`Ingresa tu ${label.toLowerCase()}`}
-                      value={value}
-                      onChangeText={onChange}
-                    />
-                  </View>
-                ))}
-              </>
-            )}
+          {/* Mostrar nombre del departamento */}
+          <FloatingInput
+            label={"Departamento"}
+            value={
+              departments.find((dep) => dep.id === form.departmentID)?.name
+            }
+            editable={false}
+          />
 
-            {/* Mostrar nombre del departamento */}
-            <View style={styles.inputWrapper}>
-              <Text style={styles.inputLabel}>Departamento</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Departamento"
-                value={
-                  departments.find((dep) => dep.id === form.departmentID)?.name
-                }
-                editable={false}
-              />
-            </View>
+          <View style={styles.buttonContainer}>
+            <CustomButton
+              title={"Cancelar"}
+              onPress={() => navigation.goBack()}
+              buttonStyles={{ backgroundColor: "#DC3545", width: width * 0.32 }}
+            />
+            <CustomButton
+              title={"Actualizar"}
+              onPress={handleUpdate}
+              buttonStyles={{ backgroundColor: "#007BFF", width: width * 0.32 }}
+            />
           </View>
-
-          <TouchableOpacity style={styles.button} onPress={handleUpdate}>
-            <Text style={styles.buttonText}>Actualizar</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-      </CustomViewReverse>
-  );
+        </Form>
+      </View>
+    </CustomViewReverse>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -268,36 +266,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 16,
   },
-  section: {
-    paddingVertical: 12,
-  },
-  sectionTitle: {
-    margin: 8,
-    marginLeft: 12,
-    fontSize: 13,
-    letterSpacing: 0.33,
-    fontWeight: "500",
-    color: "#a69f9f",
-    textTransform: "uppercase",
-  },
-  sectionBody: {
-    borderRadius: 12,
-    backgroundColor: "#fff",
-    padding: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
-  },
-  inputWrapper: {
-    marginBottom: 16,
-  },
-  inputLabel: {
-    fontSize: 16,
-    fontWeight: "500",
-    color: "#555",
-    marginBottom: 4,
+  body: {
+    flex: 1,
+    alignItems: "center",
+    paddingBottom: 16,
   },
   input: {
     height: 40,
@@ -308,16 +280,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: "#C5E0F2",
   },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: width * 0.05,
+    marginLeft: 10,
+  },
   button: {
     backgroundColor: "#007BFF",
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: "center",
-    marginTop: 16,
+    // marginTop: 16,
   },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-});
+})

@@ -10,7 +10,6 @@ import {
   ActivityIndicator,
   Dimensions,
   Pressable,
-  ScrollView,
 } from "react-native"
 import filter from "lodash.filter"
 import { useFocusEffect } from "@react-navigation/native"
@@ -18,6 +17,7 @@ import { getAllProjectSubmissionsCheck } from "../../Modules/Operations DB Proto
 import { CustomViewReverse } from "../components/CustomViewReverse"
 import Icon from "react-native-vector-icons/Ionicons"
 import { GetUserData } from "../../Modules/DataInfo"
+import { Info } from "../../components"
 
 const { width, height } = Dimensions.get("window")
 
@@ -121,7 +121,7 @@ const PrototypingCheck = ({ navigation }) => {
   }
 
   return (
-    <CustomViewReverse>
+    <CustomViewReverse style={{ flex: 1 }}>
       <View style={styles.mainContainer}>
         {/* Header */}
         <View style={styles.header}>
@@ -172,16 +172,7 @@ const PrototypingCheck = ({ navigation }) => {
           />
         )}
 
-        <View
-          style={{
-            width: width * 0.9,
-            height: height * 0.6,
-            backgroundColor: "#FFFFFF",
-            borderRadius: 12,
-            padding: 8,
-            marginTop: 8,
-          }}
-        >
+        <View style={styles.flatListContainer}>
           <FlatList
             data={data}
             keyExtractor={(item) => item.id.toString()}
@@ -228,27 +219,32 @@ const PrototypingCheck = ({ navigation }) => {
 
                 {item.Details && (
                   <View style={styles.details}>
-                    <Text style={styles.detailText}>ID: {item.id}</Text>
-                    <Text style={styles.detailText}>
-                      Fecha de Solicitud: {item.submission_date}
-                    </Text>
-                    <Text style={styles.detailText}>
-                      Teléfono de Contacto: {item.contact_phone}
-                    </Text>
-                    <Text style={styles.detailText}>
-                      Proyecto: {item.application}
-                    </Text>
+                    <Info title="ID: " text={item.id} />
+                    {/* <Text style={styles.detailText}>ID: {item.id}</Text> */}
+                    <Info
+                      title="Fecha de Solicitud: "
+                      text={item.submission_date}
+                    />
+                    <Info
+                      title="Teléfono de contacto: "
+                      text={item.contact_phone}
+                    />
+                    <Info title="Proyecto: " text={item.application} />
                     {/* Agrega más campos según sea necesario */}
                     <View style={styles.buttons}>
                       <TouchableOpacity
                         onPress={() => navigateToCheck(item.id)}
+                        style={styles.buttonContainer}
                       >
                         <Image
                           source={require("../../Resources/imagenes/editar.png")}
                           style={styles.buttonImage}
                         />
                       </TouchableOpacity>
-                      <TouchableOpacity onPress={() => navigateToPDF(item.id)}>
+                      <TouchableOpacity
+                        onPress={() => navigateToPDF(item.id)}
+                        style={styles.buttonContainer}
+                      >
                         <Image
                           source={require("../../Resources/imagenes/pdf.png")}
                           style={styles.buttonImage}
@@ -269,6 +265,7 @@ const PrototypingCheck = ({ navigation }) => {
 const styles = StyleSheet.create({
   mainContainer: {
     // marginTop: -80,
+    height: "90%",
     // flex: 1,
     // justifyContent: "center",
     // alignContent: "center",
@@ -319,6 +316,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     borderColor: "#ddd",
   },
+  flatListContainer: {
+    flex: 1,
+    width: width * 0.9,
+    height: height * 0.6,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+    padding: 8,
+    marginTop: 8,
+  },
   toggleButton: {
     margin: 5,
     padding: 10,
@@ -368,10 +374,19 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     paddingVertical: 10,
   },
+  buttonContainer: {
+    flexDirection: "row",
+    backgroundColor: "#FFF",
+    borderRadius: 100,
+    width: 36,
+    height: 36,
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+  },
   buttonImage: {
     width: 24,
     height: 24,
-    marginHorizontal: 10,
   },
   warningIcon: {
     marginLeft: 10,

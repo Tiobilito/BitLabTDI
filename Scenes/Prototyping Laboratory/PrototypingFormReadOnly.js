@@ -16,6 +16,7 @@ import {
 import { useRoute } from "@react-navigation/native"
 import { GetUserData } from "../../Modules/DataInfo"
 import { CustomView } from "../components/CustomView"
+import { CustomButton } from "../../components"
 
 const { width, height } = Dimensions.get("window")
 // const width = Dimensions.get("window").width
@@ -51,7 +52,7 @@ export default function PrototypingFormReadOnly({ navigation }) {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#394f66" />
+        <ActivityIndicator size="large" color="#394F66" />
       </View>
     )
   }
@@ -173,18 +174,16 @@ export default function PrototypingFormReadOnly({ navigation }) {
 
             {/* Botones para aprobar o rechazar la solicitud*/}
             <View style={styles.approval}>
-              <TouchableOpacity
-                style={styles.submitButton}
-                onPress={() => UpdateCheck(true)}
-              >
-                <Text style={styles.submitButtonText}>Aprobar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.submitButton}
+              <CustomButton
+                title={"Rechazar"}
                 onPress={() => UpdateCheck(false)}
-              >
-                <Text style={styles.submitButtonText}>Rechazar</Text>
-              </TouchableOpacity>
+                buttonStyles={{ backgroundColor: "#DC3545", width: width * 0.4 }}
+              />
+              <CustomButton
+                title={" Aprobar "}
+                onPress={() => UpdateCheck(true)}
+                buttonStyles={{ width: width * 0.4, backgroundColor: "#007BFF" }}
+              />
             </View>
           </ScrollView>
         </View>
@@ -209,11 +208,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
+    // fontSize: width * 0.06,
     fontWeight: "bold",
     textAlign: "center",
     marginVertical: 20,
-    color: "#394f66",
+    color: "#394F66",
     padding: width * 0.08,
   },
   formSection: {
@@ -226,12 +226,12 @@ const styles = StyleSheet.create({
   titleSection: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#394f66",
+    color: "#394F66",
     marginBottom: 10,
   },
   label: {
     fontSize: 16,
-    color: "#394f66",
+    color: "#394F66",
     marginTop: 10,
   },
   value: {
@@ -249,25 +249,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "red",
   },
-  submitButton: {
-    width: width * 0.25,
-    height: width * 0.1,
-    backgroundColor: "#2272A7",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-    marginBottom: width * 0.0,
-    marginRight: 10,
-  },
-
-  submitButtonText: {
-    color: "white",
-    fontSize: 18,
-  },
   approval: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 20,
+    marginTop: width * 0.05,
+    marginLeft: 10,
   },
 })

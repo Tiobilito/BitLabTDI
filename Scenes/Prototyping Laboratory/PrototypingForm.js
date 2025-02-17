@@ -12,6 +12,9 @@ import {
 } from "react-native"
 import { addProjectSub } from "../../Modules/Operations DB Prototyping"
 import { CustomView } from "../components/CustomView"
+import { CustomButton, FloatingInput } from "../../components"
+import { mainStyles } from "../../components/styles"
+import { useRoute, useNavigation } from "@react-navigation/native"
 
 const { width } = Dimensions.get("window")
 
@@ -31,6 +34,7 @@ const RadioButton = ({ label, value, selected, onSelect }) => {
 }
 
 export default function PrototypingForm() {
+  const navigation = useNavigation()
   const SentProject = async () => {
     try {
       // Asignar null al rol no seleccionado
@@ -178,48 +182,45 @@ export default function PrototypingForm() {
 
   return (
     <View style={styles.container}>
+      {/* Coloca la barra de estado por encima de las ventanas */}
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor="black"
+        translucent={true}
+      />
       <CustomView>
         <View style={styles.scrollContainer}>
           <ScrollView contentContainerStyle={styles.formContainer}>
-            {/* Coloca la barra de estado por encima de las ventanas */}
-            <StatusBar
-              barStyle="light-content"
-              backgroundColor="black"
-              translucent={true}
-            />
             {/* <View style={styles.backTriangle} />
       <View style={styles.mainTriangle} /> */}
             <Text style={styles.title}>
-              Formato de requerimiento de servicio de maquinado de prototipo.
+              Formato de requerimiento de servicio de maquinado de prototipo
             </Text>
 
             {/* Seccion 1: Datos de contacto */}
             <View style={styles.formSection}>
               <Text style={styles.titleSection}>Datos de contacto</Text>
-              <Text style={styles.label}>Nombre completo:</Text>
-              <TextInput
-                style={styles.input}
+              <FloatingInput
+                label="Nombre completo"
                 value={name}
                 onChangeText={setName}
-                placeholder=""
+                placeholder="John Doe"
               />
-              <Text style={styles.label}>Correo electrónico:</Text>
-              <TextInput
-                style={styles.input}
+              <FloatingInput
+                label="Correo electrónico"
                 value={email}
                 onChangeText={setEmail}
-                placeholder="tuemail@ejemplo.com"
+                placeholder="tuemail@dominio"
               />
-              <Text style={styles.label}>Número de Teléfono:</Text>
-              <TextInput
-                style={styles.input}
+              <FloatingInput
+                label="Número de Teléfono"
                 value={phone}
                 onChangeText={setPhone}
                 placeholder="Número de teléfono"
                 keyboardType="phone-pad"
                 maxLength={10}
               />
-              <Text style={styles.sectionSubTitle}>
+              <Text style={mainStyles.title}>
                 Usuario(s) que solicita(n) el servicio:
               </Text>
               <View style={styles.checkboxGroup}>
@@ -238,31 +239,27 @@ export default function PrototypingForm() {
               {/* Función para desplegar los inputs del checkbox seleccionado para el tipo de usuario */}
               {roles.alumno ? (
                 <View style={styles.formGroup}>
-                  <Text style={styles.label}>Código de Alumno</Text>
-                  <TextInput
-                    style={styles.input}
+                  <FloatingInput
+                    label="Código de Alumno"
                     value={studentCode}
                     onChangeText={setStudentCode}
-                    placeholder="Código de Alumno"
-                    keyboardType="numeric"
+                    placeholder="xxxxxxxxx"
+                    keyboardType="phone-pad"
                     maxLength={9}
                   />
                 </View>
               ) : null}
               {roles.profesor ? (
-                <View style={styles.formGroup}>
-                  <Text style={styles.label}>Código de Profesor</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={teacherCode}
-                    onChangeText={setTeacherCode}
-                    placeholder="Código de Profesor"
-                    keyboardType="numeric"
-                    maxLength={9}
-                  />
-                </View>
+                <FloatingInput
+                  label="Código de Profesor"
+                  value={teacherCode}
+                  onChangeText={setTeacherCode}
+                  placeholder="xxxxxxxxx"
+                  keyboardType="phone-pad"
+                  maxLength={9}
+                />
               ) : null}
-              <Text style={styles.labelprojectType}>Proyecto para:</Text>
+              <Text style={mainStyles.title}>Proyecto para:</Text>
               <View style={styles.radioGroup}>
                 <RadioButton
                   label="Licenciatura"
@@ -283,19 +280,18 @@ export default function PrototypingForm() {
                   onSelect={setProjectType}
                 />
               </View>
-              <Text style={styles.label}>Aplicación:</Text>
-              <TextInput
-                style={styles.input}
+              <FloatingInput
+                label="Aplicación"
                 value={application}
                 onChangeText={setApplication}
                 placeholder="¿En qué aplicarás tu proyecto?"
               />
-              <Text style={styles.label}>Descripción:</Text>
-              <TextInput
-                style={styles.input}
+              <FloatingInput
+                label="Descripción"
                 value={descriptionProject}
                 onChangeText={setDescriptionProject}
                 placeholder="Describe tu proyecto"
+                multiline={true}
               />
               {error && <Text style={styles.errorMessage}>{error}</Text>}
             </View>
@@ -303,7 +299,7 @@ export default function PrototypingForm() {
             {/* Sección 2: Datos del Prototipo */}
             <View style={styles.formSection}>
               <Text style={styles.titleSection}>Datos del Prototipo</Text>
-              <Text style={[styles.label, { fontSize: 18 }]}>
+              <Text style={mainStyles.title}>
                 Selecciona el tipo de prototipo:
               </Text>
               <View style={styles.radioGroup}>
@@ -320,53 +316,69 @@ export default function PrototypingForm() {
                   onSelect={setPrototypeType}
                 />
               </View>
-              <Text style={styles.label}>Descripción del prototipo:</Text>
-              <TextInput
-                style={styles.input}
+              <FloatingInput
+                label="Descripción del prototipo"
                 value={descriptionPrototype}
                 onChangeText={setDescriptionPrototype}
                 placeholder="Describe tu prototipo"
+                multiline={true}
               />
-              <Text style={styles.sectionSubTitle}>
+              <Text style={[mainStyles.title, { marginTop: 20 }]}>
                 Requerimientos específicos del Prototipo:
               </Text>
-              <Text style={styles.label}>Dimensiones:</Text>
-              <TextInput
-                style={styles.input}
+              <FloatingInput
+                label="Dimensiones"
                 value={specificRequirementsDimensions}
                 onChangeText={setspecificRequirementsDimensions}
-                placeholder="Dime tus dimensiones"
+                placeholder="200x100x50"
               />
-              <Text style={styles.label}>Corte especial:</Text>
-              <TextInput
-                style={styles.input}
+              <FloatingInput
+                label="Corte especial"
                 value={specialCut}
                 onChangeText={setSpecialCut}
-                placeholder="Dime tu corte especial"
+                placeholder="¿Se necesita algún corte especial?"
               />
-              <Text style={styles.label}>Otros:</Text>
-              <TextInput
-                style={styles.input}
+              <FloatingInput
+                label="Otros requisitos"
                 value={others}
                 onChangeText={setOthers}
-                placeholder="Menciona otro requerimiento"
+                placeholder="Requisitos específicos"
+                multiline={true}
               />
-              <Text style={styles.label}>Observaciones:</Text>
-              <TextInput
-                style={styles.input}
+              <FloatingInput
+                label="Observaciones"
                 value={remarks}
                 onChangeText={setRemarks}
-                placeholder="Menciona alguna observación"
+                placeholder="Comentarios sobre el prototipo"
+                multiline={true}
               />
             </View>
 
-            {/* Botón de envío del formulario */}
-            <TouchableOpacity
+            <View style={styles.buttonContainer}>
+              <CustomButton
+                title="Cancelar"
+                onPress={() => navigation.goBack()}
+                buttonStyles={{
+                  width: width * 0.32,
+                  backgroundColor: "#DC3545",
+                }}
+              />
+              {/* Botón de envío del formulario */}
+              <CustomButton
+                title="Enviar"
+                onPress={handleSubmit}
+                buttonStyles={{
+                  width: width * 0.32,
+                  backgroundColor: "#007BFF",
+                }}
+              />
+            </View>
+            {/* <TouchableOpacity
               style={styles.submitButton}
               onPress={handleSubmit}
             >
               <Text style={styles.submitButtonText}>Enviar</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </ScrollView>
         </View>
       </CustomView>
@@ -384,6 +396,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginTop: 200,
     overflow: "hidden",
+    width: "95%",
   },
   formContainer: {
     paddingVertical: 10,
@@ -484,7 +497,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    marginBottom: width * 0.0,
+    // marginBottom: width * 0.0,
+    marginTop: 20,
   },
   submitButtonText: {
     color: "white",
@@ -520,5 +534,12 @@ const styles = StyleSheet.create({
   },
   formGroup: {
     marginTop: 15,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: width * 0.05,
+    marginLeft: 10,
   },
 })

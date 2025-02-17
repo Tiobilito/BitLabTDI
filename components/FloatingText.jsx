@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet } from "react-native"
 import { mainStyles } from "./styles"
 
-export default ({ title, text }) => {
+export default ({ title, text, containerStyle = {} }) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, containerStyle]}>
       <Text style={mainStyles.title}>{title}</Text>
-      <Text style={mainStyles.input}>{text}</Text>
+      <Text style={[mainStyles.input, { color: "#FFFA" }]}>{text}</Text>
     </View>
   )
 }

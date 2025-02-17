@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback } from "react"
 import {
   Text,
   StyleSheet,
@@ -10,104 +10,104 @@ import {
   FlatList,
   ActivityIndicator,
   Dimensions,
-} from "react-native";
-import filter from "lodash.filter";
-import { useFocusEffect } from "@react-navigation/native";
-import { getAllProjectSubmissionsChecked } from "../../Modules/Operations DB Prototyping";
-import { CustomViewReverse } from "../components/CustomViewReverse";
-import Icon from "react-native-vector-icons/Ionicons";
-import { GetUserData } from "../../Modules/DataInfo";
+} from "react-native"
+import filter from "lodash.filter"
+import { useFocusEffect } from "@react-navigation/native"
+import { getAllProjectSubmissionsChecked } from "../../Modules/Operations DB Prototyping"
+import { CustomViewReverse } from "../components/CustomViewReverse"
+import Icon from "react-native-vector-icons/Ionicons"
+import { GetUserData } from "../../Modules/DataInfo"
+import { Info } from "../../components"
 
-const WIDTH = Dimensions.get("window").width;
-const HEIGHT = Dimensions.get("window").height;
+const { width, height } = Dimensions.get("window")
 
 const PrototypingAlreadyChecked = ({ navigation }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
-  const [fullData, setFullData] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [nameQuery, setNameQuery] = useState("");
-  const [showNameFilter, setShowNameFilter] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
+  const [data, setData] = useState([])
+  const [error, setError] = useState(null)
+  const [fullData, setFullData] = useState([])
+  const [searchQuery, setSearchQuery] = useState("")
+  const [nameQuery, setNameQuery] = useState("")
+  const [showNameFilter, setShowNameFilter] = useState(false)
 
   useFocusEffect(
     useCallback(() => {
-      setIsLoading(true);
-      fetchData();
+      setIsLoading(true)
+      fetchData()
     }, [])
-  );
+  )
 
   const fetchData = async () => {
-    let Data;
+    let Data
     try {
-      const UData = await GetUserData();
-      Data = await getAllProjectSubmissionsChecked(UData.User_type);
+      const UData = await GetUserData()
+      Data = await getAllProjectSubmissionsChecked(UData.User_type)
       let BData = Data.map((registro) => ({
         ...registro,
         Details: false,
         Status: false,
-      }));
+      }))
       // Ciclo que evalúa cada elemento de BData
       BData.forEach((registro) => {
         switch (UData.User_type) {
           case 0: // Caso 0: Jefe de división
-            registro.Status = registro.department_head;
-            break;
+            registro.Status = registro.department_head
+            break
           case 1: // Caso 1: Jefe de laboratorio
-            registro.Status = registro.laboratory_head;
-            break;
+            registro.Status = registro.laboratory_head
+            break
           case 2: // Caso 2: Prestador de servicio
-            registro.Status = registro.service_staff;
-            break;
+            registro.Status = registro.service_staff
+            break
           default:
             // Lógica para otros casos si es necesario
-            break;
+            break
         }
-      });
-      setData(BData);
-      setFullData(BData);
-      setIsLoading(false);
+      })
+      setData(BData)
+      setFullData(BData)
+      setIsLoading(false)
     } catch (error) {
-      setError(error);
-      console.log(error);
-      setIsLoading(false);
+      setError(error)
+      console.log(error)
+      setIsLoading(false)
     }
-  };
+  }
 
   const toggleDetails = (itemId) => {
     const updatedData = data.map((registro) => {
       if (registro.id === itemId) {
-        return { ...registro, Details: !registro.Details };
+        return { ...registro, Details: !registro.Details }
       }
-      return registro;
-    });
-    setData(updatedData);
-  };
+      return registro
+    })
+    setData(updatedData)
+  }
 
   const applyFilters = () => {
     const filteredData = filter(fullData, (item) => {
       return (
         containsApplication(item, searchQuery) &&
         containsApplicantName(item, nameQuery)
-      );
-    });
-    setData(filteredData);
-  };
+      )
+    })
+    setData(filteredData)
+  }
 
   const containsApplication = ({ application }, query) => {
-    return application.toLowerCase().includes(query.toLowerCase());
-  };
+    return application.toLowerCase().includes(query.toLowerCase())
+  }
 
   const containsApplicantName = ({ applicant_name }, query) => {
-    return applicant_name.toLowerCase().includes(query.toLowerCase());
-  };
+    return applicant_name.toLowerCase().includes(query.toLowerCase())
+  }
 
   if (isLoading) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#ffffff" />
       </View>
-    );
+    )
   }
 
   if (error) {
@@ -115,39 +115,41 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
       <View style={styles.centered}>
         <Text style={styles.errorText}>Error en la obtención de datos</Text>
       </View>
-    );
+    )
   }
 
   const navigateToCheck = (id) => {
-    navigation.navigate("ReportCheck", { idReport: id });
-  };
+    navigation.navigate("ReportCheck", { idReport: id })
+  }
 
   const navigateToPDF = (id) => {
-    navigation.navigate("GeneratePDF", { idReport: id });
-  };
+    navigation.navigate("GeneratePDF", { idReport: id })
+  }
 
   const navigateToRemaning = () => {
-    navigation.navigate("Check");
-  };
+    navigation.navigate("Check")
+  }
 
   return (
-    <CustomViewReverse>
+    <CustomViewReverse style={{ flex: 1, justifyContent: "center" }}>
       <View
         style={{
-          height: HEIGHT * 0.88,
-          width: WIDTH * 0.9,
-          marginTop: HEIGHT * 0.04,
+          height: "90%",
+          width: width * 0.9,
+          marginTop: height * 0.04,
         }}
       >
-        <Pressable style={{ marginLeft: "80%" }} onPress={navigateToRemaning}>
-          <Icon name="arrow-back-outline" size={50} color="black" />
-        </Pressable>
+        <View style={styles.arrowContainer}>
+          <Pressable style={styles.arrow} onPress={navigateToRemaning}>
+            <Icon name="arrow-back-outline" size={40} color="#007BFF" />
+          </Pressable>
+        </View>
         {/* Input para filtrar por application */}
         <TextInput
           style={styles.searchBox}
           onChangeText={(query) => {
-            setSearchQuery(query);
-            applyFilters();
+            setSearchQuery(query)
+            applyFilters()
           }}
           value={searchQuery}
           placeholder="Buscar por aplicación"
@@ -170,8 +172,8 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
           <TextInput
             style={styles.searchBox}
             onChangeText={(query) => {
-              setNameQuery(query);
-              applyFilters();
+              setNameQuery(query)
+              applyFilters()
             }}
             value={nameQuery}
             placeholder="Buscar por nombre del solicitante"
@@ -180,8 +182,9 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
 
         <View
           style={{
-            width: WIDTH * 0.9,
-            height: HEIGHT * 0.65,
+            flex: 1,
+            width: width * 0.9,
+            height: height * 0.65,
             backgroundColor: "#FFFFFF",
             borderRadius: 12,
             padding: 8,
@@ -222,27 +225,32 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
 
                 {item.Details && (
                   <View style={styles.details}>
-                    <Text style={styles.detailText}>ID: {item.id}</Text>
-                    <Text style={styles.detailText}>
-                      Fecha de Solicitud: {item.submission_date}
-                    </Text>
-                    <Text style={styles.detailText}>
-                      Teléfono de Contacto: {item.contact_phone}
-                    </Text>
-                    <Text style={styles.detailText}>
-                      Proyecto: {item.application}
-                    </Text>
+                    <Info title="ID: " text={item.id} />
+                    <Info
+                      title="Fecha de Solicitud: "
+                      text={item.submission_date}
+                    />
+                    <Info
+                      title="Teléfono de Contacto: "
+                      text={item.contact_phone}
+                    />
+                    <Info title="Proyecto: " text={item.application} />
+
                     {/* Agrega más campos según sea necesario */}
                     <View style={styles.buttons}>
                       <TouchableOpacity
                         onPress={() => navigateToCheck(item.id)}
+                        style={styles.buttonContainer}
                       >
                         <Image
                           source={require("../../Resources/imagenes/editar.png")}
                           style={styles.buttonImage}
                         />
                       </TouchableOpacity>
-                      <TouchableOpacity onPress={() => navigateToPDF(item.id)}>
+                      <TouchableOpacity
+                        onPress={() => navigateToPDF(item.id)}
+                        style={styles.buttonContainer}
+                      >
                         <Image
                           source={require("../../Resources/imagenes/pdf.png")}
                           style={styles.buttonImage}
@@ -257,8 +265,8 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
         </View>
       </View>
     </CustomViewReverse>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   centered: {
@@ -320,19 +328,36 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
   },
-  detailText: {
-    fontSize: 14,
-    color: "#ffffff",
+  arrowContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginRight: width * 0.06,
+  },
+  arrow: {
+    borderWidth: 2,
+    borderColor: "#007BFF",
+    borderRadius: 100,
+    padding: 5,
   },
   buttons: {
     flexDirection: "row",
     justifyContent: "space-around",
     paddingVertical: 10,
   },
+  buttonContainer: {
+    flexDirection: "row",
+    backgroundColor: "#FFF",
+    borderRadius: 100,
+    width: 36,
+    height: 36,
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+  },
   buttonImage: {
     width: 24,
     height: 24,
-    marginHorizontal: 10,
+    // marginHorizontal: 10,
   },
   buttonImageP: {
     width: 24,
@@ -343,6 +368,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 80,
   },
-});
+})
 
-export default PrototypingAlreadyChecked;
+export default PrototypingAlreadyChecked
