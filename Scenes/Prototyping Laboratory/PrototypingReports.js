@@ -16,7 +16,6 @@ import { useFocusEffect } from "@react-navigation/native"
 import { getAllProjectSubmissionsByUserId } from "../../Modules/Operations DB Prototyping"
 import { GetUserData } from "../../Modules/DataInfo"
 import { CustomViewReverse } from "../components/CustomViewReverse"
-import Icon from "react-native-vector-icons/Ionicons" // Asegúrate de tener esta librería instalada
 import { Info } from "../../components"
 
 const { width, height } = Dimensions.get("window")
@@ -154,8 +153,10 @@ const PrototypingReportsPage = ({ navigation }) => {
 
         <View
           style={{
-            width: width * 0.9,
-            height: height * 0.65,
+            justifyContent: "center",
+            alignSelf: "center",
+            width: width * 0.80,
+            height: height * 0.70,
             backgroundColor: "#FFFFFF",
             borderRadius: 12,
             padding: 8,
@@ -178,22 +179,24 @@ const PrototypingReportsPage = ({ navigation }) => {
                 </TouchableOpacity>
 
                 {/* Mostrar el status del reporte */}
-                <View
-                  style={[
-                    styles.statusMargin,
-                    {
-                      backgroundColor:
-                        item.status === "approved"
-                          ? "#5ED52C"
-                          : item.status === "rejected"
-                          ? "#EF3131"
-                          : item.status === "awaiting_revision"
-                          ? "#57C9E1"
-                          : "white",
-                    },
-                  ]}
-                >
-                  <Text style={styles.statusText}>{item.status}</Text>
+                <View style={styles.statusContainer}>
+                  <View
+                    style={[
+                      styles.statusMargin,
+                      {
+                        backgroundColor:
+                          item.status === "approved"
+                            ? "#5ED52C"
+                            : item.status === "rejected"
+                            ? "#EF3131"
+                            : item.status === "awaiting_revision"
+                            ? "#57C9E1"
+                            : "white",
+                      },
+                    ]}
+                  >
+                    <Text style={styles.statusText}>{item.status}</Text>
+                  </View>
                   {item.department_head &&
                     item.laboratory_head &&
                     item.service_staff && (
@@ -210,7 +213,6 @@ const PrototypingReportsPage = ({ navigation }) => {
                       </View>
                     )}
                 </View>
-
                 {item.Details && (
                   <View style={styles.details}>
                     <Info title="ID: " text={item.id} />
@@ -336,28 +338,34 @@ const styles = StyleSheet.create({
   statusMargin: {
     backgroundColor: "white",
     borderRadius: 80,
-    alignItems: "center",
     height: 30,
     width: "45%",
     marginTop: 4,
-    justifyContent: "center",
     marginLeft: 10,
     marginBottom: 10,
+    // textAlign: "center",
+    // textAlignVertical: "center",
   },
   statusText: {
     fontSize: 15,
     fontWeight: "bold",
     color: "black",
-    alignSelf: "center",
-    alignItems: "center",
+    textAlign: "center",
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    textAlignVertical: "center",
   },
   btnPrint: {
     backgroundColor: "white",
     width: 35,
     height: 35,
     borderRadius: 80,
-    marginLeft: 200,
-    marginTop: -25,
+    marginRight: width * 0.02,
+    // marginLeft: 200,
+    // marginTop: -25,
   },
   buttonImagePrint: {
     width: 24,
@@ -365,6 +373,12 @@ const styles = StyleSheet.create({
     marginLeft: 4,
     marginTop: 5,
   },
+  statusContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
+  }
 })
 
 export default PrototypingReportsPage

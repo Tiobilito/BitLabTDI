@@ -17,8 +17,8 @@ import { getAllOrdersByUserId } from "../../Modules/Operations DB Fixes"
 import { getAllProjectSubmissionsByUserId } from "../../Modules/Operations DB Prototyping"
 import { GetUserData } from "../../Modules/DataInfo"
 
-const WIDTH = Dimensions.get("screen").width
-const HEIGHT = Dimensions.get("screen").height
+const width = Dimensions.get("screen").width
+const height = Dimensions.get("screen").height
 
 const TeacherStudentPage = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -96,7 +96,7 @@ const TeacherStudentPage = ({ navigation }) => {
 
   return (
     <CustomViewReverse>
-      <View style={{ marginTop: HEIGHT * 0.05, gap: HEIGHT * 0.02 }}>
+      <View style={{ marginTop: height * 0.05, gap: height * 0.02 }}>
         <TouchableOpacity
           style={styles.btnAction}
           onPress={() => navigation.navigate("ReportForm")}
@@ -104,7 +104,7 @@ const TeacherStudentPage = ({ navigation }) => {
           <Ionicons
             name="clipboard"
             style={{
-              fontSize: WIDTH > 400 ? 32 : 24,
+              fontSize: width > 400 ? 32 : 24,
               color: "#2272A7",
             }}
           />
@@ -153,29 +153,40 @@ const TeacherStudentPage = ({ navigation }) => {
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <View style={styles.itemContainer}>
-                <Pressable onPress={() => toggleDetailsReports(item.id)}>
-                  <Text style={styles.TextHeader}>{item.application}</Text>
-                </Pressable>
-                <View
-                  style={[
-                    styles.statusMargin,
-                    {
-                      backgroundColor:
-                        item.status === "approved"
-                          ? "#5ED52C"
-                          : item.status === "rejected"
-                          ? "#EF3131"
-                          : item.status === "awaiting_revision"
-                          ? "#57C9E1"
-                          : "white",
-                    },
-                  ]}
-                >
-                  <Text style={styles.statusText}>{item.status}</Text>
-                  {item.department_head &&
-                    item.laboratory_head &&
-                    item.service_staff && (
-                      <View>
+                <View style={styles.contentContainer}>
+                  <Pressable onPress={() => toggleDetailsReports(item.id)}>
+                    <Text style={styles.TextHeader}>{item.application}</Text>
+                  </Pressable>
+                  <View style={styles.statusContainer}>
+                    <View
+                      style={[
+                        styles.statusMargin,
+                        {
+                          backgroundColor:
+                            item.status === "approved"
+                              ? "#5ED52C"
+                              : item.status === "rejected"
+                              ? "#EF3131"
+                              : item.status === "awaiting_revision"
+                              ? "#57C9E1"
+                              : "white",
+                        },
+                      ]}
+                    >
+                      <Text style={styles.statusText}>{item.status}</Text>
+                    </View>
+                  </View>
+                </View>
+                {item.Details && (
+                  <View style={styles.contentContainer}>
+                    <Text
+                      style={styles.dateText}
+                    >
+                      {item.submission_date}
+                    </Text>
+                    {item.department_head &&
+                      item.laboratory_head &&
+                      item.service_staff && (
                         <Pressable
                           onPress={() => navigateToPDF(item.id)}
                           style={styles.btnPrint}
@@ -185,21 +196,7 @@ const TeacherStudentPage = ({ navigation }) => {
                             style={styles.buttonImage}
                           />
                         </Pressable>
-                      </View>
-                    )}
-                </View>
-                {item.Details && (
-                  <View>
-                    <Text
-                      style={{
-                        color: "white",
-                        fontSize: 20,
-                        marginLeft: 15,
-                        marginTop: 5,
-                      }}
-                    >
-                      {item.submission_date}
-                    </Text>
+                      )}
                   </View>
                 )}
               </View>
@@ -224,27 +221,27 @@ const styles = StyleSheet.create({
     color: "red",
   },
   text: {
-    fontSize: WIDTH > 400 ? 32 : 24,
+    fontSize: width > 400 ? 32 : 24,
     fontWeight: "bold",
     color: "#2272A7",
   },
   textShowStats: {
-    fontSize: WIDTH > 400 ? 24 : 16,
+    fontSize: width > 400 ? 24 : 16,
     fontWeight: "bold",
     color: "#2272A7",
   },
   iconShowStats: {
-    fontSize: WIDTH > 400 ? 24 : 16,
+    fontSize: width > 400 ? 24 : 16,
     color: "#2272A7",
   },
   iconOrders: {
-    fontSize: WIDTH > 400 ? 40 : 30,
+    fontSize: width > 400 ? 40 : 30,
     color: "gray",
     marginLeft: 7,
     marginTop: 6,
   },
   iconPrint: {
-    fontSize: WIDTH > 400 ? 60 : 55,
+    fontSize: width > 400 ? 60 : 55,
     color: "red",
   },
   btnPrint: {
@@ -252,8 +249,8 @@ const styles = StyleSheet.create({
     width: 35,
     height: 35,
     borderRadius: 80,
-    marginLeft: 180,
-    marginTop: -35,
+    // marginLeft: 200,
+    // marginTop: -25,
   },
   btnReadOnlyO: {
     backgroundColor: "white",
@@ -270,46 +267,71 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   btnAction: {
-    width: WIDTH * 0.85,
-    height: HEIGHT * 0.08,
+    width: width * 0.85,
+    height: height * 0.08,
     flexDirection: "row",
     backgroundColor: "#FFFFFF",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 40,
-    gap: WIDTH * 0.04,
+    gap: width * 0.04,
   },
   btnShowStats: {
     flexDirection: "row",
-    gap: WIDTH * 0.04,
-    marginTop: HEIGHT * 0.02,
+    gap: width * 0.04,
+    marginTop: height * 0.02,
   },
   btnShow: {
-    width: WIDTH * 0.45,
-    height: HEIGHT * 0.07,
+    width: width * 0.45,
+    height: height * 0.07,
     flexDirection: "row",
     backgroundColor: "#FFFFFF",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    gap: WIDTH * 0.04,
+    gap: width * 0.04,
+  },
+  dateText: {
+    color: "white",
+    fontSize: 20,
+    marginLeft: 15,
+    marginTop: 5,
   },
   tables: {
-    width: WIDTH * 0.9,
-    height: HEIGHT * 0.55,
+    width: width * 0.9,
+    height: height * 0.55,
     backgroundColor: "#FFFFFF",
     borderRadius: 10,
     margin: 10,
     padding: 10, // Añadido padding
   },
+  TextHeader: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+    flex: 1,
+    flexWrap: "wrap",
+    width: width * 0.4,
+  },
+  statusContainer: {
+    flexDirection: "column",
+    alignItems: "center",
+    alignContent: "stretch",
+    // width: width * 0.45,
+  },
   itemContainer: {
     backgroundColor: "#2272A7",
-    margin: HEIGHT * 0.008,
-    padding: WIDTH * 0.04, // Aumentado padding
+    margin: height * 0.008,
+    padding: width * 0.04, // Aumentado padding
     borderRadius: 10,
-    flexDirection: "row", // Añadido para alinear elementos en fila
-    justifyContent: "space-between", // Añadido para espaciar elementos
-    alignItems: "center", // Añadido para centrar elementos verticalmente
+    // flexDirection: "row", // Añadido para alinear elementos en fila
+    // justifyContent: "space-between", // Añadido para espaciar elementos
+    // alignItems: "center", // Añadido para centrar elementos verticalmente
+  },
+  contentContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
   },
   itemText: {
     color: "white", // Añadido color de texto
@@ -319,28 +341,25 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#2272A7",
     fontSize: 16,
-    marginTop: HEIGHT * 0.02,
-  },
-  TextHeader: {
-    color: "white",
-    fontSize: 20,
-    fontWeight: "bold",
+    marginTop: height * 0.02,
   },
   statusMargin: {
-    backgroundColor: "white",
     borderRadius: 80,
     alignItems: "center",
-    height: 30,
-    width: "45%",
-    marginTop: 4,
-    justifyContent: "center",
+    paddingVertical: 5,
+    paddingHorizontal: 5,
+    width: width * 0.35,
+    height: height * 0.03,
+    textAlign: "center",
+    textAlignVertical: "center",
+    marginBottom: 5,
   },
   statusText: {
-    fontSize: 15,
+    fontSize: width * 0.035,
     fontWeight: "bold",
     color: "black",
-    alignContent: "center",
-    alignSelf: "center",
+    textAlign: "center",
+    textAlignVertical: "center",
   },
 })
 
