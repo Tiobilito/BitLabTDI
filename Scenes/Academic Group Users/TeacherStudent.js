@@ -95,22 +95,20 @@ const TeacherStudentPage = ({ navigation }) => {
   }
 
   return (
-    <CustomViewReverse>
-      <View style={{ marginTop: height * 0.05, gap: height * 0.02 }}>
-        <TouchableOpacity
-          style={styles.btnAction}
-          onPress={() => navigation.navigate("ReportForm")}
-        >
-          <Ionicons
-            name="clipboard"
-            style={{
-              fontSize: width > 400 ? 32 : 24,
-              color: "#2272A7",
-            }}
-          />
-          <Text style={styles.text}>Añadir Reporte</Text>
-        </TouchableOpacity>
-      </View>
+    <CustomViewReverse style={{ flex: 1 }}>
+      <TouchableOpacity
+        style={styles.btnAction}
+        onPress={() => navigation.navigate("ReportForm")}
+      >
+        <Ionicons
+          name="clipboard"
+          style={{
+            fontSize: width > 400 ? 32 : 24,
+            color: "#2272A7",
+          }}
+        />
+        <Text style={styles.text}>Añadir Reporte</Text>
+      </TouchableOpacity>
       <View style={styles.btnShowStats}>
         <TouchableOpacity
           style={styles.btnShow}
@@ -154,7 +152,10 @@ const TeacherStudentPage = ({ navigation }) => {
             renderItem={({ item }) => (
               <View style={styles.itemContainer}>
                 <View style={styles.contentContainer}>
-                  <Pressable onPress={() => toggleDetailsReports(item.id)}>
+                  <Pressable
+                    onPress={() => toggleDetailsReports(item.id)}
+                    style={{ flex: 1 }}
+                  >
                     <Text style={styles.TextHeader}>{item.application}</Text>
                   </Pressable>
                   <View style={styles.statusContainer}>
@@ -179,11 +180,7 @@ const TeacherStudentPage = ({ navigation }) => {
                 </View>
                 {item.Details && (
                   <View style={styles.contentContainer}>
-                    <Text
-                      style={styles.dateText}
-                    >
-                      {item.submission_date}
-                    </Text>
+                    <Text style={styles.dateText}>{item.submission_date}</Text>
                     {item.department_head &&
                       item.laboratory_head &&
                       item.service_staff && (
@@ -212,6 +209,48 @@ const TeacherStudentPage = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
+  btnAction: {
+    width: "95%",
+    height: "8%",
+    flexDirection: "row",
+    gap: width * 0.02,
+    backgroundColor: "#FFFFFF",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    borderRadius: 100,
+    // textAlign: "center",
+    // textAlignVertical: "center",
+    // justifyContent: "center",
+  },
+  text: {
+    fontSize: width > 400 ? 38 : 24,
+    fontWeight: "bold",
+    color: "#2272A7",
+  },
+  btnShowStats: {
+    flexDirection: "row",
+    gap: width * 0.03,
+    marginVertical: height * 0.02,
+  },
+  btnShow: {
+    height: "125%",
+    paddingHorizontal: 10,
+    flexDirection: "row",
+    backgroundColor: "#FFFFFF",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    gap: width * 0.02,
+  },
+  textShowStats: {
+    fontSize: width > 400 ? 26 : 16,
+    fontWeight: "bold",
+    color: "#2272A7",
+  },
+  iconShowStats: {
+    fontSize: width > 400 ? 24 : 16,
+    color: "#2272A7",
+  },
   centered: {
     flex: 1,
     justifyContent: "center",
@@ -219,20 +258,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "red",
-  },
-  text: {
-    fontSize: width > 400 ? 32 : 24,
-    fontWeight: "bold",
-    color: "#2272A7",
-  },
-  textShowStats: {
-    fontSize: width > 400 ? 24 : 16,
-    fontWeight: "bold",
-    color: "#2272A7",
-  },
-  iconShowStats: {
-    fontSize: width > 400 ? 24 : 16,
-    color: "#2272A7",
   },
   iconOrders: {
     fontSize: width > 400 ? 40 : 30,
@@ -266,31 +291,6 @@ const styles = StyleSheet.create({
     marginLeft: 4,
     marginTop: 5,
   },
-  btnAction: {
-    width: width * 0.85,
-    height: height * 0.08,
-    flexDirection: "row",
-    backgroundColor: "#FFFFFF",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 40,
-    gap: width * 0.04,
-  },
-  btnShowStats: {
-    flexDirection: "row",
-    gap: width * 0.04,
-    marginTop: height * 0.02,
-  },
-  btnShow: {
-    width: width * 0.45,
-    height: height * 0.07,
-    flexDirection: "row",
-    backgroundColor: "#FFFFFF",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-    gap: width * 0.04,
-  },
   dateText: {
     color: "white",
     fontSize: 20,
@@ -298,8 +298,9 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   tables: {
-    width: width * 0.9,
-    height: height * 0.55,
+    minWidth: "80%",
+    width: "80%",
+    height: "70%",
     backgroundColor: "#FFFFFF",
     borderRadius: 10,
     margin: 10,
@@ -311,19 +312,39 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     flex: 1,
     flexWrap: "wrap",
-    width: width * 0.4,
+    // width: width * 0.4,
   },
   statusContainer: {
     flexDirection: "column",
     alignItems: "center",
     alignContent: "stretch",
+    flex: 1,
     // width: width * 0.45,
+  },
+  statusMargin: {
+    borderRadius: 80,
+    alignItems: "center",
+    paddingVertical: 5,
+    paddingHorizontal: 5,
+    width: "100%",
+    // height: height * 0.03,
+    textAlign: "center",
+    textAlignVertical: "center",
+    // marginBottom: 5,
+  },
+  statusText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "black",
+    textAlign: "center",
+    textAlignVertical: "center",
   },
   itemContainer: {
     backgroundColor: "#2272A7",
-    margin: height * 0.008,
-    padding: width * 0.04, // Aumentado padding
+    // margin: height * 0.008,
+    padding: width * 0.03, // Aumentado padding
     borderRadius: 10,
+    marginVertical: height * 0.01,
     // flexDirection: "row", // Añadido para alinear elementos en fila
     // justifyContent: "space-between", // Añadido para espaciar elementos
     // alignItems: "center", // Añadido para centrar elementos verticalmente
@@ -331,7 +352,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-start",
+    // alignItems: "flex-start",
   },
   itemText: {
     color: "white", // Añadido color de texto
@@ -342,24 +363,6 @@ const styles = StyleSheet.create({
     color: "#2272A7",
     fontSize: 16,
     marginTop: height * 0.02,
-  },
-  statusMargin: {
-    borderRadius: 80,
-    alignItems: "center",
-    paddingVertical: 5,
-    paddingHorizontal: 5,
-    width: width * 0.35,
-    height: height * 0.03,
-    textAlign: "center",
-    textAlignVertical: "center",
-    marginBottom: 5,
-  },
-  statusText: {
-    fontSize: width * 0.035,
-    fontWeight: "bold",
-    color: "black",
-    textAlign: "center",
-    textAlignVertical: "center",
   },
 })
 

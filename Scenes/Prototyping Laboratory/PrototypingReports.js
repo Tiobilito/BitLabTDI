@@ -110,7 +110,8 @@ const PrototypingReportsPage = ({ navigation }) => {
     <CustomViewReverse>
       <View
         style={{
-          height: height * 0.88,
+          flex: 1,
+          height: "80%",
           width: width * 0.9,
           marginTop: height * 0.04,
         }}

@@ -174,6 +174,6 @@ export async function getCostsByOrderId(OrderId) {
     console.log("No se encontraron los costos o no existen");
     return null;
   }
-  console.log("Costos: ", data[0]);
-  return data[0];
+  console.log("Costos: ", data);
+  return data;
 }

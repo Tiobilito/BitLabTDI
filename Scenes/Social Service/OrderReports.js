@@ -1,76 +1,134 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, FlatList, Dimensions } from "react-native";
-import { useRoute } from "@react-navigation/native";
-import { getCostsByOrderId, getOrderById } from "../../Modules/Operations DB Fixes";
-import { CustomView } from "../components/CustomView";
+import React, { useState, useEffect } from "react"
+import { StyleSheet, Text, View, FlatList, Dimensions } from "react-native"
+import { useRoute } from "@react-navigation/native"
+import {
+  getCostsByOrderId,
+  getOrderById,
+} from "../../Modules/Operations DB Fixes"
+import { CustomView } from "../components/CustomView"
+import { Form, FloatingText, CustomButton } from "../../components"
 
-const Scale = Dimensions.get("window").width;
+const { width, height } = Dimensions.get("window")
 
 const OrderPageReadOnly = ({ navigation }) => {
-  const route = useRoute();
-  const { idOrder } = route.params;
-  const [orderData, setOrderData] = useState(null);
-  const [costData, setCostData] = useState([]);
+  const route = useRoute()
+  const { idOrder } = route.params
+  const [orderData, setOrderData] = useState(null)
+  const [costData, setCostData] = useState([])
 
   useEffect(() => {
     const getData = async () => {
-      const order = await getOrderById(idOrder);
-      const costs = await getCostsByOrderId(idOrder);
-      setOrderData(order);
-      setCostData(costs);
-      console.log("Orden: ", orderData);
-      console.log("Costos: ", costData);
-    };
-    getData();
-  }, [idOrder]);
+      const order = await getOrderById(idOrder)
+      const costs = await getCostsByOrderId(idOrder)
+
+      setOrderData(order)
+      setCostData(costs)
+    }
+    getData()
+  }, [idOrder])
+
+  useEffect(() => console.log("cost data -> ", costData), [costData])
+  useEffect(() => console.log("order data -> ", orderData), [orderData])
 
   const renderItem = ({ item }) => (
     <View style={styles.costItem}>
-      <Text style={styles.costText}>Nombre del costo: {item.cost_name}</Text>
-      <Text style={styles.costText}>Precio: ${item.price}</Text>
-      <Text style={styles.costText}>IVA: {item.iva ? "IVA incluido" : "Sin IVA"}</Text>
-      <Text style={styles.costText}>ID de la orden: {item.order_id}</Text>
+      <FloatingText
+        textStyle={{ color: "#1D1D1D" }}
+        title="Nombre del costo"
+        text={item.cost_name}
+      />
+      <FloatingText
+        textStyle={{ color: "#1D1D1D" }}
+        title="Precio"
+        text={item.price}
+      />
+      <FloatingText
+        textStyle={{ color: "#1D1D1D" }}
+        title="IVA"
+        text={item.iva ? "IVA incluido" : "Sin IVA"}
+      />
+      <FloatingText
+        textStyle={{ color: "#1D1D1D" }}
+        title="ID de la orden"
+        text={item.order_id}
+      />
     </View>
-  );
+  )
 
   return (
     <CustomView>
-      {orderData && (
-        <View style={styles.container}>
-          <Text style={styles.text}>ID Dispositivo: {orderData.device_id}</Text>
-          <Text style={styles.text}>Cliente: {orderData.customer_id}</Text>
-          <Text style={styles.text}>Estado: {orderData.status}</Text>
-          <Text style={styles.text}>Fecha de Recepción: {orderData.date_received}</Text>
-          <Text style={styles.text}>Diagnóstico General: {orderData.diagnosis}</Text>
-        </View>
-      )}
-      <FlatList
-        data={costData}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        ListEmptyComponent={<Text>No hay costos registrados</Text>}
-        contentContainerStyle={styles.flatlist}
-      />
+      <View style={styles.body}>
+        <Form bodyStyle={{ backgroundColor: "translucent" }} shadow={false}>
+          <Text style={styles.title}>Reporte de orden</Text>
+          {orderData && (
+            <View style={styles.costItem}>
+              <FloatingText
+                textStyle={{ color: "#1D1D1D" }}
+                title={"ID Dispositivo"}
+                text={orderData.device_id}
+              />
+              <FloatingText
+                textStyle={{ color: "#1D1D1D" }}
+                title={"Cliente"}
+                text={orderData.customer_id}
+              />
+              <FloatingText
+                textStyle={{ color: "#1D1D1D" }}
+                title={"Estado"}
+                text={orderData.status}
+              />
+              <FloatingText
+                textStyle={{ color: "#1D1D1D" }}
+                title={"Fecha de Recepción"}
+                text={orderData.date_received}
+              />
+              <FloatingText
+                textStyle={{ color: "#1D1D1D" }}
+                title={"Diagnóstico General"}
+                text={orderData.diagnosis}
+              />
+            </View>
+          )}
+          {costData && (
+            <FlatList
+              scrollEnabled={false}
+              data={costData}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id.toString()}
+              ListEmptyComponent={<Text>No hay costos registrados</Text>}
+              contentContainerStyle={styles.flatlist}
+            />
+          )}
+          <CustomButton
+            title="Volver"
+            onPress={() => navigation.goBack()}
+            buttonStyles={{ backgroundColor: "#DC3545" }}
+          />
+        </Form>
+      </View>
     </CustomView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
+  body: {
+    marginTop: height * 0.14,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginTop: 20,
+    color: "#394f66",
+    padding: width * 0.04,
+    // marginBottom: -width * 0.06,
+  },
   background: {
     flex: 1,
     backgroundColor: "#f0f4f7",
     marginTop: 30,
   },
-  container: {
-    width: "95%",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 10,
-    margin: 10,
-    padding: 10,
-    marginTop: 36,
-  },
   text: {
-    fontSize: Scale > 400 ? 50 : 20,
+    fontSize: width > 400 ? 50 : 20,
     marginBottom: 5,
     color: "#000000",
   },
@@ -78,16 +136,15 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   costItem: {
-    flexDirection: "column",
-    justifyContent: "space-between",
+    width: width * 0.8,
     padding: 10,
-    backgroundColor: "#fff",
-    marginBottom: 5,
+    backgroundColor: "#FFF",
+    marginBottom: 20,
     borderRadius: 5,
   },
   costText: {
     fontSize: 16,
   },
-});
+})
 
-export default OrderPageReadOnly;
+export default OrderPageReadOnly

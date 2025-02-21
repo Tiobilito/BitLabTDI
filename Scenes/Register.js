@@ -1,13 +1,10 @@
 import { React, useState, useEffect } from "react"
 import {
   StyleSheet,
-  TextInput,
   Alert,
   Dimensions,
   Text,
   View,
-  ScrollView,
-  TouchableOpacity,
   Image,
 } from "react-native"
 import { getAllDepartamentos } from "../Modules/Operations DB Generals"
@@ -112,7 +109,7 @@ const Register = ({ navigation }) => {
 
   const handleTranslateY = () => {
     translateY.value = withSpring(0, {
-      damping: 18,
+      damping: 19,
       stiffness: 180,
       mass: 1,
     })
@@ -133,7 +130,7 @@ const Register = ({ navigation }) => {
         </Animated.View>
 
         <View style={styles.body}>
-          <Form title={"Registra tu nueva cuenta"}>
+          <Form title={"Registra tu nueva cuenta"} transition="spring">
             <>
               <FloatingInput
                 label="Código"
@@ -141,18 +138,6 @@ const Register = ({ navigation }) => {
                 onChangeText={setCode}
                 keyboardType="numeric"
               />
-
-              {/* <View style={styles.inputWrapper}>
-                <Text style={styles.inputLabel}>Código</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Code"
-                  value={code}
-                  onChangeText={setCode}
-                  keyboardType="numeric"
-                />
-              </View> */}
-
               <FloatingInput
                 label="Nombre"
                 value={username}
@@ -182,7 +167,7 @@ const Register = ({ navigation }) => {
                 label="Dirección"
                 value={address}
                 onChangeText={setAddress}
-                placeholder={"Ejemplo 1234"}
+                placeholder={"calle xxxx"}
               />
               <FloatingInput
                 label={"Código Postal"}
@@ -203,7 +188,7 @@ const Register = ({ navigation }) => {
                 value={email}
                 onChangeText={setEmail}
                 keyboardType={"email-address"}
-                placeholder={"xxx@dominio"}
+                placeholder={"correo@dominio"}
               />
 
               {userType === "2" && (
@@ -259,8 +244,6 @@ const Register = ({ navigation }) => {
                   buttonStyles={{
                     backgroundColor: "#DC3545",
                     width: width * 0.32,
-                    // marginTop: 20,
-                    // marginLeft: 10,
                   }}
                 />
                 <CustomButton
@@ -269,8 +252,6 @@ const Register = ({ navigation }) => {
                   buttonStyles={{
                     backgroundColor: "#007BFF",
                     width: width * 0.32,
-                    // marginTop: 20,
-                    // marginLeft: 10,
                   }}
                 />
               </View>
@@ -289,13 +270,6 @@ const styles = StyleSheet.create({
   body: {
     marginTop: -50,
     height: "70%",
-    // flex: 1,
-    // flexDirection: "row",
-    // alignItems: "center",
-    // justifyContent: "center",
-    // width: "100%",
-    // paddingHorizontal: 16,
-    // marginTop: 35,
   },
   inputWrapper: {
     marginBottom: 16,
@@ -311,32 +285,7 @@ const styles = StyleSheet.create({
     color: "#555",
     backgroundColor: "#C5E0F2",
     borderRadius: width > 400 ? 20 : 15,
-    // minHeight: height * 0.02,
     textAlignVertical: "center",
-    // padding: width * 0.02,
-  },
-  // input: {
-  //   height: 40,
-  //   borderColor: "#ddd",
-  //   borderWidth: 1,
-  //   borderRadius: 8,
-  //   paddingHorizontal: 8,
-  //   fontSize: 16,
-  //   backgroundColor: "#C5E0F2",
-  // },
-  formCont: {
-    width: width * 0.8,
-    marginBottom: width * 0.08,
-  },
-  loginButton: {
-    width: width * 0.5,
-    height: width * 0.1,
-    backgroundColor: "#2272A7",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-    marginTop: 20,
-    // marginBottom: width * 0.08,
   },
   Logo: {
     width: width * 0.7,
