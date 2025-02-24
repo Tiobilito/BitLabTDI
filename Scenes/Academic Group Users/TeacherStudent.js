@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react"
+import React, { useState, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,89 +9,89 @@ import {
   Image,
   ActivityIndicator,
   Pressable,
-} from "react-native"
-import { useFocusEffect } from "@react-navigation/native"
-import Ionicons from "@expo/vector-icons/Ionicons"
-import { CustomViewReverse } from "../components/CustomViewReverse"
-import { getAllOrdersByUserId } from "../../Modules/Operations DB Fixes"
-import { getAllProjectSubmissionsByUserId } from "../../Modules/Operations DB Prototyping"
-import { GetUserData } from "../../Modules/DataInfo"
+} from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { CustomViewReverse } from "../components/CustomViewReverse";
+import { getAllOrdersByUserId } from "../../Modules/Operations DB Fixes";
+import { getAllProjectSubmissionsByUserId } from "../../Modules/Operations DB Prototyping";
+import { GetUserData } from "../../Modules/DataInfo";
 
-const width = Dimensions.get("screen").width
-const height = Dimensions.get("screen").height
+const width = Dimensions.get("screen").width;
+const height = Dimensions.get("screen").height;
 
 const TeacherStudentPage = ({ navigation }) => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [dataOrders, setDataOrders] = useState([])
-  const [dataReports, setDataReports] = useState([]) // Nueva lista de reportes
-  const [showListOrders, setShowListOrders] = useState(true) // Estado para alternar entre listas
+  const [isLoading, setIsLoading] = useState(false);
+  const [dataOrders, setDataOrders] = useState([]);
+  const [dataReports, setDataReports] = useState([]); // Nueva lista de reportes
+  const [showListOrders, setShowListOrders] = useState(true); // Estado para alternar entre listas
 
   useFocusEffect(
     useCallback(() => {
-      setIsLoading(true)
-      fetchData()
+      setIsLoading(true);
+      fetchData();
     }, [])
-  )
+  );
 
   const navigateToPDF = (id) => {
-    navigation.navigate("GeneratePDF", { idReport: id })
-  }
+    navigation.navigate("GeneratePDF", { idReport: id });
+  };
 
   const navigateToOrder = (id) => {
-    navigation.navigate("OrderRead", { idOrder: id })
-  }
+    navigation.navigate("OrderRead", { idOrder: id });
+  };
 
   const fetchData = async () => {
     try {
-      const UData = await GetUserData()
-      let Data = await getAllOrdersByUserId(UData.Code)
-      let ReportsData = await getAllProjectSubmissionsByUserId(UData.Code)
+      const UData = await GetUserData();
+      let Data = await getAllOrdersByUserId(UData.Code);
+      let ReportsData = await getAllProjectSubmissionsByUserId(UData.Code);
       let BData = Data.map((registro) => ({
         ...registro,
         Details: false,
-      }))
+      }));
       let BRData = ReportsData.map((registro) => ({
         ...registro,
         Details: false,
-      }))
-      setDataOrders(BData)
-      setDataReports(BRData)
-      setIsLoading(false)
+      }));
+      setDataOrders(BData);
+      setDataReports(BRData);
+      setIsLoading(false);
     } catch (error) {
-      console.log(error)
-      setIsLoading(false)
+      console.log(error);
+      setIsLoading(false);
     }
-  }
+  };
 
   const toggleList = (Option) => {
     switch (Option) {
       case "Ordenes":
-        setShowListOrders(true)
-        break
+        setShowListOrders(true);
+        break;
       case "Reportes":
-        setShowListOrders(false)
-        break
+        setShowListOrders(false);
+        break;
       default:
-        break
+        break;
     }
-  }
+  };
 
   const toggleDetailsReports = (itemId) => {
     const updatedData = dataReports.map((registro) => {
       if (registro.id === itemId) {
-        return { ...registro, Details: !registro.Details }
+        return { ...registro, Details: !registro.Details };
       }
-      return registro
-    })
-    setDataReports(updatedData)
-  }
+      return registro;
+    });
+    setDataReports(updatedData);
+  };
 
   if (isLoading) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#ffffff" />
       </View>
-    )
+    );
   }
 
   return (
@@ -205,8 +205,8 @@ const TeacherStudentPage = ({ navigation }) => {
         )}
       </View>
     </CustomViewReverse>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   btnAction: {
@@ -218,9 +218,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     borderRadius: 100,
-    // textAlign: "center",
-    // textAlignVertical: "center",
-    // justifyContent: "center",
+    textAlign: "center",
+    textAlignVertical: "center",
+    justifyContent: "center",
   },
   text: {
     fontSize: width > 400 ? 38 : 24,
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     width: 55,
     height: 55,
     borderRadius: 80,
-    marginLeft: 250,
+    marginLeft: 200,
     marginTop: -20,
   },
   buttonImage: {
@@ -364,6 +364,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: height * 0.02,
   },
-})
+});
 
-export default TeacherStudentPage
+export default TeacherStudentPage;

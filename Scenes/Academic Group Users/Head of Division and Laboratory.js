@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react"
+import React, { useState, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,77 +9,76 @@ import {
   Image,
   ActivityIndicator,
   Pressable,
-} from "react-native"
-import { useFocusEffect } from "@react-navigation/native"
-import Ionicons from "@expo/vector-icons/Ionicons"
-import { CustomViewReverse } from "../components/CustomViewReverse"
-import { getAllOrdersByUserId } from "../../Modules/Operations DB Fixes"
-import { getAllProjectSubmissions } from "../../Modules/Operations DB Prototyping"
-import { GetUserData } from "../../Modules/DataInfo"
+} from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { CustomViewReverse } from "../components/CustomViewReverse";
+import { getAllProjectSubmissions } from "../../Modules/Operations DB Prototyping";
+import { GetUserData } from "../../Modules/DataInfo";
 
-const { width, height } = Dimensions.get("screen")
+const { width, height } = Dimensions.get("screen");
 
 const HeadDivisionLaboratoryPage = ({ navigation }) => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [dataReports, setDataReports] = useState([]) // Nueva lista de reportes
-  const [showListOrders, setShowListOrders] = useState(true) // Estado para alternar entre listas
+  const [isLoading, setIsLoading] = useState(false);
+  const [dataReports, setDataReports] = useState([]); // Nueva lista de reportes
+  const [showListOrders, setShowListOrders] = useState(true); // Estado para alternar entre listas
 
   useFocusEffect(
     useCallback(() => {
-      setIsLoading(true)
-      fetchData()
+      setIsLoading(true);
+      fetchData();
     }, [])
-  )
+  );
 
   const navigateToPDF = (id) => {
-    navigation.navigate("GeneratePDF", { idReport: id })
-  }
+    navigation.navigate("GeneratePDF", { idReport: id });
+  };
 
   const fetchData = async () => {
     try {
-      const UData = await GetUserData()
-      let ReportsData = await getAllProjectSubmissions(UData.Code)
+      const UData = await GetUserData();
+      let ReportsData = await getAllProjectSubmissions(UData.Code);
       let BRData = ReportsData.map((registro) => ({
         ...registro,
         Details: false,
-      }))
-      setDataReports(BRData)
-      setIsLoading(false)
+      }));
+      setDataReports(BRData);
+      setIsLoading(false);
     } catch (error) {
-      console.log(error)
-      setIsLoading(false)
+      console.log(error);
+      setIsLoading(false);
     }
-  }
+  };
 
   const toggleList = (Option) => {
     switch (Option) {
       case "Ordenes":
-        setShowListOrders(true)
-        break
+        setShowListOrders(true);
+        break;
       case "Reportes":
-        setShowListOrders(false)
-        break
+        setShowListOrders(false);
+        break;
       default:
-        break
+        break;
     }
-  }
+  };
 
   const toggleDetailsReports = (itemId) => {
     const updatedData = dataReports.map((registro) => {
       if (registro.id === itemId) {
-        return { ...registro, Details: !registro.Details }
+        return { ...registro, Details: !registro.Details };
       }
-      return registro
-    })
-    setDataReports(updatedData)
-  }
+      return registro;
+    });
+    setDataReports(updatedData);
+  };
 
   if (isLoading) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#ffffff" />
       </View>
-    )
+    );
   }
 
   return (
@@ -167,8 +166,8 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
         />
       </View>
     </CustomViewReverse>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   centered: {
@@ -283,6 +282,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     alignItems: "center",
   },
-})
+});
 
-export default HeadDivisionLaboratoryPage
+export default HeadDivisionLaboratoryPage;
