@@ -3,7 +3,15 @@ import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import { Asset } from "expo-asset";
 import { Buffer } from "buffer";
-import * as WebBrowser from "expo-web-browser";
+
+// Función para dividir una cadena en partes de máximo 55 caracteres, con un límite de 3 partes
+const splitStringIntoChunks = (str, maxLength, maxChunks) => {
+  const chunks = [];
+  for (let i = 0; i < str.length && chunks.length < maxChunks; i += maxLength) {
+    chunks.push(str.substring(i, i + maxLength));
+  }
+  return chunks;
+};
 
 export const generatePDF = async (data) => {
   try {
@@ -78,6 +86,7 @@ export const generatePDF = async (data) => {
         coordenadas.tipoPrototipo = { x: 209, y: 500 }; // Valor por defecto
         coordenadas.descripcion = { x: 209, y: 500 };
     }
+
     // Cambiar las coordenadas de Numero de caras PCB dinámicamente
     switch (data.internal_use_pcb_faces) {
       case 1:
@@ -89,6 +98,7 @@ export const generatePDF = async (data) => {
       default:
         coordenadas.carasPCB; // Valor por defecto
     }
+
     // Cambiar las coordenadas de PCB proporcionado por el usuario dinámicamente
     switch (data.internal_use_pcb_provided_by_user) {
       case true:
@@ -126,11 +136,25 @@ export const generatePDF = async (data) => {
       size: 9,
       color: rgb(0, 0, 0),
     });
-    page.drawText(String(data.application || ""), {
-      x: coordenadas.aplicacion.x,
-      y: coordenadas.aplicacion.y,
-      size: 10,
-      color: rgb(0, 0, 0),
+
+    // Dividir la aplicación en partes de máximo 55 caracteres, con un límite de 3 partes
+    const application = data.application || "";
+    const maxCharsPerLineApplication = 36;
+    const maxChunksApplication = 3;
+    const applicationChunks = splitStringIntoChunks(
+      application,
+      maxCharsPerLineApplication,
+      maxChunksApplication
+    );
+
+    // Dibujar cada parte de la aplicación en una nueva línea
+    applicationChunks.forEach((chunk, index) => {
+      page.drawText(chunk, {
+        x: coordenadas.aplicacion.x,
+        y: coordenadas.aplicacion.y - index * 15, // Ajusta la posición en Y para cada línea
+        size: 10,
+        color: rgb(0, 0, 0),
+      });
     });
 
     if (data.student_user_code) {
@@ -163,12 +187,28 @@ export const generatePDF = async (data) => {
       size: 12,
       color: rgb(0, 0, 0),
     });
-    page.drawText(String(data.prototype_description || ""), {
-      x: coordenadas.descripcion.x,
-      y: coordenadas.descripcion.y,
-      size: 10,
-      color: rgb(0, 0, 0),
+
+    // Dividir la descripción en partes de máximo 68 caracteres, con un límite de 3 partes
+    const descripcion = data.prototype_description || "";
+    const maxCharsPerLineDescripcion = 63;
+    const maxChunksDescripcion = 3;
+    const descripcionChunks = splitStringIntoChunks(
+      descripcion,
+      maxCharsPerLineDescripcion,
+      maxChunksDescripcion
+    );
+
+    // Dibujar cada parte de la descripción en una nueva línea
+    descripcionChunks.forEach((chunk, index) => {
+      page.drawText(chunk, {
+        x: coordenadas.descripcion.x,
+        y: coordenadas.descripcion.y - index * 15, // Ajusta la posición en Y para cada línea
+        size: 10,
+        color: rgb(0, 0, 0),
+      });
     });
+
+    // Resto de los campos
     page.drawText(String(data.specific_requirements_dimensions || ""), {
       x: coordenadas.dimensiones.x,
       y: coordenadas.dimensiones.y,
@@ -216,21 +256,47 @@ export const generatePDF = async (data) => {
       size: 12,
       color: rgb(0, 0, 0),
     });
-    page.drawText(
-      String(data.internal_use_required_inputs || "No especificado"),
-      {
+
+    // Dentro de la función generatePDF, reemplaza la lógica de data.internal_use_required_inputs con esto:
+    const requiredInputs = data.internal_use_required_inputs || "";
+    const maxCharsPerLineRequiredInputs = 24; // Máximo de caracteres por línea para requiredInputs
+    const maxChunksRequiredInputs = 2; // Máximo de partes (líneas) permitidas
+    const requiredInputsChunks = splitStringIntoChunks(
+      requiredInputs,
+      maxCharsPerLineRequiredInputs,
+      maxChunksRequiredInputs
+    );
+
+    // Dibujar cada parte de los materiales requeridos en una nueva línea
+    requiredInputsChunks.forEach((chunk, index) => {
+      page.drawText(chunk, {
         x: coordenadas.material_requerido.x,
-        y: coordenadas.material_requerido.y,
+        y: coordenadas.material_requerido.y - index * 15, // Ajusta la posición en Y para cada línea
         size: 10,
         color: rgb(0, 0, 0),
-      }
-    );
-    page.drawText(String(data.internal_use_comments || "No especificado"), {
-      x: coordenadas.comentarios_internos.x,
-      y: coordenadas.comentarios_internos.y,
-      size: 10,
-      color: rgb(0, 0, 0),
+      });
     });
+
+    // Dentro de la función generatePDF, reemplaza la lógica de data.internal_use_comments con esto:
+    const internalUseComments = data.internal_use_comments || "";
+    const maxCharsPerLineComments = 48; // Máximo de caracteres por línea para comments
+    const maxChunksComments = 2; // Máximo de partes (líneas) permitidas
+    const commentsChunks = splitStringIntoChunks(
+      internalUseComments,
+      maxCharsPerLineComments,
+      maxChunksComments
+    );
+
+    // Dibujar cada parte de los comentarios internos en una nueva línea
+    commentsChunks.forEach((chunk, index) => {
+      page.drawText(chunk, {
+        x: coordenadas.comentarios_internos.x,
+        y: coordenadas.comentarios_internos.y - index * 15, // Ajusta la posición en Y para cada línea
+        size: 10,
+        color: rgb(0, 0, 0),
+      });
+    });
+
     page.drawText(String(data.prototype_approved_date || "No especificado"), {
       x: coordenadas.fecha_aprovacion.x,
       y: coordenadas.fecha_aprovacion.y,

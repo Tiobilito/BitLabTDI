@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,19 +9,16 @@ import {
   StatusBar,
   Alert,
   Dimensions,
-} from "react-native"
-import { useRoute, useNavigation } from "@react-navigation/native"
+} from "react-native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 import {
   getPrototypeById,
   updateProjectSub,
   updateProjectCheck,
-} from "../../Modules/Operations DB Prototyping"
-import { GetUserData } from "../../Modules/DataInfo"
-import { CustomView } from "../components/CustomView"
-import { FloatingInput, CustomButton } from "../../components"
-import { mainStyles } from "../../components/styles"
+} from "../../Modules/Operations DB Prototyping";
+import { GetUserData } from "../../Modules/DataInfo";
 
-const width = Dimensions.get("window").width
+const Scale = Dimensions.get("window").width;
 
 // Componente personalizado de RadioButton
 const RadioButton = ({ label, value, selected, onSelect }) => (
@@ -34,21 +31,21 @@ const RadioButton = ({ label, value, selected, onSelect }) => (
     />
     <Text style={styles.radioButtonLabel}>{label}</Text>
   </TouchableOpacity>
-)
+);
 
 // Función auxiliar para las validaciones
 const validateField = (field, message) => {
   if (!field) {
-    Alert.alert("Error", message)
-    return false
+    Alert.alert("Error", message);
+    return false;
   }
-  return true
-}
+  return true;
+};
 
 export default function PrototypingFormEdit() {
-  const route = useRoute()
-  const navigation = useNavigation()
-  const { idReport } = route.params || {}
+  const route = useRoute();
+  const navigation = useNavigation();
+  const { idReport } = route.params || {};
 
   const [formData, setFormData] = useState({
     name: "",
@@ -66,18 +63,18 @@ export default function PrototypingFormEdit() {
     specialCut: "",
     others: "",
     remarks: "",
-  })
+  });
 
-  const [error, setError] = useState("")
-  const [dataUser, setDataUserType] = useState("")
+  const [error, setError] = useState("");
+  const [dataUser, setDataUserType] = useState("");
   const [internalData, setInternalData] = useState({
     pcbFaces: 0,
     pcbProvidedByUser: null,
     requiredInputs: "",
     comments: "",
-  })
+  });
 
-  const [state, setState] = useState(null)
+  const [state, setState] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,7 +82,7 @@ export default function PrototypingFormEdit() {
         const [fetchedData, userData] = await Promise.all([
           getPrototypeById(idReport),
           GetUserData(),
-        ])
+        ]);
         //console.log(fetchedData.student_user_code);
         //console.log(fetchedData.professor_user_code);
         setFormData({
@@ -114,19 +111,19 @@ export default function PrototypingFormEdit() {
           specialCut: fetchedData.specific_requirements_special_cut,
           others: fetchedData.specific_requirements_other,
           remarks: fetchedData.specific_requirements_comments,
-        })
-        setDataUserType(userData.User_type)
+        });
+        setDataUserType(userData.User_type);
       } catch (error) {
-        setError("Error al cargar los datos.")
+        setError("Error al cargar los datos.");
       }
-    }
+    };
 
-    fetchData()
-  }, [idReport])
+    fetchData();
+  }, [idReport]);
 
   const handleUpdate = async (value) => {
     try {
-      const estado = value ? "approved" : "rejected"
+      const estado = value ? "approved" : "rejected";
       const baseProject = {
         applicant_name: formData.name,
         contact_email: formData.email,
@@ -156,7 +153,7 @@ export default function PrototypingFormEdit() {
         laboratory_head: null,
         service_staff: null,
         status: "awaiting_revision",
-      }
+      };
 
       const updatedProject =
         dataUser === 2
@@ -168,21 +165,21 @@ export default function PrototypingFormEdit() {
               prototype_approved_date: new Date().toISOString().split("T")[0],
               status: estado,
             }
-          : baseProject
+          : baseProject;
 
-      await updateProjectSub(idReport, updatedProject)
-      Alert.alert("Éxito", "Prototipo actualizado exitosamente.")
-      navigation.goBack()
+      await updateProjectSub(idReport, updatedProject);
+      Alert.alert("Éxito", "Prototipo actualizado exitosamente.");
+      navigation.goBack();
     } catch (error) {
-      Alert.alert("Error", "Hubo un problema al actualizar el prototipo.")
+      Alert.alert("Error", "Hubo un problema al actualizar el prototipo.");
     }
-  }
+  };
 
   const handleSubmit = () => {
     // Validar que al menos uno de los roles esté seleccionado
     if (!formData.roles.alumno && !formData.roles.profesor) {
-      alert("Por favor, selecciona al menos un rol (alumno o profesor).")
-      return
+      alert("Por favor, selecciona al menos un rol (alumno o profesor).");
+      return;
     }
 
     // Validaciones generales
@@ -238,19 +235,19 @@ export default function PrototypingFormEdit() {
         field: formData.specificRequirementsDimensions,
         message: "Por favor, ingresa las dimensiones del prototipo.",
       },
-    ]
+    ];
 
     // Validar cada campo
     for (const { field, message } of validationFields) {
       if (!validateField(field, message)) {
-        return
+        return;
       }
     }
 
     // Si pasa todas las validaciones, procede con la actualización
-    console.log(formData)
-    handleUpdate(true)
-  }
+    console.log(formData);
+    handleUpdate(true);
+  };
 
   /* Función para los checkbox */
   const Checkbox = ({ label, checked, onChange }) => {
@@ -259,16 +256,16 @@ export default function PrototypingFormEdit() {
         <View style={[styles.checkbox, checked && styles.checkboxChecked]} />
         <Text style={styles.checkboxLabel}>{label}</Text>
       </TouchableOpacity>
-    )
-  }
+    );
+  };
 
   /* Función para elegir el tipo de usuario que solicita el prototipo */
   const handleRoleChange = (role) => {
     setFormData((prev) => ({
       ...prev,
       roles: { ...prev.roles, [role]: !prev.roles[role] },
-    }))
-  }
+    }));
+  };
 
   const handleSelectApproved = (value) => {
     if (
@@ -277,366 +274,328 @@ export default function PrototypingFormEdit() {
       !internalData.requiredInputs ||
       !internalData.comments
     ) {
-      Alert.alert("Error", "Por favor, completa todos los campos internos.")
-      return
+      Alert.alert("Error", "Por favor, completa todos los campos internos.");
+      return;
     }
 
-    handleUpdate(value)
-    updateProjectCheck(idReport, value, dataUser)
-  }
+    handleUpdate(value);
+    updateProjectCheck(idReport, value, dataUser);
+  };
 
   useEffect(() => {
     if (state !== null) {
-      handleSelectApproved(state)
+      handleSelectApproved(state);
     }
-  }, [state])
+  }, [state]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.formContainer}>
       {/* Coloca la barra de estado por encima de las ventanas */}
       <StatusBar
         barStyle="light-content"
         backgroundColor="black"
         translucent={true}
       />
-      <CustomView>
-        <View style={styles.scrollContainer}>
-          <ScrollView contentContainerStyle={styles.formContainer}>
-            <Text style={styles.title}>
-              Formato de requerimiento de servicio de maquinado de prototipo
-            </Text>
-            {/* Seccion 1: Datos de contacto */}
-            <View style={styles.formSection}>
-              <Text style={styles.titleSection}>Datos de contacto</Text>
-              <FloatingInput
-                label="Nombre completo"
-                value={formData.name}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, name: text })
-                }
-              />
-              <FloatingInput
-                label="Correo electrónico"
-                value={formData.email}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, email: text })
-                }
-                placeholder="tuemail@dominio"
-              />
-              <FloatingInput
-                label="Número de teléfono"
-                value={formData.phone}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, phone: text })
-                }
-                keyboardType="phone-pad"
-                maxLength={10}
-              />
-              <Text style={mainStyles.title}>
-                Usuario(s) que solicita(n) el servicio:
-              </Text>
-              <View style={styles.checkboxGroup}>
-                <Checkbox
-                  label="Alumno"
-                  checked={formData.roles.alumno}
-                  onChange={() => handleRoleChange("alumno")}
-                />
-                <Checkbox
-                  label="Profesor"
-                  checked={formData.roles.profesor}
-                  onChange={() => handleRoleChange("profesor")}
-                />
-              </View>
-
-              {/* Función para desplegar los inputs del checkbox seleccionado para el tipo de usuario */}
-              {formData.roles.alumno ? (
-                <View style={styles.formGroup}>
-                  <FloatingInput
-                    label="Código de Alumno"
-                    value={formData.studentCode}
-                    onChangeText={(text) =>
-                      setFormData({ ...formData, studentCode: text })
-                    }
-                    placeholder="xxxxxxxxx"
-                    keyboardType="phone-pad"
-                    maxLength={9}
-                  />
-                </View>
-              ) : null}
-              {formData.roles.profesor ? (
-                <FloatingInput
-                  label="Código de Profesor"
-                  value={formData.teacherCode}
-                  onChangeText={(text) =>
-                    setFormData({ ...formData, teacherCode: text })
-                  }
-                  placeholder="xxxxxxxxx"
-                  keyboardType="phone-pad"
-                  maxLength={9}
-                />
-              ) : null}
-              <Text style={mainStyles.title}>Proyecto para:</Text>
-              <View style={styles.radioGroup}>
-                <RadioButton
-                  label="Licenciatura"
-                  value="Licenciatura"
-                  selected={formData.projectType === "Licenciatura"}
-                  onSelect={(value) =>
-                    setFormData({ ...formData, projectType: value })
-                  }
-                />
-                <RadioButton
-                  label="Posgrado"
-                  value="Posgrado"
-                  selected={formData.projectType === "Posgrado"}
-                  onSelect={(value) =>
-                    setFormData({ ...formData, projectType: value })
-                  }
-                />
-                <RadioButton
-                  label="Cuerpo Academico"
-                  value="Cuerpo Academico"
-                  selected={formData.projectType === "Cuerpo Academico"}
-                  onSelect={(value) =>
-                    setFormData({ ...formData, projectType: value })
-                  }
-                />
-              </View>
-              <FloatingInput
-                label="Aplicación"
-                value={formData.application}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, application: text })
-                }
-                placeholder="¿En qué aplicarás tu proyecto?"
-              />
-              <FloatingInput
-                label="Descripción"
-                value={formData.descriptionProject}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, descriptionProject: text })
-                }
-                placeholder="Describe tu proyecto"
-              />
-              {error && <Text style={styles.errorMessage}>{error}</Text>}
-            </View>
-            {/* Sección 2: Datos del Prototipo */}
-            <View style={styles.formSection}>
-              <Text style={styles.titleSection}>Datos del Prototipo</Text>
-
-              <Text style={mainStyles.title}>Tipo de prototipo:</Text>
-              <View style={styles.radioGroup}>
-                <RadioButton
-                  label="Diseño de circuito impreso"
-                  value="impreso"
-                  selected={formData.prototypeType === "impreso"}
-                  onSelect={(value) =>
-                    setFormData({ ...formData, prototypeType: value })
-                  }
-                />
-                <RadioButton
-                  label="Diseño de prototipo en 3D"
-                  value="tresD"
-                  selected={formData.prototypeType === "tresD"}
-                  onSelect={(value) =>
-                    setFormData({ ...formData, prototypeType: value })
-                  }
-                />
-              </View>
-              <FloatingInput
-                label="Descripción del prototipo"
-                value={formData.descriptionPrototype}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, descriptionPrototype: text })
-                }
-                placeholder="Describe tu prototipo"
-              />
-
-              <Text style={[mainStyles.title, { marginTop: 20 }]}>
-                Requerimientos específicos:
-              </Text>
-              <FloatingInput
-                label="Dimensiones (en mm)"
-                value={formData.specificRequirementsDimensions}
-                onChangeText={(text) =>
-                  setFormData({
-                    ...formData,
-                    specificRequirementsDimensions: text,
-                  })
-                }
-                placeholder="200x100x50"
-              />
-              <FloatingInput
-                label="Corte especial"
-                value={formData.specialCut}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, specialCut: text })
-                }
-                placeholder="¿Se necesita algún corte especial?"
-              />
-              <FloatingInput
-                label="Otros requisitos"
-                value={formData.others}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, others: text })
-                }
-                placeholder="Requisitos específicos"
-              />
-              <FloatingInput
-                label="Comentarios adicionales"
-                value={formData.remarks}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, remarks: text })
-                }
-                placeholder="Comentarios sobre el prototipo"
-              />
-            </View>
-            {/* Seccion para llenado de datos del staff */}
-            {dataUser === 2 && (
-              <View style={styles.formSection}>
-                <Text style={styles.titleSection}>Información interna</Text>
-
-                <Text style={styles.label}>Número de caras PCB:</Text>
-                <View style={styles.radioGroup}>
-                  <RadioButton
-                    label="1 cara"
-                    value={1}
-                    selected={internalData.pcbFaces === 1}
-                    onSelect={(value) =>
-                      setInternalData({ ...internalData, pcbFaces: value })
-                    }
-                  />
-                  <RadioButton
-                    label="2 caras"
-                    value={2}
-                    selected={internalData.pcbFaces === 2}
-                    onSelect={(value) =>
-                      setInternalData({ ...internalData, pcbFaces: value })
-                    }
-                  />
-                </View>
-
-                <Text style={styles.label}>
-                  ¿PCB proporcionado por el usuario?
-                </Text>
-                <View style={styles.radioGroup}>
-                  <RadioButton
-                    label="Sí"
-                    value={true}
-                    selected={internalData.pcbProvidedByUser === true}
-                    onSelect={(value) =>
-                      setInternalData({
-                        ...internalData,
-                        pcbProvidedByUser: value,
-                      })
-                    }
-                  />
-                  <RadioButton
-                    label="No"
-                    value={false}
-                    selected={internalData.pcbProvidedByUser === false}
-                    onSelect={(value) =>
-                      setInternalData({
-                        ...internalData,
-                        pcbProvidedByUser: value,
-                      })
-                    }
-                  />
-                </View>
-
-                <Text style={styles.label}>Insumos requeridos:</Text>
-                <TextInput
-                  style={styles.input}
-                  value={internalData.requiredInputs}
-                  onChangeText={(text) =>
-                    setInternalData({ ...internalData, requiredInputs: text })
-                  }
-                  placeholder="Especifica los insumos necesarios"
-                />
-
-                <Text style={styles.label}>Observaciones:</Text>
-                <TextInput
-                  style={styles.input}
-                  value={internalData.comments}
-                  onChangeText={(text) =>
-                    setInternalData({ ...internalData, comments: text })
-                  }
-                  placeholder="Observaciones adicionales"
-                />
-              </View>
-            )}
-            {/* Botónes de envío, aprovacion y rechazo del formulario */}
-            {dataUser === 2 ? (
-              <View style={styles.approval}>
-                <TouchableOpacity
-                  style={styles.submitButton}
-                  onPress={() => {
-                    setState(true) // Acción 1
-                  }}
-                >
-                  <Text style={styles.submitButtonText}>Aprobar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.submitButton}
-                  onPress={() => {
-                    setState(false) // Acción 1
-                  }}
-                >
-                  <Text style={styles.submitButtonText}>Rechazar</Text>
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <View style={styles.approval}>
-                <CustomButton
-                  title="Cancelar"
-                  onPress={() => navigation.goBack()}
-                  buttonStyles={{
-                    width: width * 0.32,
-                    backgroundColor: "#dc3545",
-                  }}
-                />
-                <CustomButton
-                  title="Enviar"
-                  onPress={handleSubmit}
-                  buttonStyles={{
-                    width: width * 0.32,
-                    backgroundColor: "#007BFF",
-                  }}
-                />
-                {/* <TouchableOpacity
-                  style={styles.submitButton}
-                  onPress={handleSubmit}
-                >
-                  <Text style={styles.submitButtonText}>Enviar</Text>
-                </TouchableOpacity> */}
-              </View>
-            )}
-          </ScrollView>
+      <View style={styles.backTriangle} />
+      <View style={styles.mainTriangle} />
+      <Text style={styles.title}>
+        Formato de requerimiento de servicio de maquinado de prototipo.
+      </Text>
+      {/* Seccion 1: Datos de contacto */}
+      <View style={styles.formSection}>
+        <Text style={styles.titleSection}>Datos de contacto</Text>
+        <Text style={styles.label}>Nombre completo:</Text>
+        <TextInput
+          style={styles.input}
+          value={formData.name}
+          onChangeText={(text) => setFormData({ ...formData, name: text })}
+          maxLength={40}
+        />
+        <Text style={styles.label}>Correo electrónico:</Text>
+        <TextInput
+          style={styles.input}
+          value={formData.email}
+          onChangeText={(text) => setFormData({ ...formData, email: text })}
+          placeholder="tuemail@ejemplo.com"
+          maxLength={35}
+        />
+        <Text style={styles.label}>Número de Teléfono:</Text>
+        <TextInput
+          style={styles.input}
+          value={formData.phone}
+          onChangeText={(text) => setFormData({ ...formData, phone: text })}
+          placeholder="Número de teléfono"
+          keyboardType="phone-pad"
+          maxLength={10}
+        />
+        <Text style={styles.sectionSubTitle}>
+          Usuario(s) que solicita(n) el servicio:
+        </Text>
+        <View style={styles.checkboxGroup}>
+          <Checkbox
+            label="Alumno"
+            checked={formData.roles.alumno}
+            onChange={() => handleRoleChange("alumno")}
+          />
+          <Checkbox
+            label="Profesor"
+            checked={formData.roles.profesor}
+            onChange={() => handleRoleChange("profesor")}
+          />
         </View>
-      </CustomView>
-    </View>
-  )
+
+        {/* Función para desplegar los inputs del checkbox seleccionado para el tipo de usuario */}
+        {formData.roles.alumno ? (
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Código de Alumno</Text>
+            <TextInput
+              style={styles.input}
+              value={formData.studentCode}
+              onChangeText={(text) =>
+                setFormData({ ...formData, studentCode: text })
+              }
+              placeholder="Código de Alumno"
+              keyboardType="numeric"
+              maxLength={9}
+            />
+          </View>
+        ) : null}
+        {formData.roles.profesor ? (
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Código de Profesor</Text>
+            <TextInput
+              style={styles.input}
+              value={formData.teacherCode}
+              onChangeText={(text) =>
+                setFormData({ ...formData, teacherCode: text })
+              }
+              placeholder="Código de Profesor"
+              keyboardType="numeric"
+              maxLength={9}
+            />
+          </View>
+        ) : null}
+        <Text style={styles.labelprojectType}>Proyecto para:</Text>
+        <View style={styles.radioGroup}>
+          <RadioButton
+            label="Licenciatura"
+            value="Licenciatura"
+            selected={formData.projectType === "Licenciatura"}
+            onSelect={(value) =>
+              setFormData({ ...formData, projectType: value })
+            }
+          />
+          <RadioButton
+            label="Posgrado"
+            value="Posgrado"
+            selected={formData.projectType === "Posgrado"}
+            onSelect={(value) =>
+              setFormData({ ...formData, projectType: value })
+            }
+          />
+          <RadioButton
+            label="Cuerpo Academico"
+            value="Cuerpo Academico"
+            selected={formData.projectType === "Cuerpo Academico"}
+            onSelect={(value) =>
+              setFormData({ ...formData, projectType: value })
+            }
+          />
+        </View>
+        <Text style={styles.label}>Aplicación:</Text>
+        <TextInput
+          style={styles.input}
+          value={formData.application}
+          onChangeText={(text) =>
+            setFormData({ ...formData, application: text })
+          }
+          placeholder="¿En qué aplicarás tu proyecto?"
+          maxLength={112}
+        />
+        {error && <Text style={styles.errorMessage}>{error}</Text>}
+      </View>
+      {/* Sección 2: Datos del Prototipo */}
+      <View style={styles.formSection}>
+        <Text style={styles.titleSection}>Datos del Prototipo</Text>
+
+        <Text style={styles.label}>Tipo de prototipo:</Text>
+        <View style={styles.radioGroup}>
+          <RadioButton
+            label="Diseño de circuito impreso"
+            value="impreso"
+            selected={formData.prototypeType === "impreso"}
+            onSelect={(value) =>
+              setFormData({ ...formData, prototypeType: value })
+            }
+          />
+          <RadioButton
+            label="Diseño de prototipo en 3D"
+            value="tresD"
+            selected={formData.prototypeType === "tresD"}
+            onSelect={(value) =>
+              setFormData({ ...formData, prototypeType: value })
+            }
+          />
+        </View>
+
+        <Text style={styles.label}>Descripción del prototipo:</Text>
+        <TextInput
+          style={styles.input}
+          value={formData.descriptionPrototype}
+          onChangeText={(text) =>
+            setFormData({ ...formData, descriptionPrototype: text })
+          }
+          placeholder="Describe tu prototipo"
+          maxLength={191}
+        />
+
+        <Text style={styles.label}>Requerimientos específicos:</Text>
+
+        <Text style={styles.label}>Dimensiones (en mm):</Text>
+        <TextInput
+          style={styles.input}
+          value={formData.specificRequirementsDimensions}
+          onChangeText={(text) =>
+            setFormData({ ...formData, specificRequirementsDimensions: text })
+          }
+          placeholder="Ejemplo: 200x100x50"
+          maxLength={40}
+        />
+
+        <Text style={styles.label}>Corte especial:</Text>
+        <TextInput
+          style={styles.input}
+          value={formData.specialCut}
+          onChangeText={(text) =>
+            setFormData({ ...formData, specialCut: text })
+          }
+          placeholder="¿Se necesita algún corte especial?"
+          maxLength={82}
+        />
+
+        <Text style={styles.label}>Otros requisitos:</Text>
+        <TextInput
+          style={styles.input}
+          value={formData.others}
+          onChangeText={(text) => setFormData({ ...formData, others: text })}
+          placeholder="Describe otros requisitos específicos"
+          maxLength={91}
+        />
+
+        <Text style={styles.label}>Comentarios adicionales:</Text>
+        <TextInput
+          style={styles.input}
+          value={formData.remarks}
+          onChangeText={(text) => setFormData({ ...formData, remarks: text })}
+          placeholder="Comentarios adicionales sobre el prototipo"
+          maxLength={79}
+        />
+      </View>
+      {/* Seccion para llenado de datos del staff */}
+      {dataUser === 2 && (
+        <View style={styles.formSection}>
+          <Text style={styles.titleSection}>Información interna</Text>
+
+          <Text style={styles.label}>Número de caras PCB:</Text>
+          <View style={styles.radioGroup}>
+            <RadioButton
+              label="1 cara"
+              value={1}
+              selected={internalData.pcbFaces === 1}
+              onSelect={(value) =>
+                setInternalData({ ...internalData, pcbFaces: value })
+              }
+            />
+            <RadioButton
+              label="2 caras"
+              value={2}
+              selected={internalData.pcbFaces === 2}
+              onSelect={(value) =>
+                setInternalData({ ...internalData, pcbFaces: value })
+              }
+            />
+          </View>
+
+          <Text style={styles.label}>¿PCB proporcionado por el usuario?</Text>
+          <View style={styles.radioGroup}>
+            <RadioButton
+              label="Sí"
+              value={true}
+              selected={internalData.pcbProvidedByUser === true}
+              onSelect={(value) =>
+                setInternalData({ ...internalData, pcbProvidedByUser: value })
+              }
+            />
+            <RadioButton
+              label="No"
+              value={false}
+              selected={internalData.pcbProvidedByUser === false}
+              onSelect={(value) =>
+                setInternalData({ ...internalData, pcbProvidedByUser: value })
+              }
+            />
+          </View>
+
+          <Text style={styles.label}>Insumos requeridos:</Text>
+          <TextInput
+            style={styles.input}
+            value={internalData.requiredInputs}
+            onChangeText={(text) =>
+              setInternalData({ ...internalData, requiredInputs: text })
+            }
+            placeholder="Especifica los insumos necesarios"
+            maxLength={50}
+          />
+
+          <Text style={styles.label}>Observaciones:</Text>
+          <TextInput
+            style={styles.input}
+            value={internalData.comments}
+            onChangeText={(text) =>
+              setInternalData({ ...internalData, comments: text })
+            }
+            placeholder="Observaciones adicionales"
+            maxLength={98}
+          />
+        </View>
+      )}
+      {/* Botónes de envío, aprovacion y rechazo del formulario */}
+      {dataUser === 2 ? (
+        <View style={styles.approval}>
+          <TouchableOpacity
+            style={styles.submitButton}
+            onPress={() => {
+              setState(true); // Acción 1
+            }}
+          >
+            <Text style={styles.submitButtonText}>Aprobar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.submitButton}
+            onPress={() => {
+              setState(false); // Acción 1
+            }}
+          >
+            <Text style={styles.submitButtonText}>Rechazar</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+          <Text style={styles.submitButtonText}>Enviar</Text>
+        </TouchableOpacity>
+      )}
+    </ScrollView>
+  );
 }
 
 /* Estilos */
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  scrollContainer: {
-    paddingVertical: 20,
-    paddingHorizontal: 16,
-    marginTop: 200,
-    overflow: "hidden",
-    width: "95%",
-  },
   formContainer: {
-    // flexGrow: 1,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
+    flexGrow: 1,
+    padding: 20,
+    backgroundColor: "#f2f2f2",
     alignItems: "center",
-    // backgroundColor: "#f2f2f2",
-    // marginLeft: 0,
+    marginLeft: 0,
   },
   title: {
     fontSize: 24,
@@ -644,7 +603,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 20,
     color: "#394f66",
-    padding: width * 0.04,
   },
   titleSection: {
     fontSize: 20,
@@ -683,15 +641,14 @@ const styles = StyleSheet.create({
     color: "#2c3e50",
   },
   input: {
-    height: width > 400 ? 60 : 40,
-    // width: "100%",
+    height: Scale > 400 ? 60 : 40,
+    width: "100%",
     backgroundColor: "#C5E0F2",
-    borderRadius: width > 400 ? 20 : 15,
+    borderRadius: Scale > 400 ? 20 : 15,
     padding: 10,
     margin: 10,
     marginLeft: 0,
-    // fontSize: width > 400 ? 30 : 15,
-    fontSize: width * 0.04,
+    fontSize: Scale > 400 ? 30 : 15,
   },
   radioGroup: {
     flexDirection: "column",
@@ -723,13 +680,13 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   submitButton: {
-    width: width * 0.25,
-    height: width * 0.1,
+    width: Scale * 0.25,
+    height: Scale * 0.1,
     backgroundColor: "#2272A7",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    marginBottom: width * 0.0,
+    marginBottom: Scale * 0.0,
     marginRight: 10,
   },
   submitButtonText: {
@@ -801,9 +758,8 @@ const styles = StyleSheet.create({
   },
   approval: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
-    marginTop: width * 0.05,
-    marginLeft: 10,
+    marginTop: 20,
   },
-})
+});

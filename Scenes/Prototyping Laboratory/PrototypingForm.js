@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -9,14 +9,10 @@ import {
   StatusBar,
   Alert,
   Dimensions,
-} from "react-native"
-import { addProjectSub } from "../../Modules/Operations DB Prototyping"
-import { CustomView } from "../components/CustomView"
-import { CustomButton, FloatingInput } from "../../components"
-import { mainStyles } from "../../components/styles"
-import { useRoute, useNavigation } from "@react-navigation/native"
+} from "react-native";
+import { addProjectSub } from "../../Modules/Operations DB Prototyping";
 
-const { width } = Dimensions.get("window")
+const Scale = Dimensions.get("window").width;
 
 // Componente personalizado de RadioButton
 const RadioButton = ({ label, value, selected, onSelect }) => {
@@ -30,16 +26,50 @@ const RadioButton = ({ label, value, selected, onSelect }) => {
       />
       <Text style={styles.radioButtonLabel}>{label}</Text>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 export default function PrototypingForm() {
-  const navigation = useNavigation()
+  /* Estados del formulario */
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [projectType, setProjectType] = useState("");
+  const [roles, setRoles] = useState({ alumno: false, profesor: false });
+  const [studentCode, setStudentCode] = useState("");
+  const [teacherCode, setTeacherCode] = useState("");
+  const [application, setApplication] = useState("");
+  const [prototypeType, setPrototypeType] = useState("");
+  const [descriptionPrototype, setDescriptionPrototype] = useState("");
+  const [specificRequirementsDimensions, setspecificRequirementsDimensions] =
+    useState("");
+  const [specialCut, setSpecialCut] = useState("");
+  const [others, setOthers] = useState("");
+  const [remarks, setRemarks] = useState("");
+
+  // Función para limpiar todos los inputs
+  const resetForm = () => {
+    setName("");
+    setEmail("");
+    setPhone("");
+    setProjectType("");
+    setRoles({ alumno: false, profesor: false });
+    setStudentCode("");
+    setTeacherCode("");
+    setApplication("");
+    setPrototypeType("");
+    setDescriptionPrototype("");
+    setspecificRequirementsDimensions("");
+    setSpecialCut("");
+    setOthers("");
+    setRemarks("");
+  };
+
   const SentProject = async () => {
     try {
       // Asignar null al rol no seleccionado
-      const finalStudentCode = roles.alumno ? Number(studentCode) : null
-      const finalTeacherCode = roles.profesor ? Number(teacherCode) : null
+      const finalStudentCode = roles.alumno ? Number(studentCode) : null;
+      const finalTeacherCode = roles.profesor ? Number(teacherCode) : null;
 
       const newProject = {
         submission_date: new Date().toISOString().split("T")[0], // Fecha actual
@@ -60,110 +90,83 @@ export default function PrototypingForm() {
         laboratory_head: null,
         service_staff: null,
         status: "awaiting_revision",
-      }
+      };
 
       // Llamada a la función para agregar el proyecto
-      await addProjectSub(newProject)
+      await addProjectSub(newProject);
 
       // Mostrar mensaje de éxito si todo va bien
-      Alert.alert("Éxito", "Solicitud enviada exitosamente.")
+      Alert.alert("Éxito", "Solicitud enviada exitosamente.");
+
+      // Limpiar el formulario después de enviar
+      resetForm();
     } catch (error) {
       // Mostrar mensaje de error si ocurre algún problema
       Alert.alert(
         "Error",
         "Hubo un problema al enviar el formulario. Inténtalo de nuevo."
-      )
-      console.error("Error al enviar el proyecto:", error)
+      );
+      console.error("Error al enviar el proyecto:", error);
     }
-  }
-
-  /* Datos del contacto */
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [date, setDate] = useState("")
-  const [phone, setPhone] = useState("")
-  const [projectType, setProjectType] = useState("")
-  const [error, setError] = useState("")
-  const [roles, setRoles] = useState({ alumno: false, profesor: false })
-  const [studentCode, setStudentCode] = useState("")
-  const [teacherCode, setTeacherCode] = useState("")
-  const [application, setApplication] = useState("")
-  const [descriptionProject, setDescriptionProject] = useState("")
-
-  /* Datos del prototipo */
-  const [prototypeType, setPrototypeType] = useState("")
-  const [descriptionPrototype, setDescriptionPrototype] = useState({
-    impreso: false,
-    tresD: false,
-  })
-  const [specificRequirementsDimensions, setspecificRequirementsDimensions] =
-    useState("")
-  const [specialCut, setSpecialCut] = useState("")
-  const [others, setOthers] = useState("")
-  const [remarks, setRemarks] = useState("")
+  };
 
   const handleSubmit = () => {
-    // Validaciones de los campos de contacto
-    if (!name) {
-      Alert.alert("Error", "Por favor, ingresa tu nombre.")
-      return
-    }
-    if (!email) {
-      Alert.alert("Error", "Por favor, ingresa tu correo electrónico.")
-      return
-    }
-    if (!phone) {
-      Alert.alert("Error", "Por favor, ingresa tu número de teléfono.")
-      return
+    // Definir un arreglo de validaciones
+    const validations = [
+      { condition: !name, message: "Por favor, ingresa tu nombre." },
+      {
+        condition: !email,
+        message: "Por favor, ingresa tu correo electrónico.",
+      },
+      {
+        condition: !phone,
+        message: "Por favor, ingresa tu número de teléfono.",
+      },
+      {
+        condition: !roles.alumno && !roles.profesor,
+        message: "Por favor, selecciona un rol (Alumno o Profesor).",
+      },
+      {
+        condition: roles.alumno && !studentCode,
+        message: "Por favor, ingresa el código de alumno.",
+      },
+      {
+        condition: roles.profesor && !teacherCode,
+        message: "Por favor, ingresa el código de profesor.",
+      },
+      {
+        condition: !projectType,
+        message: "Por favor, selecciona el tipo de proyecto.",
+      },
+      {
+        condition: !application,
+        message: "Por favor, ingresa la aplicación de tu proyecto.",
+      },
+      {
+        condition: !prototypeType,
+        message: "Por favor, selecciona el tipo de prototipo.",
+      },
+      {
+        condition: !descriptionPrototype,
+        message: "Por favor, ingresa una descripción del prototipo.",
+      },
+      {
+        condition: !specificRequirementsDimensions,
+        message: "Por favor, ingresa las dimensiones del prototipo.",
+      },
+    ];
+
+    // Recorrer el arreglo de validaciones
+    for (const validation of validations) {
+      if (validation.condition) {
+        Alert.alert("Error", validation.message);
+        return; // Detener la ejecución si hay un error
+      }
     }
 
-    // Validaciones de roles y códigos correspondientes
-    if (!roles.alumno && !roles.profesor) {
-      Alert.alert("Error", "Por favor, selecciona un rol (Alumno o Profesor).")
-      return
-    }
-    if (roles.alumno && !studentCode) {
-      Alert.alert("Error", "Por favor, ingresa el código de alumno.")
-      return
-    }
-    if (roles.profesor && !teacherCode) {
-      Alert.alert("Error", "Por favor, ingresa el código de profesor.")
-      return
-    }
-
-    // Validaciones adicionales
-    if (!projectType) {
-      Alert.alert("Error", "Por favor, selecciona el tipo de proyecto.")
-      return
-    }
-    if (!application) {
-      Alert.alert("Error", "Por favor, ingresa la aplicación de tu proyecto.")
-      return
-    }
-    if (!descriptionProject) {
-      Alert.alert("Error", "Por favor, ingresa una descripción del proyecto.")
-      return
-    }
-
-    // Validaciones del prototipo
-    if (!prototypeType) {
-      Alert.alert("Error", "Por favor, selecciona el tipo de prototipo.")
-      return
-    }
-    if (!descriptionPrototype) {
-      Alert.alert("Error", "Por favor, ingresa una descripción del prototipo.")
-      return
-    }
-    if (!specificRequirementsDimensions) {
-      Alert.alert("Error", "Por favor, ingresa las dimensiones del prototipo.")
-      return
-    }
-
-    // Si todas las validaciones pasan, limpiar errores y enviar el formulario
-    //Alert.alert("Éxito", "Formulario enviado exitosamente");
-    SentProject()
-    // Aquí va la lógica para enviar el formulario
-  }
+    // Si todas las validaciones pasan, enviar el formulario
+    SentProject();
+  };
 
   /* Función para los checkbox */
   const Checkbox = ({ label, checked, onChange }) => {
@@ -172,239 +175,211 @@ export default function PrototypingForm() {
         <View style={[styles.checkbox, checked && styles.checkboxChecked]} />
         <Text style={styles.checkboxLabel}>{label}</Text>
       </TouchableOpacity>
-    )
-  }
+    );
+  };
 
   /* Función para elegir el tipo de usuario que solicita el prototipo */
   const handleRoleChange = (role) => {
-    setRoles((prev) => ({ ...prev, [role]: !prev[role] }))
-  }
+    setRoles((prev) => ({ ...prev, [role]: !prev[role] }));
+  };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.formContainer}>
       {/* Coloca la barra de estado por encima de las ventanas */}
       <StatusBar
         barStyle="light-content"
         backgroundColor="black"
         translucent={true}
       />
-      <CustomView>
-        <View style={styles.scrollContainer}>
-          <ScrollView contentContainerStyle={styles.formContainer}>
-            {/* <View style={styles.backTriangle} />
-      <View style={styles.mainTriangle} /> */}
-            <Text style={styles.title}>
-              Formato de requerimiento de servicio de maquinado de prototipo
-            </Text>
+      <View style={styles.backTriangle} />
+      <View style={styles.mainTriangle} />
+      <Text style={styles.title}>
+        Formato de requerimiento de servicio de maquinado de prototipo.
+      </Text>
 
-            {/* Seccion 1: Datos de contacto */}
-            <View style={styles.formSection}>
-              <Text style={styles.titleSection}>Datos de contacto</Text>
-              <FloatingInput
-                label="Nombre completo"
-                value={name}
-                onChangeText={setName}
-                placeholder="John Doe"
-              />
-              <FloatingInput
-                label="Correo electrónico"
-                value={email}
-                onChangeText={setEmail}
-                placeholder="tuemail@dominio"
-              />
-              <FloatingInput
-                label="Número de Teléfono"
-                value={phone}
-                onChangeText={setPhone}
-                placeholder="Número de teléfono"
-                keyboardType="phone-pad"
-                maxLength={10}
-              />
-              <Text style={mainStyles.title}>
-                Usuario(s) que solicita(n) el servicio:
-              </Text>
-              <View style={styles.checkboxGroup}>
-                <Checkbox
-                  label="Alumno"
-                  checked={roles.alumno}
-                  onChange={() => handleRoleChange("alumno")}
-                />
-                <Checkbox
-                  label="Profesor"
-                  checked={roles.profesor}
-                  onChange={() => handleRoleChange("profesor")}
-                />
-              </View>
-
-              {/* Función para desplegar los inputs del checkbox seleccionado para el tipo de usuario */}
-              {roles.alumno ? (
-                <View style={styles.formGroup}>
-                  <FloatingInput
-                    label="Código de Alumno"
-                    value={studentCode}
-                    onChangeText={setStudentCode}
-                    placeholder="xxxxxxxxx"
-                    keyboardType="phone-pad"
-                    maxLength={9}
-                  />
-                </View>
-              ) : null}
-              {roles.profesor ? (
-                <FloatingInput
-                  label="Código de Profesor"
-                  value={teacherCode}
-                  onChangeText={setTeacherCode}
-                  placeholder="xxxxxxxxx"
-                  keyboardType="phone-pad"
-                  maxLength={9}
-                />
-              ) : null}
-              <Text style={mainStyles.title}>Proyecto para:</Text>
-              <View style={styles.radioGroup}>
-                <RadioButton
-                  label="Licenciatura"
-                  value="Licenciatura"
-                  selected={projectType === "Licenciatura"}
-                  onSelect={setProjectType}
-                />
-                <RadioButton
-                  label="Posgrado"
-                  value="Posgrado"
-                  selected={projectType === "Posgrado"}
-                  onSelect={setProjectType}
-                />
-                <RadioButton
-                  label="Cuerpo Academico"
-                  value="Cuerpo Academico"
-                  selected={projectType === "Cuerpo Academico"}
-                  onSelect={setProjectType}
-                />
-              </View>
-              <FloatingInput
-                label="Aplicación"
-                value={application}
-                onChangeText={setApplication}
-                placeholder="¿En qué aplicarás tu proyecto?"
-              />
-              <FloatingInput
-                label="Descripción"
-                value={descriptionProject}
-                onChangeText={setDescriptionProject}
-                placeholder="Describe tu proyecto"
-                multiline={true}
-              />
-              {error && <Text style={styles.errorMessage}>{error}</Text>}
-            </View>
-
-            {/* Sección 2: Datos del Prototipo */}
-            <View style={styles.formSection}>
-              <Text style={styles.titleSection}>Datos del Prototipo</Text>
-              <Text style={mainStyles.title}>
-                Selecciona el tipo de prototipo:
-              </Text>
-              <View style={styles.radioGroup}>
-                <RadioButton
-                  label="Diseño de circuito impreso"
-                  value="impreso"
-                  selected={prototypeType === "impreso"}
-                  onSelect={setPrototypeType}
-                />
-                <RadioButton
-                  label="Diseño de prototipo en 3D"
-                  value="tresD"
-                  selected={prototypeType === "tresD"}
-                  onSelect={setPrototypeType}
-                />
-              </View>
-              <FloatingInput
-                label="Descripción del prototipo"
-                value={descriptionPrototype}
-                onChangeText={setDescriptionPrototype}
-                placeholder="Describe tu prototipo"
-                multiline={true}
-              />
-              <Text style={[mainStyles.title, { marginTop: 20 }]}>
-                Requerimientos específicos del Prototipo:
-              </Text>
-              <FloatingInput
-                label="Dimensiones"
-                value={specificRequirementsDimensions}
-                onChangeText={setspecificRequirementsDimensions}
-                placeholder="200x100x50"
-              />
-              <FloatingInput
-                label="Corte especial"
-                value={specialCut}
-                onChangeText={setSpecialCut}
-                placeholder="¿Se necesita algún corte especial?"
-              />
-              <FloatingInput
-                label="Otros requisitos"
-                value={others}
-                onChangeText={setOthers}
-                placeholder="Requisitos específicos"
-                multiline={true}
-              />
-              <FloatingInput
-                label="Observaciones"
-                value={remarks}
-                onChangeText={setRemarks}
-                placeholder="Comentarios sobre el prototipo"
-                multiline={true}
-              />
-            </View>
-
-            <View style={styles.buttonContainer}>
-              <CustomButton
-                title="Cancelar"
-                onPress={() => navigation.goBack()}
-                buttonStyles={{
-                  width: width * 0.32,
-                  backgroundColor: "#DC3545",
-                }}
-              />
-              {/* Botón de envío del formulario */}
-              <CustomButton
-                title="Enviar"
-                onPress={handleSubmit}
-                buttonStyles={{
-                  width: width * 0.32,
-                  backgroundColor: "#007BFF",
-                }}
-              />
-            </View>
-            {/* <TouchableOpacity
-              style={styles.submitButton}
-              onPress={handleSubmit}
-            >
-              <Text style={styles.submitButtonText}>Enviar</Text>
-            </TouchableOpacity> */}
-          </ScrollView>
+      {/* Seccion 1: Datos de contacto */}
+      <View style={styles.formSection}>
+        <Text style={styles.titleSection}>Datos de contacto</Text>
+        <Text style={styles.label}>Nombre completo:</Text>
+        <TextInput
+          style={styles.input}
+          value={name}
+          onChangeText={setName}
+          placeholder=""
+          maxLength={40}
+        />
+        <Text style={styles.label}>Correo electrónico:</Text>
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          placeholder="tuemail@ejemplo.com"
+          maxLength={35}
+        />
+        <Text style={styles.label}>Número de Teléfono:</Text>
+        <TextInput
+          style={styles.input}
+          value={phone}
+          onChangeText={setPhone}
+          placeholder="Número de teléfono"
+          keyboardType="phone-pad"
+          maxLength={10}
+        />
+        <Text style={styles.sectionSubTitle}>
+          Usuario(s) que solicita(n) el servicio:
+        </Text>
+        <View style={styles.checkboxGroup}>
+          <Checkbox
+            label="Alumno"
+            checked={roles.alumno}
+            onChange={() => handleRoleChange("alumno")}
+          />
+          <Checkbox
+            label="Profesor"
+            checked={roles.profesor}
+            onChange={() => handleRoleChange("profesor")}
+          />
         </View>
-      </CustomView>
-    </View>
-  )
+
+        {/* Función para desplegar los inputs del checkbox seleccionado para el tipo de usuario */}
+        {roles.alumno ? (
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Código de Alumno</Text>
+            <TextInput
+              style={styles.input}
+              value={studentCode}
+              onChangeText={setStudentCode}
+              placeholder="Código de Alumno"
+              keyboardType="numeric"
+              maxLength={9}
+            />
+          </View>
+        ) : null}
+        {roles.profesor ? (
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Código de Profesor</Text>
+            <TextInput
+              style={styles.input}
+              value={teacherCode}
+              onChangeText={setTeacherCode}
+              placeholder="Código de Profesor"
+              keyboardType="numeric"
+              maxLength={9}
+            />
+          </View>
+        ) : null}
+        <Text style={styles.labelprojectType}>Proyecto para:</Text>
+        <View style={styles.radioGroup}>
+          <RadioButton
+            label="Licenciatura"
+            value="Licenciatura"
+            selected={projectType === "Licenciatura"}
+            onSelect={setProjectType}
+          />
+          <RadioButton
+            label="Posgrado"
+            value="Posgrado"
+            selected={projectType === "Posgrado"}
+            onSelect={setProjectType}
+          />
+          <RadioButton
+            label="Cuerpo Academico"
+            value="Cuerpo Academico"
+            selected={projectType === "Cuerpo Academico"}
+            onSelect={setProjectType}
+          />
+        </View>
+        <Text style={styles.label}>Aplicación:</Text>
+        <TextInput
+          style={styles.input}
+          value={application}
+          onChangeText={setApplication}
+          placeholder="¿En qué aplicarás tu proyecto?"
+          maxLength={110}
+        />
+      </View>
+
+      {/* Sección 2: Datos del Prototipo */}
+      <View style={styles.formSection}>
+        <Text style={styles.titleSection}>Datos del Prototipo</Text>
+        <Text style={[styles.label, { fontSize: 18 }]}>
+          Selecciona el tipo de prototipo:
+        </Text>
+        <View style={styles.radioGroup}>
+          <RadioButton
+            label="Diseño de circuito impreso"
+            value="impreso"
+            selected={prototypeType === "impreso"}
+            onSelect={setPrototypeType}
+          />
+          <RadioButton
+            label="Diseño de prototipo en 3D"
+            value="tresD"
+            selected={prototypeType === "tresD"}
+            onSelect={setPrototypeType}
+          />
+        </View>
+        <Text style={styles.label}>Descripción del prototipo:</Text>
+        <TextInput
+          style={styles.input}
+          value={descriptionPrototype}
+          onChangeText={setDescriptionPrototype}
+          placeholder="Describe tu prototipo"
+          maxLength={191}
+        />
+        <Text style={styles.sectionSubTitle}>
+          Requerimientos específicos del Prototipo:
+        </Text>
+        <Text style={styles.label}>Dimensiones:</Text>
+        <TextInput
+          style={styles.input}
+          value={specificRequirementsDimensions}
+          onChangeText={setspecificRequirementsDimensions}
+          placeholder="Dime tus dimensiones"
+          maxLength={40}
+        />
+        <Text style={styles.label}>Corte especial:</Text>
+        <TextInput
+          style={styles.input}
+          value={specialCut}
+          onChangeText={setSpecialCut}
+          placeholder="Dime tu corte especial"
+          maxLength={82}
+        />
+        <Text style={styles.label}>Otros:</Text>
+        <TextInput
+          style={styles.input}
+          value={others}
+          onChangeText={setOthers}
+          placeholder="Menciona algún otro requerimiento que tengas"
+          maxLength={91}
+        />
+        <Text style={styles.label}>Observaciones:</Text>
+        <TextInput
+          style={styles.input}
+          value={remarks}
+          onChangeText={setRemarks}
+          placeholder="Menciona alguna observación que tengas"
+          maxLength={79}
+        />
+      </View>
+
+      {/* Botón de envío del formulario */}
+      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+        <Text style={styles.submitButtonText}>Enviar</Text>
+      </TouchableOpacity>
+    </ScrollView>
+  );
 }
 
 /* Estilos */
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  scrollContainer: {
-    paddingVertical: 20,
-    paddingHorizontal: 16,
-    marginTop: 200,
-    overflow: "hidden",
-    width: "95%",
-  },
   formContainer: {
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    // backgroundColor: "#F5F5F5",
-    // borderTopEndRadius: 200,
-    // borderTopLeftRadius: 200,
+    flexGrow: 1,
+    padding: 20,
+    backgroundColor: "#f2f2f2",
     alignItems: "center",
+    marginLeft: 0,
   },
   title: {
     fontSize: 24,
@@ -412,7 +387,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 20,
     color: "#394f66",
-    padding: width * 0.04,
   },
   titleSection: {
     fontSize: 20,
@@ -436,7 +410,7 @@ const styles = StyleSheet.create({
   sectionSubTitle: {
     fontSize: 18,
     marginBottom: 10,
-    color: "#2C3E50",
+    color: "#2c3e50",
     textAlign: "center",
   },
   label: {
@@ -451,15 +425,14 @@ const styles = StyleSheet.create({
     color: "#2c3e50",
   },
   input: {
-    height: width > 400 ? 60 : 40,
-    // width: "100%",
+    height: Scale > 400 ? 60 : 40,
+    width: "100%",
     backgroundColor: "#C5E0F2",
-    borderRadius: width > 400 ? 20 : 15,
+    borderRadius: Scale > 400 ? 20 : 15,
     padding: 10,
     margin: 10,
     marginLeft: 0,
-    // fontSize: width > 400 ? 30 : 15,
-    fontSize: width * 0.04,
+    fontSize: Scale > 400 ? 30 : 15,
   },
   radioGroup: {
     flexDirection: "column",
@@ -491,14 +464,13 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   submitButton: {
-    width: width * 0.25,
-    height: width * 0.1,
+    width: Scale * 0.25,
+    height: Scale * 0.1,
     backgroundColor: "#2272A7",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    // marginBottom: width * 0.0,
-    marginTop: 20,
+    marginBottom: Scale * 0.0,
   },
   submitButtonText: {
     color: "white",
@@ -535,11 +507,36 @@ const styles = StyleSheet.create({
   formGroup: {
     marginTop: 15,
   },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: width * 0.05,
-    marginLeft: 10,
+  mainTriangle: {
+    width: 0,
+    height: 0,
+    backgroundColor: "transparent",
+    borderStyle: "solid",
+    borderLeftWidth: 450,
+    borderRightWidth: 280,
+    borderBottomWidth: 280,
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
+    borderBottomColor: "#328EC5",
+    transform: [{ rotate: "30deg" }],
+    marginTop: "-70%",
+    marginBottom: "10%",
+    marginRight: "-30%",
   },
-})
+  backTriangle: {
+    width: 0,
+    height: 0,
+    backgroundColor: "transparent",
+    borderStyle: "solid",
+    borderLeftWidth: 350,
+    borderRightWidth: 200,
+    borderBottomWidth: 250,
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
+    borderBottomColor: "#57A9D9",
+    transform: [{ rotate: "95deg" }],
+    marginTop: "-40%",
+    marginBottom: "5%",
+    marginLeft: "-70%",
+  },
+});
