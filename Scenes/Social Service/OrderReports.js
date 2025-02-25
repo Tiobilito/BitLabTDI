@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react"
-import { StyleSheet, Text, View, FlatList, Dimensions } from "react-native"
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Dimensions,
+  ActivityIndicator,
+} from "react-native"
 import { useRoute } from "@react-navigation/native"
 import {
   getCostsByOrderId,
@@ -15,20 +22,27 @@ const OrderPageReadOnly = ({ navigation }) => {
   const { idOrder } = route.params
   const [orderData, setOrderData] = useState(null)
   const [costData, setCostData] = useState([])
-
+  const [loading, setLoading] = useState(true)
+  
   useEffect(() => {
     const getData = async () => {
-      const order = await getOrderById(idOrder)
-      const costs = await getCostsByOrderId(idOrder)
+      try {
+        const order = await getOrderById(idOrder)
+        const costs = await getCostsByOrderId(idOrder)
 
-      setOrderData(order)
-      setCostData(costs)
+        setOrderData(order)
+        setCostData(costs)
+      } catch (err) {
+        console.error("Error al obtener los datos: ", err)
+      } finally {
+        setLoading(false)
+      }
     }
     getData()
   }, [idOrder])
 
-  useEffect(() => console.log("cost data -> ", costData), [costData])
-  useEffect(() => console.log("order data -> ", orderData), [orderData])
+  // useEffect(() => console.log("cost data -> ", costData), [costData])
+  // useEffect(() => console.log("order data -> ", orderData), [orderData])
 
   const renderItem = ({ item }) => (
     <View style={styles.costItem}>
@@ -59,51 +73,62 @@ const OrderPageReadOnly = ({ navigation }) => {
     <CustomView>
       <View style={styles.body}>
         <Form bodyStyle={{ backgroundColor: "translucent" }} shadow={false}>
-          <Text style={styles.title}>Reporte de orden</Text>
-          {orderData && (
-            <View style={styles.costItem}>
-              <FloatingText
-                textStyle={{ color: "#1D1D1D" }}
-                title={"ID Dispositivo"}
-                text={orderData.device_id}
-              />
-              <FloatingText
-                textStyle={{ color: "#1D1D1D" }}
-                title={"Cliente"}
-                text={orderData.customer_id}
-              />
-              <FloatingText
-                textStyle={{ color: "#1D1D1D" }}
-                title={"Estado"}
-                text={orderData.status}
-              />
-              <FloatingText
-                textStyle={{ color: "#1D1D1D" }}
-                title={"Fecha de Recepción"}
-                text={orderData.date_received}
-              />
-              <FloatingText
-                textStyle={{ color: "#1D1D1D" }}
-                title={"Diagnóstico General"}
-                text={orderData.diagnosis}
-              />
-            </View>
-          )}
-          {costData && (
-            <FlatList
-              scrollEnabled={false}
-              data={costData}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.id.toString()}
-              ListEmptyComponent={<Text>No hay costos registrados</Text>}
-              contentContainerStyle={styles.flatlist}
+          <Text style={styles.title}>Reporte de ordenes</Text>
+
+          {loading ? (
+            <ActivityIndicator
+              size="large"
+              color="#007BFF"
+              style={styles.loader}
             />
+          ) : (
+            <>
+              {orderData && (
+                <View style={styles.costItem}>
+                  <FloatingText
+                    textStyle={{ color: "#1D1D1D" }}
+                    title={"ID Dispositivo"}
+                    text={orderData.device_id}
+                  />
+                  <FloatingText
+                    textStyle={{ color: "#1D1D1D" }}
+                    title={"Cliente"}
+                    text={orderData.customer_id}
+                  />
+                  <FloatingText
+                    textStyle={{ color: "#1D1D1D" }}
+                    title={"Estado"}
+                    text={orderData.status}
+                  />
+                  <FloatingText
+                    textStyle={{ color: "#1D1D1D" }}
+                    title={"Fecha de Recepción"}
+                    text={orderData.date_received}
+                  />
+                  <FloatingText
+                    textStyle={{ color: "#1D1D1D" }}
+                    title={"Diagnóstico General"}
+                    text={orderData.diagnosis}
+                  />
+                </View>
+              )}
+              {costData && (
+                <FlatList
+                  scrollEnabled={false}
+                  data={costData}
+                  renderItem={renderItem}
+                  keyExtractor={(item) => item.id.toString()}
+                  ListEmptyComponent={<Text>No hay costos registrados</Text>}
+                  contentContainerStyle={styles.flatlist}
+                />
+              )}
+              <CustomButton
+                title="Volver"
+                onPress={() => navigation.goBack()}
+                buttonStyles={{ backgroundColor: "#DC3545" }}
+              />
+            </>
           )}
-          <CustomButton
-            title="Volver"
-            onPress={() => navigation.goBack()}
-            buttonStyles={{ backgroundColor: "#DC3545" }}
-          />
         </Form>
       </View>
     </CustomView>
@@ -121,6 +146,9 @@ const styles = StyleSheet.create({
     color: "#394f66",
     padding: width * 0.04,
     // marginBottom: -width * 0.06,
+  },
+  loader: {
+    marginTop: 20,
   },
   background: {
     flex: 1,

@@ -11,7 +11,7 @@ import Animated, {
 const { width, height } = Dimensions.get("window")
 
 export default ({
-  title,
+  title = "",
   children,
   bodyStyle = {},
   shadow = true,
