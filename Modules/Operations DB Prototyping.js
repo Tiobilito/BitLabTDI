@@ -269,3 +269,18 @@ export async function updateProjectCheck(id, check, userType) {
 
   console.log("Registro actualizado:", data);
 }
+
+// Función para obtener una solicitud de prototipo por ID
+export async function getDeviceModelById(id) {
+  const { data, error } = await supabase
+    .from("devices")
+    .select("serial_number, model")
+    .eq("id", id) // Filtra por el ID recibido
+    .single(); // Asegúrate de obtener solo un registro
+
+  if (error) {
+    console.error("Error al obtener la solicitud:", error);
+    return null; // Manejo de errores
+  }
+  return data; // Retorna el registro encontrado
+}

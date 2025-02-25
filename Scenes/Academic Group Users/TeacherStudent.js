@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react"
 import {
   StyleSheet,
   Text,
@@ -9,89 +9,119 @@ import {
   Image,
   ActivityIndicator,
   Pressable,
-} from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { CustomViewReverse } from "../components/CustomViewReverse";
-import { getAllOrdersByUserId } from "../../Modules/Operations DB Fixes";
-import { getAllProjectSubmissionsByUserId } from "../../Modules/Operations DB Prototyping";
-import { GetUserData } from "../../Modules/DataInfo";
+} from "react-native"
+import { useFocusEffect } from "@react-navigation/native"
+import Ionicons from "@expo/vector-icons/Ionicons"
+import { CustomViewReverse } from "../components/CustomViewReverse"
+import { getAllOrdersByUserId } from "../../Modules/Operations DB Fixes"
+import {
+  getAllProjectSubmissionsByUserId,
+  getDeviceModelById,
+} from "../../Modules/Operations DB Prototyping"
+import { GetUserData } from "../../Modules/DataInfo"
+import { s, scale } from "react-native-size-matters"
 
-const width = Dimensions.get("screen").width;
-const height = Dimensions.get("screen").height;
+const width = Dimensions.get("screen").width
+const height = Dimensions.get("screen").height
 
 const TeacherStudentPage = ({ navigation }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [dataOrders, setDataOrders] = useState([]);
-  const [dataReports, setDataReports] = useState([]); // Nueva lista de reportes
-  const [showListOrders, setShowListOrders] = useState(true); // Estado para alternar entre listas
+  const [isLoading, setIsLoading] = useState(false)
+  const [dataOrders, setDataOrders] = useState([])
+  const [dataReports, setDataReports] = useState([]) // Nueva lista de reportes
+  const [showListOrders, setShowListOrders] = useState(true) // Estado para alternar entre listas
+  const [devices, setDevices] = useState({})
 
   useFocusEffect(
     useCallback(() => {
-      setIsLoading(true);
-      fetchData();
+      setIsLoading(true)
+      fetchData()
     }, [])
-  );
+  )
+
+  // useEffect(() => console.log("dataOrders -> ", dataOrders), [dataOrders])
+  // useEffect(() => console.log("dataReports -> ", dataReports), [dataReports])
+  useEffect(() => console.log("devices -> ", devices), [devices])
 
   const navigateToPDF = (id) => {
-    navigation.navigate("GeneratePDF", { idReport: id });
-  };
+    navigation.navigate("GeneratePDF", { idReport: id })
+  }
 
   const navigateToOrder = (id) => {
-    navigation.navigate("OrderRead", { idOrder: id });
-  };
+    navigation.navigate("OrderRead", { idOrder: id })
+  }
 
   const fetchData = async () => {
     try {
-      const UData = await GetUserData();
-      let Data = await getAllOrdersByUserId(UData.Code);
-      let ReportsData = await getAllProjectSubmissionsByUserId(UData.Code);
+      const UData = await GetUserData()
+      let Data = await getAllOrdersByUserId(UData.Code)
+      let ReportsData = await getAllProjectSubmissionsByUserId(UData.Code)
       let BData = Data.map((registro) => ({
         ...registro,
         Details: false,
-      }));
+      }))
       let BRData = ReportsData.map((registro) => ({
         ...registro,
         Details: false,
-      }));
-      setDataOrders(BData);
-      setDataReports(BRData);
-      setIsLoading(false);
+      }))
+      let devices = {}
+      await Promise.all(
+        Data.map(
+          async (registro) =>
+            (devices[registro.device_id] = await getDeviceModelById(
+              registro.device_id
+            ))
+        )
+      )
+      // console.log("devices -> ", devices)
+      setDataOrders(BData)
+      setDataReports(BRData)
+      setDevices(devices)
+      setIsLoading(false)
     } catch (error) {
-      console.log(error);
-      setIsLoading(false);
+      console.log(error)
+      setIsLoading(false)
     }
-  };
+  }
 
   const toggleList = (Option) => {
     switch (Option) {
       case "Ordenes":
-        setShowListOrders(true);
-        break;
+        setShowListOrders(true)
+        break
       case "Reportes":
-        setShowListOrders(false);
-        break;
+        setShowListOrders(false)
+        break
       default:
-        break;
+        break
     }
-  };
+  }
+
+  const toggleDetailsOrders = (itemId) => {
+    const updatedData = dataOrders.map((registro) => {
+      if (registro.id === itemId) {
+        return { ...registro, Details: !registro.Details }
+      }
+      return registro
+    })
+    setDataOrders(updatedData)
+  }
 
   const toggleDetailsReports = (itemId) => {
     const updatedData = dataReports.map((registro) => {
       if (registro.id === itemId) {
-        return { ...registro, Details: !registro.Details };
+        return { ...registro, Details: !registro.Details }
       }
-      return registro;
-    });
-    setDataReports(updatedData);
-  };
+      return registro
+    })
+    setDataReports(updatedData)
+  }
 
   if (isLoading) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#ffffff" />
       </View>
-    );
+    )
   }
 
   return (
@@ -100,16 +130,11 @@ const TeacherStudentPage = ({ navigation }) => {
         style={styles.btnAction}
         onPress={() => navigation.navigate("ReportForm")}
       >
-        <Ionicons
-          name="clipboard"
-          style={{
-            fontSize: width > 400 ? 32 : 24,
-            color: "#2272A7",
-          }}
-        />
+        <Ionicons name="clipboard" style={styles.reportIcon} />
         <Text style={styles.text}>Añadir Reporte</Text>
       </TouchableOpacity>
-      <View style={styles.btnShowStats}>
+
+      <View style={styles.btnShowContainer}>
         <TouchableOpacity
           style={styles.btnShow}
           onPress={() => toggleList("Ordenes")}
@@ -131,15 +156,33 @@ const TeacherStudentPage = ({ navigation }) => {
             data={dataOrders}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
-              <View style={styles.itemContainer}>
-                <Text style={styles.itemText}>{item.id}</Text>
-                <Pressable
-                  onPress={() => navigateToOrder(item.id)}
-                  style={styles.btnReadOnlyO}
-                >
-                  <Ionicons name={"reader"} style={styles.iconOrders} />
-                </Pressable>
-              </View>
+              <Pressable
+                style={styles.itemContainer}
+                onPress={() => toggleDetailsOrders(item.id)}
+              >
+                <View style={styles.orderContainer}>
+                  <Text style={styles.itemText}>{item.id}</Text>
+                  <Pressable
+                    onPress={() => navigateToOrder(item.id)}
+                    style={styles.btnReadOnlyO}
+                  >
+                    <Ionicons name={"reader"} style={styles.iconOrders} />
+                  </Pressable>
+                </View>
+                {item.Details && (
+                  <View>
+                    <Text style={styles.dateTitle}>
+                      Num. Serial:{" "}
+                      <Text style={styles.dateText}>{devices[item.device_id].serial_number}</Text>
+                    </Text>
+                    <Text style={styles.dateTitle}>
+                      Modelo:{" "}
+                      <Text style={styles.dateText}>{devices[item.device_id].model}</Text>
+                    </Text>
+                    <Text style={styles.dateTitle}>{item.status}</Text>
+                  </View>
+                )}
+              </Pressable>
             )}
             ListEmptyComponent={
               <Text style={styles.emptyText}>No hay ordenes disponibles</Text>
@@ -180,7 +223,12 @@ const TeacherStudentPage = ({ navigation }) => {
                 </View>
                 {item.Details && (
                   <View style={styles.contentContainer}>
-                    <Text style={styles.dateText}>{item.submission_date}</Text>
+                    <Text style={styles.dateTitle}>
+                      Enviado:{" "}
+                      <Text style={styles.dateText}>
+                        {item.submission_date}
+                      </Text>
+                    </Text>
                     {item.department_head &&
                       item.laboratory_head &&
                       item.service_staff && (
@@ -205,50 +253,53 @@ const TeacherStudentPage = ({ navigation }) => {
         )}
       </View>
     </CustomViewReverse>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   btnAction: {
-    width: "95%",
-    height: "8%",
     flexDirection: "row",
-    gap: width * 0.02,
-    backgroundColor: "#FFFFFF",
-    alignItems: "center",
-    paddingHorizontal: 10,
+    backgroundColor: "#FFF",
     borderRadius: 100,
-    textAlign: "center",
-    textAlignVertical: "center",
+    padding: scale(6),
+    width: width * 0.8,
+    alignSelf: "center",
     justifyContent: "center",
+    gap: scale(10),
+  },
+  reportIcon: {
+    fontSize: scale(20),
+    color: "#2272A7",
+    marginTop: scale(7),
   },
   text: {
-    fontSize: width > 400 ? 38 : 24,
+    fontSize: scale(24),
     fontWeight: "bold",
     color: "#2272A7",
   },
-  btnShowStats: {
+  btnShowContainer: {
     flexDirection: "row",
-    gap: width * 0.03,
-    marginVertical: height * 0.02,
+    // gap: scale(10),
+    marginVertical: scale(10),
+    justifyContent: "space-between",
+    width: width * 0.8,
   },
   btnShow: {
-    height: "125%",
-    paddingHorizontal: 10,
+    padding: scale(6),
     flexDirection: "row",
     backgroundColor: "#FFFFFF",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 10,
-    gap: width * 0.02,
+    borderRadius: 100,
+    width: "48%",
   },
   textShowStats: {
-    fontSize: width > 400 ? 26 : 16,
+    fontSize: scale(22),
     fontWeight: "bold",
     color: "#2272A7",
   },
   iconShowStats: {
-    fontSize: width > 400 ? 24 : 16,
+    fontSize: scale(18),
     color: "#2272A7",
   },
   centered: {
@@ -259,43 +310,25 @@ const styles = StyleSheet.create({
   errorText: {
     color: "red",
   },
-  iconOrders: {
-    fontSize: width > 400 ? 40 : 30,
-    color: "gray",
-    marginLeft: 7,
-    marginTop: 6,
-  },
-  iconPrint: {
-    fontSize: width > 400 ? 60 : 55,
-    color: "red",
-  },
-  btnPrint: {
-    backgroundColor: "white",
-    width: 35,
-    height: 35,
-    borderRadius: 80,
-    // marginLeft: 200,
-    // marginTop: -25,
-  },
   btnReadOnlyO: {
     backgroundColor: "white",
-    width: 55,
-    height: 55,
+    padding: scale(6),
     borderRadius: 80,
-    marginLeft: 200,
-    marginTop: -20,
   },
-  buttonImage: {
-    width: 24,
-    height: 24,
-    marginLeft: 4,
-    marginTop: 5,
+  iconOrders: {
+    fontSize: scale(24),
+    textAlign: "center",
+    color: "gray",
+  },
+  dateTitle: {
+    color: "white",
+    fontSize: scale(16),
+    marginTop: scale(5),
+    fontWeight: "bold",
   },
   dateText: {
-    color: "white",
-    fontSize: 20,
-    marginLeft: 15,
-    marginTop: 5,
+    fontWeight: "normal",
+    // marginLeft: 15,
   },
   tables: {
     minWidth: "80%",
@@ -349,6 +382,11 @@ const styles = StyleSheet.create({
     // justifyContent: "space-between", // Añadido para espaciar elementos
     // alignItems: "center", // Añadido para centrar elementos verticalmente
   },
+  orderContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    // alignItems: "center",
+  },
   contentContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -356,14 +394,28 @@ const styles = StyleSheet.create({
   },
   itemText: {
     color: "white", // Añadido color de texto
-    fontSize: 18, // Añadido tamaño de texto
+    fontSize: scale(16), // Añadido tamaño de texto
+    fontWeight: "bold",
+    // textDecorationLine: "underline",
   },
   emptyText: {
     textAlign: "center",
     color: "#2272A7",
-    fontSize: 16,
+    fontSize: scale(14),
     marginTop: height * 0.02,
   },
-});
+  btnPrint: {
+    backgroundColor: "white",
+    width: scale(30),
+    height: scale(30),
+    borderRadius: 80,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonImage: {
+    width: scale(20),
+    height: scale(20),
+  },
+})
 
-export default TeacherStudentPage;
+export default TeacherStudentPage

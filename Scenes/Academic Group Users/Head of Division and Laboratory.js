@@ -1,96 +1,91 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback } from "react"
 import {
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
   Dimensions,
   FlatList,
   Image,
   ActivityIndicator,
   Pressable,
-} from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { CustomViewReverse } from "../components/CustomViewReverse";
-import { getAllProjectSubmissions } from "../../Modules/Operations DB Prototyping";
-import { GetUserData } from "../../Modules/DataInfo";
+} from "react-native"
+import { useFocusEffect } from "@react-navigation/native"
+import Ionicons from "@expo/vector-icons/Ionicons"
+import { CustomViewReverse } from "../components/CustomViewReverse"
+import { getAllProjectSubmissions } from "../../Modules/Operations DB Prototyping"
+import { GetUserData } from "../../Modules/DataInfo"
+import { scale, verticalScale } from "react-native-size-matters"
 
-const { width, height } = Dimensions.get("screen");
+const { width, height } = Dimensions.get("screen")
 
 const HeadDivisionLaboratoryPage = ({ navigation }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [dataReports, setDataReports] = useState([]); // Nueva lista de reportes
-  const [showListOrders, setShowListOrders] = useState(true); // Estado para alternar entre listas
+  const [isLoading, setIsLoading] = useState(false)
+  const [dataReports, setDataReports] = useState([]) // Nueva lista de reportes
+  const [showListOrders, setShowListOrders] = useState(true) // Estado para alternar entre listas
 
   useFocusEffect(
     useCallback(() => {
-      setIsLoading(true);
-      fetchData();
+      setIsLoading(true)
+      fetchData()
     }, [])
-  );
+  )
 
   const navigateToPDF = (id) => {
-    navigation.navigate("GeneratePDF", { idReport: id });
-  };
+    navigation.navigate("GeneratePDF", { idReport: id })
+  }
 
   const fetchData = async () => {
     try {
-      const UData = await GetUserData();
-      let ReportsData = await getAllProjectSubmissions(UData.Code);
+      const UData = await GetUserData()
+      let ReportsData = await getAllProjectSubmissions(UData.Code)
       let BRData = ReportsData.map((registro) => ({
         ...registro,
         Details: false,
-      }));
-      setDataReports(BRData);
-      setIsLoading(false);
+      }))
+      setDataReports(BRData)
+      setIsLoading(false)
     } catch (error) {
-      console.log(error);
-      setIsLoading(false);
+      console.log(error)
+      setIsLoading(false)
     }
-  };
+  }
 
   const toggleList = (Option) => {
     switch (Option) {
       case "Ordenes":
-        setShowListOrders(true);
-        break;
+        setShowListOrders(true)
+        break
       case "Reportes":
-        setShowListOrders(false);
-        break;
+        setShowListOrders(false)
+        break
       default:
-        break;
+        break
     }
-  };
+  }
 
   const toggleDetailsReports = (itemId) => {
     const updatedData = dataReports.map((registro) => {
       if (registro.id === itemId) {
-        return { ...registro, Details: !registro.Details };
+        return { ...registro, Details: !registro.Details }
       }
-      return registro;
-    });
-    setDataReports(updatedData);
-  };
+      return registro
+    })
+    setDataReports(updatedData)
+  }
 
   if (isLoading) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#ffffff" />
       </View>
-    );
+    )
   }
 
   return (
     <CustomViewReverse>
       <View style={styles.btnShowStats}>
-        <TouchableOpacity
-          style={styles.btnShow}
-          onPress={() => toggleList("Reportes")}
-        >
-          <Ionicons name="clipboard" style={styles.iconShowStats} />
-          <Text style={styles.textShowStats}>Reportes</Text>
-        </TouchableOpacity>
+        <Ionicons name="clipboard" style={styles.iconShowStats} />
+        <Text style={styles.textTitle}>Reportes</Text>
       </View>
       <View style={styles.tables}>
         <FlatList
@@ -166,8 +161,8 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
         />
       </View>
     </CustomViewReverse>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   centered: {
@@ -183,36 +178,34 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#2272A7",
   },
-  textShowStats: {
-    fontSize: width > 400 ? 24 : 16,
+  textTitle: {
+    fontSize: scale(24),
     fontWeight: "bold",
     color: "#2272A7",
   },
   iconShowStats: {
-    fontSize: width > 400 ? 24 : 16,
+    fontSize: scale(20),
     color: "#2272A7",
+    marginTop: scale(7),
   },
   pdfButtonContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-  },
-  iconPrint: {
-    fontSize: width > 400 ? 60 : 55,
-    color: "red",
+    marginRight: width * 0.3,
   },
   btnPrint: {
     backgroundColor: "white",
-    width: 45,
-    height: 45,
+    width: scale(36),
+    height: scale(36),
     borderRadius: 80,
     alignItems: "center",
     alignContent: "center",
     justifyContent: "center",
   },
   buttonImage: {
-    width: 28,
-    height: 28,
+    width: scale(24),
+    height: scale(24),
   },
   btnAction: {
     width: width * 0.85,
@@ -273,7 +266,7 @@ const styles = StyleSheet.create({
     height: 30,
     marginTop: 4,
     justifyContent: "center",
-    width: width > 400 ? 150 : 100,
+    width: width * 0.4,
   },
   statusText: {
     fontSize: 14,
@@ -282,6 +275,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     alignItems: "center",
   },
-});
+})
 
-export default HeadDivisionLaboratoryPage;
+export default HeadDivisionLaboratoryPage
