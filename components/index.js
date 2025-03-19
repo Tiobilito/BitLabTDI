@@ -4,6 +4,7 @@ import FloatingInput from "./FloatingInput.jsx"
 import FloatingCalendar from "./FloatingCalendar.jsx"
 import Form from "./Form.jsx"
 import Info from "./Info.jsx"
+import GoogleDrivePicker from './GoogleDrivePicker.jsx'
 
 export {
   CustomButton,
@@ -12,4 +13,5 @@ export {
   FloatingInput,
   FloatingCalendar,
   Info,
+  GoogleDrivePicker
 }

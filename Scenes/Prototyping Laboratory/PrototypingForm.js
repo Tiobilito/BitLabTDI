@@ -11,6 +11,7 @@ import {
   Dimensions,
 } from "react-native";
 import { addProjectSub } from "../../Modules/Operations DB Prototyping";
+import { GoogleDrivePicker } from '../../components';
 
 const Scale = Dimensions.get("window").width;
 
@@ -194,7 +195,7 @@ export default function PrototypingForm() {
       <View style={styles.backTriangle} />
       <View style={styles.mainTriangle} />
       <Text style={styles.title}>
-        Formato de requerimiento de servicio de maquinado de prototipo.
+        Formato de requerimiento de servicio de maquinado de prototipo
       </Text>
 
       {/* Seccion 1: Datos de contacto */}
@@ -327,6 +328,8 @@ export default function PrototypingForm() {
           placeholder="Describe tu prototipo"
           maxLength={191}
         />
+        <Text style={styles.label}>Seleccionar archivos:</Text>
+        <GoogleDrivePicker />
         <Text style={styles.sectionSubTitle}>
           Requerimientos específicos del Prototipo:
         </Text>

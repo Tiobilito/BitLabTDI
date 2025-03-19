@@ -2,6 +2,7 @@
   "expo": {
     "name": "BitLabTDI",
     "slug": "BitLabTDI",
+    "scheme": "BitLabTDI",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,7 +16,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.tiobilito.BitLabTDI"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,12 +27,14 @@
       "package": "com.tiobilito.BitLabTDI"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
     },
     "extra": {
       "eas": {
-        "projectId": "445b9686-b17d-4987-9b22-b027e9978550"
+        "projectId": "4c2e8c03-e99f-4175-ae61-3a7a906370c0"
       }
-    }
+    },
+    "owner": "jhotwox"
   }
 }
