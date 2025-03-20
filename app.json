@@ -2,7 +2,7 @@
   "expo": {
     "name": "BitLabTDI",
     "slug": "BitLabTDI",
-    "scheme": "BitLabTDI",
+    "scheme": "com.tiobilito.BitLabTDI",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
