@@ -1,15 +1,9 @@
 import { useEffect, useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Button,
-  Text,
-  Modal,
-} from "react-native";
+import { View, StyleSheet, Button, Text, Modal } from "react-native";
 import { WebView } from "react-native-webview";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
-import * as AuthSession from 'expo-auth-session'
+import * as AuthSession from "expo-auth-session";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -18,76 +12,94 @@ const GOOGLE_WEB_TOKEN =
 const GOOGLE_ANDROID_TOKEN =
   "955311692015-ta1lf17m1h1sak8ce4ljjkb5qc6d7dls.apps.googleusercontent.com";
 
-const SCOPES = ["https://www.googleapis.com/auth/drive", "profile", "email"];
+const SCOPES = [
+  // "https://www.googleapis.com/auth/drive.readonly",
+  "email",
+  "profile",
+];
 
 export default () => {
   const [accessToken, setAccessToken] = useState(null);
   const [pickerUrl, setPickerUrl] = useState(null);
-
-  const redirectUri = AuthSession.makeRedirectUri({ native: `com.tiobilito.BitLabTDI:/oauth2redirect` });
   
+  const redirectUri = AuthSession.makeRedirectUri({
+    native: `com.tiobilito.BitLabTDI:/oauth2redirect`,
+    useProxy: true,
+  });
+
   const [request, response, promptAsync] = Google.useAuthRequest({
     webClientId: GOOGLE_WEB_TOKEN,
     androidClientId: GOOGLE_ANDROID_TOKEN,
-    scopes: ["profile", "email", "https://www.googleapis.com/auth/drive.readonly"],
+    scopes: SCOPES,
     redirectUri,
   });
 
+  const getToken = async (token) => {
+    console.log("token -> ", token);
+    // Guardar token en asyncStorage o algo
+  };
+
   useEffect(() => {
-    if (response?.type === "success") {
-      console.log("[+] success")
-      const { authentication } = response;
-      if (authentication?.accessToken)
-        setAccessToken(authentication.accessToken)
-    }
+    console.log("response -> ", response)
+    
+    // if (response?.type === "success") {
+    //   console.log("[+] success");
+    //   if (response.authentication?.accessToken) {
+    //     console.log("token 1 -> ", response.authentication?.accessToken);
+    //     console.log("token 2 -> ", response.authentication?.idToken);
+    //     // setAccessToken(response.authentication.accessToken);
+    //   }
+    // } else {
+    //   console.log("Error de autenticación\nResponse -> ", response);
+    // }
 
-    if (response?.type !== "success") {
-      console.log("[x] -> ", response)
-    }
-
-    console.log("Response -> ", response)
     // console.log("params 1 -> ", response.params)
     // console.log("params 2 -> ", response.params?.access_token)
-
-  }, [response])
+  }, [response]);
 
   const openGooglePicker = () => {
-    if(!accessToken) {
-      console.log("Inicia sesión")
+    if (!accessToken) {
+      console.log("Inicia sesión");
       return;
     }
 
     const pickerUrl = `https://drive.google.com/embeddedfolderview?id=root&authuser=0#grid`;
     // const pickerUrl = "https://accounts.google.com/ServiceLogin?continue=https://drive.google.com/embeddedfolderview?id=root&authuser=0";
-    setPickerUrl(pickerUrl)
-  }
+    setPickerUrl(pickerUrl);
+  };
 
   const PickerModal = ({ pickerUrl, onClose }) => {
     return (
-      <Modal
-        visible={!!pickerUrl}
-        animationType="slide"
-        transparent={false}
-      >
+      <Modal visible={!!pickerUrl} animationType="slide" transparent={false}>
         <View style={{ flex: 1 }}>
-          <Button title="Cerrar" onPress={onClose}/>
-          <WebView source={{ uri: pickerUrl }} style={{flex: 1, marginTop: 10 }} />
+          <Button title="Cerrar" onPress={onClose} />
+          <WebView
+            source={{ uri: pickerUrl }}
+            style={{ flex: 1, marginTop: 10 }}
+          />
         </View>
       </Modal>
-    )
-  }
-  
+    );
+  };
+
   return (
     <View style={{ padding: 20 }}>
       {!accessToken ? (
-        <Button title="Iniciar sesión con Google" onPress={() => promptAsync()} />
+        <Button
+          title="Iniciar sesión con Google"
+          onPress={() =>
+            promptAsync().catch((err) =>
+              console.log("[-] Error en promptAsync", err)
+            )
+          }
+        />
       ) : (
         <>
           <Text>Autenticado con éxito</Text>
           <Button title="Abrir Google Picker" onPress={openGooglePicker} />
         </>
       )}
-  
+
       <PickerModal pickerUrl={pickerUrl} onClose={() => setPickerUrl(null)} />
     </View>
   );

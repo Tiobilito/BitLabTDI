@@ -8,10 +8,10 @@ import {
 
 const { width } = Dimensions.get("window")
 
-export default ({ title, onPress, buttonStyles = {}, textStyles = {} }) => {
+export default ({ title, onPress, buttonStyles = {}, textStyles = {}, disabled = false }) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={[styles.button, buttonStyles]} onPress={onPress}>
+      <TouchableOpacity style={[styles.button, { backgroundColor: disabled ? "#2272A788" : "#2272A7" }, buttonStyles]} onPress={onPress} disabled={disabled}>
         <Text style={[styles.buttonText, textStyles]}>{title}</Text>
       </TouchableOpacity>
     </View>

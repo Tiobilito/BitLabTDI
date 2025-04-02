@@ -13,6 +13,7 @@ export default ({
   multiline = false,
   containerStyle = {},
   inputStyle = {},
+  ...rest
 }) => {
   return (
     <View style={[styles.container, containerStyle]}>
@@ -28,6 +29,7 @@ export default ({
         editable={editable}
         secureTextEntry={secureTextEntry}
         multiline={multiline}
+        {...rest}
       />
     </View>
   )

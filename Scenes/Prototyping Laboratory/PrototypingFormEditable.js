@@ -299,7 +299,7 @@ export default function PrototypingFormEdit() {
       <View style={styles.backTriangle} />
       <View style={styles.mainTriangle} />
       <Text style={styles.title}>
-        Formato de requerimiento de servicio de maquinado de prototipo.
+        Formato de requerimiento de servicio de maquinado de prototipo
       </Text>
       {/* Seccion 1: Datos de contacto */}
       <View style={styles.formSection}>

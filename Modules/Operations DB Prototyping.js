@@ -15,6 +15,7 @@ export async function addProjectSub(Project) {
       project_type: Project.project_type,
       prototype_type: Project.prototype_type,
       prototype_description: Project.prototype_description,
+      drive_url: Project.drive_url,
       specific_requirements_dimensions:
         Project.specific_requirements_dimensions,
       specific_requirements_special_cut:
@@ -38,7 +39,8 @@ export async function addProjectSub(Project) {
   ]);
   if (error) {
     console.error("Error al insertar registro:", error);
-    return null;
+    throw new Error(error);
+    // return null;
   }
   console.log("Registro añadido:", data);
   return data;
@@ -115,6 +117,7 @@ export async function updateProjectSub(idReport, Project) {
       project_type: Project.project_type,
       prototype_type: Project.prototype_type,
       prototype_description: Project.prototype_description,
+      drive_url: Project.drive_url,
       specific_requirements_dimensions:
         Project.specific_requirements_dimensions,
       specific_requirements_special_cut:
