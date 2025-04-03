@@ -43,7 +43,7 @@ export async function addProjectSub(Project) {
     // return null;
   }
   console.log("Registro añadido:", data);
-  return data;
+  return true;
 }
 
 // Función para obtener todos los registros de la tabla project_submissions

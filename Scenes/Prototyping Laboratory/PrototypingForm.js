@@ -115,13 +115,25 @@ export default function PrototypingForm() {
       console.log("response -> ", response);
       if (response === null || !response) {
         Alert.alert("Error", "[X] No se logro enviar la solicitud.");
+        return;
       }
       
       // Mostrar mensaje de éxito si todo va bien
-      Alert.alert("Éxito", "Solicitud enviada exitosamente.");
+      Alert.alert(
+        "Éxito",
+        "Solicitud enviada exitosamente.",
+        [{
+          text: 'OK', onPress: () => {
+            // Limpiar el formulario después de enviar
+            resetForm();
+            navigation.goBack();
+          }
+        }],
+        {
+          cancelable: false,
+        }
+      );
       
-      // Limpiar el formulario después de enviar
-      resetForm();
     } catch (error) {
       // Mostrar mensaje de error si ocurre algún problema
       Alert.alert(
@@ -272,7 +284,7 @@ export default function PrototypingForm() {
         if (!response.ok || response.status !== 200)
           setDriveUrlErr('El URL no es valido, comprueba que este completo');
         else
-          setDriveUrlErr('Esta URL no parece ser publica\nComprueba que el acceso sea para "Cualquier persona con el enlace"');
+          setDriveUrlErr('Esta URL no parece ser publico\nComprueba que el acceso sea para "Cualquier persona con el enlace"');
         setDriveUrlCheck(false);
       }
       return result;
