@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Dimensions,
   TouchableOpacity,
+  Linking,
 } from "react-native"
 import {
   getPrototypeById,
@@ -16,7 +17,7 @@ import {
 import { useRoute } from "@react-navigation/native"
 import { GetUserData } from "../../Modules/DataInfo"
 import { CustomView } from "../components/CustomView"
-import { CustomButton } from "../../components"
+import { CustomButton, OpenDrive } from "../../components"
 
 const { width, height } = Dimensions.get("window")
 // const width = Dimensions.get("window").width
@@ -83,6 +84,7 @@ export default function PrototypingFormReadOnly({ navigation }) {
     specific_requirements_special_cut,
     specific_requirements_other,
     specific_requirements_comments,
+    drive_url,
   } = data
 
   // Verifica el tipo de prototipo y muestra una mejor descripción al usuario
@@ -170,6 +172,14 @@ export default function PrototypingFormReadOnly({ navigation }) {
                 {specific_requirements_comments ||
                   "Sin comentarios adicionales"}
               </Text>
+              <Text style={styles.label}>Carpeta de archivos:</Text>
+              <OpenDrive link={drive_url} buttonStyle={{width: "50%"}}/>
+              <Text
+                style={[styles.value, styles.url]}
+                onPress={() => Linking.openURL(drive_url)}
+              >
+                {drive_url}
+              </Text>
             </View>
 
             {/* Botones para aprobar o rechazar la solicitud*/}
@@ -256,4 +266,8 @@ const styles = StyleSheet.create({
     marginTop: width * 0.05,
     marginLeft: 10,
   },
+  url: {
+    textDecorationLine: "underline",
+    color: 'blue',
+  }
 })

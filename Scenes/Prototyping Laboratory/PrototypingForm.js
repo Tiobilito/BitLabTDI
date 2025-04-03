@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
@@ -21,6 +20,8 @@ import { FloatingInput } from '../../components';
 import { mainStyles } from '../../components/styles';
 
 const width = Dimensions.get("window").width;
+
+const numberRegex = /^(\d+)?$/;
 
 // Componente personalizado de RadioButton
 const RadioButton = ({ label, value, selected, onSelect }) => {
@@ -49,7 +50,7 @@ export default function PrototypingForm() {
   const [application, setApplication] = useState("");
   const [prototypeType, setPrototypeType] = useState("");
   const [descriptionPrototype, setDescriptionPrototype] = useState("");
-  const [url, setDriveUrl] = useState("");
+  const [driveUrl, setDriveUrl] = useState("");
   const [driveUrlErr, setDriveUrlErr] = useState("");
   const [driveUrlCheck, setDriveUrlCheck] = useState(false);
   const [specificRequirementsDimensions, setspecificRequirementsDimensions] =
@@ -99,7 +100,7 @@ export default function PrototypingForm() {
         project_type: projectType, // Tipo de proyecto
         prototype_type: prototypeType, // Tipo de prototipo
         prototype_description: descriptionPrototype, // Descripción del prototipo
-        drive_url: url, // URL de la carpeta de google drive
+        drive_url: driveUrl, // URL de la carpeta de google drive
         specific_requirements_dimensions: specificRequirementsDimensions, // Dimensiones del prototipo
         specific_requirements_special_cut: specialCut, // Corte específico (Opcional)
         specific_requirements_other: others, // Otros (Opcional)
@@ -185,16 +186,16 @@ export default function PrototypingForm() {
         message: "Por favor, ingresa una descripción del prototipo.",
       },
       {
-        condition: !url,
-        message: "Por favor, ingresa una URL de Google Drive",
+        condition: !driveUrl,
+        message: "Por favor, ingresa una URL de Google Drive.",
       },
       {
         condition: driveUrlErr !== "",
-        message: "Por favor, ingresa una URL de Google Drive valida",
+        message: "Por favor, ingresa una URL de Google Drive valida.",
       },
       {
         condition: !driveUrlCheck,
-        message: "Por favor, vuelve a validar la URL de Google Drive",
+        message: "Por favor, vuelve a validar la URL de Google Drive.",
       },
       {
         condition: !specificRequirementsDimensions,
@@ -228,8 +229,7 @@ export default function PrototypingForm() {
   const handleRoleChange = (role) => {
     setRoles((prev) => ({ ...prev, [role]: !prev[role] }));
   };
-
-  // const driveFolderRegex = /^https?:\/\/drive\.google\.com\/drive\/(?:u\/\d+\/)?folders\/([a-zA-Z0-9_-]+)$/;
+  
   const driveFolderRegex = /^https?:\/\/drive\.google\.com\/drive\/(?:u\/\d+\/)?folders\/([a-zA-Z0-9_-]+)(?:\?[\w=&%-]+)?$/;
 
   const isDriveFolder = async (url) => {
@@ -325,14 +325,6 @@ export default function PrototypingForm() {
           onChangeText={setName}
           maxLength={40}
         />
-        {/* <Text style={styles.label}>Nombre completo:</Text>
-        <TextInput
-          style={styles.input}
-          value={name}
-          onChangeText={setName}
-          placeholder=""
-          maxLength={40}
-        /> */}
         <FloatingInput
           label="Correo electrónico"
           value={email}
@@ -340,31 +332,16 @@ export default function PrototypingForm() {
           maxLength={35}
           placeholder="tuemail@ejemplo.com"
         />
-        {/* <Text style={styles.label}>Correo electrónico:</Text>
-        <TextInput
-        style={styles.input}
-        value={email}
-        onChangeText={setEmail}
-        placeholder="tuemail@ejemplo.com"
-        maxLength={35}
-        /> */}
-        
         <FloatingInput
           label="Número de Teléfono"
           value={phone}
-          onChangeText={setPhone}
+          onChangeText={ text => {
+            if (numberRegex.test(text))
+              setPhone(text)
+          }}
           maxLength={10}
           keyboardType={"phone-pad"}
         />
-        {/* <Text style={styles.label}>Número de Teléfono:</Text>
-        <TextInput
-          style={styles.input}
-          value={phone}
-          onChangeText={setPhone}
-          placeholder="Número de teléfono"
-          keyboardType="phone-pad"
-          maxLength={10}
-        /> */}
         <Text style={mainStyles.title}>
           Usuario(s) que solicita(n) el servicio:
         </Text>
@@ -387,19 +364,13 @@ export default function PrototypingForm() {
             <FloatingInput
               label="Código de Alumno"
               value={studentCode}
-              onChangeText={setStudentCode}
+              onChangeText={ text => {
+                if (numberRegex.test(text))
+                  setStudentCode(text)
+              }}
               keyboardType={"numeric"}
               maxLength={9}
             />
-            {/* <Text style={styles.label}>Código de Alumno</Text>
-            <TextInput
-              style={styles.input}
-              value={studentCode}
-              onChangeText={setStudentCode}
-              placeholder="Código de Alumno"
-              keyboardType="numeric"
-              maxLength={9}
-            /> */}
           </View>
         ) : null}
         {roles.profesor ? (
@@ -407,19 +378,13 @@ export default function PrototypingForm() {
             <FloatingInput
               label="Código de Profesor"
               value={teacherCode}
-              onChangeText={setTeacherCode}
+              onChangeText={text => {
+                if (numberRegex.test(text))  
+                  setTeacherCode(text)
+              }}
               keyboardType={"numeric"}
               maxLength={9}
             />
-            {/* <Text style={styles.label}>Código de Profesor</Text>
-            <TextInput
-              style={styles.input}
-              value={teacherCode}
-              onChangeText={setTeacherCode}
-              placeholder="Código de Profesor"
-              keyboardType="numeric"
-              maxLength={9}
-            /> */}
           </View>
         ) : null}
         <Text style={[mainStyles.title, { marginTop: scale(10) }]}>Proyecto para:</Text>
@@ -450,14 +415,6 @@ export default function PrototypingForm() {
           placeholder="¿En qué aplicarás tu proyecto?"
           maxLength={110}
         />
-        {/* <Text style={mainStyles.title}>Aplicación:</Text>
-        <TextInput
-          style={styles.input}
-          value={application}
-          onChangeText={setApplication}
-          placeholder="¿En qué aplicarás tu proyecto?"
-          maxLength={110}
-        /> */}
       </View>
 
       {/* Sección 2: Datos del Prototipo */}
@@ -487,20 +444,12 @@ export default function PrototypingForm() {
           placeholder="Describe tu prototipo"
           maxLength={191}
         />
-        {/* <Text style={styles.label}>Descripción del prototipo:</Text>
-        <TextInput
-          style={styles.input}
-          value={descriptionPrototype}
-          onChangeText={setDescriptionPrototype}
-          placeholder="Describe tu prototipo"
-          maxLength={191}
-        /> */}
         <Text style={mainStyles.title}>Seleccionar archivos:</Text>
         <OpenDrive buttonStyle={styles.buttonFiles}/>
         <View style={[styles.buttonContainer, { gap: 0, marginLeft: 0, }]}>
           <FloatingInput
             label=""
-            value={url}
+            value={driveUrl}
             onChangeText={handleUrlChange}
             placeholder="URL carpeta de drive"
             multiline={true}
@@ -510,18 +459,11 @@ export default function PrototypingForm() {
               : (driveUrlCheck === true && driveUrlErr === "") 
               ? "#0F06" : "#C5E0F2",
               width: width / 1.5,
-              // height: scale(75),
-              // lineHeight: 30,
-              // height: "auto",
             }}
           />
           <TouchableOpacity onPress={deleteUrl} style={{
-            // justifyContent: "flex-end",
-            // alignItems: "flex-end",
-            // alignContent: "flex-end",
             alignSelf: "center",
             marginTop: scale(11),
-            // backgroundColor: "#000"
           }}>
             <MaterialCommunityIcons name="delete-empty" size={scale(40)} color="#2272A7" />
           </TouchableOpacity>
@@ -534,34 +476,19 @@ export default function PrototypingForm() {
           Requerimientos específicos del Prototipo:
         </Text>
         <FloatingInput
-          label="Dimensiones"
+          label="Dimensiones en mm"
           value={specificRequirementsDimensions}
           onChangeText={setspecificRequirementsDimensions}
           maxLength={40}
+          placeholder="200x100x50"
         />
-        {/* <Text style={styles.label}>Dimensiones:</Text>
-        <TextInput
-          style={styles.input}
-          value={specificRequirementsDimensions}
-          onChangeText={setspecificRequirementsDimensions}
-          placeholder="Dime tus dimensiones"
-          maxLength={40}
-        /> */}
         <FloatingInput
           label="Corte especial"
           value={specialCut}
           onChangeText={setSpecialCut}
-          // placeholder="Describe tu prototipo"
           maxLength={82}
+          placeholder="¿Se necesita algún corte especial?"
         />
-        {/* <Text style={styles.label}>Corte especial:</Text>
-        <TextInput
-          style={styles.input}
-          value={specialCut}
-          onChangeText={setSpecialCut}
-          placeholder="Dime tu corte especial"
-          maxLength={82}
-        /> */}
         <FloatingInput
           label="Otros"
           value={others}
@@ -569,14 +496,6 @@ export default function PrototypingForm() {
           placeholder="Menciona algún otro requerimiento que tengas"
           maxLength={91}
         />
-        {/* <Text style={styles.label}>Otros:</Text>
-        <TextInput
-          style={styles.input}
-          value={others}
-          onChangeText={setOthers}
-          placeholder="Menciona algún otro requerimiento que tengas"
-          maxLength={91}
-        /> */}
         <FloatingInput
           label="Observaciones"
           value={remarks}
@@ -584,14 +503,6 @@ export default function PrototypingForm() {
           placeholder="Menciona alguna observación"
           maxLength={79}
         />
-        {/* <Text style={styles.label}>Observaciones:</Text>
-        <TextInput
-          style={styles.input}
-          value={remarks}
-          onChangeText={setRemarks}
-          placeholder="Menciona alguna observación que tengas"
-          maxLength={79}
-        /> */}
       </View>
 
       <View style={styles.buttonContainer}>
@@ -606,9 +517,6 @@ export default function PrototypingForm() {
           onPress={handleSubmit}
           buttonStyles={{ backgroundColor: "#007BFF", width: width * 0.4 }}
         />
-      {/* <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitButtonText}>Enviar</Text>
-      </TouchableOpacity> */}
       </View>
       </View>
       </CustomView>
@@ -620,11 +528,8 @@ export default function PrototypingForm() {
 const styles = StyleSheet.create({
   formContainer: {
     flexGrow: 1,
-    // padding: 25,
-    // backgroundColor: "#f2f2f2",
     marginTop: verticalScale(-45),
     alignItems: "center",
-    // marginLeft: 20,
   },
   title: {
     fontSize: 24,
@@ -652,21 +557,9 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
   },
-  sectionSubTitle: {
-    fontSize: 18,
-    marginBottom: 10,
-    color: "#2c3e50",
-    textAlign: "center",
-  },
   label: {
     fontSize: 16,
     marginBottom: 5,
-    color: "#2c3e50",
-  },
-  labelprojectType: {
-    fontSize: 16,
-    marginBottom: 15,
-    marginTop: 15,
     color: "#2c3e50",
   },
   input: {
@@ -681,10 +574,6 @@ const styles = StyleSheet.create({
   },
   radioGroup: {
     flexDirection: "column",
-    justifyContent: "space-around",
-  },
-  radioGroupImpreso: {
-    flexDirection: "row",
     justifyContent: "space-around",
   },
   radioButtonContainer: {
@@ -707,23 +596,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#2c3e50",
     marginBottom: 15,
-  },
-  submitButton: {
-    // width: 100%,
-    height: width * 0.1,
-    backgroundColor: "#2272A7",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-    marginBottom: width * 0.0,
-  },
-  submitButtonText: {
-    color: "white",
-    fontSize: 18,
-  },
-  errorMessage: {
-    color: "red",
-    marginTop: 10,
   },
   checkboxGroup: {
     flexDirection: "row",
@@ -752,47 +624,11 @@ const styles = StyleSheet.create({
   formGroup: {
     marginTop: 15,
   },
-  mainTriangle: {
-    width: 0,
-    height: 0,
-    backgroundColor: "transparent",
-    borderStyle: "solid",
-    borderLeftWidth: 450,
-    borderRightWidth: 280,
-    borderBottomWidth: 280,
-    borderLeftColor: "transparent",
-    borderRightColor: "transparent",
-    borderBottomColor: "#328EC5",
-    transform: [{ rotate: "30deg" }],
-    marginTop: "-70%",
-    marginBottom: "10%",
-    marginRight: "-30%",
-  },
-  backTriangle: {
-    width: 0,
-    height: 0,
-    backgroundColor: "transparent",
-    borderStyle: "solid",
-    borderLeftWidth: 350,
-    borderRightWidth: 200,
-    borderBottomWidth: 250,
-    borderLeftColor: "transparent",
-    borderRightColor: "transparent",
-    borderBottomColor: "#57A9D9",
-    transform: [{ rotate: "95deg" }],
-    marginTop: "-40%",
-    marginBottom: "5%",
-    marginLeft: "-70%",
-  },
   err:{
     color: "#F00",
     fontSize: scale(10),
     marginBottom: scale(10),
     paddingHorizontal: scale(8),
-  },
-  selectFiles: {
-    backgroundColor: "#CCC6",
-    borderRadius: 5,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -804,6 +640,5 @@ const styles = StyleSheet.create({
   },
   buttonFiles: {
     width: "100%",
-    // backgroundColor: "#FFF",
   },
 });
