@@ -74,11 +74,11 @@ export default ({link = null, buttonStyle = {} }) => {
         onPress={openGoogleDrive}
         style={[styles.button, buttonStyle]}
       >
-        <Text style={styles.text}>Abrir </Text>
         <Image
           source={require("../Resources/imagenes/Google-Drive-PNG.png")}
           style={styles.img}
         />
+        <Text style={styles.text}> Drive</Text>
       </TouchableOpacity>
     </View>
   );

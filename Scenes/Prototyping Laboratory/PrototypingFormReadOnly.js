@@ -8,7 +8,6 @@ import {
   ActivityIndicator,
   Dimensions,
   TouchableOpacity,
-  Linking,
 } from "react-native"
 import {
   getPrototypeById,
@@ -18,9 +17,13 @@ import { useRoute } from "@react-navigation/native"
 import { GetUserData } from "../../Modules/DataInfo"
 import { CustomView } from "../components/CustomView"
 import { CustomButton, OpenDrive } from "../../components"
+import Feather from "@expo/vector-icons/Feather"
+import { scale } from "react-native-size-matters"
+import * as Clipboard from "expo-clipboard"
+import Toast from "react-native-toast-message"
+
 
 const { width, height } = Dimensions.get("window")
-// const width = Dimensions.get("window").width
 
 export default function PrototypingFormReadOnly({ navigation }) {
   const route = useRoute()
@@ -99,6 +102,16 @@ export default function PrototypingFormReadOnly({ navigation }) {
     }
   }
 
+  const copyOnClipboard = async () => {
+    await Clipboard.setStringAsync(drive_url)
+    Toast.show({
+      type: "info",
+      text1: "Copiado al portapapeles",
+      position: "bottom",
+      visibilityTime: 1200,
+    })
+  }
+
   return (
     <View style={styles.container}>
       <CustomView>
@@ -173,13 +186,12 @@ export default function PrototypingFormReadOnly({ navigation }) {
                   "Sin comentarios adicionales"}
               </Text>
               <Text style={styles.label}>Carpeta de archivos:</Text>
-              <OpenDrive link={drive_url} buttonStyle={{width: "50%"}}/>
-              <Text
-                style={[styles.value, styles.url]}
-                onPress={() => Linking.openURL(drive_url)}
-              >
-                {drive_url}
-              </Text>
+              <View style={styles.approval}>
+                <OpenDrive link={drive_url} buttonStyle={{width: "100%"}}/>
+                <TouchableOpacity style={styles.copyButton} onPress={copyOnClipboard}>
+                  <Feather name="copy" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
             </View>
 
             {/* Botones para aprobar o rechazar la solicitud*/}
@@ -196,6 +208,7 @@ export default function PrototypingFormReadOnly({ navigation }) {
               />
             </View>
           </ScrollView>
+          <Toast />
         </View>
       </CustomView>
     </View>
@@ -269,5 +282,10 @@ const styles = StyleSheet.create({
   url: {
     textDecorationLine: "underline",
     color: 'blue',
+  },
+  copyButton: {
+    padding: scale(6),
+    borderWidth: 1,
+    borderRadius: 5,
   }
 })
