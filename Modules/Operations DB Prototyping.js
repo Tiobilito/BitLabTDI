@@ -13,7 +13,6 @@ export async function addProjectSub(Project) {
       student_user_code: Project.student_user_code,
       professor_user_code: Project.professor_user_code,
       project_type: Project.project_type,
-      prototype_type: Project.prototype_type,
       prototype_description: Project.prototype_description,
       drive_url: Project.drive_url,
       specific_requirements_dimensions:
@@ -39,8 +38,7 @@ export async function addProjectSub(Project) {
   ]);
   if (error) {
     console.error("Error al insertar registro:", error);
-    throw new Error(error);
-    // return null;
+    throw error;
   }
   console.log("Registro añadido:", data);
   return true;
@@ -115,7 +113,6 @@ export async function updateProjectSub(idReport, Project) {
       student_user_code: Project.student_user_code,
       professor_user_code: Project.professor_user_code,
       project_type: Project.project_type,
-      prototype_type: Project.prototype_type,
       prototype_description: Project.prototype_description,
       drive_url: Project.drive_url,
       specific_requirements_dimensions:

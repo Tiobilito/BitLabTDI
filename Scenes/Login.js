@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react"
+import { React, useState, useEffect, useCallback } from "react"
 import {
   StyleSheet,
   TextInput,
@@ -17,6 +17,7 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated"
+import { useFocusEffect } from "@react-navigation/native"
 
 const Scale = Dimensions.get("window").width
 
@@ -38,13 +39,21 @@ const LoginPage = ({ navigation }) => {
   }, []);
   */
 
-  useEffect(() => {
-    // Add 1500ms of delay
-    setTimeout(() => {
-      handleTranslateY()
-    }, 800)
-  }, [])
 
+
+  useFocusEffect(
+    useCallback(() => {
+      // Add 800ms of delay
+      setTimeout(() => {
+        handleTranslateY()
+      }, 800)
+
+      return () => {
+        translateY.value = -1000
+      }
+    }, [])
+  )
+  
   const Verify = async () => {
     const Verify = await CheckUser(code, password)
     if (Verify) {

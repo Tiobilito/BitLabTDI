@@ -8,7 +8,6 @@ import {
   StatusBar,
   Alert,
   Dimensions,
-  ActivityIndicator,
 } from "react-native";
 import { addProjectSub } from "../../Modules/Operations DB Prototyping";
 import { OpenDrive, CustomButton } from '../../components';
@@ -48,7 +47,6 @@ export default function PrototypingForm() {
   const [studentCode, setStudentCode] = useState("");
   const [teacherCode, setTeacherCode] = useState("");
   const [application, setApplication] = useState("");
-  const [prototypeType, setPrototypeType] = useState("");
   const [descriptionPrototype, setDescriptionPrototype] = useState("");
   const [driveUrl, setDriveUrl] = useState("");
   const [driveUrlErr, setDriveUrlErr] = useState("");
@@ -71,7 +69,6 @@ export default function PrototypingForm() {
     setStudentCode("");
     setTeacherCode("");
     setApplication("");
-    setPrototypeType("");
     setDescriptionPrototype("");
     setDriveUrl("");
     setDriveUrlErr("");
@@ -98,7 +95,6 @@ export default function PrototypingForm() {
         student_user_code: finalStudentCode, // Código del alumno (o null)
         professor_user_code: finalTeacherCode, // Código del profesor (o null)
         project_type: projectType, // Tipo de proyecto
-        prototype_type: prototypeType, // Tipo de prototipo
         prototype_description: descriptionPrototype, // Descripción del prototipo
         drive_url: driveUrl, // URL de la carpeta de google drive
         specific_requirements_dimensions: specificRequirementsDimensions, // Dimensiones del prototipo
@@ -136,6 +132,16 @@ export default function PrototypingForm() {
       );
       
     } catch (error) {
+      // El codigo de estudiante o profesor no coincide
+      console.log("ERROR:::: ", error)
+      console.log("ERROR CODE:::: ", error.code)
+      if (error.code === "23503") {
+        Alert.alert(
+          "Error",
+          "El codigo de estudiante o profesor no existe o no se encuentra registrado"
+        );
+        return;
+      } 
       // Mostrar mensaje de error si ocurre algún problema
       Alert.alert(
         "Error",
@@ -176,10 +182,6 @@ export default function PrototypingForm() {
       {
         condition: !application,
         message: "Por favor, ingresa la aplicación de tu proyecto.",
-      },
-      {
-        condition: !prototypeType,
-        message: "Por favor, selecciona el tipo de prototipo.",
       },
       {
         condition: !descriptionPrototype,
@@ -420,23 +422,6 @@ export default function PrototypingForm() {
       {/* Sección 2: Datos del Prototipo */}
       <View style={styles.formSection}>
         <Text style={styles.titleSection}>Datos del Prototipo</Text>
-        <Text style={[mainStyles.title, { fontSize: 18 }]}>
-          Selecciona el tipo de prototipo:
-        </Text>
-        <View style={styles.radioGroup}>
-          <RadioButton
-            label="Diseño de circuito impreso"
-            value="impreso"
-            selected={prototypeType === "impreso"}
-            onSelect={setPrototypeType}
-          />
-          <RadioButton
-            label="Diseño de prototipo en 3D"
-            value="tresD"
-            selected={prototypeType === "tresD"}
-            onSelect={setPrototypeType}
-          />
-        </View>
         <FloatingInput
           label="Descripción del prototipo"
           value={descriptionPrototype}

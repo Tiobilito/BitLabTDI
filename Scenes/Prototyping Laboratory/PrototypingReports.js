@@ -16,7 +16,7 @@ import { useFocusEffect } from "@react-navigation/native"
 import { getAllProjectSubmissionsByUserId } from "../../Modules/Operations DB Prototyping"
 import { GetUserData } from "../../Modules/DataInfo"
 import { CustomViewReverse } from "../components/CustomViewReverse"
-import { Info } from "../../components"
+import { Info, StatusIndicator } from "../../components"
 
 const { width, height } = Dimensions.get("window")
 
@@ -181,7 +181,8 @@ const PrototypingReportsPage = ({ navigation }) => {
 
                 {/* Mostrar el status del reporte */}
                 <View style={styles.statusContainer}>
-                  <View
+                  <StatusIndicator status={item.status}/>
+                  {/* <View
                     style={[
                       styles.statusMargin,
                       {
@@ -197,7 +198,7 @@ const PrototypingReportsPage = ({ navigation }) => {
                     ]}
                   >
                     <Text style={styles.statusText}>{item.status}</Text>
-                  </View>
+                  </View> */}
                   {item.department_head &&
                     item.laboratory_head &&
                     item.service_staff && (

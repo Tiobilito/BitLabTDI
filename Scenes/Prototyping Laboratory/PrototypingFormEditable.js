@@ -63,7 +63,6 @@ export default function PrototypingFormEdit() {
     studentCode: "",
     teacherCode: "",
     application: "",
-    prototypeType: "",
     descriptionPrototype: "",
     driveUrl: "",
     specificRequirementsDimensions: "",
@@ -112,7 +111,6 @@ export default function PrototypingFormEdit() {
               ? String(fetchedData.professor_user_code)
               : "",
           application: fetchedData.application,
-          prototypeType: fetchedData.prototype_type,
           descriptionPrototype: fetchedData.prototype_description,
           driveUrl: fetchedData.drive_url,
           specificRequirementsDimensions:
@@ -146,7 +144,6 @@ export default function PrototypingFormEdit() {
           ? Number(formData.teacherCode)
           : null,
         application: formData.application,
-        prototype_type: formData.prototypeType,
         prototype_description: formData.descriptionPrototype,
         drive_url: formData.driveUrl,
         specific_requirements_dimensions:
@@ -228,10 +225,6 @@ export default function PrototypingFormEdit() {
       {
         field: formData.application,
         message: "Por favor, ingresa la aplicación de tu proyecto.",
-      },
-      {
-        field: formData.prototypeType,
-        message: "Por favor, selecciona el tipo de prototipo.",
       },
       {
         field: formData.descriptionPrototype,
@@ -407,13 +400,6 @@ export default function PrototypingFormEdit() {
               onChangeText={(text) => setFormData({ ...formData, name: text })}
               maxLength={40}
             />
-            {/* <Text style={styles.label}>Nombre completo:</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.name}
-              onChangeText={(text) => setFormData({ ...formData, name: text })}
-              maxLength={40}
-            /> */}
             <FloatingInput
               label="Correo electrónico"
               value={formData.email}
@@ -421,14 +407,6 @@ export default function PrototypingFormEdit() {
               maxLength={35}
               placeholder="tuemail@ejemplo.com"
             />
-            {/* <Text style={styles.label}>Correo electrónico:</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.email}
-              onChangeText={(text) => setFormData({ ...formData, email: text })}
-              placeholder="tuemail@ejemplo.com"
-              maxLength={35}
-            /> */}
             <FloatingInput
               label="Número de Teléfono"
               value={formData.phone}
@@ -439,15 +417,6 @@ export default function PrototypingFormEdit() {
               maxLength={10}
               keyboardType={"phone-pad"}
             />
-            {/* <Text style={styles.label}>Número de Teléfono:</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.phone}
-              onChangeText={(text) => setFormData({ ...formData, phone: text })}
-              placeholder="Número de teléfono"
-              keyboardType="phone-pad"
-              maxLength={10}
-            /> */}
             <Text style={mainStyles.title}>
               Usuario(s) que solicita(n) el servicio:
             </Text>
@@ -477,17 +446,6 @@ export default function PrototypingFormEdit() {
                   keyboardType={"numeric"}
                   maxLength={9}
                 />
-                {/* <Text style={styles.label}>Código de Alumno</Text>
-                <TextInput
-                  style={styles.input}
-                  value={formData.studentCode}
-                  onChangeText={(text) =>
-                    setFormData({ ...formData, studentCode: text })
-                  }
-                  placeholder="Código de Alumno"
-                  keyboardType="numeric"
-                  maxLength={9}
-                /> */}
               </View>
             ) : null}
             {formData.roles.profesor ? (
@@ -502,17 +460,6 @@ export default function PrototypingFormEdit() {
                   keyboardType={"numeric"}
                   maxLength={9}
                 />
-                {/* <Text style={styles.label}>Código de Profesor</Text>
-                <TextInput
-                  style={styles.input}
-                  value={formData.teacherCode}
-                  onChangeText={(text) =>
-                    setFormData({ ...formData, teacherCode: text })
-                  }
-                  placeholder="Código de Profesor"
-                  keyboardType="numeric"
-                  maxLength={9}
-                /> */}
               </View>
             ) : null}
             <Text style={[mainStyles.title, { marginTop: scale(10) }]}>Proyecto para:</Text>
@@ -551,42 +498,11 @@ export default function PrototypingFormEdit() {
               placeholder="¿En qué aplicarás tu proyecto?"
               maxLength={112}
             />
-            {/* <Text style={styles.label}>Aplicación:</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.application}
-              onChangeText={(text) =>
-                setFormData({ ...formData, application: text })
-              }
-              placeholder="¿En qué aplicarás tu proyecto?"
-              maxLength={112}
-            /> */}
             {error && <Text style={styles.errorMessage}>{error}</Text>}
           </View>
           {/* Sección 2: Datos del Prototipo */}
           <View style={styles.formSection}>
             <Text style={styles.titleSection}>Datos del Prototipo</Text>
-
-            <Text style={[mainStyles.title, { fontSize: 18 }]}>Tipo de prototipo:</Text>
-            <View style={styles.radioGroup}>
-              <RadioButton
-                label="Diseño de circuito impreso"
-                value="impreso"
-                selected={formData.prototypeType === "impreso"}
-                onSelect={(value) =>
-                  setFormData({ ...formData, prototypeType: value })
-                }
-              />
-              <RadioButton
-                label="Diseño de prototipo en 3D"
-                value="tresD"
-                selected={formData.prototypeType === "tresD"}
-                onSelect={(value) =>
-                  setFormData({ ...formData, prototypeType: value })
-                }
-              />
-            </View>
-
             <FloatingInput
               label="Descripción del prototipo"
               value={formData.descriptionPrototype}
@@ -596,17 +512,6 @@ export default function PrototypingFormEdit() {
               placeholder="Describe tu prototipo"
               maxLength={191}
             />
-            {/* <Text style={styles.label}>Descripción del prototipo:</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.descriptionPrototype}
-              onChangeText={(text) =>
-                setFormData({ ...formData, descriptionPrototype: text })
-              }
-              placeholder="Describe tu prototipo"
-              maxLength={191}
-            /> */}
-
             <Text style={mainStyles.title}>Seleccionar archivos:</Text>
             <OpenDrive buttonStyle={styles.buttonFiles}/>
             <View style={[styles.buttonContainer, { gap: 0, marginLeft: 0, }]}>
@@ -647,16 +552,6 @@ export default function PrototypingFormEdit() {
               placeholder="200x100x50"
               maxLength={40}
             />
-            {/* <Text style={styles.label}>Dimensiones (en mm):</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.specificRequirementsDimensions}
-              onChangeText={(text) =>
-                setFormData({ ...formData, specificRequirementsDimensions: text })
-              }
-              placeholder="Ejemplo: 200x100x50"
-              maxLength={40}
-            /> */}
             <FloatingInput
               label="Corte especial"
               value={formData.specialCut}
@@ -666,17 +561,6 @@ export default function PrototypingFormEdit() {
               maxLength={82}
               placeholder="¿Se necesita algún corte especial?"
             />
-            {/* <Text style={styles.label}>Corte especial:</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.specialCut}
-              onChangeText={(text) =>
-                setFormData({ ...formData, specialCut: text })
-              }
-              placeholder="¿Se necesita algún corte especial?"
-              maxLength={82}
-            /> */}
-
             <FloatingInput
               label="Otros"
               value={formData.others}
@@ -684,15 +568,6 @@ export default function PrototypingFormEdit() {
               placeholder="Menciona algún otro requerimiento que tengas"
               maxLength={91}
             />
-            {/* <Text style={styles.label}>Otros requisitos:</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.others}
-              onChangeText={(text) => setFormData({ ...formData, others: text })}
-              placeholder="Describe otros requisitos específicos"
-              maxLength={91}
-            /> */}
-
             <FloatingInput
               label="Observaciones"
               value={formData.remarks}
@@ -700,14 +575,6 @@ export default function PrototypingFormEdit() {
               placeholder="Menciona alguna observación"
               maxLength={79}
             />
-            {/* <Text style={styles.label}>Comentarios adicionales:</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.remarks}
-              onChangeText={(text) => setFormData({ ...formData, remarks: text })}
-              placeholder="Comentarios adicionales sobre el prototipo"
-              maxLength={79}
-            /> */}
           </View>
           {/* Seccion para llenado de datos del staff */}
           {dataUser === 2 && (
@@ -810,9 +677,6 @@ export default function PrototypingFormEdit() {
                 buttonStyles={{ backgroundColor: "#007BFF", width: width * 0.4 }}
               />
             </View>
-            // <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-            //   <Text style={styles.submitButtonText}>Enviar</Text>
-            // </TouchableOpacity>
           )}
       </View>
       </CustomView>
@@ -826,11 +690,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     marginTop: verticalScale(-45),
     alignItems: "center",
-    // padding: 20,
-    // flexGrow: 1,
-    // backgroundColor: "#f2f2f2",
-    // alignItems: "center",
-    // marginLeft: 0,
   },
   title: {
     fontSize: 24,

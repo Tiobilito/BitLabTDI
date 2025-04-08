@@ -19,7 +19,8 @@ import {
   getDeviceModelById,
 } from "../../Modules/Operations DB Prototyping"
 import { GetUserData } from "../../Modules/DataInfo"
-import { s, scale } from "react-native-size-matters"
+import { scale, verticalScale } from "react-native-size-matters"
+import { StatusIndicator } from '../../components'
 
 const width = Dimensions.get("screen").width
 const height = Dimensions.get("screen").height
@@ -202,23 +203,7 @@ const TeacherStudentPage = ({ navigation }) => {
                     <Text style={styles.TextHeader}>{item.application}</Text>
                   </Pressable>
                   <View style={styles.statusContainer}>
-                    <View
-                      style={[
-                        styles.statusMargin,
-                        {
-                          backgroundColor:
-                            item.status === "approved"
-                              ? "#5ED52C"
-                              : item.status === "rejected"
-                              ? "#EF3131"
-                              : item.status === "awaiting_revision"
-                              ? "#57C9E1"
-                              : "white",
-                        },
-                      ]}
-                    >
-                      <Text style={styles.statusText}>{item.status}</Text>
-                    </View>
+                    <StatusIndicator status={item.status} size={10} />
                   </View>
                 </View>
                 {item.Details && (
@@ -320,10 +305,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "gray",
   },
+  // #region title
   dateTitle: {
     color: "white",
     fontSize: scale(16),
-    marginTop: scale(5),
+    marginTop: verticalScale(14),
     fontWeight: "bold",
   },
   dateText: {
@@ -404,6 +390,7 @@ const styles = StyleSheet.create({
     fontSize: scale(14),
     marginTop: height * 0.02,
   },
+  // #region btn
   btnPrint: {
     backgroundColor: "white",
     width: scale(30),
@@ -411,6 +398,7 @@ const styles = StyleSheet.create({
     borderRadius: 80,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: verticalScale(10),
   },
   buttonImage: {
     width: scale(20),

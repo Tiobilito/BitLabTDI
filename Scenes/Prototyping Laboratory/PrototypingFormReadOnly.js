@@ -81,7 +81,6 @@ export default function PrototypingFormReadOnly({ navigation }) {
     student_user_code,
     professor_user_code,
     project_type,
-    prototype_type,
     prototype_description,
     specific_requirements_dimensions,
     specific_requirements_special_cut,
@@ -90,23 +89,11 @@ export default function PrototypingFormReadOnly({ navigation }) {
     drive_url,
   } = data
 
-  // Verifica el tipo de prototipo y muestra una mejor descripción al usuario
-  const getPrototypeDisplayName = (prototypeType) => {
-    switch (prototypeType) {
-      case "impreso":
-        return "Diseño de tipo impreso"
-      case "tresD":
-        return "Diseño de prototipo en 3D"
-      default:
-        return "Diseño desconocido"
-    }
-  }
-
   const copyOnClipboard = async () => {
     await Clipboard.setStringAsync(drive_url)
     Toast.show({
       type: "info",
-      text1: "Copiado al portapapeles",
+      text1: "URL copiado al portapapeles!",
       position: "bottom",
       visibilityTime: 1200,
     })
@@ -162,10 +149,6 @@ export default function PrototypingFormReadOnly({ navigation }) {
 
             <View style={styles.formSection}>
               <Text style={styles.titleSection}>Datos del Prototipo</Text>
-              <Text style={styles.label}>Tipo de Prototipo:</Text>
-              <Text style={styles.value}>
-                {getPrototypeDisplayName(prototype_type)}
-              </Text>
               <Text style={styles.label}>Descripción del Prototipo:</Text>
               <Text style={styles.value}>{prototype_description}</Text>
               <Text style={styles.label}>Dimensiones:</Text>
@@ -189,7 +172,7 @@ export default function PrototypingFormReadOnly({ navigation }) {
               <View style={styles.approval}>
                 <OpenDrive link={drive_url} buttonStyle={{width: "100%"}}/>
                 <TouchableOpacity style={styles.copyButton} onPress={copyOnClipboard}>
-                  <Feather name="copy" size={24} color="black" />
+                  <Feather name="copy" size={30} color="#2272A7" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -285,7 +268,8 @@ const styles = StyleSheet.create({
   },
   copyButton: {
     padding: scale(6),
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 5,
+    borderColor: "#2272A7"
   }
 })

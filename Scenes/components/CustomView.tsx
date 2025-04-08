@@ -1,4 +1,5 @@
-import React, { ReactNode, useEffect } from "react"
+import { useFocusEffect } from "@react-navigation/native"
+import React, { ReactNode, useCallback, useEffect } from "react"
 import { View, StyleSheet, Dimensions } from "react-native"
 import Animated, {
   useSharedValue,
@@ -18,8 +19,18 @@ export const CustomView = ({ children }: Props) => {
   const rotateMain = useSharedValue(0)
   const rotateBack = useSharedValue(0)
 
-  useEffect(() => handleTranslate(), [])
-
+  useFocusEffect(
+    useCallback(() => {
+      handleTranslate()
+      return () => {
+        translateX.value = -1000
+        translateY.value = -1000
+        rotateMain.value = 0
+        rotateBack.value = 0
+      }
+    }, [])
+  )
+  
   const handleTranslate = () => {
     translateX.value = withTiming(-width * 0.01, { duration: 1200 })
     translateY.value = withTiming(-height * 0.45, { duration: 1000 })

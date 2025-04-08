@@ -41,7 +41,9 @@ const PrototypingCheck = ({ navigation }) => {
     let Data
     try {
       const UData = await GetUserData()
+      console.log("UserData -> ", UData)
       Data = await getAllProjectSubmissionsCheck(UData.User_type)
+      console.log("Data -> ", Data)
       const BData = Data.map((registro) => ({
         ...registro,
         Details: false,
@@ -51,7 +53,7 @@ const PrototypingCheck = ({ navigation }) => {
       setIsLoading(false)
     } catch (error) {
       setError(error)
-      console.log(error)
+      console.log("[x]Error -> ", error)
       setIsLoading(false)
     }
   }

@@ -92,15 +92,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: scale(8),
     paddingHorizontal: scale(8),
-    backgroundColor: "#2272A7",
+    // backgroundColor: "#2272A7",
+    borderColor: "#2272A7",
+    borderWidth: 2,
   },
   img: {
     width: scale(40),
     height: scale(40),
   },
   text: {
-    color: "#FFF",
+    color: "#2272A7",
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 20,
   }
 })

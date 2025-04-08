@@ -5,6 +5,7 @@ import FloatingCalendar from "./FloatingCalendar.jsx"
 import Form from "./Form.jsx"
 import Info from "./Info.jsx"
 import OpenDrive from './openDrive.jsx'
+import StatusIndicator from './StatusIndicator.jsx'
 
 export {
   CustomButton,
@@ -13,5 +14,6 @@ export {
   FloatingInput,
   FloatingCalendar,
   Info,
-  OpenDrive
+  OpenDrive,
+  StatusIndicator,
 }

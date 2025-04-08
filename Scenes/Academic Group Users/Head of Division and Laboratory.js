@@ -15,6 +15,7 @@ import { CustomViewReverse } from "../components/CustomViewReverse"
 import { getAllProjectSubmissions } from "../../Modules/Operations DB Prototyping"
 import { GetUserData } from "../../Modules/DataInfo"
 import { scale, verticalScale } from "react-native-size-matters"
+import { StatusIndicator } from '../../components'
 
 const { width, height } = Dimensions.get("screen")
 
@@ -98,7 +99,8 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
                   <Text style={styles.TextHeader}>{item.application}</Text>
                 </Pressable>
                 {/* Status */}
-                <View
+                <StatusIndicator status={item.status} />
+                {/* <View
                   style={[
                     styles.statusMargin,
                     {
@@ -114,7 +116,7 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
                   ]}
                 >
                   <Text style={styles.statusText}>{item.status}</Text>
-                </View>
+                </View> */}
 
                 {/* Details */}
                 <View>
