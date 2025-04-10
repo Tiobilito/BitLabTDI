@@ -34,6 +34,12 @@
         "projectId": "445b9686-b17d-4987-9b22-b027e9978550"
       }
     },
-    "owner": "toldkier"
+    "owner": "toldkier",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/445b9686-b17d-4987-9b22-b027e9978550"
+    }
   }
 }
