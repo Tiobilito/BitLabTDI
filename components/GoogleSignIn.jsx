@@ -17,7 +17,7 @@
 //   const [isSubmitting, setIsSubmitting] = useState(false);
   
 //   const redirectUri = AuthSession.makeRedirectUri({
-//     native: `com.tiobilito.BitLabTDI:/oauth2redirect`,
+//     native: `com.toldkier.BitLabTDI:/oauth2redirect`,
 //     useProxy: true,
 //   });
 

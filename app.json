@@ -16,14 +16,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.tiobilito.BitLabTDI"
+      "bundleIdentifier": "com.toldkier.BitLabTDI"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.tiobilito.BitLabTDI"
+      "package": "com.toldkier.BitLabTDI"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -31,9 +31,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "4c2e8c03-e99f-4175-ae61-3a7a906370c0"
+        "projectId": "445b9686-b17d-4987-9b22-b027e9978550"
       }
     },
-    "owner": "tiobilito"
+    "owner": "toldkier"
   }
 }

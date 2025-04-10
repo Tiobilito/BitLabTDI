@@ -23,7 +23,7 @@ export default () => {
   const [pickerUrl, setPickerUrl] = useState(null);
   
   const redirectUri = AuthSession.makeRedirectUri({
-    native: `com.tiobilito.BitLabTDI:/oauth2redirect`,
+    native: `com.toldkier.BitLabTDI:/oauth2redirect`,
     useProxy: true,
   });
 
