@@ -2,7 +2,6 @@
   "expo": {
     "name": "BitLabTDI",
     "slug": "BitLabTDI",
-    "scheme": "com.tiobilito.BitLabTDI",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -35,6 +34,6 @@
         "projectId": "4c2e8c03-e99f-4175-ae61-3a7a906370c0"
       }
     },
-    "owner": "jhotwox"
+    "owner": "tiobilito"
   }
 }
