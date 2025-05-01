@@ -6,8 +6,8 @@ import {
   Text,
   View,
   Image,
+  TouchableOpacity,
 } from "react-native"
-import { getAllDepartamentos } from "../Modules/Operations DB Generals"
 import { addUser } from "../Modules/Operations DB Users"
 import { Picker } from "@react-native-picker/picker"
 import { CustomView } from "./components/CustomView"
@@ -17,6 +17,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated"
 import { CustomButton, Form, FloatingInput } from "../components"
+import Icon from "react-native-vector-icons/Ionicons"
 
 const { width, height } = Dimensions.get("window")
 
@@ -32,20 +33,11 @@ const Register = ({ navigation }) => {
   const [nss, setNss] = useState("")
   const [rfc, setRfc] = useState("")
   const [salary, setSalary] = useState("")
-  const [departmentID, setDepartmentID] = useState("")
-  const [departments, setDepartments] = useState([])
+  const [showPassword, setShowPassword] = useState(false)
 
   const translateY = useSharedValue(-1000)
 
   useEffect(() => {
-    const loadDepartments = async () => {
-      const data = await getAllDepartamentos()
-      if (data) {
-        setDepartments(data)
-      }
-    }
-    loadDepartments()
-
     // Animación
     setTimeout(() => {
       handleTranslateY()
@@ -151,12 +143,24 @@ const Register = ({ navigation }) => {
                 value={username}
                 onChangeText={setUsername}
               />
-              <FloatingInput
-                label={"Contraseña"}
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={true}
-              />
+              <View style={styles.passwordWrapper}>
+                <FloatingInput
+                  label={"Contraseña"}
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={!showPassword}
+                />
+                <TouchableOpacity
+                  style={styles.eyeIcon}
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Icon
+                    name={showPassword ? "eye-off" : "eye"}
+                    size={20}
+                    color="#555"
+                  />
+                </TouchableOpacity>
+              </View>
               <View style={styles.inputWrapper}>
                 <Text style={styles.inputLabel}>Rol:</Text>
                 <View style={[styles.input, { height: "auto" }]}>
@@ -171,20 +175,20 @@ const Register = ({ navigation }) => {
                 </View>
               </View>
               <FloatingInput
-                label="Dirección"
+                label="Dirección (Opcional)"
                 value={address}
                 onChangeText={setAddress}
                 placeholder={"calle xxxx"}
               />
               <FloatingInput
-                label={"Código Postal"}
+                label={"Código Postal (opcional)"}
                 value={zipCode}
                 onChangeText={setZipCode}
                 keyboardType={"numeric"}
                 placeholder={"xxxxx"}
               />
               <FloatingInput
-                label={"Número de teléfono"}
+                label={"Número de teléfono (opcional)"}
                 value={phoneNum}
                 onChangeText={setPhoneNum}
                 keyboardType={"numeric"}
@@ -284,6 +288,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: width * 0.05,
     marginLeft: 10,
+  },
+  passwordWrapper: {
+    position: "relative",
+    marginBottom: 16,
+  },
+  eyeIcon: {
+    position: "absolute",
+    right: "4%",
+    top: "45%",
   },
 })
 
