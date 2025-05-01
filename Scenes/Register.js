@@ -98,12 +98,20 @@ const Register = ({ navigation }) => {
         rfc: userType === "2" ? rfc : "",
         salary: userType === "2" ? parseFloat(salary) : null, // Convertir a número con decimales
         number: phoneNum,
-        department_id: departmentID ? parseInt(departmentID) : null, // Convertir a entero si existe
+        department_id: null, // Enviar como nulo
         password: password,
       }
-      await addUser(UserData)
-      Alert.alert("Éxito", "Usuario registrado exitosamente.")
-      navigation.goBack()
+      try {
+        await addUser(UserData)
+        Alert.alert("Éxito", "Usuario registrado exitosamente.")
+        navigation.goBack()
+      } catch (error) {
+        if (error?.code === "23505") {
+          Alert.alert("Error", "El usuario con este código ya existe.")
+        } else {
+          Alert.alert("Error", "Ocurrió un error al registrar el usuario.")
+        }
+      }
     }
   }
 
@@ -148,7 +156,6 @@ const Register = ({ navigation }) => {
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry={true}
-                keyboardType={"visible-password"}
               />
               <View style={styles.inputWrapper}>
                 <Text style={styles.inputLabel}>Rol:</Text>
@@ -215,27 +222,6 @@ const Register = ({ navigation }) => {
                   />
                 </>
               )}
-
-              <View style={styles.inputWrapper}>
-                <Text style={styles.inputLabel}>
-                  ID departamento (opcional)
-                </Text>
-                <View style={[styles.input, { height: "auto" }]}>
-                  <Picker
-                    selectedValue={departmentID}
-                    onValueChange={(itemValue) => setDepartmentID(itemValue)}
-                  >
-                    <Picker.Item label="Selecciona un departamento" value="" />
-                    {departments.map((dept) => (
-                      <Picker.Item
-                        key={dept.id}
-                        label={dept.name}
-                        value={dept.id}
-                      />
-                    ))}
-                  </Picker>
-                </View>
-              </View>
 
               <View style={styles.buttonContainer}>
                 <CustomButton

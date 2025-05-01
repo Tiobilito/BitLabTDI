@@ -103,19 +103,6 @@ const SocialServicePage = ({ navigation }) => {
           />
           <Text style={styles.text}>Añadir Cliente</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.btnAction}
-          onPress={() => navigation.navigate("ReportForm")}
-        >
-          <Ionicons
-            name="clipboard"
-            style={{
-              fontSize: WIDTH > 400 ? 32 : 24,
-              color: "#2272A7",
-            }}
-          />
-          <Text style={styles.text}>Añadir Reporte</Text>
-        </TouchableOpacity>
       </View>
       <View style={styles.btnShowStats}>
         <TouchableOpacity style={styles.btnShow} onPress={() => toggleList("Ordenes")}>
