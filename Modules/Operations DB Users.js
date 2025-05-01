@@ -22,7 +22,7 @@ export async function CheckUserCode(code) {
   const { data, error } = await supabase
     .from("users")
     .select("*")
-    .eq("name", code);
+    .eq("code", code);
   if (error) {
     console.log("hubo un error", error);
   }
@@ -132,7 +132,7 @@ export async function addUser(user) {
       console.error("Error al insertar registro:", error);
       return null;
     }
-    console.log("Registro añadido:", data);
+    Alert.alert("Éxito", "Usuario registrado exitosamente.");
     return data;
   } else {
     Alert.alert("Codigo duplicado");

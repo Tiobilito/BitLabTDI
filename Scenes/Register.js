@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react"
+import { React, useState, useEffect } from "react";
 import {
   StyleSheet,
   Alert,
@@ -7,75 +7,78 @@ import {
   View,
   Image,
   TouchableOpacity,
-} from "react-native"
-import { addUser } from "../Modules/Operations DB Users"
-import { Picker } from "@react-native-picker/picker"
-import { CustomView } from "./components/CustomView"
+  ActivityIndicator,
+  Modal,
+} from "react-native";
+import { addUser } from "../Modules/Operations DB Users";
+import { Picker } from "@react-native-picker/picker";
+import { CustomView } from "./components/CustomView";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
-} from "react-native-reanimated"
-import { CustomButton, Form, FloatingInput } from "../components"
-import Icon from "react-native-vector-icons/Ionicons"
+} from "react-native-reanimated";
+import { CustomButton, Form, FloatingInput } from "../components";
+import Icon from "react-native-vector-icons/Ionicons";
 
-const { width, height } = Dimensions.get("window")
+const { width, height } = Dimensions.get("window");
 
 const Register = ({ navigation }) => {
-  const [code, setCode] = useState("")
-  const [username, setUsername] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [userType, setUserType] = useState("")
-  const [address, setAddress] = useState("")
-  const [zipCode, setZipCode] = useState("")
-  const [phoneNum, setPhoneNum] = useState("")
-  const [nss, setNss] = useState("")
-  const [rfc, setRfc] = useState("")
-  const [salary, setSalary] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
+  const [code, setCode] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [userType, setUserType] = useState("");
+  const [address, setAddress] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [phoneNum, setPhoneNum] = useState("");
+  const [nss, setNss] = useState("");
+  const [rfc, setRfc] = useState("");
+  const [salary, setSalary] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const translateY = useSharedValue(-1000)
+  const translateY = useSharedValue(-1000);
 
   useEffect(() => {
     // Animación
     setTimeout(() => {
-      handleTranslateY()
-    }, 800)
-  }, [])
+      handleTranslateY();
+    }, 800);
+  }, []);
 
   const isFormValid = () => {
     if (!code) {
-      Alert.alert("Error", "El código es obligatorio.")
-      return false
+      Alert.alert("Error", "El código es obligatorio.");
+      return false;
     }
     if (!username) {
-      Alert.alert("Error", "El nombre es obligatorio.")
-      return false
+      Alert.alert("Error", "El nombre es obligatorio.");
+      return false;
     }
     if (!userType || userType === "null" || userType === "") {
-      Alert.alert("Error", "El rol es obligatorio.")
-      return false
-    }    
-    if (!password) {
-      Alert.alert("Error", "La contraseña es obligatoria.")
-      return false
+      Alert.alert("Error", "El rol es obligatorio.");
+      return false;
     }
-    return true
-  }
+    if (!password) {
+      Alert.alert("Error", "La contraseña es obligatoria.");
+      return false;
+    }
+    return true;
+  };
 
   const resetFields = () => {
-    setNss("")
-    setRfc("")
-    setSalary("")
-  }
+    setNss("");
+    setRfc("");
+    setSalary("");
+  };
 
   const handleUserTypeChange = (value) => {
-    setUserType(value)
+    setUserType(value);
     if (value !== "2") {
-      resetFields()
+      resetFields();
     }
-  }
+  };
 
   const Verify = async () => {
     if (isFormValid()) {
@@ -92,36 +95,40 @@ const Register = ({ navigation }) => {
         number: phoneNum,
         department_id: null, // Enviar como nulo
         password: password,
-      }
+      };
+      setIsLoading(true); // Mostrar el modal de carga
       try {
-        await addUser(UserData)
-        Alert.alert("Éxito", "Usuario registrado exitosamente.")
-        navigation.goBack()
+        await addUser(UserData);
+        setIsLoading(false); // Ocultar el modal de carga
+        navigation.goBack();
       } catch (error) {
-        if (error?.code === "23505") {
-          Alert.alert("Error", "El usuario con este código ya existe.")
-        } else {
-          Alert.alert("Error", "Ocurrió un error al registrar el usuario.")
-        }
+        setIsLoading(false); // Ocultar el modal de carga en caso de error
+        Alert.alert("Error", "Ocurrió un error al registrar el usuario.");
       }
     }
-  }
+  };
 
   const handleTranslateY = () => {
     translateY.value = withSpring(0, {
       damping: 19,
       stiffness: 180,
       mass: 1,
-    })
-  }
+    });
+  };
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }],
-  }))
+  }));
 
   return (
     <View style={styles.container}>
       <CustomView>
+        {/* Modal de carga */}
+        <Modal transparent={true} visible={isLoading}>
+          <View style={styles.modalContainer}>
+            <ActivityIndicator size="large" color="#007BFF" />
+          </View>
+        </Modal>
         <Animated.View style={animatedStyle}>
           <Image
             source={require("../Resources/imagenes/BITLABTDI.png")}
@@ -250,8 +257,8 @@ const Register = ({ navigation }) => {
         </View>
       </CustomView>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -298,6 +305,12 @@ const styles = StyleSheet.create({
     right: "4%",
     top: "45%",
   },
-})
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+});
 
-export default Register
+export default Register;
