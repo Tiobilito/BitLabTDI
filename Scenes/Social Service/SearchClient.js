@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react"
+import React, { useState, useCallback, useEffect } from "react"
 import {
   Text,
   StyleSheet,
@@ -60,6 +60,14 @@ const SearchPage = ({ navigation }) => {
     setData(updatedData)
   }
 
+  useEffect(() => {
+    if (!searchQuery) {
+      setData(fullData) // Restablece los datos originales si el campo está vacío
+    } else {
+      applyFilters() // Aplica los filtros si hay valores en el campo
+    }
+  }, [searchQuery]) // Observa los cambios en searchQuery
+
   if (isLoading) {
     return (
       <View style={styles.centered}>
@@ -84,6 +92,11 @@ const SearchPage = ({ navigation }) => {
       lowerCaseName.includes(query.toLowerCase()) ||
       lowerCaseEmail.includes(query.toLowerCase())
     )
+  }
+
+  const applyFilters = () => {
+    const filteredData = filter(fullData, (item) => contains(item, searchQuery))
+    setData(filteredData)
   }
 
   const navigateToEditClient = (code) => {

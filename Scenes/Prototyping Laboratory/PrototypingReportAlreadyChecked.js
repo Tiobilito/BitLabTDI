@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react"
+import React, { useState, useCallback, useEffect } from "react"
 import {
   Text,
   StyleSheet,
@@ -86,10 +86,9 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
 
   const applyFilters = () => {
     const filteredData = filter(fullData, (item) => {
-      return (
-        containsApplication(item, searchQuery) &&
-        containsApplicantName(item, nameQuery)
-      )
+      const matchesApplication = containsApplication(item, searchQuery)
+      const matchesApplicantName = containsApplicantName(item, nameQuery)
+      return matchesApplication && matchesApplicantName
     })
     setData(filteredData)
   }
@@ -101,6 +100,14 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
   const containsApplicantName = ({ applicant_name }, query) => {
     return applicant_name.toLowerCase().includes(query.toLowerCase())
   }
+
+  useEffect(() => {
+    if (!searchQuery && !nameQuery) {
+      setData(fullData) // Restablece los datos originales si ambos campos están vacíos
+    } else {
+      applyFilters() // Aplica los filtros si hay valores en los campos
+    }
+  }, [searchQuery, nameQuery]) // Observa los cambios en searchQuery y nameQuery
 
   if (isLoading) {
     return (
