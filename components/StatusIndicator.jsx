@@ -7,7 +7,7 @@ export default ({ status, size = 12 }) => {
     const statusMap = {
       approved: {
         color: '#10B981',
-        label: 'Aprovado',
+        label: 'Aprobado',
         backgroundColor: 'rgba(16, 185, 129, 0.1)'
       },
       rejected: {

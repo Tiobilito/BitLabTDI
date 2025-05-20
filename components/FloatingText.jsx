@@ -5,7 +5,7 @@ export default ({ title, text, containerStyle = {}, textStyle = {} }) => {
   return (
     <View style={[styles.container, containerStyle]}>
       <Text style={mainStyles.title}>{title}</Text>
-      <Text style={[mainStyles.input, { color: "#FFFA" }, textStyle]}>{text}</Text>
+      <Text style={[mainStyles.input, { color: "#AAAA" }, textStyle]}>{text}</Text>
     </View>
   )
 }

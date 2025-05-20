@@ -6,6 +6,7 @@ import Form from "./Form.jsx"
 import Info from "./Info.jsx"
 import OpenDrive from './openDrive.jsx'
 import StatusIndicator from './StatusIndicator.jsx'
+import CircularFloatingButton from './CircularFloatingButton.jsx'
 
 export {
   CustomButton,
@@ -16,4 +17,5 @@ export {
   Info,
   OpenDrive,
   StatusIndicator,
+  CircularFloatingButton,
 }
