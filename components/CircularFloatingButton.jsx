@@ -1,14 +1,41 @@
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import { FontAwesome as Icon } from '@expo/vector-icons'
+import Reanimated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from 'react-native-reanimated'
+import { useFocusEffect } from '@react-navigation/native'
+import { useCallback } from 'react'
 
 export default ({ navigation }) => {
   
   const handlePress = () => navigation.navigate("Check")
   
+  const rotation = useSharedValue(90)
+
+  useFocusEffect(
+    useCallback(() => {
+      rotation.value = withTiming(0, { duration: 1000 })
+      
+      return () => {
+        rotation.value = 90
+      }
+    }, [])
+  )
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { rotate: `${rotation.value}deg`},
+    ],
+  }))
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.fab} onPress={handlePress}>
-        <Icon name='rotate-left' size={28} color="#FFF"/>
+        <Reanimated.View style={[animatedStyle]}>
+          <Icon name='rotate-left' size={28} color="#FFF"/>
+        </Reanimated.View>
       </TouchableOpacity>
     </View>
   )

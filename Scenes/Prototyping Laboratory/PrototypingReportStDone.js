@@ -16,7 +16,7 @@ import { useFocusEffect } from "@react-navigation/native"
 import { getAllProjectSubmissionsFinished } from "../../Modules/Operations DB Prototyping"
 import { CustomViewReverse } from "../components/CustomViewReverse"
 import Icon from "react-native-vector-icons/Ionicons"
-import { Info } from "../../components"
+import { Info, CircularFloatingButton } from "../../components"
 
 const { width, height } = Dimensions.get("window")
 
@@ -122,16 +122,11 @@ const PrototypingReportStDone = ({ navigation }) => {
     <CustomViewReverse style={{ flex: 1, justifyContent: "center" }}>
       <View
         style={{
-          height: "90%",
+          height: "84%",
           width: width * 0.9,
-          // marginTop: height * 0.04,
+          marginTop: height * 0.04,
         }}
       >
-        <View style={styles.arrowContainer}>
-          <Pressable style={styles.arrow} onPress={navigateToRemaning}>
-            <Icon name="arrow-back-outline" size={40} color="#007BFF" />
-          </Pressable>
-        </View>
         {/* Input para filtrar por application */}
         <TextInput
           style={styles.searchBox}
@@ -252,6 +247,9 @@ const PrototypingReportStDone = ({ navigation }) => {
           />
         </View>
       </View>
+      <View style={{flex: 1, alignSelf: "flex-end" }}>
+        <CircularFloatingButton navigation={navigation} />
+      </View>
     </CustomViewReverse>
   )
 }
@@ -315,17 +313,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#2272A7",
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-  },
-  arrowContainer: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    marginRight: width * 0.06,
-  },
-  arrow: {
-    borderWidth: 2,
-    borderColor: "#007BFF",
-    borderRadius: 100,
-    padding: 5,
   },
   buttons: {
     flexDirection: "row",

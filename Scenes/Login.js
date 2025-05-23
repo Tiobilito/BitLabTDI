@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useCallback } from "react"
+import { React, useState, useCallback, useEffect } from "react"
 import {
   StyleSheet,
   TextInput,
@@ -9,7 +9,7 @@ import {
   View,
   ScrollView,
 } from "react-native"
-import { GetUserData, StoreUserData } from "../Modules/DataInfo"
+import { StoreUserData } from "../Modules/DataInfo"
 import { CheckUser } from "../Modules/Operations DB Users"
 import { CustomView } from "./components/CustomView"
 import Animated, {
@@ -18,12 +18,16 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated"
 import { useFocusEffect } from "@react-navigation/native"
+import Icon from "react-native-vector-icons/Ionicons";
+import Toast, { ErrorToast } from 'react-native-toast-message'
 
 const Scale = Dimensions.get("window").width
 
 const LoginPage = ({ navigation }) => {
   const [code, setCode] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
+  const [loginEnable, setLoginEnable] = useState(false)
 
   const translateY = useSharedValue(-1000)
   /*
@@ -39,8 +43,6 @@ const LoginPage = ({ navigation }) => {
   }, []);
   */
 
-
-
   useFocusEffect(
     useCallback(() => {
       // Add 800ms of delay
@@ -53,6 +55,13 @@ const LoginPage = ({ navigation }) => {
       }
     }, [])
   )
+
+  useEffect(() => {
+    if (!code || !password)
+      setLoginEnable(false)
+    else
+      setLoginEnable(true)
+  }, [code, password])
   
   const Verify = async () => {
     const Verify = await CheckUser(code, password)
@@ -111,20 +120,34 @@ const LoginPage = ({ navigation }) => {
               value={code.toString()}
               keyboardType="numeric"
             />
+            
             <Text style={styles.textForm}>Contraseña</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(text) => setPassword(text)}
-              value={password}
-              placeholder=""
-              secureTextEntry={true}
-            />
+            <View style={styles.passwordWrapper}>
+              <TextInput
+                style={styles.input}
+                onChangeText={setPassword}
+                value={password}
+                placeholder=""
+                secureTextEntry={!showPassword}
+              />
+              <TouchableOpacity
+                style={styles.eyeIcon}
+                onPress={() => setShowPassword(prev => !prev)}
+              >
+                <Icon
+                  name={showPassword ? "eye-off" : "eye"}
+                  size={32}
+                  color="#555"
+                />
+              </TouchableOpacity>
+            </View>
           </View>
 
           {/* Iniciar */}
           <TouchableOpacity
-            style={styles.loginButton}
+            style={[styles.loginButton, { opacity: loginEnable ? 1 : 0.6 }]}
             onPress={() => Verify(code, password)}
+            disabled={!loginEnable}
           >
             <Text style={{ color: "white", fontWeight: "bold" }}>Iniciar</Text>
           </TouchableOpacity>
@@ -172,7 +195,20 @@ const LoginPage = ({ navigation }) => {
           </View>
         </View>
       </ScrollView>
+      <Toast config={toastConfig} />
     </CustomView>
+  )
+}
+
+const toastConfig = {
+  error: props => (
+    <ErrorToast
+      {...props}
+      style={{borderLeftColor: "#DC3545"}}
+      // contentContainerStyle={{ }}
+      text1Style={{color: "#DC3545"}}
+      text2Style={{color: "#DC3545"}}
+    />
   )
 }
 
@@ -191,6 +227,15 @@ const styles = StyleSheet.create({
     fontWeight: "regular",
     marginLeft: "5%",
     color: "#000000",
+  },
+  passwordWrapper: {
+    position: "relative",
+    marginBottom: 16,
+  },
+  eyeIcon: {
+    position: "absolute",
+    right: "8%",
+    top: "30%",
   },
   formCont: {
     width: Scale * 0.8,

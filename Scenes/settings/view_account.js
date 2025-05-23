@@ -1,7 +1,6 @@
 import { React, useState, useEffect } from "react"
 import {
   StyleSheet,
-  ScrollView,
   View,
   Text,
   TouchableOpacity,
@@ -14,6 +13,7 @@ import { getAllDepartamentos } from "../../Modules/Operations DB Generals"
 import { getUserById } from "../../Modules/Operations DB Users"
 import { CustomViewReverse } from "../components/CustomViewReverse"
 import { CustomButton, FloatingText, Form } from "../../components"
+import { scale } from "react-native-size-matters"
 
 const { width, height } = Dimensions.get("window")
 
@@ -73,21 +73,12 @@ export default function ViewAccount() {
           }}
           style={styles.headerAction}
         >
-          <FeatherIcon color="#000" name="arrow-left" size={24} />
+          <FeatherIcon color="#000" name="arrow-left" size={28} />
         </TouchableOpacity>
 
         <Text numberOfLines={1} style={styles.headerTitle}>
           Ver datos de cuenta
         </Text>
-
-        <TouchableOpacity
-          onPress={() => {
-            // handle additional options
-          }}
-          style={[styles.headerAction, { alignItems: "flex-end" }]}
-        >
-          <FeatherIcon color="#000" name="more-vertical" size={24} />
-        </TouchableOpacity>
       </View>
 
       <View style={styles.body}>
@@ -137,18 +128,20 @@ const styles = StyleSheet.create({
     marginTop: 35,
   },
   headerAction: {
-    width: 40,
-    height: 40,
+    position: "absolute",
+    width: 32,
+    height: 32,
     justifyContent: "center",
+    marginLeft: scale(20),
+    zIndex: 10,
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 19,
     fontWeight: "600",
     color: "#000",
     flexGrow: 1,
     textAlign: "center",
-    // flexShrink: 1,
-    // flexBasis: 0,
+    alignSelf: "center",
   },
   body: {
     flex: 1,

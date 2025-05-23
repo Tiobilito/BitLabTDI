@@ -17,7 +17,8 @@ import { useRoute } from "@react-navigation/native"
 import { GetUserData } from "../../Modules/DataInfo"
 import { CustomView } from "../components/CustomView"
 import { CustomButton, OpenDrive } from "../../components"
-import Feather from "@expo/vector-icons/Feather"
+// import Feather from "@expo/vector-icons/Feather"
+import { MaterialIcons, Feather } from "@expo/vector-icons"
 import { scale } from "react-native-size-matters"
 import * as Clipboard from "expo-clipboard"
 import Toast from "react-native-toast-message"
@@ -32,10 +33,18 @@ export default function PrototypingFormReadOnly({ navigation }) {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  const UpdateCheck = async (Check) => {
+  const updateCheck = async (Check) => {
     const uData = await GetUserData()
     await updateProjectCheck(idReport, Check, uData.User_type)
     navigation.goBack()
+  }
+
+  const updateStatus = async () => {
+    setData(prev => ({
+      ...prev,
+      status: prev.status === "approved" ? "finished" : "approved"
+    }))
+    console.log("Data -> ", fetchedData)
   }
 
   useEffect(() => {
@@ -43,6 +52,7 @@ export default function PrototypingFormReadOnly({ navigation }) {
       try {
         const fetchedData = await getPrototypeById(idReport)
         setData(fetchedData)
+        console.log("fetchedData -> ", fetchedData);
       } catch (error) {
         setError("Error al cargar los datos del prototipo")
       } finally {
@@ -56,7 +66,7 @@ export default function PrototypingFormReadOnly({ navigation }) {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#394F66" />
+        <ActivityIndicator size="large" color="#095EA7" />
       </View>
     )
   }
@@ -129,6 +139,28 @@ export default function PrototypingFormReadOnly({ navigation }) {
               <Text style={styles.value}>{project_type}</Text>
               <Text style={styles.label}>Aplicación:</Text>
               <Text style={styles.value}>{application}</Text>
+              <Text style={styles.label}>Estado:</Text>
+              <View style={styles.approval}>
+                {data.status === "approved" && (
+                  <CustomButton
+                    title="Aprobado"
+                    onPress={() => {}}
+                    buttonStyles={{ width: width * 0.4, backgroundColor: "#095EA7"}}
+                    disabled={true}
+                  />
+                )}
+                {data.status === "finished" && (
+                <CustomButton
+                    title="Terminado"
+                    onPress={() => {}}
+                    buttonStyles={{ width: width * 0.4, backgroundColor: "#12B81A"}}
+                    disabled={true}
+                  />
+                )}
+                <TouchableOpacity style={styles.copyButton} onPress={updateStatus}>
+                  <MaterialIcons name="loop" size={30} color="#2272A7" />
+                </TouchableOpacity>
+              </View>
             </View>
 
             <View style={styles.formSection}>
@@ -181,12 +213,12 @@ export default function PrototypingFormReadOnly({ navigation }) {
             <View style={styles.approval}>
               <CustomButton
                 title={"Rechazar"}
-                onPress={() => UpdateCheck(false)}
+                onPress={() => updateCheck(false)}
                 buttonStyles={{ backgroundColor: "#DC3545", width: width * 0.4 }}
               />
               <CustomButton
                 title={" Aprobar "}
-                onPress={() => UpdateCheck(true)}
+                onPress={() => updateCheck(true)}
                 buttonStyles={{ width: width * 0.4, backgroundColor: "#007BFF" }}
               />
             </View>

@@ -199,7 +199,7 @@ const AcademicGroupApp = () => {
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "black",
+        tabBarActiveTintColor: "#095ea7",
         tabBarInactiveTintColor: "gray",
       })}
     >
@@ -235,7 +235,7 @@ const StaffApp = () => {
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "black",
+        tabBarActiveTintColor: "#095ea7",
         tabBarInactiveTintColor: "gray",
       })}
     >
@@ -274,7 +274,7 @@ const SocialServiceApp = () => {
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "black",
+        tabBarActiveTintColor: "#095ea7",
         tabBarInactiveTintColor: "gray",
       })}
     >

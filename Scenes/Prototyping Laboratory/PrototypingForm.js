@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,8 @@ import {
   StatusBar,
   Alert,
   Dimensions,
+  Pressable,
+  Modal,
 } from "react-native";
 import { addProjectSub } from "../../Modules/Operations DB Prototyping";
 import { OpenDrive, CustomButton } from '../../components';
@@ -17,10 +19,12 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { CustomView } from '../components/CustomView';
 import { FloatingInput } from '../../components';
 import { mainStyles } from '../../components/styles';
+import Toast, { ErrorToast } from 'react-native-toast-message';
 
 const width = Dimensions.get("window").width;
 
 const numberRegex = /^(\d+)?$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Componente personalizado de RadioButton
 const RadioButton = ({ label, value, selected, onSelect }) => {
@@ -48,6 +52,7 @@ export default function PrototypingForm() {
   const [teacherCode, setTeacherCode] = useState("");
   const [application, setApplication] = useState("");
   const [descriptionPrototype, setDescriptionPrototype] = useState("");
+  const [numberOfFaces, setNumberOfFaces] = useState(0);
   const [driveUrl, setDriveUrl] = useState("");
   const [driveUrlErr, setDriveUrlErr] = useState("");
   const [driveUrlCheck, setDriveUrlCheck] = useState(false);
@@ -56,6 +61,8 @@ export default function PrototypingForm() {
   const [specialCut, setSpecialCut] = useState("");
   const [others, setOthers] = useState("");
   const [remarks, setRemarks] = useState("");
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [helpModal, setHelpModal] = useState(false);
 
   const navigation = useNavigation();
 
@@ -70,6 +77,7 @@ export default function PrototypingForm() {
     setTeacherCode("");
     setApplication("");
     setDescriptionPrototype("");
+    setNumberOfFaces(0);
     setDriveUrl("");
     setDriveUrlErr("");
     setDriveUrlCheck(false);
@@ -84,8 +92,7 @@ export default function PrototypingForm() {
       // Asignar null al rol no seleccionado
       const finalStudentCode = roles.alumno ? Number(studentCode) : null;
       const finalTeacherCode = roles.profesor ? Number(teacherCode) : null;
-
-      // TODO: Añadir URL a supabase
+      
       const newProject = {
         submission_date: new Date().toISOString().split("T")[0], // Fecha actual
         applicant_name: name, // Nombre del usuario que solicita el servicio
@@ -96,6 +103,7 @@ export default function PrototypingForm() {
         professor_user_code: finalTeacherCode, // Código del profesor (o null)
         project_type: projectType, // Tipo de proyecto
         prototype_description: descriptionPrototype, // Descripción del prototipo
+        internal_use_pcb_faces: numberOfFaces, // Número de capas
         drive_url: driveUrl, // URL de la carpeta de google drive
         specific_requirements_dimensions: specificRequirementsDimensions, // Dimensiones del prototipo
         specific_requirements_special_cut: specialCut, // Corte específico (Opcional)
@@ -116,37 +124,56 @@ export default function PrototypingForm() {
       }
       
       // Mostrar mensaje de éxito si todo va bien
-      Alert.alert(
-        "Éxito",
-        "Solicitud enviada exitosamente.",
-        [{
-          text: 'OK', onPress: () => {
-            // Limpiar el formulario después de enviar
+      Toast.show({
+        type: "success",
+        text1: "Solicitud enviada exitosamente.",
+        position: "bottom",
+        onShow: () => {
+          setButtonDisabled(true);
+          const timeout = setTimeout(() => {
             resetForm();
+            setButtonDisabled(false);
             navigation.goBack();
-          }
-        }],
-        {
-          cancelable: false,
+          }, 800);
+
+          return () => clearInterval(timeout);
         }
-      );
+      })
+      // Alert.alert(
+      //   "Éxito",
+      //   "Solicitud enviada exitosamente.",
+      //   [{
+      //     text: 'OK', onPress: () => {
+      //       // Limpiar el formulario después de enviar
+      //       resetForm();
+      //       navigation.goBack();
+      //     }
+      //   }],
+      //   {
+      //     cancelable: false,
+      //   }
+      // );
       
     } catch (error) {
       // El codigo de estudiante o profesor no coincide
       console.log("ERROR:::: ", error)
       console.log("ERROR CODE:::: ", error.code)
       if (error.code === "23503") {
-        Alert.alert(
-          "Error",
-          "El codigo de estudiante o profesor no existe o no se encuentra registrado"
-        );
+        Toast.show({
+          type: "error",
+          text1: "No se encontro",
+          text2: "Código de estudiante o profesor",
+          position: "bottom",
+        });
         return;
       } 
       // Mostrar mensaje de error si ocurre algún problema
-      Alert.alert(
-        "Error",
-        "Hubo un problema al enviar el formulario. Inténtalo de nuevo."
-      );
+      Toast.show({
+        type: "error",
+        text1: "Hubo un problema al enviar el formulario",
+        text2: "Inténtalo de nuevo.",
+        position: "bottom",
+      });
       console.error("Error al enviar el proyecto:", error);
     }
   };
@@ -158,6 +185,10 @@ export default function PrototypingForm() {
       {
         condition: !email,
         message: "Por favor, ingresa tu correo electrónico.",
+      },
+      {
+        condition: !emailRegex.test(email),
+        message: "Por favor, ingresa un correo válido."
       },
       {
         condition: !phone,
@@ -188,12 +219,16 @@ export default function PrototypingForm() {
         message: "Por favor, ingresa una descripción del prototipo.",
       },
       {
+        condition: !numberOfFaces,
+        message: "Por favor, ingresa el número de caras.",
+      },
+      {
         condition: !driveUrl,
         message: "Por favor, ingresa una URL de Google Drive.",
       },
       {
         condition: driveUrlErr !== "",
-        message: "Por favor, ingresa una URL de Google Drive valida.",
+        message: "Por favor, ingresa una URL de Google Drive válida.",
       },
       {
         condition: !driveUrlCheck,
@@ -208,7 +243,12 @@ export default function PrototypingForm() {
     // Recorrer el arreglo de validaciones
     for (const validation of validations) {
       if (validation.condition) {
-        Alert.alert("Error", validation.message);
+        Toast.show({
+          type: "error",
+          text1: validation.message,
+          position: "bottom",
+        });
+        // Alert.alert("Error", validation.message);
         return; // Detener la ejecución si hay un error
       }
     }
@@ -264,7 +304,7 @@ export default function PrototypingForm() {
       return response.url === url;
     }
     
-    setDriveUrlErr("Esta URL no es valida");
+    setDriveUrlErr("Esta URL no es válida");
   }
 
   const handleUrlChange = async (url) => {
@@ -284,7 +324,7 @@ export default function PrototypingForm() {
         setDriveUrlCheck(true);
       } else {
         if (!response.ok || response.status !== 200)
-          setDriveUrlErr('El URL no es valido, comprueba que este completo');
+          setDriveUrlErr('El URL no es válido, comprueba que este completo');
         else
           setDriveUrlErr('Esta URL no parece ser publico\nComprueba que el acceso sea para "Cualquier persona con el enlace"');
         setDriveUrlCheck(false);
@@ -304,212 +344,258 @@ export default function PrototypingForm() {
     setDriveUrlCheck(false);
   }
 
+  useEffect(() => {
+    console.log(`${typeof(numberOfFaces)} -> ${numberOfFaces}`)
+  }, [numberOfFaces])
+
   return (
-    <ScrollView contentContainerStyle={styles.formContainer}>
-      <CustomView>
-      <View style={{width: scale(320), marginTop: verticalScale(210)}}>
-      {/* Coloca la barra de estado por encima de las ventanas */}
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor="#f5f5f5"
-        translucent={true}
-      />
-      <Text style={styles.title}>
-        Formato de requerimiento de servicio de maquinado de prototipo
-      </Text>
-
-      {/* Seccion 1: Datos de contacto */}
-      <View style={styles.formSection}>
-        <Text style={styles.titleSection}>Datos de contacto</Text>
-        <FloatingInput
-          label="Nombre completo"
-          value={name}
-          onChangeText={setName}
-          maxLength={40}
+    <View>
+      <ScrollView contentContainerStyle={styles.formContainer}>
+        <CustomView>
+        <View style={{width: scale(320), marginTop: verticalScale(210)}}>
+        {/* Coloca la barra de estado por encima de las ventanas */}
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor="#f5f5f533"
+          translucent={true}
         />
-        <FloatingInput
-          label="Correo electrónico"
-          value={email}
-          onChangeText={setEmail}
-          maxLength={35}
-          placeholder="tuemail@ejemplo.com"
-        />
-        <FloatingInput
-          label="Número de Teléfono"
-          value={phone}
-          onChangeText={ text => {
-            if (numberRegex.test(text))
-              setPhone(text)
-          }}
-          maxLength={10}
-          keyboardType={"phone-pad"}
-        />
-        <Text style={mainStyles.title}>
-          Usuario(s) que solicita(n) el servicio:
+        <Text style={styles.title}>
+          Formato de requerimiento de servicio de maquinado de prototipo
         </Text>
-        <View style={styles.checkboxGroup}>
-          <Checkbox
-            label="Alumno"
-            checked={roles.alumno}
-            onChange={() => handleRoleChange("alumno")}
-          />
-          <Checkbox
-            label="Profesor"
-            checked={roles.profesor}
-            onChange={() => handleRoleChange("profesor")}
-          />
-        </View>
 
-        {/* Función para desplegar los inputs del checkbox seleccionado para el tipo de usuario */}
-        {roles.alumno ? (
-          <View style={styles.formGroup}>
-            <FloatingInput
-              label="Código de Alumno"
-              value={studentCode}
-              onChangeText={ text => {
-                if (numberRegex.test(text))
-                  setStudentCode(text)
-              }}
-              keyboardType={"numeric"}
-              maxLength={9}
-            />
-          </View>
-        ) : null}
-        {roles.profesor ? (
-          <View style={styles.formGroup}>
-            <FloatingInput
-              label="Código de Profesor"
-              value={teacherCode}
-              onChangeText={text => {
-                if (numberRegex.test(text))  
-                  setTeacherCode(text)
-              }}
-              keyboardType={"numeric"}
-              maxLength={9}
-            />
-          </View>
-        ) : null}
-        <Text style={[mainStyles.title, { marginTop: scale(10) }]}>Proyecto para:</Text>
-        <View style={styles.radioGroup}>
-          <RadioButton
-            label="Licenciatura"
-            value="Licenciatura"
-            selected={projectType === "Licenciatura"}
-            onSelect={setProjectType}
-          />
-          <RadioButton
-            label="Posgrado"
-            value="Posgrado"
-            selected={projectType === "Posgrado"}
-            onSelect={setProjectType}
-          />
-          <RadioButton
-            label="Cuerpo Academico"
-            value="Cuerpo Academico"
-            selected={projectType === "Cuerpo Academico"}
-            onSelect={setProjectType}
-          />
-        </View>
-        <FloatingInput
-          label="Aplicación"
-          value={application}
-          onChangeText={setApplication}
-          placeholder="¿En qué aplicarás tu proyecto?"
-          maxLength={110}
-        />
-      </View>
-
-      {/* Sección 2: Datos del Prototipo */}
-      <View style={styles.formSection}>
-        <Text style={styles.titleSection}>Datos del Prototipo</Text>
-        <FloatingInput
-          label="Descripción del prototipo"
-          value={descriptionPrototype}
-          onChangeText={setDescriptionPrototype}
-          placeholder="Describe tu prototipo"
-          maxLength={191}
-        />
-        <Text style={mainStyles.title}>Seleccionar archivos:</Text>
-        <OpenDrive buttonStyle={styles.buttonFiles}/>
-        <View style={[styles.buttonContainer, { gap: 0, marginLeft: 0, }]}>
+        {/* Seccion 1: Datos de contacto */}
+        <View style={styles.formSection}>
+          <Text style={styles.titleSection}>Datos de contacto</Text>
           <FloatingInput
-            label=""
-            value={driveUrl}
-            onChangeText={handleUrlChange}
-            placeholder="URL carpeta de drive"
-            multiline={true}
-            keyboardType="url"
-            inputStyle={{
-              backgroundColor: driveUrlErr !== "" ? "#F006"
-              : (driveUrlCheck === true && driveUrlErr === "") 
-              ? "#0F06" : "#C5E0F2",
-              width: width / 1.5,
-            }}
+            label="Nombre completo"
+            value={name}
+            onChangeText={setName}
+            maxLength={40}
           />
-          <TouchableOpacity onPress={deleteUrl} style={{
-            alignSelf: "center",
-            marginTop: scale(11),
-          }}>
-            <MaterialCommunityIcons name="delete-empty" size={scale(40)} color="#2272A7" />
-          </TouchableOpacity>
-        </View>
-        { driveUrlErr && (
-          <Text style={styles.err}>{driveUrlErr}</Text>
-        )}
-        { (driveUrlCheck && driveUrlErr === "") && <Text style={[styles.err, { color: "#18F" }]}>Validado!</Text>}
-        <Text style={mainStyles.title}>
-          Requerimientos específicos del Prototipo:
-        </Text>
-        <FloatingInput
-          label="Dimensiones en mm"
-          value={specificRequirementsDimensions}
-          onChangeText={setspecificRequirementsDimensions}
-          maxLength={40}
-          placeholder="200x100x50"
-        />
-        <FloatingInput
-          label="Corte especial"
-          value={specialCut}
-          onChangeText={setSpecialCut}
-          maxLength={82}
-          placeholder="¿Se necesita algún corte especial?"
-        />
-        <FloatingInput
-          label="Otros"
-          value={others}
-          onChangeText={setOthers}
-          placeholder="Menciona algún otro requerimiento que tengas"
-          maxLength={91}
-        />
-        <FloatingInput
-          label="Observaciones"
-          value={remarks}
-          onChangeText={setRemarks}
-          placeholder="Menciona alguna observación"
-          maxLength={79}
-        />
-      </View>
+          <FloatingInput
+            label="Correo electrónico"
+            value={email}
+            onChangeText={setEmail}
+            maxLength={35}
+            placeholder="tuemail@ejemplo.com"
+          />
+          <FloatingInput
+            label="Número de Teléfono"
+            value={phone}
+            onChangeText={ text => {
+              if (numberRegex.test(text))
+                setPhone(text)
+            }}
+            maxLength={10}
+            keyboardType={"phone-pad"}
+          />
+          <Text style={mainStyles.title}>
+            Usuario(s) que solicita(n) el servicio
+          </Text>
+          <View style={styles.checkboxGroup}>
+            <Checkbox
+              label="Alumno"
+              checked={roles.alumno}
+              onChange={() => handleRoleChange("alumno")}
+            />
+            <Checkbox
+              label="Profesor"
+              checked={roles.profesor}
+              onChange={() => handleRoleChange("profesor")}
+            />
+          </View>
 
-      <View style={styles.buttonContainer}>
-      {/* Botón de envío del formulario */}
-        <CustomButton
-          title={"Cancelar"}
-          onPress={() => navigation.goBack()}
-          buttonStyles={{ backgroundColor: "#DC3545", width: width * 0.4 }}
-        />
-        <CustomButton
-          title={"Enviar"}
-          onPress={handleSubmit}
-          buttonStyles={{ backgroundColor: "#007BFF", width: width * 0.4 }}
-        />
-      </View>
-      </View>
-      </CustomView>
-    </ScrollView>
+          {/* Función para desplegar los inputs del checkbox seleccionado para el tipo de usuario */}
+          {roles.alumno ? (
+            <View style={styles.formGroup}>
+              <FloatingInput
+                label="Código de Alumno"
+                value={studentCode}
+                onChangeText={ text => {
+                  if (numberRegex.test(text))
+                    setStudentCode(text)
+                }}
+                keyboardType={"numeric"}
+                maxLength={9}
+              />
+            </View>
+          ) : null}
+          {roles.profesor ? (
+            <View style={styles.formGroup}>
+              <FloatingInput
+                label="Código de Profesor"
+                value={teacherCode}
+                onChangeText={text => {
+                  if (numberRegex.test(text))  
+                    setTeacherCode(text)
+                }}
+                keyboardType={"numeric"}
+                maxLength={9}
+              />
+            </View>
+          ) : null}
+          <Text style={[mainStyles.title, { marginTop: scale(10) }]}>Proyecto para</Text>
+          <View style={styles.radioGroup}>
+            <RadioButton
+              label="Licenciatura"
+              value="Licenciatura"
+              selected={projectType === "Licenciatura"}
+              onSelect={setProjectType}
+            />
+            <RadioButton
+              label="Posgrado"
+              value="Posgrado"
+              selected={projectType === "Posgrado"}
+              onSelect={setProjectType}
+            />
+            <RadioButton
+              label="Cuerpo Academico"
+              value="Cuerpo Academico"
+              selected={projectType === "Cuerpo Academico"}
+              onSelect={setProjectType}
+            />
+          </View>
+          <FloatingInput
+            label="Aplicación"
+            value={application}
+            onChangeText={setApplication}
+            placeholder="¿En qué aplicarás tu proyecto?"
+            maxLength={110}
+          />
+        </View>
+
+        {/* Sección 2: Datos del Prototipo */}
+        <View style={styles.formSection}>
+          <Text style={styles.titleSection}>Datos del Prototipo</Text>
+          <FloatingInput
+            label="Descripción del prototipo"
+            value={descriptionPrototype}
+            onChangeText={setDescriptionPrototype}
+            placeholder="Describe tu prototipo"
+            maxLength={191}
+          />
+          <Text style={mainStyles.title}>Número de caras</Text>
+          <View style={styles.radioGroup}>
+            <RadioButton
+              label="1"
+              value={1}
+              selected={numberOfFaces === 1}
+              onSelect={setNumberOfFaces}
+            />
+            <RadioButton
+              label="2"
+              value={2}
+              selected={numberOfFaces === 2}
+              onSelect={setNumberOfFaces}
+            />
+          </View>
+          {/* FIXME: Agregar modal */}
+          <Text style={mainStyles.title}>Seleccionar archivos</Text>
+          <View style={[styles.buttonContainer, { gap: 0, marginLeft: 0, }]}>
+            <OpenDrive buttonStyle={styles.buttonFiles}/>
+            <View>
+              <Pressable
+                onPress={() => setHelpModal(true)}
+                style={styles.btnPrint}
+              >
+                <MaterialCommunityIcons name="progress-question" size={scale(32)} color="#2272A7" />
+              </Pressable>
+            </View>
+          </View>
+          <View style={[styles.buttonContainer, { gap: 0, marginLeft: 0, }]}>
+            <FloatingInput
+              label=""
+              value={driveUrl}
+              onChangeText={handleUrlChange}
+              placeholder="URL carpeta de drive"
+              multiline={true}
+              keyboardType="url"
+              inputStyle={{
+                backgroundColor: driveUrlErr !== "" ? "#F006"
+                : (driveUrlCheck === true && driveUrlErr === "") 
+                ? "#0F06" : "#C5E0F2",
+                width: width / 1.5,
+              }}
+            />
+            <TouchableOpacity onPress={deleteUrl} style={{
+              alignSelf: "center",
+              marginTop: scale(11),
+            }}>
+              <MaterialCommunityIcons name="delete-empty" size={scale(40)} color="#2272A7" />
+            </TouchableOpacity>
+          </View>
+          { driveUrlErr && (
+            <Text style={styles.err}>{driveUrlErr}</Text>
+          )}
+          { (driveUrlCheck && driveUrlErr === "") && <Text style={[styles.err, { color: "#18F" }]}>Validado!</Text>}
+          <Text style={mainStyles.title}>
+            Requerimientos específicos del Prototipo
+          </Text>
+          <FloatingInput
+            label="Dimensiones en mm"
+            value={specificRequirementsDimensions}
+            onChangeText={setspecificRequirementsDimensions}
+            maxLength={40}
+            placeholder="200x100x50"
+          />
+          <FloatingInput
+            label="Corte especial"
+            value={specialCut}
+            onChangeText={setSpecialCut}
+            maxLength={82}
+            placeholder="¿Se necesita algún corte especial?"
+          />
+          <FloatingInput
+            label="Otros"
+            value={others}
+            onChangeText={setOthers}
+            placeholder="Menciona algún otro requerimiento que tengas"
+            maxLength={91}
+          />
+          <FloatingInput
+            label="Observaciones"
+            value={remarks}
+            onChangeText={setRemarks}
+            placeholder="Menciona alguna observación"
+            maxLength={79}
+          />
+        </View>
+
+        <View style={styles.buttonContainer}>
+        {/* Botón de envío del formulario */}
+          <CustomButton
+            title={"Cancelar"}
+            onPress={() => navigation.goBack()}
+            buttonStyles={{ backgroundColor: "#DC3545", width: width * 0.4 }}
+          />
+          <CustomButton
+            title={"Enviar"}
+            onPress={handleSubmit}
+            buttonStyles={{ backgroundColor: "#007BFF", width: width * 0.4 }}
+            disabled={buttonDisabled}
+          />
+        </View>
+        </View>
+        </CustomView>
+      </ScrollView>
+      <Toast config={toastConfig} />
+    </View>
   );
 }
 
 /* Estilos */
+const toastConfig = {
+  error: props => (
+    <ErrorToast
+      {...props}
+      style={{borderLeftColor: "#DC3545"}}
+      // contentContainerStyle={{ }}
+      text1Style={{color: "#DC3545"}}
+      text2Style={{color: "#DC3545"}}
+    />
+  )
+}
+
 const styles = StyleSheet.create({
   formContainer: {
     flexGrow: 1,
@@ -625,5 +711,20 @@ const styles = StyleSheet.create({
   },
   buttonFiles: {
     width: "100%",
+  },
+  helpButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    // alignItems: "center",
+    marginRight: width * 0.3,
+  },
+  btnPrint: {
+    backgroundColor: "white",
+    width: scale(36),
+    height: scale(36),
+    borderRadius: 80,
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
   },
 });

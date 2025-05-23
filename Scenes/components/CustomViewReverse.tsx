@@ -1,10 +1,12 @@
 import React, { ReactNode, useEffect } from "react"
-import { View, StyleSheet, Dimensions } from "react-native"
+import { View, StyleSheet, Dimensions, Keyboard } from "react-native"
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
+  withDelay,
 } from "react-native-reanimated"
+
 interface Props {
   children: ReactNode
 }
@@ -16,8 +18,25 @@ export const CustomViewReverse = ({ children }: Props) => {
   const translateY = useSharedValue(1000)
   const rotateMain = useSharedValue(0)
   const rotateBack = useSharedValue(140)
+  const opacity = useSharedValue(1)
 
   useEffect(() => handleTranslate(), [])
+
+  // Evita que al aparecer el teclado se muestre cortado el fondo
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      opacity.value = 0
+    })
+    
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      opacity.value = withDelay(50, withTiming(1, { duration: 50 }))
+    })
+
+    return () => {
+      showSubscription.remove()
+      hideSubscription.remove()
+    }
+  }, [])
 
   const handleTranslate = () => {
     translateX.value = withTiming(-width * 0.3, { duration: 1000 })
@@ -28,23 +47,16 @@ export const CustomViewReverse = ({ children }: Props) => {
 
   const animatedTranslateXStyle = useAnimatedStyle(() => ({
     transform: [
-      {
-        translateX: translateX.value as number,
-      },
-      {
-        rotate: `${rotateBack.value}deg` as string,
-      },
+      { translateX: translateX.value as number },
+      { rotate: `${rotateBack.value}deg` as string },
     ] as const,
+    opacity: opacity.value,
   }))
 
   const animatedTranslateYStyle = useAnimatedStyle(() => ({
     transform: [
-      {
-        translateY: translateY.value as number,
-      },
-      {
-        rotate: `${rotateMain.value}deg` as string,
-      },
+      { translateY: translateY.value as number },
+      { rotate: `${rotateMain.value}deg` as string },
     ] as const,
   }))
 

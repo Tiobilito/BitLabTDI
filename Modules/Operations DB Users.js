@@ -1,5 +1,6 @@
 import { supabase } from "./Supabase";
 import { Alert } from "react-native";
+import Toast from 'react-native-toast-message'
 
 export async function CheckUser(code, contraseña) {
   const { data, error } = await supabase
@@ -11,9 +12,16 @@ export async function CheckUser(code, contraseña) {
     console.log("hubo un error", error);
   }
   if (data.length > 0) {
+    console.log("Bienvenido!");
     return data[0];
   } else {
-    Alert.alert("Datos incorrectos");
+    console.log("Datos incorrectos");
+    Toast.show({
+      type: "error",
+      text1: "Datos incorrectos",
+      position: "bottom",
+    });
+    // Alert.alert("Datos incorrectos");
     return null;
   }
 }
@@ -29,7 +37,13 @@ export async function CheckUserCode(code) {
   if (data.length > 0) {
     return true;
   } else {
-    Alert.alert("Datos incorrectos");
+    Toast.show({
+      type: "error",
+      text1: "Datos incorrectos",
+      position: "bottom",
+    });
+    console.log("Datos incorrectos");
+    // Alert.alert("Datos incorrectos");
     return false;
   }
 }
@@ -130,12 +144,19 @@ export async function addUser(user) {
     ]);
     if (error) {
       console.error("Error al insertar registro:", error);
-      return null;
+      return false;
     }
     Alert.alert("Éxito", "Usuario registrado exitosamente.");
+    
     return data;
   } else {
-    Alert.alert("Codigo duplicado");
+    Toast.show({
+      type: "error",
+      text1: "El usuario con este código ya existe",
+      position: "bottom",
+    });
+    return false;
+    // Alert.alert("Codigo duplicado");
   }
 }
 

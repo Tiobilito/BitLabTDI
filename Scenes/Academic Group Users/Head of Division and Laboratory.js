@@ -77,7 +77,7 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#ffffff" />
+        <ActivityIndicator size="large" color="#095EA7" />
       </View>
     )
   }
@@ -100,24 +100,6 @@ const HeadDivisionLaboratoryPage = ({ navigation }) => {
                 </Pressable>
                 {/* Status */}
                 <StatusIndicator status={item.status} />
-                {/* <View
-                  style={[
-                    styles.statusMargin,
-                    {
-                      backgroundColor:
-                        item.status === "approved"
-                          ? "#5ED52C"
-                          : item.status === "rejected"
-                          ? "#EF3131"
-                          : item.status === "awaiting_revision"
-                          ? "#57C9E1"
-                          : "white",
-                    },
-                  ]}
-                >
-                  <Text style={styles.statusText}>{item.status}</Text>
-                </View> */}
-
                 {/* Details */}
                 <View>
                   {item.Details && (
@@ -256,9 +238,10 @@ const styles = StyleSheet.create({
   },
   TextHeader: {
     color: "white",
-    fontSize: width > 500 ? 20 : 16,
+    // fontSize: width > 500 ? 20 : 16,
+    fontSize: scale(16),
     fontWeight: "bold",
-    textDecorationLine: "underline",
+    // textDecorationLine: "underline",
     marginBottom: 5,
     width: width * 0.7,
   },

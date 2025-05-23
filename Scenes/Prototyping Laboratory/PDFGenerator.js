@@ -13,6 +13,12 @@ const splitStringIntoChunks = (str, maxLength, maxChunks) => {
   return chunks;
 };
 
+const sanitizeText = (text) => text.replace(
+    /([\u{1F300}-\u{1F5FF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F700}-\u{1F77F}]|[\u{1F780}-\u{1F7FF}]|[\u{1F800}-\u{1F8FF}]|[\u{1F900}-\u{1F9FF}]|[\u{1FA00}-\u{1FA6F}]|[\u{1FA70}-\u{1FAFF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{FE00}-\u{FE0F}]|[\u{1F1E6}-\u{1F1FF}])/gu,
+    '[x]'
+  );
+
+
 export const generatePDF = async (data) => {
   try {
     // Cargar el PDF desde la carpeta assets
@@ -20,20 +26,20 @@ export const generatePDF = async (data) => {
       require("../../assets/formato_servicio_prototipadoD.pdf")
     );
     await asset.downloadAsync(); // Asegura que el archivo esté disponible localmente
-
+    
     const existingPdfBytes = await FileSystem.readAsStringAsync(
       asset.localUri,
       {
         encoding: FileSystem.EncodingType.Base64,
       }
     );
-
+    
     const pdfDoc = await PDFDocument.load(
       Buffer.from(existingPdfBytes, "base64")
     );
     const pages = pdfDoc.getPages();
     const page = pages[0];
-
+    
     // Coordenadas específicas para cada campo en el formulario
     const coordenadas = {
       nombre: { x: 38, y: 660 },
@@ -56,7 +62,7 @@ export const generatePDF = async (data) => {
       comentarios_internos: { x: 313, y: 174 },
       fecha_aprovacion: { x: 80, y: 125 },
     };
-
+    
     // Cambiar las coordenadas de tipoProyecto dinámicamente
     switch (data.project_type) {
       case "Licenciatura":
@@ -71,7 +77,7 @@ export const generatePDF = async (data) => {
       default:
         coordenadas.tipoProyecto = { x: 345, y: 587 }; // Valor por defecto
     }
-
+    
     // Cambiar las coordenadas de tipoPrototipo dinámicamente
     switch (data.prototype_type) {
       case "impreso":
@@ -84,9 +90,9 @@ export const generatePDF = async (data) => {
         break;
       default:
         coordenadas.tipoPrototipo = { x: 209, y: 500 }; // Valor por defecto
-        coordenadas.descripcion = { x: 209, y: 500 };
-    }
-
+        coordenadas.descripcion = { x: 250, y: 500 };
+      }
+      
     // Cambiar las coordenadas de Numero de caras PCB dinámicamente
     switch (data.internal_use_pcb_faces) {
       case 1:
@@ -98,7 +104,7 @@ export const generatePDF = async (data) => {
       default:
         coordenadas.carasPCB; // Valor por defecto
     }
-
+    
     // Cambiar las coordenadas de PCB proporcionado por el usuario dinámicamente
     switch (data.internal_use_pcb_provided_by_user) {
       case true:
@@ -110,9 +116,9 @@ export const generatePDF = async (data) => {
       default:
         coordenadas.material_proporcionado; // Valor por defecto
     }
-
+    
     // Insertar datos
-    page.drawText(String(data.applicant_name || ""), {
+    page.drawText(sanitizeText(String(data.applicant_name || "")), {
       x: coordenadas.nombre.x,
       y: coordenadas.nombre.y,
       size: 10,
@@ -136,9 +142,9 @@ export const generatePDF = async (data) => {
       size: 9,
       color: rgb(0, 0, 0),
     });
-
+    
     // Dividir la aplicación en partes de máximo 55 caracteres, con un límite de 3 partes
-    const application = data.application || "";
+    const application = sanitizeText(data.application) || "";
     const maxCharsPerLineApplication = 36;
     const maxChunksApplication = 3;
     const applicationChunks = splitStringIntoChunks(
@@ -189,7 +195,7 @@ export const generatePDF = async (data) => {
     });
 
     // Dividir la descripción en partes de máximo 68 caracteres, con un límite de 3 partes
-    const descripcion = data.prototype_description || "";
+    const descripcion = sanitizeText(data.prototype_description) || "";
     const maxCharsPerLineDescripcion = 63;
     const maxChunksDescripcion = 3;
     const descripcionChunks = splitStringIntoChunks(
@@ -209,14 +215,14 @@ export const generatePDF = async (data) => {
     });
 
     // Resto de los campos
-    page.drawText(String(data.specific_requirements_dimensions || ""), {
+    page.drawText(sanitizeText(String(data.specific_requirements_dimensions || "")), {
       x: coordenadas.dimensiones.x,
       y: coordenadas.dimensiones.y,
       size: 10,
       color: rgb(0, 0, 0),
     });
     page.drawText(
-      String(data.specific_requirements_special_cut || "No especificado"),
+      sanitizeText(String(data.specific_requirements_special_cut || "No especificado")),
       {
         x: coordenadas.corteEspecial.x,
         y: coordenadas.corteEspecial.y,
@@ -224,8 +230,11 @@ export const generatePDF = async (data) => {
         color: rgb(0, 0, 0),
       }
     );
+    // console.log("Draw special cut")
+    // console.log("Otros requerimientos: ", data.specific_requirements_other);
+    // console.log("Sanitizado: ", sanitizeText(data.specific_requirements_other));
     page.drawText(
-      String(data.specific_requirements_other || "No especificado"),
+      sanitizeText(String(data.specific_requirements_other || "No especificado")),
       {
         x: coordenadas.otros.x,
         y: coordenadas.otros.y,
@@ -234,9 +243,7 @@ export const generatePDF = async (data) => {
       }
     );
     page.drawText(
-      String(
-        data.specific_requirements_comments || "Sin comentarios adicionales"
-      ),
+      sanitizeText(String(data.specific_requirements_comments || "Sin comentarios adicionales")),
       {
         x: coordenadas.observaciones.x,
         y: coordenadas.observaciones.y,
@@ -256,9 +263,9 @@ export const generatePDF = async (data) => {
       size: 12,
       color: rgb(0, 0, 0),
     });
-
+    
     // Dentro de la función generatePDF, reemplaza la lógica de data.internal_use_required_inputs con esto:
-    const requiredInputs = data.internal_use_required_inputs || "";
+    const requiredInputs = sanitizeText(String(data.internal_use_required_inputs)) || "";
     const maxCharsPerLineRequiredInputs = 24; // Máximo de caracteres por línea para requiredInputs
     const maxChunksRequiredInputs = 2; // Máximo de partes (líneas) permitidas
     const requiredInputsChunks = splitStringIntoChunks(
@@ -266,7 +273,7 @@ export const generatePDF = async (data) => {
       maxCharsPerLineRequiredInputs,
       maxChunksRequiredInputs
     );
-
+    
     // Dibujar cada parte de los materiales requeridos en una nueva línea
     requiredInputsChunks.forEach((chunk, index) => {
       page.drawText(chunk, {
@@ -276,9 +283,9 @@ export const generatePDF = async (data) => {
         color: rgb(0, 0, 0),
       });
     });
-
+    
     // Dentro de la función generatePDF, reemplaza la lógica de data.internal_use_comments con esto:
-    const internalUseComments = data.internal_use_comments || "";
+    const internalUseComments = sanitizeText(String(data.internal_use_comments)) || "";
     const maxCharsPerLineComments = 48; // Máximo de caracteres por línea para comments
     const maxChunksComments = 2; // Máximo de partes (líneas) permitidas
     const commentsChunks = splitStringIntoChunks(

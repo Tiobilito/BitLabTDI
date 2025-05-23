@@ -189,23 +189,6 @@ const PrototypingReportsPage = ({ navigation }) => {
                 {/* Mostrar el status del reporte */}
                 <View style={styles.statusContainer}>
                   <StatusIndicator status={item.status}/>
-                  {/* <View
-                    style={[
-                      styles.statusMargin,
-                      {
-                        backgroundColor:
-                          item.status === "approved"
-                            ? "#5ED52C"
-                            : item.status === "rejected"
-                            ? "#EF3131"
-                            : item.status === "awaiting_revision"
-                            ? "#57C9E1"
-                            : "white",
-                      },
-                    ]}
-                  >
-                    <Text style={styles.statusText}>{item.status}</Text>
-                  </View> */}
                   {item.department_head &&
                     item.laboratory_head &&
                     item.service_staff && (

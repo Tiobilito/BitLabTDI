@@ -155,10 +155,10 @@ export async function getAllProjectSubmissionsCheck(userType) {
   if (userType === 0) {
     console.log("department_head");
     query = query.or("department_head.is.null"); // Solo registros con null (falta que el jefe de departamento lo verifique)
-  } else if (userType === 2) {
+  } else if (userType === 1) {
     console.log("laboratory_head");
     query = query.eq("department_head", true).or("laboratory_head.is.null"); // Solo registros con null (falta que el jefe de laboratorio lo verifique)
-  } else if (userType === 3) {
+  } else if (userType === 2) {
     console.log("service_staff");
     query = query
       .eq("department_head", true)
@@ -185,12 +185,12 @@ export async function getAllProjectSubmissionsChecked(userType) {
   if (userType === 0) {
     console.log("department_head");
     query = query.not("department_head", "is", null);
-  } else if (userType === 2) {
+  } else if (userType === 1) {
     console.log("laboratory_head");
     query = query
       .eq("department_head", true)
       .not("laboratory_head", "is", null);
-  } else if (userType === 3) {
+  } else if (userType === 2) {
     console.log("service_staff");
     query = query
       .eq("department_head", true)

@@ -22,10 +22,12 @@ import { scale, verticalScale } from 'react-native-size-matters'
 import { FloatingInput, CustomButton, OpenDrive } from '../../components'
 import { mainStyles } from "../../components/styles";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import Toast, { ErrorToast } from 'react-native-toast-message';
 
 const width = Dimensions.get("window").width;
 
 const numberRegex = /^(\d+)?$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Componente personalizado de RadioButton
 const RadioButton = ({ label, value, selected, onSelect }) => (
@@ -43,7 +45,12 @@ const RadioButton = ({ label, value, selected, onSelect }) => (
 // Función auxiliar para las validaciones
 const validateField = (field, message) => {
   if (!field) {
-    Alert.alert("Error", message);
+    Toast.show({
+      type: "error",
+      position: "bottom",
+      text1: message,
+    })
+    // Alert.alert("Error", message);
     return false;
   }
   return true;
@@ -64,6 +71,7 @@ export default function PrototypingFormEdit() {
     teacherCode: "",
     application: "",
     descriptionPrototype: "",
+    pcbFaces: 0,
     driveUrl: "",
     specificRequirementsDimensions: "",
     specialCut: "",
@@ -74,15 +82,16 @@ export default function PrototypingFormEdit() {
   const [error, setError] = useState("");
   const [dataUser, setDataUserType] = useState("");
   const [internalData, setInternalData] = useState({
-    pcbFaces: 0,
     pcbProvidedByUser: null,
     requiredInputs: "",
     comments: "",
   });
   const [driveUrlErr, setDriveUrlErr] = useState("");
   const [driveUrlCheck, setDriveUrlCheck] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
 
   const [state, setState] = useState(null);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,8 +100,12 @@ export default function PrototypingFormEdit() {
           getPrototypeById(idReport),
           GetUserData(),
         ]);
-        //console.log(fetchedData.student_user_code);
-        //console.log(fetchedData.professor_user_code);
+        // let keys = Object.keys(fetchedData);
+        // for(let i=0; i < keys.length; i++) {
+        //   console.log(`${keys[i]}: ${fetchedData[keys[i]]}`)
+        // }
+        console.log(fetchedData.student_user_code);
+        console.log(fetchedData.professor_user_code);
         setFormData({
           name: fetchedData.applicant_name,
           email: fetchedData.contact_email,
@@ -112,6 +125,7 @@ export default function PrototypingFormEdit() {
               : "",
           application: fetchedData.application,
           descriptionPrototype: fetchedData.prototype_description,
+          pcbFaces: fetchedData.internal_use_pcb_faces,
           driveUrl: fetchedData.drive_url,
           specificRequirementsDimensions:
             fetchedData.specific_requirements_dimensions,
@@ -145,13 +159,13 @@ export default function PrototypingFormEdit() {
           : null,
         application: formData.application,
         prototype_description: formData.descriptionPrototype,
+        internal_use_pcb_faces: formData.pcbFaces,
         drive_url: formData.driveUrl,
         specific_requirements_dimensions:
           formData.specificRequirementsDimensions,
         specific_requirements_special_cut: formData.specialCut,
         specific_requirements_other: formData.others,
         specific_requirements_comments: formData.remarks,
-        internal_use_pcb_faces: null,
         internal_use_pcb_provided_by_user: null,
         internal_use_required_inputs: null,
         internal_use_comments: null,
@@ -165,7 +179,6 @@ export default function PrototypingFormEdit() {
       const updatedProject =
         dataUser === 2
           ? {
-              internal_use_pcb_faces: internalData.pcbFaces,
               internal_use_pcb_provided_by_user: internalData.pcbProvidedByUser,
               internal_use_required_inputs: internalData.requiredInputs,
               internal_use_comments: internalData.comments,
@@ -175,10 +188,28 @@ export default function PrototypingFormEdit() {
           : baseProject;
 
       await updateProjectSub(idReport, updatedProject);
-      Alert.alert("Éxito", "Prototipo actualizado exitosamente.");
-      navigation.goBack();
+      Toast.show({
+        type: "success",
+        position: "bottom",
+        text1: "Prototipo actualizado exitosamente.",
+        onShow: () => {
+          setButtonDisabled(true);
+          const timeout = setTimeout(() => {
+            setButtonDisabled(false);
+            navigation.goBack();
+          }, 1000);
+
+          return () => clearInterval(timeout);
+        }
+      })
+      // Alert.alert("Éxito", "");
     } catch (error) {
-      Alert.alert("Error", "Hubo un problema al actualizar el prototipo.");
+      Toast.show({
+        type: "error",
+        position: "bottom",
+        text1: "Hubo un problema al actualizar el prototipo.",
+      })
+      // Alert.alert("Error", "");
     }
   };
 
@@ -195,6 +226,10 @@ export default function PrototypingFormEdit() {
       {
         field: formData.email,
         message: "Por favor, ingresa tu correo electrónico.",
+      },
+      {
+        field: emailRegex.test(formData.email),
+        message: "Por favor, ingresa un correo válido.",
       },
       {
         field: formData.phone,
@@ -229,6 +264,10 @@ export default function PrototypingFormEdit() {
       {
         field: formData.descriptionPrototype,
         message: "Por favor, ingresa una descripción del prototipo.",
+      },
+      {
+        field: formData.pcbFaces,
+        message: "Por favor, ingresa el número de caras.",
       },
       {
         field: formData.driveUrl,
@@ -280,12 +319,16 @@ export default function PrototypingFormEdit() {
 
   const handleSelectApproved = (value) => {
     if (
-      internalData.pcbFaces === null ||
       internalData.pcbProvidedByUser === null ||
       !internalData.requiredInputs ||
       !internalData.comments
     ) {
-      Alert.alert("Error", "Por favor, completa todos los campos internos.");
+      Toast.show({
+        type: "error",
+        position: "bottom",
+        text1: "Por favor, completa todos los campos internos.",
+      })
+      // Alert.alert("Error", "");
       return;
     }
 
@@ -462,7 +505,7 @@ export default function PrototypingFormEdit() {
                 />
               </View>
             ) : null}
-            <Text style={[mainStyles.title, { marginTop: scale(10) }]}>Proyecto para:</Text>
+            <Text style={[mainStyles.title, { marginTop: scale(10) }]}>Proyecto para</Text>
             <View style={styles.radioGroup}>
               <RadioButton
                 label="Licenciatura"
@@ -512,7 +555,26 @@ export default function PrototypingFormEdit() {
               placeholder="Describe tu prototipo"
               maxLength={191}
             />
-            <Text style={mainStyles.title}>Seleccionar archivos:</Text>
+            <Text style={mainStyles.title}>Número de caras PCB</Text>
+            <View style={styles.radioGroup}>
+              <RadioButton
+                label="1"
+                value={1}
+                selected={formData.pcbFaces === 1}
+                onSelect={(value) =>
+                  setFormData({ ...formData, pcbFaces: value })
+                }
+              />
+              <RadioButton
+                label="2"
+                value={2}
+                selected={formData.pcbFaces === 2}
+                onSelect={(value) =>
+                  setFormData({ ...formData, pcbFaces: value })
+                }
+              />
+            </View>
+            <Text style={mainStyles.title}>Seleccionar archivos</Text>
             <OpenDrive buttonStyle={styles.buttonFiles}/>
             <View style={[styles.buttonContainer, { gap: 0, marginLeft: 0, }]}>
               <FloatingInput
@@ -580,27 +642,6 @@ export default function PrototypingFormEdit() {
           {dataUser === 2 && (
             <View style={styles.formSection}>
               <Text style={styles.titleSection}>Información interna</Text>
-
-              <Text style={styles.label}>Número de caras PCB:</Text>
-              <View style={styles.radioGroup}>
-                <RadioButton
-                  label="1 cara"
-                  value={1}
-                  selected={internalData.pcbFaces === 1}
-                  onSelect={(value) =>
-                    setInternalData({ ...internalData, pcbFaces: value })
-                  }
-                />
-                <RadioButton
-                  label="2 caras"
-                  value={2}
-                  selected={internalData.pcbFaces === 2}
-                  onSelect={(value) =>
-                    setInternalData({ ...internalData, pcbFaces: value })
-                  }
-                />
-              </View>
-
               <Text style={styles.label}>¿PCB proporcionado por el usuario?</Text>
               <View style={styles.radioGroup}>
                 <RadioButton
@@ -675,16 +716,30 @@ export default function PrototypingFormEdit() {
                 title={"Enviar"}
                 onPress={handleSubmit}
                 buttonStyles={{ backgroundColor: "#007BFF", width: width * 0.4 }}
+                disabled={buttonDisabled}
               />
             </View>
           )}
       </View>
       </CustomView>
+      <Toast config={toastConfig} />
     </ScrollView>
   );
 }
 
 /* Estilos */
+const toastConfig = {
+  error: props => (
+    <ErrorToast
+      {...props}
+      style={{borderLeftColor: "#DC3545"}}
+      // contentContainerStyle={{ }}
+      text1Style={{color: "#DC3545"}}
+      text2Style={{color: "#DC3545"}}
+    />
+  )
+}
+
 const styles = StyleSheet.create({
   formContainer: {
     flexGrow: 1,

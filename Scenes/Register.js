@@ -20,6 +20,8 @@ import Animated, {
 } from "react-native-reanimated";
 import { CustomButton, Form, FloatingInput } from "../components";
 import Icon from "react-native-vector-icons/Ionicons";
+import Toast, { ErrorToast } from 'react-native-toast-message'
+import { mainStyles } from "../components/styles";
 
 const { width, height } = Dimensions.get("window");
 
@@ -49,19 +51,39 @@ const Register = ({ navigation }) => {
 
   const isFormValid = () => {
     if (!code) {
-      Alert.alert("Error", "El código es obligatorio.");
+      Toast.show({
+        type: "error",
+        text1: "El código es obligatorio",
+        position: "bottom",
+      });
+      // Alert.alert("Error", "El código es obligatorio.");
       return false;
     }
     if (!username) {
-      Alert.alert("Error", "El nombre es obligatorio.");
+      Toast.show({
+        type: "error",
+        text1: "El nombre es obligatorio",
+        position: "bottom",
+      });
+      // Alert.alert("Error", "El nombre es obligatorio.");
       return false;
     }
     if (!userType || userType === "null" || userType === "") {
-      Alert.alert("Error", "El rol es obligatorio.");
+      Toast.show({
+        type: "error",
+        text1: "El rol es obligatorio",
+        position: "bottom",
+      });
+      // Alert.alert("Error", "El rol es obligatorio.");
       return false;
     }
     if (!password) {
-      Alert.alert("Error", "La contraseña es obligatoria.");
+      Toast.show({
+        type: "error",
+        text1: "La contraseña es obligatoria",
+        position: "bottom",
+      });
+      // Alert.alert("Error", "La contraseña es obligatoria.");
       return false;
     }
     return true;
@@ -98,12 +120,19 @@ const Register = ({ navigation }) => {
       };
       setIsLoading(true); // Mostrar el modal de carga
       try {
-        await addUser(UserData);
+        const response = await addUser(UserData);
         setIsLoading(false); // Ocultar el modal de carga
-        navigation.goBack();
+        console.log("Response -> ", response);
+        if (response !== false)
+          navigation.goBack();
       } catch (error) {
         setIsLoading(false); // Ocultar el modal de carga en caso de error
-        Alert.alert("Error", "Ocurrió un error al registrar el usuario.");
+        Toast.show({
+          type: "error",
+          text1: "Ocurrió un error al registrar el usuario",
+          position: "bottom",
+        });
+        // Alert.alert("Error", "Ocurrió un error al registrar el usuario.");
       }
     }
   };
@@ -169,7 +198,7 @@ const Register = ({ navigation }) => {
                 </TouchableOpacity>
               </View>
               <View style={styles.inputWrapper}>
-                <Text style={styles.inputLabel}>Rol:</Text>
+                <Text style={mainStyles.title}>Rol:</Text>
                 <View style={[styles.input, { height: "auto" }]}>
                   <Picker
                     selectedValue={userType}
@@ -255,10 +284,23 @@ const Register = ({ navigation }) => {
             </>
           </Form>
         </View>
+        <Toast config={toastConfig} />
       </CustomView>
     </View>
   );
 };
+
+const toastConfig = {
+  error: props => (
+    <ErrorToast
+      {...props}
+      style={{borderLeftColor: "#DC3545"}}
+      // contentContainerStyle={{ }}
+      text1Style={{color: "#DC3545"}}
+      text2Style={{color: "#DC3545"}}
+    />
+  )
+}
 
 const styles = StyleSheet.create({
   container: {

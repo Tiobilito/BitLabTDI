@@ -4,7 +4,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  TextInput,
   Alert,
   Dimensions,
 } from "react-native"
@@ -15,6 +14,7 @@ import { getAllDepartamentos } from "../../Modules/Operations DB Generals"
 import { getUserById, updateUser } from "../../Modules/Operations DB Users"
 import { CustomViewReverse } from "../components/CustomViewReverse"
 import { CustomButton, Form, FloatingInput } from "../../components"
+import { scale } from "react-native-size-matters"
 
 const { height, width } = Dimensions.get("window")
 
@@ -127,12 +127,6 @@ export default function UpdateAccount() {
         <Text numberOfLines={1} style={styles.headerTitle}>
           Actualizar datos de cuenta
         </Text>
-
-        <TouchableOpacity
-          style={[styles.headerAction, { alignItems: "flex-end" }]}
-        >
-          <FeatherIcon color="#000" name="more-vertical" size={24} />
-        </TouchableOpacity>
       </View>
 
       <View style={styles.body}>
@@ -251,9 +245,12 @@ const styles = StyleSheet.create({
     marginTop: 35,
   },
   headerAction: {
-    width: 40,
-    height: 40,
+    position: "absolute",
+    width: 32,
+    height: 32,
     justifyContent: "center",
+    marginLeft: scale(20),
+    zIndex: 10,
   },
   headerTitle: {
     fontSize: 19,

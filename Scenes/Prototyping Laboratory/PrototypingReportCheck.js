@@ -96,7 +96,7 @@ const PrototypingCheck = ({ navigation }) => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#ffffff" />
+        <ActivityIndicator size="large" color="#095ea7" />
       </View>
     )
   }
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#095ea7",
+    backgroundColor: "#f5f5f5",
   },
   errorText: {
     color: "#ffffff",
