@@ -7,7 +7,6 @@ import {
   StyleSheet,
   ScrollView,
   StatusBar,
-  Alert,
   Dimensions,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
@@ -20,9 +19,9 @@ import { GetUserData } from "../../Modules/DataInfo";
 import { CustomView } from '../components/CustomView'
 import { scale, verticalScale } from 'react-native-size-matters'
 import { FloatingInput, CustomButton, OpenDrive } from '../../components'
-import { mainStyles } from "../../components/styles";
+import { mainStyles, toastConfig } from "../../components/styles";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import Toast, { ErrorToast } from 'react-native-toast-message';
+import Toast from 'react-native-toast-message';
 
 const width = Dimensions.get("window").width;
 
@@ -71,6 +70,7 @@ export default function PrototypingFormEdit() {
     teacherCode: "",
     application: "",
     descriptionPrototype: "",
+    prototypeType: 0,
     pcbFaces: 0,
     driveUrl: "",
     specificRequirementsDimensions: "",
@@ -125,6 +125,7 @@ export default function PrototypingFormEdit() {
               : "",
           application: fetchedData.application,
           descriptionPrototype: fetchedData.prototype_description,
+          prototypeType: fetchedData.prototype_type,
           pcbFaces: fetchedData.internal_use_pcb_faces,
           driveUrl: fetchedData.drive_url,
           specificRequirementsDimensions:
@@ -159,6 +160,7 @@ export default function PrototypingFormEdit() {
           : null,
         application: formData.application,
         prototype_description: formData.descriptionPrototype,
+        prototype_type: formData.prototypeType,
         internal_use_pcb_faces: formData.pcbFaces,
         drive_url: formData.driveUrl,
         specific_requirements_dimensions:
@@ -264,6 +266,10 @@ export default function PrototypingFormEdit() {
       {
         field: formData.descriptionPrototype,
         message: "Por favor, ingresa una descripción del prototipo.",
+      },
+      {
+        field: formData.prototypeType,
+        message: "Por favor, ingresa el tipo de prototipo.",
       },
       {
         field: formData.pcbFaces,
@@ -392,9 +398,6 @@ export default function PrototypingFormEdit() {
 
     try {
       const response = await fetch(url, { method: 'HEAD' });
-      // console.log("response url -> ", response.url);
-      // console.log("response status -> ", response.status);
-      // console.log("response ok -> ", response.ok);
       
       const result = response.url === url && response.ok === true && response.status === 200;
       if (result) {
@@ -427,8 +430,8 @@ export default function PrototypingFormEdit() {
       <CustomView>
         <View style={{width: scale(320), marginTop: verticalScale(210)}}>
           <StatusBar
-            barStyle="light-content"
-            backgroundColor="black"
+            barStyle="dark-content"
+            backgroundColor="#f5f5f533"
             translucent={true}
           />
           <Text style={styles.title}>
@@ -555,6 +558,23 @@ export default function PrototypingFormEdit() {
               placeholder="Describe tu prototipo"
               maxLength={191}
             />
+            <Text style={mainStyles.title}>Tipo de prototipo</Text>
+            <View style={styles.radioGroup}>
+              <RadioButton
+                label="Diseño de circuito impreso de alto detalle"
+                value={1}
+                selected={formData.prototypeType === 1}
+                onSelect={(value) => 
+                  setFormData({...formData, prototypeType: value})}
+              />
+              <RadioButton
+                label="Diseño de circuito impreso"
+                value={2}
+                selected={formData.prototypeType === 2}
+                onSelect={(value) => 
+                  setFormData({...formData, prototypeType: value})}
+              />
+            </View>
             <Text style={mainStyles.title}>Número de caras PCB</Text>
             <View style={styles.radioGroup}>
               <RadioButton
@@ -728,18 +748,6 @@ export default function PrototypingFormEdit() {
 }
 
 /* Estilos */
-const toastConfig = {
-  error: props => (
-    <ErrorToast
-      {...props}
-      style={{borderLeftColor: "#DC3545"}}
-      // contentContainerStyle={{ }}
-      text1Style={{color: "#DC3545"}}
-      text2Style={{color: "#DC3545"}}
-    />
-  )
-}
-
 const styles = StyleSheet.create({
   formContainer: {
     flexGrow: 1,

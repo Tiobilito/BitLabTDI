@@ -7,6 +7,7 @@ import Info from "./Info.jsx"
 import OpenDrive from './openDrive.jsx'
 import StatusIndicator from './StatusIndicator.jsx'
 import CircularFloatingButton from './CircularFloatingButton.jsx'
+import SwapButton from './SwapButton.jsx';
 
 export {
   CustomButton,
@@ -18,4 +19,5 @@ export {
   OpenDrive,
   StatusIndicator,
   CircularFloatingButton,
+  SwapButton,
 }

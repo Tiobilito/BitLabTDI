@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  StatusBar,
   ActivityIndicator,
   Dimensions,
   TouchableOpacity,
@@ -12,17 +11,16 @@ import {
 import {
   getPrototypeById,
   updateProjectCheck,
+  updateProjectStatus,
 } from "../../Modules/Operations DB Prototyping"
 import { useRoute } from "@react-navigation/native"
 import { GetUserData } from "../../Modules/DataInfo"
 import { CustomView } from "../components/CustomView"
-import { CustomButton, OpenDrive } from "../../components"
-// import Feather from "@expo/vector-icons/Feather"
-import { MaterialIcons, Feather } from "@expo/vector-icons"
+import { CustomButton, OpenDrive, SwapButton } from "../../components"
+import { Feather } from "@expo/vector-icons"
 import { scale } from "react-native-size-matters"
 import * as Clipboard from "expo-clipboard"
 import Toast from "react-native-toast-message"
-
 
 const { width, height } = Dimensions.get("window")
 
@@ -32,20 +30,37 @@ export default function PrototypingFormReadOnly({ navigation }) {
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [userType, setUserType] = useState(null)
 
   const updateCheck = async (Check) => {
-    const uData = await GetUserData()
-    await updateProjectCheck(idReport, Check, uData.User_type)
+    await updateProjectCheck(idReport, Check, userType)
     navigation.goBack()
   }
 
   const updateStatus = async () => {
-    setData(prev => ({
-      ...prev,
-      status: prev.status === "approved" ? "finished" : "approved"
-    }))
-    console.log("Data -> ", fetchedData)
+    const status = data.status === "approved" ? "finished" : "approved"
+
+    if (await updateProjectStatus(idReport, status)) {
+      setData(prev => ({
+        ...prev,
+        status: status
+      }))
+    } else {
+      Toast.show({
+        type: "error",
+        position: "bottom",
+        text1: "Error al cambiar el estado",
+      })
+    }
   }
+
+  useEffect(() => {
+    const init = async () => {
+      const userData = await GetUserData()
+      setUserType(userData.User_type)
+    }
+    init()
+  }, [])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -92,6 +107,8 @@ export default function PrototypingFormReadOnly({ navigation }) {
     professor_user_code,
     project_type,
     prototype_description,
+    prototype_type,
+    internal_use_pcb_faces,
     specific_requirements_dimensions,
     specific_requirements_special_cut,
     specific_requirements_other,
@@ -109,16 +126,19 @@ export default function PrototypingFormReadOnly({ navigation }) {
     })
   }
 
+  const dictionary = {
+    "approved": "Aprobado",
+    "rejected": "Rechazado",
+    "awaiting_revision": "Esperando revisión",
+    "finished": "Terminado"
+  }
+
   return (
     <View style={styles.container}>
       <CustomView>
         <View style={styles.scrollContainer}>
+          <View style={styles.blured}/>
           <ScrollView contentContainerStyle={styles.formContainer}>
-            <StatusBar
-              barStyle="light-content"
-              backgroundColor="black"
-              translucent={true}
-            />
             <Text style={styles.title}>
               Detalles de la solicitud de servicio de prototipo
             </Text>
@@ -141,25 +161,21 @@ export default function PrototypingFormReadOnly({ navigation }) {
               <Text style={styles.value}>{application}</Text>
               <Text style={styles.label}>Estado:</Text>
               <View style={styles.approval}>
-                {data.status === "approved" && (
-                  <CustomButton
-                    title="Aprobado"
-                    onPress={() => {}}
-                    buttonStyles={{ width: width * 0.4, backgroundColor: "#095EA7"}}
-                    disabled={true}
-                  />
-                )}
-                {data.status === "finished" && (
                 <CustomButton
-                    title="Terminado"
-                    onPress={() => {}}
-                    buttonStyles={{ width: width * 0.4, backgroundColor: "#12B81A"}}
-                    disabled={true}
-                  />
+                  title={dictionary[data.status]}
+                  buttonStyles={{
+                    width: width * 0.4,
+                    backgroundColor:
+                      data.status === "approved" ? "#10B981" :
+                      data.status === "finished" ? "#6B7280" :
+                      data.status === "awaiting_revision" ? "#F59E0B" :
+                      "#EF4444"
+                  }}
+                  disabled={true}
+                />
+                {((data.status === "approved" || data.status === "finished") && userType === 2) && (
+                  <SwapButton onPress={updateStatus} />
                 )}
-                <TouchableOpacity style={styles.copyButton} onPress={updateStatus}>
-                  <MaterialIcons name="loop" size={30} color="#2272A7" />
-                </TouchableOpacity>
               </View>
             </View>
 
@@ -183,6 +199,14 @@ export default function PrototypingFormReadOnly({ navigation }) {
               <Text style={styles.titleSection}>Datos del Prototipo</Text>
               <Text style={styles.label}>Descripción del Prototipo:</Text>
               <Text style={styles.value}>{prototype_description}</Text>
+              <Text style={styles.label}>Tipo de prototipo:</Text>
+              <Text style={styles.value}>{
+                prototype_type === 1 ? "Diseño de circuito impreso de alto detalle"
+                : prototype_type === 2 ? "Diseño de circuito impreso"
+                : "No asignado"}
+              </Text>
+              <Text style={styles.label}>Caras del PCB:</Text>
+              <Text style={styles.value}>{internal_use_pcb_faces}</Text>
               <Text style={styles.label}>Dimensiones:</Text>
               <Text style={styles.value}>
                 {specific_requirements_dimensions}
@@ -210,7 +234,7 @@ export default function PrototypingFormReadOnly({ navigation }) {
             </View>
 
             {/* Botones para aprobar o rechazar la solicitud*/}
-            <View style={styles.approval}>
+            <View style={[styles.approval, { marginLeft: 10 }]}>
               <CustomButton
                 title={"Rechazar"}
                 onPress={() => updateCheck(false)}
@@ -239,6 +263,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginTop: 200,
   },
+  blured: {
+
+  },
   formContainer: {
     flexGrow: 1,
     paddingHorizontal: 5,
@@ -257,7 +284,7 @@ const styles = StyleSheet.create({
   formSection: {
     marginBottom: 20,
     padding: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF",
     borderRadius: 10,
     elevation: 2,
   },
@@ -281,22 +308,21 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#F5F5F5",
   },
   errorText: {
     fontSize: 16,
-    color: "red",
+    color: "#F00",
   },
   approval: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: width * 0.05,
-    marginLeft: 10,
   },
   url: {
     textDecorationLine: "underline",
-    color: 'blue',
+    color: '#00F',
   },
   copyButton: {
     padding: scale(6),

@@ -21,17 +21,16 @@ const sanitizeText = (text) => text.replace(
 
 export const generatePDF = async (data) => {
   try {
+    // #region load PDF
     // Cargar el PDF desde la carpeta assets
     const asset = Asset.fromModule(
-      require("../../assets/formato_servicio_prototipadoD.pdf")
+      require("../../assets/Formato_de_requerimiento_de_servicio_de_maquinado_de_prototipo.pdf")
     );
     await asset.downloadAsync(); // Asegura que el archivo esté disponible localmente
     
     const existingPdfBytes = await FileSystem.readAsStringAsync(
       asset.localUri,
-      {
-        encoding: FileSystem.EncodingType.Base64,
-      }
+      { encoding: FileSystem.EncodingType.Base64 }
     );
     
     const pdfDoc = await PDFDocument.load(
@@ -42,82 +41,86 @@ export const generatePDF = async (data) => {
     
     // Coordenadas específicas para cada campo en el formulario
     const coordenadas = {
-      nombre: { x: 38, y: 660 },
-      correo: { x: 300, y: 660 },
-      telefono: { x: 517, y: 660 },
-      fecha: { x: 530, y: 717 },
-      aplicacion: { x: 38, y: 625 },
-      codigoAlumno: { x: 315, y: 624 },
-      codigoProfesor: { x: 515, y: 624 },
-      tipoProyecto: { x: 100, y: 580 },
+      nombre: { x: 20, y: 665  },
+      correo: { x: 270, y: 665 },
+      telefono: { x: 490, y: 665 },
+      fecha: { x: 531, y: 703 }, //717
+      aplicacion: { x: 20, y: 625 },
+      codigoAlumno: { x: 270, y: 620 },
+      codigoProfesor: { x: 490, y: 620 },
+      tipoProyecto: { x: 0, y: 0 },
       tipoPrototipo: { x: 100, y: 560 },
-      descripcion: { x: 100, y: 540 },
-      dimensiones: { x: 115, y: 371 },
-      corteEspecial: { x: 128, y: 353 },
-      otros: { x: 78, y: 336 },
-      observaciones: { x: 130, y: 280 },
-      carasPCB: { x: 78, y: 174 },
-      material_proporcionado: { x: 78, y: 149.5 },
-      material_requerido: { x: 173, y: 174 },
-      comentarios_internos: { x: 313, y: 174 },
-      fecha_aprovacion: { x: 80, y: 125 },
+      descripcion: { x: 260, y: 530 },
+      dimensiones: { x: 90, y: 364 },
+      corteEspecial: { x: 90, y: 347 },
+      otros: { x: 90, y: 333 },
+      observaciones: { x: 90, y: 282 },
+      carasPCB: { x: 0, y: 0 },
+      material_proporcionado: { x: 0, y: 0 },
+      comentarios_internos: { x: 200, y: 182 },
+      fecha_aprovacion: { x: 90, y: 125 },
     };
     
+    // #region dynamic coordinates
     // Cambiar las coordenadas de tipoProyecto dinámicamente
     switch (data.project_type) {
       case "Licenciatura":
-        coordenadas.tipoProyecto = { x: 345, y: 587 };
+        coordenadas.tipoProyecto = { x: 325, y: 585 };
+        // coordenadas.tipoProyecto = { x: 330, y: 585 };
         break;
       case "Posgrado":
-        coordenadas.tipoProyecto = { x: 440, y: 587 };
+        coordenadas.tipoProyecto = { x: 435, y: 585 };
         break;
-      case "Cuerpo académico":
-        coordenadas.tipoProyecto = { x: 540, y: 587 };
+      case "Cuerpo Academico":
+        coordenadas.tipoProyecto = { x: 535, y: 585 };
         break;
       default:
-        coordenadas.tipoProyecto = { x: 345, y: 587 }; // Valor por defecto
+        coordenadas.tipoProyecto = { x: 300, y: 585 }; // Valor por defecto
     }
     
     // Cambiar las coordenadas de tipoPrototipo dinámicamente
     switch (data.prototype_type) {
-      case "impreso":
-        coordenadas.tipoPrototipo = { x: 209, y: 500 };
-        coordenadas.descripcion = { x: 240, y: 520 };
+      case 1:
+        coordenadas.tipoPrototipo = { x: 235, y: 505 };
+        // coordenadas.tipoPrototipo = { x: 220, y: 495 };
         break;
-      case "tresD":
-        coordenadas.tipoPrototipo = { x: 209, y: 434 };
-        coordenadas.descripcion = { x: 240, y: 460 }; //y 460
+      case 2:
+        coordenadas.tipoPrototipo = { x: 235, y: 427 };
+        // coordenadas.tipoPrototipo = { x: 209, y: 434 };
         break;
       default:
         coordenadas.tipoPrototipo = { x: 209, y: 500 }; // Valor por defecto
-        coordenadas.descripcion = { x: 250, y: 500 };
       }
       
     // Cambiar las coordenadas de Numero de caras PCB dinámicamente
     switch (data.internal_use_pcb_faces) {
       case 1:
-        coordenadas.carasPCB = { x: 78, y: 174 };
+        coordenadas.carasPCB = { x: 68, y: 187.5 };
+        // coordenadas.carasPCB = { x: 78, y: 174 };
         break;
       case 2:
-        coordenadas.carasPCB = { x: 145, y: 174 };
+        coordenadas.carasPCB = { x: 145, y: 187.5 };
+        // coordenadas.carasPCB = { x: 145, y: 174 };
         break;
       default:
-        coordenadas.carasPCB; // Valor por defecto
+        coordenadas.carasPCB = { x: 78, y: 174 };
     }
-    
+      
     // Cambiar las coordenadas de PCB proporcionado por el usuario dinámicamente
     switch (data.internal_use_pcb_provided_by_user) {
       case true:
-        coordenadas.material_proporcionado = { x: 78, y: 149.5 };
+        coordenadas.material_proporcionado = { x: 68, y: 157.5 };
+        // coordenadas.material_proporcionado = { x: 78, y: 149.5 };
         break;
       case false:
-        coordenadas.material_proporcionado = { x: 145, y: 149.5 };
+        coordenadas.material_proporcionado = { x: 145, y: 157.5 };
+        // coordenadas.material_proporcionado = { x: 145, y: 149.5 };
         break;
       default:
-        coordenadas.material_proporcionado; // Valor por defecto
+        coordenadas.material_proporcionado = { x: 78, y: 149.5 };
     }
     
-    // Insertar datos
+    // #region insert data
     page.drawText(sanitizeText(String(data.applicant_name || "")), {
       x: coordenadas.nombre.x,
       y: coordenadas.nombre.y,
@@ -196,7 +199,7 @@ export const generatePDF = async (data) => {
 
     // Dividir la descripción en partes de máximo 68 caracteres, con un límite de 3 partes
     const descripcion = sanitizeText(data.prototype_description) || "";
-    const maxCharsPerLineDescripcion = 63;
+    const maxCharsPerLineDescripcion = 58;
     const maxChunksDescripcion = 3;
     const descripcionChunks = splitStringIntoChunks(
       descripcion,
@@ -262,26 +265,6 @@ export const generatePDF = async (data) => {
       y: coordenadas.material_proporcionado.y,
       size: 12,
       color: rgb(0, 0, 0),
-    });
-    
-    // Dentro de la función generatePDF, reemplaza la lógica de data.internal_use_required_inputs con esto:
-    const requiredInputs = sanitizeText(String(data.internal_use_required_inputs)) || "";
-    const maxCharsPerLineRequiredInputs = 24; // Máximo de caracteres por línea para requiredInputs
-    const maxChunksRequiredInputs = 2; // Máximo de partes (líneas) permitidas
-    const requiredInputsChunks = splitStringIntoChunks(
-      requiredInputs,
-      maxCharsPerLineRequiredInputs,
-      maxChunksRequiredInputs
-    );
-    
-    // Dibujar cada parte de los materiales requeridos en una nueva línea
-    requiredInputsChunks.forEach((chunk, index) => {
-      page.drawText(chunk, {
-        x: coordenadas.material_requerido.x,
-        y: coordenadas.material_requerido.y - index * 15, // Ajusta la posición en Y para cada línea
-        size: 10,
-        color: rgb(0, 0, 0),
-      });
     });
     
     // Dentro de la función generatePDF, reemplaza la lógica de data.internal_use_comments con esto:

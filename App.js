@@ -1,4 +1,5 @@
 import React from "react";
+import { StatusBar } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -293,6 +294,11 @@ const SocialServiceApp = () => {
 export default function App() {
   return (
     <NavigationContainer>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="#f5f5f533"
+        translucent={true}
+      />
       <Stack.Navigator
         screenOptions={{
           headerShown: false,

@@ -14,6 +14,7 @@ export async function addProjectSub(Project) {
       professor_user_code: Project.professor_user_code,
       project_type: Project.project_type,
       prototype_description: Project.prototype_description,
+      prototype_type: Project.prototype_type,
       drive_url: Project.drive_url,
       specific_requirements_dimensions:
         Project.specific_requirements_dimensions,
@@ -114,6 +115,7 @@ export async function updateProjectSub(idReport, Project) {
       professor_user_code: Project.professor_user_code,
       project_type: Project.project_type,
       prototype_description: Project.prototype_description,
+      prototype_type: Project.prototype_type,
       drive_url: Project.drive_url,
       specific_requirements_dimensions:
         Project.specific_requirements_dimensions,
@@ -239,7 +241,6 @@ export async function updateProjectCheck(id, check, userType) {
     } else {
       updateField = { department_head: check, laboratory_head: null, service_staff: null }; // Envia el verificado false y null a los demas
     }
-    updateField.status = status; // Agrega el cambio de estado al campo de actualización
   } else if (userType == 1) {
     console.log("laboratory_head");
     if (check) {
@@ -247,15 +248,19 @@ export async function updateProjectCheck(id, check, userType) {
     } else {
       updateField = { laboratory_head: check, service_staff: null };
     }
-    updateField.status = status;
   } else if (userType == 2) {
+    const date = new Date().toISOString().split("T")[0]
     console.log("service_staff");
-    updateField = { service_staff: check };
+    updateField = { service_staff: check, prototype_approved_date: date };
+    status = "approved"
   } else {
     console.error("Tipo de usuario no válido");
     return;
   }
 
+  // Agrega el cambio de estado al campo de actualización
+  updateField.status = status;
+  
   // Realiza la actualización en la tabla
   const { data, error } = await supabase
     .from("project_submissions")
@@ -268,6 +273,21 @@ export async function updateProjectCheck(id, check, userType) {
   }
 
   console.log("Registro actualizado:", data);
+}
+
+export async function updateProjectStatus(id, status) {
+  const { data, error } = await supabase
+    .from("project_submissions")
+    .update({ status: status })
+    .eq("id", id);
+
+  if (error) {
+    console.error("Error al actualizar el estatus:", error);
+    return false;
+  }
+
+  console.log("Estatus actualizado");
+  return true;
 }
 
 // Función para obtener una solicitud de prototipo por ID

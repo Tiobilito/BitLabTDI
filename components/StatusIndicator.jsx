@@ -20,6 +20,11 @@ export default ({ status, size = 12 }) => {
         label: 'Esperando revisión',
         backgroundColor: 'rgba(245, 158, 11, 0.1)'
       },
+      finished: {
+        color: '#FFF',
+        label: 'Terminado',
+        backgroundColor: 'rgba(255, 255, 255, 0.2)'
+      },
       default: {
         color: '#6B7280',
         label: 'Desconocido',

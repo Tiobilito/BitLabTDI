@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect } from "react"
-import { View, StyleSheet, Dimensions, Keyboard } from "react-native"
+import { View, StyleSheet, Dimensions, Keyboard, StatusBar } from "react-native"
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -20,7 +20,11 @@ export const CustomViewReverse = ({ children }: Props) => {
   const rotateBack = useSharedValue(140)
   const opacity = useSharedValue(1)
 
-  useEffect(() => handleTranslate(), [])
+  useEffect(() => {
+    StatusBar.setBarStyle("dark-content")
+    StatusBar.setBackgroundColor("#f5f5f5")
+    handleTranslate()
+  }, [])
 
   // Evita que al aparecer el teclado se muestre cortado el fondo
   useEffect(() => {

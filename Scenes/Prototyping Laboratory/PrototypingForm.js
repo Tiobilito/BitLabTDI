@@ -18,8 +18,8 @@ import { useNavigation } from "@react-navigation/native";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { CustomView } from '../components/CustomView';
 import { FloatingInput } from '../../components';
-import { mainStyles } from '../../components/styles';
-import Toast, { ErrorToast } from 'react-native-toast-message';
+import { mainStyles, toastConfig } from '../../components/styles';
+import Toast from 'react-native-toast-message';
 
 const width = Dimensions.get("window").width;
 
@@ -52,6 +52,7 @@ export default function PrototypingForm() {
   const [teacherCode, setTeacherCode] = useState("");
   const [application, setApplication] = useState("");
   const [descriptionPrototype, setDescriptionPrototype] = useState("");
+  const [prototypeType, setPrototypeType] = useState(0);
   const [numberOfFaces, setNumberOfFaces] = useState(0);
   const [driveUrl, setDriveUrl] = useState("");
   const [driveUrlErr, setDriveUrlErr] = useState("");
@@ -77,6 +78,7 @@ export default function PrototypingForm() {
     setTeacherCode("");
     setApplication("");
     setDescriptionPrototype("");
+    setPrototypeType("");
     setNumberOfFaces(0);
     setDriveUrl("");
     setDriveUrlErr("");
@@ -103,6 +105,7 @@ export default function PrototypingForm() {
         professor_user_code: finalTeacherCode, // Código del profesor (o null)
         project_type: projectType, // Tipo de proyecto
         prototype_description: descriptionPrototype, // Descripción del prototipo
+        prototype_type: prototypeType, //Tipo de prototipo
         internal_use_pcb_faces: numberOfFaces, // Número de capas
         drive_url: driveUrl, // URL de la carpeta de google drive
         specific_requirements_dimensions: specificRequirementsDimensions, // Dimensiones del prototipo
@@ -139,21 +142,7 @@ export default function PrototypingForm() {
           return () => clearInterval(timeout);
         }
       })
-      // Alert.alert(
-      //   "Éxito",
-      //   "Solicitud enviada exitosamente.",
-      //   [{
-      //     text: 'OK', onPress: () => {
-      //       // Limpiar el formulario después de enviar
-      //       resetForm();
-      //       navigation.goBack();
-      //     }
-      //   }],
-      //   {
-      //     cancelable: false,
-      //   }
-      // );
-      
+    
     } catch (error) {
       // El codigo de estudiante o profesor no coincide
       console.log("ERROR:::: ", error)
@@ -315,9 +304,6 @@ export default function PrototypingForm() {
   const checkUrl = async (url) => {
     try {
       const response = await fetch(url, { method: 'HEAD' });
-      // console.log("response url -> ", response.url);
-      // console.log("response status -> ", response.status);
-      // console.log("response ok -> ", response.ok);
       
       const result = response.url === url && response.ok === true && response.status === 200;
       if (result) {
@@ -474,6 +460,21 @@ export default function PrototypingForm() {
             placeholder="Describe tu prototipo"
             maxLength={191}
           />
+          <Text style={mainStyles.title}>Tipo de prototipo</Text>
+          <View style={styles.radioGroup}>
+            <RadioButton
+              label="Diseño de circuito impreso de alto detalle"
+              value={1}
+              selected={prototypeType === 1}
+              onSelect={setPrototypeType}
+            />
+            <RadioButton
+              label="Diseño de circuito impreso"
+              value={2}
+              selected={prototypeType === 2}
+              onSelect={setPrototypeType}
+            />
+          </View>
           <Text style={mainStyles.title}>Número de caras</Text>
           <View style={styles.radioGroup}>
             <RadioButton
@@ -584,18 +585,6 @@ export default function PrototypingForm() {
 }
 
 /* Estilos */
-const toastConfig = {
-  error: props => (
-    <ErrorToast
-      {...props}
-      style={{borderLeftColor: "#DC3545"}}
-      // contentContainerStyle={{ }}
-      text1Style={{color: "#DC3545"}}
-      text2Style={{color: "#DC3545"}}
-    />
-  )
-}
-
 const styles = StyleSheet.create({
   formContainer: {
     flexGrow: 1,

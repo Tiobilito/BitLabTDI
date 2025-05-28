@@ -1,6 +1,6 @@
 import { useFocusEffect } from "@react-navigation/native"
 import React, { ReactNode, useCallback, useEffect } from "react"
-import { View, StyleSheet, Dimensions } from "react-native"
+import { View, StyleSheet, Dimensions, StatusBar } from "react-native"
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -22,6 +22,8 @@ export const CustomView = ({ children }: Props) => {
   useFocusEffect(
     useCallback(() => {
       handleTranslate()
+      StatusBar.setBarStyle("light-content")
+      StatusBar.setBackgroundColor("#328EC5")
       return () => {
         translateX.value = -1000
         translateY.value = -1000

@@ -1,4 +1,5 @@
 import { Dimensions, StyleSheet } from "react-native"
+import { ErrorToast } from 'react-native-toast-message';
 
 const { width, height } = Dimensions.get("window")
 
@@ -19,3 +20,14 @@ export const mainStyles = StyleSheet.create({
     padding: width * 0.02,
   },
 })
+
+export const toastConfig = {
+  error: props => (
+    <ErrorToast
+      {...props}
+      style={{borderLeftColor: "#DC3545"}}
+      text1Style={{color: "#DC3545"}}
+      text2Style={{color: "#DC3545"}}
+    />
+  )
+}

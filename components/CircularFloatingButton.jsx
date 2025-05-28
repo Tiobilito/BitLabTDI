@@ -46,10 +46,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   fab: {
-    // position: 'absolute',
     top: 16,
-    // bottom: 16,
-    // alignSelf: "flex-end",
     backgroundColor: '#328EC5',
     width: 60,
     height: 60,

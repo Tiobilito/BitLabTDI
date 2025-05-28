@@ -12,10 +12,8 @@ export async function CheckUser(code, contraseña) {
     console.log("hubo un error", error);
   }
   if (data.length > 0) {
-    console.log("Bienvenido!");
     return data[0];
   } else {
-    console.log("Datos incorrectos");
     Toast.show({
       type: "error",
       text1: "Datos incorrectos",
@@ -42,7 +40,6 @@ export async function CheckUserCode(code) {
       text1: "Datos incorrectos",
       position: "bottom",
     });
-    console.log("Datos incorrectos");
     // Alert.alert("Datos incorrectos");
     return false;
   }

@@ -8,6 +8,7 @@ import {
   Text,
   View,
   ScrollView,
+  StatusBar,
 } from "react-native"
 import { StoreUserData } from "../Modules/DataInfo"
 import { CheckUser } from "../Modules/Operations DB Users"
@@ -19,7 +20,8 @@ import Animated, {
 } from "react-native-reanimated"
 import { useFocusEffect } from "@react-navigation/native"
 import Icon from "react-native-vector-icons/Ionicons";
-import Toast, { ErrorToast } from 'react-native-toast-message'
+import Toast from 'react-native-toast-message'
+import { toastConfig } from '../components/styles';
 
 const Scale = Dimensions.get("window").width
 
@@ -101,6 +103,11 @@ const LoginPage = ({ navigation }) => {
 
   return (
     <CustomView>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor="#328EC5"
+        translucent={true}
+      />
       <ScrollView>
         <View style={{ justifyContent: "center", alignItems: "center" }}>
           <Animated.View style={animatedStyle}>
@@ -197,18 +204,6 @@ const LoginPage = ({ navigation }) => {
       </ScrollView>
       <Toast config={toastConfig} />
     </CustomView>
-  )
-}
-
-const toastConfig = {
-  error: props => (
-    <ErrorToast
-      {...props}
-      style={{borderLeftColor: "#DC3545"}}
-      // contentContainerStyle={{ }}
-      text1Style={{color: "#DC3545"}}
-      text2Style={{color: "#DC3545"}}
-    />
   )
 }
 

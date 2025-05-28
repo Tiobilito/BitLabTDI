@@ -20,8 +20,8 @@ import Animated, {
 } from "react-native-reanimated";
 import { CustomButton, Form, FloatingInput } from "../components";
 import Icon from "react-native-vector-icons/Ionicons";
-import Toast, { ErrorToast } from 'react-native-toast-message'
-import { mainStyles } from "../components/styles";
+import Toast from 'react-native-toast-message'
+import { mainStyles, toastConfig } from "../components/styles";
 
 const { width, height } = Dimensions.get("window");
 
@@ -210,58 +210,63 @@ const Register = ({ navigation }) => {
                   </Picker>
                 </View>
               </View>
-              <FloatingInput
-                label="Dirección (Opcional)"
-                value={address}
-                onChangeText={setAddress}
-                placeholder={"calle xxxx"}
-              />
-              <FloatingInput
-                label={"Código Postal (opcional)"}
-                value={zipCode}
-                onChangeText={setZipCode}
-                keyboardType={"numeric"}
-                placeholder={"xxxxx"}
-              />
-              <FloatingInput
-                label={"Número de teléfono (opcional)"}
-                value={phoneNum}
-                onChangeText={setPhoneNum}
-                keyboardType={"numeric"}
-                placeholder={"xx-xxxx-xxxx"}
-              />
-              <FloatingInput
-                label={"Correo Electrónico (opcional)"}
-                value={email}
-                onChangeText={setEmail}
-                keyboardType={"email-address"}
-                placeholder={"correo@dominio"}
-              />
+              <View style={styles.lineContainer}>
+                <View style={styles.line} />
+              </View>
+              <View style={{ marginTop: 8 }}>
+                <FloatingInput
+                  label="Dirección (Opcional)"
+                  value={address}
+                  onChangeText={setAddress}
+                  placeholder={"calle xxxx"}
+                />
+                <FloatingInput
+                  label={"Código Postal (opcional)"}
+                  value={zipCode}
+                  onChangeText={setZipCode}
+                  keyboardType={"numeric"}
+                  placeholder={"xxxxx"}
+                />
+                <FloatingInput
+                  label={"Número de teléfono (opcional)"}
+                  value={phoneNum}
+                  onChangeText={setPhoneNum}
+                  keyboardType={"numeric"}
+                  placeholder={"xx-xxxx-xxxx"}
+                />
+                <FloatingInput
+                  label={"Correo Electrónico (opcional)"}
+                  value={email}
+                  onChangeText={setEmail}
+                  keyboardType={"email-address"}
+                  placeholder={"correo@dominio"}
+                />
 
-              {userType === "2" && (
-                <>
-                  <FloatingInput
-                    label={"Número de Seguro Social"}
-                    value={nss}
-                    onChangeText={setNss}
-                    keyboardType={"numeric"}
-                    placeholder={"xxxxxxxx"}
-                  />
-                  <FloatingInput
-                    label={"RFC"}
-                    value={rfc}
-                    onChangeText={setRfc}
-                    placeholder={"12345678"}
-                  />
-                  <FloatingInput
-                    label={"Salario"}
-                    value={salary}
-                    onChangeText={setSalary}
-                    keyboardType={"numeric"}
-                    placeholder={"xxxxx.xx"}
-                  />
-                </>
-              )}
+                {userType === "2" && (
+                  <>
+                    <FloatingInput
+                      label={"Número de Seguro Social"}
+                      value={nss}
+                      onChangeText={setNss}
+                      keyboardType={"numeric"}
+                      placeholder={"xxxxxxxx"}
+                    />
+                    <FloatingInput
+                      label={"RFC"}
+                      value={rfc}
+                      onChangeText={setRfc}
+                      placeholder={"12345678"}
+                    />
+                    <FloatingInput
+                      label={"Salario"}
+                      value={salary}
+                      onChangeText={setSalary}
+                      keyboardType={"numeric"}
+                      placeholder={"xxxxx.xx"}
+                    />
+                  </>
+                )}
+              </View>
 
               <View style={styles.buttonContainer}>
                 <CustomButton
@@ -289,18 +294,6 @@ const Register = ({ navigation }) => {
     </View>
   );
 };
-
-const toastConfig = {
-  error: props => (
-    <ErrorToast
-      {...props}
-      style={{borderLeftColor: "#DC3545"}}
-      // contentContainerStyle={{ }}
-      text1Style={{color: "#DC3545"}}
-      text2Style={{color: "#DC3545"}}
-    />
-  )
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -340,7 +333,6 @@ const styles = StyleSheet.create({
   },
   passwordWrapper: {
     position: "relative",
-    marginBottom: 16,
   },
   eyeIcon: {
     position: "absolute",
@@ -352,6 +344,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  lineContainer: {
+    marginBottom: width * 0.03,
+    marginTop: width * 0.03,
+  },
+  line: {
+    width: width * 0.7,
+    height: width * 0.002,
+    backgroundColor: "#000000",
   },
 });
 
