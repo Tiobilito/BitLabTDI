@@ -1,0 +1,42 @@
+{
+    "rejected": {
+        "color": "#EF4444",
+        "background": "rgba(239, 68, 68, 0.1)",
+        "es": "Rechazado"
+    },
+    "awaiting_revision": {
+        "color": "#F59E0B",
+        "background": "rgba(245, 158, 11, 0.1)",
+        "es": "Esperando revisión"
+    },
+    "pcb_revision": {
+        "color": "#5B0BAC",
+        "background": "rgba(139, 92, 246, 0.1)",
+        "es": "Revisando PCB"
+    },
+    "approved": {
+        "color": "#10B981",
+        "background": "rgba(16, 185, 129, 0.1)",
+        "es": "Aprobado"
+    },
+    "in_process": {
+        "color": "#0EA5E9",
+        "background": "rgba(14, 165, 233, 0.1)",
+        "es": "En proceso"
+    },
+    "finished": {
+        "color": "#DDD",
+        "background": "rgba(255, 255, 255, 0.2)",
+        "es": "Terminado"
+    },
+    "delivered": {
+        "color": "#22D3EE",
+        "background": "rgba(34, 211, 238, 0.1)",
+        "es": "Entregado"
+    },
+    "default": {
+        "color": "#6B7280",
+        "background": "rgba(107, 114, 128, 0.1)",
+        "es": "Desconocido"
+    }
+}

@@ -165,7 +165,8 @@ export async function getAllProjectSubmissionsCheck(userType) {
     query = query
       .eq("department_head", true)
       .eq("laboratory_head", true)
-      .or("service_staff.is.null"); // Solo registros con null (falta que el personal del servicio lo verifique)
+      .neq("status", "delivered")
+      // .or("service_staff.is.null"); // Solo registros con null (falta que el personal del servicio lo verifique)
   } else {
     console.error("Tipo de usuario no válido");
     return null;
@@ -177,6 +178,18 @@ export async function getAllProjectSubmissionsCheck(userType) {
     return null;
   }
   console.log("Registros obtenidos:", data);
+  
+  if (userType === 2) {
+    const sortedData = data.sort((a, b) => {
+      const priority = {
+        'awaiting_revision': 1,
+        'pcb_revision': 2,
+      };
+      return (priority[a.status] || 3) - (priority[b.status] || 3);
+    });
+    return sortedData;
+  }
+
   return data;
 }
 
@@ -197,7 +210,8 @@ export async function getAllProjectSubmissionsChecked(userType) {
     query = query
       .eq("department_head", true)
       .eq("laboratory_head", true)
-      .not("service_staff", "is", null);
+      .not("service_staff", "is", null)
+      .neq("status", "delivered");
   } else {
     console.error("Tipo de usuario no válido");
     return null;
@@ -217,7 +231,7 @@ export async function getAllProjectSubmissionsFinished() {
   const { data, error } = await supabase
     .from("project_submissions")
     .select("*") // Selecciona todas las columnas
-    .in("status", ["approved", "rejected"]); // Filtra por 'aproved' o 'disapproved'
+    .in("status", ["delivered", "rejected"]); // Filtra por 'aproved' o 'disapproved'
   if (error) {
     console.error("Error al obtener registros:", error);
     return null;

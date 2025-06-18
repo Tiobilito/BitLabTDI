@@ -12,7 +12,7 @@ import { useNavigation } from "@react-navigation/native"
 import { GetUserData } from "../../Modules/DataInfo"
 import { getUserById, updatePassword } from "../../Modules/Operations DB Users"
 import { CustomViewReverse } from "../components/CustomViewReverse"
-import { CustomButton, Form, FloatingInput } from "../../components"
+import { CustomButton, Form, FloatingInput } from "../../Components"
 import { scale } from "react-native-size-matters"
 
 const { width, height } = Dimensions.get("window")

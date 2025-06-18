@@ -16,8 +16,8 @@ import {
   CustomButton,
   Form,
   FloatingCalendar,
-} from "../../components"
-import { mainStyles } from "../../components/styles"
+} from "../../Components"
+import { mainStyles } from "../../Components/styles"
 
 const { width, height } = Dimensions.get("window")
 

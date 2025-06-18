@@ -18,7 +18,7 @@ import {
   FloatingInput,
   CustomButton,
   FloatingCalendar,
-} from "../../components"
+} from "../../Components"
 
 const { width, height } = Dimensions.get("window")
 

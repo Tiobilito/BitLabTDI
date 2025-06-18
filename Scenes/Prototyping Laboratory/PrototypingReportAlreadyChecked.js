@@ -4,7 +4,6 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  Pressable,
   Image,
   View,
   FlatList,
@@ -17,7 +16,7 @@ import { getAllProjectSubmissionsChecked } from "../../Modules/Operations DB Pro
 import { CustomViewReverse } from "../components/CustomViewReverse"
 import Icon from "react-native-vector-icons/Ionicons"
 import { GetUserData } from "../../Modules/DataInfo"
-import { Info, CircularFloatingButton } from "../../components"
+import { Info, CircularFloatingButton, StatusIndicator } from "../../Components"
 
 const { width, height } = Dimensions.get("window")
 
@@ -205,6 +204,9 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
                   <View style={styles.info}>
                     <Text style={styles.name}>{item.applicant_name}</Text>
                     <Text style={styles.email}>{item.application}</Text>
+                    <View style={{ marginLeft: -10 }}>
+                      <StatusIndicator status={item.status} size={10} />
+                    </View>
                   </View>
 
                   {/* Mostrar icono si los campos department_head, laboratory_head o service_staff son false */}
@@ -227,6 +229,7 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
 
                 {item.Details && (
                   <View style={styles.details}>
+                    
                     <Info title="ID: " text={item.id} />
                     <Info
                       title="Fecha de Solicitud: "
@@ -249,6 +252,7 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
                           style={styles.buttonImage}
                         />
                       </TouchableOpacity>
+                      {item.service_staff && ["finished", "delivered"].includes(item.status) ? (
                       <TouchableOpacity
                         onPress={() => navigateToPDF(item.id)}
                         style={styles.buttonContainer}
@@ -258,6 +262,9 @@ const PrototypingAlreadyChecked = ({ navigation }) => {
                           style={styles.buttonImage}
                         />
                       </TouchableOpacity>
+                      ) : 
+                      <View/>
+                    }
                     </View>
                   </View>
                 )}

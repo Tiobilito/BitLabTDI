@@ -12,13 +12,13 @@ import {
   Modal,
 } from "react-native";
 import { addProjectSub } from "../../Modules/Operations DB Prototyping";
-import { OpenDrive, CustomButton } from '../../components';
+import { OpenDrive, CustomButton } from '../../Components';
 import { scale, verticalScale } from "react-native-size-matters";
 import { useNavigation } from "@react-navigation/native";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { CustomView } from '../components/CustomView';
-import { FloatingInput } from '../../components';
-import { mainStyles, toastConfig } from '../../components/styles';
+import { FloatingInput } from '../../Components';
+import { mainStyles, toastConfig } from '../../Components/styles';
 import Toast from 'react-native-toast-message';
 
 const width = Dimensions.get("window").width;

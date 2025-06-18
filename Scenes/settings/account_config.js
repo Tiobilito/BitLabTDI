@@ -13,7 +13,7 @@ import { GetUserData } from "../../Modules/DataInfo"
 import { getAllDepartamentos } from "../../Modules/Operations DB Generals"
 import { getUserById, updateUser } from "../../Modules/Operations DB Users"
 import { CustomViewReverse } from "../components/CustomViewReverse"
-import { CustomButton, Form, FloatingInput } from "../../components"
+import { CustomButton, Form, FloatingInput } from "../../Components"
 import { scale } from "react-native-size-matters"
 
 const { height, width } = Dimensions.get("window")

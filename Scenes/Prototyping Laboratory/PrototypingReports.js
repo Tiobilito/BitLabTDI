@@ -16,7 +16,7 @@ import { useFocusEffect } from "@react-navigation/native"
 import { getAllProjectSubmissionsByUserId } from "../../Modules/Operations DB Prototyping"
 import { GetUserData } from "../../Modules/DataInfo"
 import { CustomViewReverse } from "../components/CustomViewReverse"
-import { Info, StatusIndicator } from "../../components"
+import { Info, StatusIndicator } from "../../Components"
 
 const { width, height } = Dimensions.get("window")
 

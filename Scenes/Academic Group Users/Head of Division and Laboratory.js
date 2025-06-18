@@ -15,7 +15,7 @@ import { CustomViewReverse } from "../components/CustomViewReverse"
 import { getAllProjectSubmissions } from "../../Modules/Operations DB Prototyping"
 import { GetUserData } from "../../Modules/DataInfo"
 import { scale, verticalScale } from "react-native-size-matters"
-import { StatusIndicator } from '../../components'
+import { StatusIndicator } from '../../Components'
 
 const { width, height } = Dimensions.get("screen")
 

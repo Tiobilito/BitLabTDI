@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react"
+import React, { useState, useCallback, useEffect, Fragment } from "react"
 import {
   Text,
   StyleSheet,
@@ -17,7 +17,7 @@ import { getAllProjectSubmissionsCheck } from "../../Modules/Operations DB Proto
 import { CustomViewReverse } from "../components/CustomViewReverse"
 import Icon from "react-native-vector-icons/Ionicons"
 import { GetUserData } from "../../Modules/DataInfo"
-import { Info } from "../../components"
+import { Info, StatusIndicator } from "../../Components"
 
 const { width, height } = Dimensions.get("window")
 
@@ -194,14 +194,15 @@ const PrototypingCheck = ({ navigation }) => {
                   <View style={styles.info}>
                     <Text style={styles.name}>{item.applicant_name}</Text>
                     <Text style={styles.email}>{item.application}</Text>
+                    <View style={{marginLeft: -10 }}>
+                      <StatusIndicator status={item.status} />
+                    </View>
                   </View>
 
                   {/* Mostrar icono si los campos department_head, laboratory_head o service_staff son false */}
 
                   {/* Mostrar el icono de advertencia o el icono de aprobado */}
-                  {!item.department_head ||
-                  !item.laboratory_head ||
-                  !item.service_staff ? (
+                  {!item.service_staff ? (
                     <Icon
                       name="timer-outline"
                       size={24}
@@ -212,18 +213,9 @@ const PrototypingCheck = ({ navigation }) => {
                     <Icon
                       name="checkmark-circle-outline"
                       size={24}
-                      color="green"
+                      color="#10B981"
                     />
                   )}
-                  {item.department_head &&
-                    item.laboratory_head &&
-                    item.service_staff && (
-                      <Icon
-                        name="checkmark-circle-outline"
-                        size={24}
-                        color="green"
-                      />
-                    )}
                 </TouchableOpacity>
 
                 {item.Details && (
@@ -250,15 +242,19 @@ const PrototypingCheck = ({ navigation }) => {
                           style={styles.buttonImage}
                         />
                       </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => navigateToPDF(item.id)}
-                        style={styles.buttonContainer}
-                      >
-                        <Image
-                          source={require("../../Resources/imagenes/pdf.png")}
-                          style={styles.buttonImage}
-                        />
-                      </TouchableOpacity>
+                      {item.service_staff && ["finished", "delivered"].includes(item.status) ? (
+                        <TouchableOpacity
+                          onPress={() => navigateToPDF(item.id)}
+                          style={styles.buttonContainer}
+                        >
+                          <Image
+                            source={require("../../Resources/imagenes/pdf.png")}
+                            style={styles.buttonImage}
+                          />
+                        </TouchableOpacity>
+                        ) :
+                        <View/>
+                      }
                     </View>
                   </View>
                 )}

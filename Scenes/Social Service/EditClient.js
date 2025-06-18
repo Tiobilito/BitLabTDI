@@ -12,7 +12,7 @@ import {
 import { useRoute } from "@react-navigation/native"
 import { getUserById, updateUser } from "../../Modules/Operations DB Users"
 import { CustomView } from "../components/CustomView"
-import { Form, FloatingInput, CustomButton } from "../../components"
+import { Form, FloatingInput, CustomButton } from "../../Components"
 
 const { width, height } = Dimensions.get("window")
 

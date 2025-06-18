@@ -13,7 +13,7 @@ import {
   getOrderById,
 } from "../../Modules/Operations DB Fixes"
 import { CustomView } from "../components/CustomView"
-import { Form, FloatingText, CustomButton } from "../../components"
+import { Form, FloatingText, CustomButton } from "../../Components"
 
 const { width, height } = Dimensions.get("window")
 

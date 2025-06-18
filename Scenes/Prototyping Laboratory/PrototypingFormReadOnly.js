@@ -16,69 +16,103 @@ import {
 import { useRoute } from "@react-navigation/native"
 import { GetUserData } from "../../Modules/DataInfo"
 import { CustomView } from "../components/CustomView"
-import { CustomButton, OpenDrive, SwapButton } from "../../components"
+import { CustomButton, OpenDrive, ProgressStatusBar } from "../../Components"
 import { Feather } from "@expo/vector-icons"
 import { scale } from "react-native-size-matters"
 import * as Clipboard from "expo-clipboard"
 import Toast from "react-native-toast-message"
+import statusMap from '../../assets/colors.json';
 
-const { width, height } = Dimensions.get("window")
+const { width } = Dimensions.get("window")
 
 export default function PrototypingFormReadOnly({ navigation }) {
   const route = useRoute()
   const { idReport } = route.params
-  const [data, setData] = useState(null)
+  const [data, setData] = useState({ status: "loading" })
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
   const [userType, setUserType] = useState(null)
+  // ProgressStatusBar
+  const [status, setStatus] = useState([])
+  const [statusDetails, setStatusDetails] = useState(statusMap.default)
 
-  const updateCheck = async (Check) => {
-    await updateProjectCheck(idReport, Check, userType)
-    navigation.goBack()
-  }
-
-  const updateStatus = async () => {
-    const status = data.status === "approved" ? "finished" : "approved"
-
-    if (await updateProjectStatus(idReport, status)) {
-      setData(prev => ({
-        ...prev,
-        status: status
-      }))
-    } else {
-      Toast.show({
-        type: "error",
-        position: "bottom",
-        text1: "Error al cambiar el estado",
-      })
-    }
-  }
-
+  const states = ["approved", "in_process", "finished", "delivered"]
+  
   useEffect(() => {
-    const init = async () => {
-      const userData = await GetUserData()
-      setUserType(userData.User_type)
-    }
-    init()
-  }, [])
-
-  useEffect(() => {
-    const fetchData = async () => {
+    const fetchInitialData = async () => {
       try {
-        const fetchedData = await getPrototypeById(idReport)
+        const [fetchedData, userData] = await Promise.all([
+          getPrototypeById(idReport),
+          GetUserData()
+        ])
+        
         setData(fetchedData)
-        console.log("fetchedData -> ", fetchedData);
+        setUserType(userData.User_type)
+        console.log("fetchedData -> ", fetchedData)
       } catch (error) {
         setError("Error al cargar los datos del prototipo")
       } finally {
         setIsLoading(false)
       }
     }
-
-    fetchData()
+    
+    fetchInitialData()
   }, [idReport])
 
-  if (isLoading) {
+  useEffect(() => {
+    if (data?.status && data.status !== "loading") {
+      const newStatusDetails = statusMap[data.status] || statusMap.default
+      if (JSON.stringify(newStatusDetails) !== JSON.stringify(statusDetails))
+        setStatusDetails(newStatusDetails)
+    }
+  }, [data?.status])
+
+  // Para componentes
+  const updateDataAndStatus = async (newStatus) => {
+    if (await updateProjectStatus(idReport, newStatus))
+      setData(prev => ({ ...prev, status: newStatus }))
+    else
+      Toast.show({
+        type: "error",
+        position: "bottom",
+        text1: "Error al cambiar el estado",
+      })
+  }
+
+  // Detectar actualización desde ProgressStatusBar
+  // useEffect(() => {
+  //   const handleEffect = async () => await updateStatus()
+  //   // Si la actualización no se hizo desde updateStatus
+  //   if (status[1] !== null) {
+  //     handleEffect()
+  //   }
+  // }, [status])
+
+  const updateCheck = async (Check) => {
+    await updateProjectCheck(idReport, Check, userType)
+    navigation.goBack()
+  }
+
+  // ProgressStatusBar
+  // const updateStatus = async () => {
+  //   console.log("ID Report: ", idReport);
+  //   if (await updateProjectStatus(idReport, status[1])) {
+  //     setData(prev => ({
+  //       ...prev,
+  //       status: status[1]
+  //     }))
+  //     setStatus(prev => [prev[1], null])
+  //   } else {
+  //     Toast.show({
+  //       type: "error",
+  //       position: "bottom",
+  //       text1: "Error al cambiar el estado",
+  //     })
+  //     setStatus(prev => [prev[0], null])
+  //   }
+  // }
+
+  if (isLoading || data.status === "loading") {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#095EA7" />
@@ -94,8 +128,38 @@ export default function PrototypingFormReadOnly({ navigation }) {
     )
   }
 
-  if (!data) {
+  if (!data)
     return null
+
+  const copyOnClipboard = async () => {
+    if (data.drive_url === null) {
+      Toast.show({
+        type: "error",
+        text1: "No se encontro la URL",
+        position: "bottom",
+        visibilityTime: 1200,
+      })
+      return
+    }
+
+    const response = await Clipboard.setStringAsync(data.drive_url)
+    console.log("[+] copy clipboard Response -> ", typeof(response))
+    if (!response) {
+      Toast.show({
+        type: "error",
+        text1: "No se logro copiar el URL!",
+        position: "bottom",
+        visibilityTime: 1200,
+      })
+    }
+    
+    updateDataAndStatus("pcb_revision")
+      Toast.show({
+        type: "info",
+        text1: "URL copiado al portapapeles!",
+        position: "bottom",
+        visibilityTime: 1200,
+      })
   }
 
   const {
@@ -115,23 +179,6 @@ export default function PrototypingFormReadOnly({ navigation }) {
     specific_requirements_comments,
     drive_url,
   } = data
-
-  const copyOnClipboard = async () => {
-    await Clipboard.setStringAsync(drive_url)
-    Toast.show({
-      type: "info",
-      text1: "URL copiado al portapapeles!",
-      position: "bottom",
-      visibilityTime: 1200,
-    })
-  }
-
-  const dictionary = {
-    "approved": "Aprobado",
-    "rejected": "Rechazado",
-    "awaiting_revision": "Esperando revisión",
-    "finished": "Terminado"
-  }
 
   return (
     <View style={styles.container}>
@@ -160,23 +207,25 @@ export default function PrototypingFormReadOnly({ navigation }) {
               <Text style={styles.label}>Aplicación:</Text>
               <Text style={styles.value}>{application}</Text>
               <Text style={styles.label}>Estado:</Text>
-              <View style={styles.approval}>
-                <CustomButton
-                  title={dictionary[data.status]}
-                  buttonStyles={{
-                    width: width * 0.4,
-                    backgroundColor:
-                      data.status === "approved" ? "#10B981" :
-                      data.status === "finished" ? "#6B7280" :
-                      data.status === "awaiting_revision" ? "#F59E0B" :
-                      "#EF4444"
-                  }}
-                  disabled={true}
-                />
-                {((data.status === "approved" || data.status === "finished") && userType === 2) && (
-                  <SwapButton onPress={updateStatus} />
-                )}
-              </View>
+              { states.includes(data.status) ?
+                <View style={{ marginTop: width * 0.05 }}>
+                  <ProgressStatusBar
+                    currentStatus={data.status}
+                    onStatusChange={(newStatus) => updateDataAndStatus(newStatus)}
+                  />
+                </View>
+                : 
+                <View style={styles.approval}>
+                  <CustomButton
+                    title={statusDetails.es}
+                    buttonStyles={{
+                      width: width * 0.4,
+                      backgroundColor: statusDetails.color === "#DDD" ? "#6B7280" : statusDetails.color
+                    }}
+                    disabled={true}
+                  />
+                </View>
+              }
             </View>
 
             <View style={styles.formSection}>
@@ -226,7 +275,7 @@ export default function PrototypingFormReadOnly({ navigation }) {
               </Text>
               <Text style={styles.label}>Carpeta de archivos:</Text>
               <View style={styles.approval}>
-                <OpenDrive link={drive_url} buttonStyle={{width: "100%"}}/>
+                <OpenDrive link={drive_url} idReport={idReport} setData={updateDataAndStatus} buttonStyle={{width: "100%"}}/>
                 <TouchableOpacity style={styles.copyButton} onPress={copyOnClipboard}>
                   <Feather name="copy" size={30} color="#2272A7" />
                 </TouchableOpacity>
@@ -234,18 +283,25 @@ export default function PrototypingFormReadOnly({ navigation }) {
             </View>
 
             {/* Botones para aprobar o rechazar la solicitud*/}
-            <View style={[styles.approval, { marginLeft: 10 }]}>
+            { states.includes(data.status) ?
               <CustomButton
                 title={"Rechazar"}
                 onPress={() => updateCheck(false)}
-                buttonStyles={{ backgroundColor: "#DC3545", width: width * 0.4 }}
+                buttonStyles={{ backgroundColor: "#DC3545", width: width * 0.8, marginLeft: 10, marginTop: width * 0.05 }}
               />
-              <CustomButton
-                title={" Aprobar "}
-                onPress={() => updateCheck(true)}
-                buttonStyles={{ width: width * 0.4, backgroundColor: "#007BFF" }}
-              />
-            </View>
+              : <View style={[styles.approval, { marginLeft: 10 }]}>
+                <CustomButton
+                  title={"Rechazar"}
+                  onPress={() => updateCheck(false)}
+                  buttonStyles={{ backgroundColor: "#DC3545", width: width * 0.4 }}
+                />
+                <CustomButton
+                  title={" Aprobar "}
+                  onPress={() => updateCheck(true)}
+                  buttonStyles={{ width: width * 0.4, backgroundColor: "#007BFF" }}
+                />
+              </View>
+            }
           </ScrollView>
           <Toast />
         </View>
@@ -329,5 +385,5 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 5,
     borderColor: "#2272A7"
-  }
+  },
 })

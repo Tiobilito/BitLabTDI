@@ -18,10 +18,10 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated";
-import { CustomButton, Form, FloatingInput } from "../components";
+import { CustomButton, Form, FloatingInput } from "../Components";
 import Icon from "react-native-vector-icons/Ionicons";
 import Toast from 'react-native-toast-message'
-import { mainStyles, toastConfig } from "../components/styles";
+import { mainStyles, toastConfig } from "../Components/styles";
 
 const { width, height } = Dimensions.get("window");
 

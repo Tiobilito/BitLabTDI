@@ -59,6 +59,7 @@ export const generatePDF = async (data) => {
       material_proporcionado: { x: 0, y: 0 },
       comentarios_internos: { x: 200, y: 182 },
       fecha_aprovacion: { x: 90, y: 125 },
+      alerta: { x: 183, y: 240 },
     };
     
     // #region dynamic coordinates
@@ -254,44 +255,54 @@ export const generatePDF = async (data) => {
         color: rgb(0, 0, 0),
       }
     );
-    page.drawText(String("X" || ""), {
-      x: coordenadas.carasPCB.x,
-      y: coordenadas.carasPCB.y,
-      size: 12,
-      color: rgb(0, 0, 0),
-    });
-    page.drawText(String("X" || ""), {
-      x: coordenadas.material_proporcionado.x,
-      y: coordenadas.material_proporcionado.y,
-      size: 12,
-      color: rgb(0, 0, 0),
-    });
+
+    // Se pidio que no se agregara información en uso interno
+    // page.drawText(String("X" || ""), {
+    //   x: coordenadas.carasPCB.x,
+    //   y: coordenadas.carasPCB.y,
+    //   size: 12,
+    //   color: rgb(0, 0, 0),
+    // });
+    // page.drawText(String("X" || ""), {
+    //   x: coordenadas.material_proporcionado.x,
+    //   y: coordenadas.material_proporcionado.y,
+    //   size: 12,
+    //   color: rgb(0, 0, 0),
+    // });
     
-    // Dentro de la función generatePDF, reemplaza la lógica de data.internal_use_comments con esto:
-    const internalUseComments = sanitizeText(String(data.internal_use_comments)) || "";
-    const maxCharsPerLineComments = 48; // Máximo de caracteres por línea para comments
-    const maxChunksComments = 2; // Máximo de partes (líneas) permitidas
-    const commentsChunks = splitStringIntoChunks(
-      internalUseComments,
-      maxCharsPerLineComments,
-      maxChunksComments
-    );
+    // // Dentro de la función generatePDF, reemplaza la lógica de data.internal_use_comments con esto:
+    // const internalUseComments = sanitizeText(String(data.internal_use_comments)) || "";
+    // const maxCharsPerLineComments = 48; // Máximo de caracteres por línea para comments
+    // const maxChunksComments = 2; // Máximo de partes (líneas) permitidas
+    // const commentsChunks = splitStringIntoChunks(
+    //   internalUseComments,
+    //   maxCharsPerLineComments,
+    //   maxChunksComments
+    // );
 
-    // Dibujar cada parte de los comentarios internos en una nueva línea
-    commentsChunks.forEach((chunk, index) => {
-      page.drawText(chunk, {
-        x: coordenadas.comentarios_internos.x,
-        y: coordenadas.comentarios_internos.y - index * 15, // Ajusta la posición en Y para cada línea
-        size: 10,
-        color: rgb(0, 0, 0),
-      });
-    });
+    // // Dibujar cada parte de los comentarios internos en una nueva línea
+    // commentsChunks.forEach((chunk, index) => {
+    //   page.drawText(chunk, {
+    //     x: coordenadas.comentarios_internos.x,
+    //     y: coordenadas.comentarios_internos.y - index * 15, // Ajusta la posición en Y para cada línea
+    //     size: 10,
+    //     color: rgb(0, 0, 0),
+    //   });
+    // });
 
-    page.drawText(String(data.prototype_approved_date || "No especificado"), {
-      x: coordenadas.fecha_aprovacion.x,
-      y: coordenadas.fecha_aprovacion.y,
-      size: 10,
-      color: rgb(0, 0, 0),
+    // page.drawText(String(data.prototype_approved_date || "No especificado"), {
+    //   x: coordenadas.fecha_aprovacion.x,
+    //   y: coordenadas.fecha_aprovacion.y,
+    //   size: 10,
+    //   color: rgb(0, 0, 0),
+    // });
+
+    // Mensaje de alerta
+    page.drawText("RECIBIDO, SIN MODIFICACIONES", {
+      x: coordenadas.alerta.x,
+      y: coordenadas.alerta.y,
+      size: 14,
+      color: rgb(1, 0, 0),
     });
 
     // Guardar PDF modificado

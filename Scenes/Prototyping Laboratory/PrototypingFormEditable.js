@@ -18,8 +18,8 @@ import {
 import { GetUserData } from "../../Modules/DataInfo";
 import { CustomView } from '../components/CustomView'
 import { scale, verticalScale } from 'react-native-size-matters'
-import { FloatingInput, CustomButton, OpenDrive } from '../../components'
-import { mainStyles, toastConfig } from "../../components/styles";
+import { FloatingInput, CustomButton, OpenDrive } from '../../Components'
+import { mainStyles, toastConfig } from "../../Components/styles";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Toast from 'react-native-toast-message';
 

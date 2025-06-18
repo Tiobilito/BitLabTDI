@@ -14,7 +14,7 @@ import filter from "lodash.filter"
 import { useRoute, useFocusEffect } from "@react-navigation/native"
 import { getAllDevices } from "../../Modules/Operations DB Fixes"
 import { CustomViewReverse } from "../components/CustomViewReverse"
-import { Info } from "../../components"
+import { Info } from "../../Components"
 
 const WIDTH = Dimensions.get("window").width
 const HEIGHT = Dimensions.get("window").height

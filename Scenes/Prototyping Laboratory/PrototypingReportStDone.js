@@ -4,7 +4,6 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  Pressable,
   Image,
   View,
   FlatList,
@@ -16,7 +15,7 @@ import { useFocusEffect } from "@react-navigation/native"
 import { getAllProjectSubmissionsFinished } from "../../Modules/Operations DB Prototyping"
 import { CustomViewReverse } from "../components/CustomViewReverse"
 import Icon from "react-native-vector-icons/Ionicons"
-import { Info, CircularFloatingButton } from "../../components"
+import { Info, CircularFloatingButton, StatusIndicator } from "../../Components"
 
 const { width, height } = Dimensions.get("window")
 
@@ -186,6 +185,9 @@ const PrototypingReportStDone = ({ navigation }) => {
                   <View style={styles.info}>
                     <Text style={styles.name}>{item.applicant_name}</Text>
                     <Text style={styles.email}>{item.application}</Text>
+                    <View style={{ marginLeft: -10 }}>
+                      <StatusIndicator status={item.status} size={10} />
+                    </View>
                   </View>
 
                   {/* Verifica que la solicitud ya fue aprobada po el jefe de departamento, el jefe de laboratorio y el prestador de servicio */}
@@ -230,15 +232,19 @@ const PrototypingReportStDone = ({ navigation }) => {
                           style={styles.buttonImage}
                         />
                       </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => navigateToPDF(item.id)}
-                        style={styles.buttonContainer}
-                      >
-                        <Image
-                          source={require("../../Resources/imagenes/pdf.png")}
-                          style={styles.buttonImage}
-                        />
-                      </TouchableOpacity>
+                      {item.service_staff && ["finished", "delivered"].includes(item.status) ? (
+                        <TouchableOpacity
+                          onPress={() => navigateToPDF(item.id)}
+                          style={styles.buttonContainer}
+                        >
+                          <Image
+                            source={require("../../Resources/imagenes/pdf.png")}
+                            style={styles.buttonImage}
+                          />
+                        </TouchableOpacity>
+                        ) :
+                        <View/>
+                      }
                     </View>
                   </View>
                 )}

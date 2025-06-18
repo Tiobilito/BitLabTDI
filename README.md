@@ -6,3 +6,12 @@
 2. prestador de servicio
 3. maestro
 4. alumno
+
+### Estados
+rejected
+awaiting_revision
+pcb_revision
+approved
+in_process
+finished
+delivered

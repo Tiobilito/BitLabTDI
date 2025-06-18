@@ -21,7 +21,7 @@ import Animated, {
 import { useFocusEffect } from "@react-navigation/native"
 import Icon from "react-native-vector-icons/Ionicons";
 import Toast from 'react-native-toast-message'
-import { toastConfig } from '../components/styles';
+import { toastConfig } from '../Components/styles';
 
 const Scale = Dimensions.get("window").width
 
